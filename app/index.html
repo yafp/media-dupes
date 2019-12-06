@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <!-- jquery -->
+    <script>window.$ = window.jQuery = require("jquery");</script>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- fontawesome -->
+    <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js" defer></script>
+
+    <!-- noty -->
+    <link rel="stylesheet" href="../node_modules/noty/lib/noty.css" >
+    <link rel="stylesheet" href="../node_modules/noty/lib/themes/bootstrap-v4.css">
+    <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
+
+    <!-- project css -->
+    <link rel="stylesheet" href="css/core.css" >
+
+
+    <title>media-dupes</title>
+</head>
+
+<body>
+    <div class="container mediaDupes_nonSelectableText">
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- Heading: -->
+        <div class="row">
+            <div class="col-12">
+            <h3><img src="img/128x128.png" height="32">media-dupes</h3>
+            <h6>A minimal media duplicator for common media services like youtube</h6>
+        </div>
+        </div>
+
+        <!-- add URL -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="add your url here" id="inputNewUrl" name="inputNewUrl">
+            <div class="input-group-append">
+                <button class="btn btn-secondary" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <!-- show urls -->
+        <div class="row">
+            <div class="col-12">
+            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="todo-list" readonly rows="8" style="min-width: 100%">
+            </textarea>
+        </div>
+        </div>
+
+        <!--
+        <div class="row">
+            <h3>config</h3>
+        </div>
+
+        <div class="row">
+            <select id="selectAvailableModes"  class="custom-select" name="selectAvailableModes" title="" disabled>
+                <option value="audio (mp3)" selected>audio (.mp3)</option>
+            </select>
+        </div>
+        -->
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- start buttons-->
+        <div class="row">
+            <div class="col-12">
+            <button id="buttonStartVideo" name="buttonStartVideo" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as video files" onclick="downloadVideo();" disabled><i class="fas fa-video"></i> Grab video</button> &nbsp;
+            <button id="buttonStartAudio" name="buttonStartAudio" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as audio files" onclick="downloadAudio();" disabled><i class="fas fa-music"></i> Grab audio</button>
+            <!--
+            <button id="buttonStartYoutubeD" name="buttonStartYoutubeD" type="button" class="btn btn-success btn-sm" onclick="test();" >test</button>
+            -->
+        </div>
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+
+        <!-- show log -->
+        <div class="row">
+            <div class="col-12">
+            <textarea class="form-control" id="textareaLogOutput" name="textareaLogOutput" title="application log" readonly rows="8" style="min-width: 100%">
+            </textarea>
+        </div>
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- extra buttons-->
+        <div class="row">
+            <div class="col-12">
+            <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm" title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
+            <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
+        </div>
+        </div>
+
+
+        <!-- reset UI -->
+        <div class="row float-right">
+            <div class="col-12">
+            <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right" onclick="resetUI();"><i class="fas fa-redo-alt"></i> Reset</button>
+        </div>
+        </div>
+
+
+
+
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class="col-12 col-md">
+            <img class="mb-2" src="img/icon/icon.png" alt="" width="24" height="24">
+            <small class="d-block mb-3 text-muted">by yafp</small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>media-dupes</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#" onclick="openURL('https://github.com/yafp/media-dupes')">Homepage</a></li>
+              <li><a class="text-muted" href="#">Changelog</a></li>
+              <li><a class="text-muted" href="#">Documentation</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Electron</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Electron <span id="electron-version"></span></a></li>
+              <li><a class="text-muted" href="#">Chrome <span id="chrome-version"></span></a></li>
+              <li><a class="text-muted" href="#">Node.js <span id="node-version"></span></a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>youtube-dl</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Documentation</a></li>
+              <li><a class="text-muted" href="#">Locations</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+
+
+
+
+
+
+</div>
+<!-- container -->
+
+
+<!-- You can also require other files to run in this process -->
+<script src="js/renderer.js"></script>
+
+</body>
+
+<script>
+// execute on ready
+$( document ).ready(function()
+{
+    console.log( "ready" );
+    searchUpdate();
+});
+</script>
+
+</html>
