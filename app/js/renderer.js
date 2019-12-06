@@ -1,17 +1,13 @@
 // ----------------------------------------------------------------------------
-// Error Handling
+// ERROR HANDLING
 // ----------------------------------------------------------------------------
-//
-//require("crashReporting.js");
+require("./js/crashReporting.js");
 // myUndefinedFunctionFromRenderer();
 
 
 // ----------------------------------------------------------------------------
 // VARIABLES
 // ----------------------------------------------------------------------------
-//
-//var a = []
-//var clean_a = []
 var arrayUserUrls = []
 
 
@@ -90,8 +86,8 @@ function validateUserInput () {
     isUrlValid = validURL(newUrl)
     if (isUrlValid) {
         console.log("VALID")
-    } 
-    else 
+    }
+    else
     {
         console.error("invalid")
     }
@@ -210,7 +206,6 @@ function showSupportedExtractors()
 function resetUiLog()
 {
     textareaLogOutput.value = ""
-
     console.log('resetUiLog ::: Did reset the log textarea')
 }
 
@@ -227,80 +222,6 @@ function uiLogAppend(newLine)
     });
 }
 
-/**
-* @name downloadVideo
-* @summary Download video
-* @description Download video
-*/
-function downloadVideoX ()
-{
-    // Example file: http://www.youtube.com/watch?v=90AiXO1pAiA
-    console.log('downloadVideo ::: Start')
-
-    resetUiLog()
-
-    //showNoty('info', 'start ...')
-
-    const fs = require('fs')
-    const youtubedl = require('youtube-dl')
-
-    // for each item of the array
-    var arrayLength = arrayUserUrls.length
-    for (var i = 0; i < arrayLength; i++)
-    {
-        var url = arrayUserUrls[i]
-        console.log('startVideo ::: Processing URL: ' + url)
-
-        uiLogAppend("Processing: " + url)
-
-
-        const options = []
-        youtubedl.getInfo(url, options, function(err, info)
-        {
-          if (err) throw err
-
-          console.log('id:', info.id)
-          console.log('title:', info.title)
-          console.log('url:', info.url)
-          console.log('thumbnail:', info.thumbnail)
-          console.log('description:', info.description)
-          console.log('filename:', info._filename)
-          console.log('format id:', info.format_id)
-
-          uiLogAppend("- Title: " + info.title)
-          uiLogAppend("- Description: " + info.description)
-
-          // continue
-          const video = youtubedl(url,
-          // Optional arguments passed to youtube-dl.
-          ['--format=18'],
-          // Additional options can be given for calling `child_process.execFile()`.
-          { cwd: __dirname })
-
-          // Will be called when the download starts.
-          video.on('info', function(info)
-          {
-              console.log('Download started')
-              console.log('filename: ' + info._filename)
-              console.log('size: ' + info.size)
-          })
-
-          //video.pipe(fs.createWriteStream('myvideo.mp4'))
-          video.pipe(fs.createWriteStream(info._filename))
-
-          // If download finished
-          video.on('end', function () {
-              console.log('finished downloading!')
-              showNoty('success', 'Finished downloading: <b>' + url + '</b>.')
-              uiLogAppend("- Finished download")
-          })
-
-        })
-    }
-
-    console.log('downloadVideo ::: End')
-}
-
 
 /**
 * @name downloadVideo
@@ -309,7 +230,7 @@ function downloadVideoX ()
 */
 function downloadVideo()
 {
-    console.log('downloadAudio ::: Start')
+    console.log('downloadVideo ::: Start')
 
     const youtubedl = require('youtube-dl')
     const { remote } = require('electron');
@@ -330,24 +251,9 @@ function downloadVideo()
 
         console.log("downloadVideo ::: Target is set to: " + targetPath)
 
-        youtubedl.exec(url, ['-f',  'bestaudio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', targetPath + '/%(title)s-%(id)s.%(ext)s'], {}, function(err, output)
+        youtubedl.exec(url, ['-o', targetPath + '/%(title)s-%(id)s.%(ext)s'], {}, function(err, output)
         {
             if (err) throw err
-
-
-
-            /*
-            console.log('id:', info.id)
-            console.log('title:', info.title)
-            console.log('url:', info.url)
-            console.log('thumbnail:', info.thumbnail)
-            console.log('description:', info.description)
-            console.log('filename:', info._filename)
-            console.log('format id:', info.format_id)
-
-            uiLogAppend("- Title: " + info.title)
-            uiLogAppend("- Description: " + info.description)
-            */
 
             console.log(output.join('\n'))
         })
@@ -355,10 +261,6 @@ function downloadVideo()
 
     console.log('downloadVideo ::: End')
 }
-
-
-
-
 
 
 /**
@@ -387,32 +289,15 @@ function downloadAudio()
 
         //youtubedl.exec(url, ['-x', '--audio-format', 'mp3'], {}, function(err, output)
         //youtubedl.exec(url, ['-f',  'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0'], {}, function(err, output)
-        youtubedl.exec(url, ['-f',  'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', targetPath + '/%(title)s-%(id)s.%(ext)s'], {}, function(err, output)
+        const video = youtubedl.exec(url, ['-f',  'bestaudio',  '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', targetPath + '/%(title)s-%(id)s.%(ext)s'], {}, function(err, output)
         {
             if (err) throw err
-
-            /*
-            console.log('id:', info.id)
-            console.log('title:', info.title)
-            console.log('url:', info.url)
-            console.log('thumbnail:', info.thumbnail)
-            console.log('description:', info.description)
-            console.log('filename:', info._filename)
-            console.log('format id:', info.format_id)
-
-            uiLogAppend("- Title: " + info.title)
-            uiLogAppend("- Description: " + info.description)
-            */
-
             console.log(output.join('\n'))
         })
     }
 
     console.log('downloadAudio ::: End')
 }
-
-
-
 
 
 /**
