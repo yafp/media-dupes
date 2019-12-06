@@ -1,0 +1,76 @@
+/* ########################################################################## */
+/* UI TEXT - MAKE THEM NOT SELECTABLE */
+/* ########################################################################## */
+.mediaDupes_nonSelectableText {
+    -webkit-user-select:none;
+    -moz-user-select: none;
+}
+
+
+h3{
+    text-align: right;
+    color: gray;
+}
+
+h6{
+    text-align: right;
+    color: gray;
+}
+
+
+.btn
+{
+    /* min-width: 100px;*/
+}
+
+
+
+/* ########################################################################## */
+/* Use the “system font/San Francisco” */
+/* ########################################################################## */
+cssbody {
+    font: caption;
+}
+
+
+/* ########################################################################## */
+/* FADEIN THE WINDOW */
+/* ########################################################################## */
+@keyframes fadein {
+  from
+  {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.app {
+    /* Disable text selection, or your app will feel like a web page */
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+
+    /* Cover the whole window */
+    /* height: 100%; */
+
+    /* Make sure this matches the native window background color that you pass to
+    * electron.BrowserWindow({...}), otherwise your app startup will look janky. */
+    background: rgb(255, 255, 255);
+
+    /* Smoother startup */
+    animation: fadein 0.5s;
+}
+
+
+
+
+
+textarea {
+    font-size: 12px !important;
+    font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+
