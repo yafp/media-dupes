@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/yafp/ttth/master/.github/logo/128x128.png)
+![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/logo/128x128.png)
 
 # media-dupes
 ## changelog
@@ -30,6 +30,13 @@ The following categories are used:
 #### ```Added```
 * Initial version of media-dupes
 * Core functions
-  * Downloading audio
-  * Show extractor list
+  * Downloading audio. See [#2](https://github.com/yafp/ttth/issues/2)
+  * Download video. See [#1](https://github.com/yafp/ttth/issues/1)
+  * Show extractor list.See [#4](https://github.com/yafp/ttth/issues/4)
   * Open local download folder
+* Minor
+  * Application menu
+  * about window
+  * check for software updates. See [#3](https://github.com/yafp/ttth/issues/3)
+  * Basic support for in-app notification using noty
+  * Basic support for os notifications
