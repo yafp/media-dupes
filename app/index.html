@@ -54,22 +54,10 @@
         <!-- show urls -->
         <div class="row">
             <div class="col-12">
-            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" readonly rows="6" style="min-width: 100%">
+            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" readonly rows="8" style="min-width: 100%">
             </textarea>
         </div>
         </div>
-
-        <!--
-        <div class="row">
-            <h3>config</h3>
-        </div>
-
-        <div class="row">
-            <select id="selectAvailableModes"  class="custom-select" name="selectAvailableModes" title="" disabled>
-                <option value="audio (mp3)" selected>audio (.mp3)</option>
-            </select>
-        </div>
-        -->
 
         <!-- empty line -->
         <div class="row">
@@ -79,85 +67,47 @@
         <!-- start buttons-->
         <div class="row">
             <div class="col-12">
-            <button id="buttonStartVideo" name="buttonStartVideo" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as video files" onclick="downloadVideo();" disabled><i class="fas fa-video"></i> Grab video</button> &nbsp;
-            <button id="buttonStartAudio" name="buttonStartAudio" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as audio files" onclick="downloadAudio();" disabled><i class="fas fa-music"></i> Grab audio</button>
+            <button id="buttonStartVideo" name="buttonStartVideo" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as video files" onclick="downloadContent('video');" disabled><i class="fas fa-video"></i> Grab video</button> &nbsp;
+            <button id="buttonStartAudio" name="buttonStartAudio" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as audio files" onclick="downloadContent('audio');" disabled><i class="fas fa-music"></i> Grab audio</button>
         </div>
         </div>
 
-<!--
+
+        <!--
         <div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Video</button>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">mp3</a>
-      <a class="dropdown-item" href="#">ogg</a>
-      <a class="dropdown-item" href="#">m4a</a>
-      <div role="separator" class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Separated link</a>
-    </div>
-  </div>
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Video</button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">mp3</a>
+              <a class="dropdown-item" href="#">ogg</a>
+              <a class="dropdown-item" href="#">m4a</a>
+              <div role="separator" class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+          </div>
 
-
-  <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Audio</button>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">mp3</a>
-      <a class="dropdown-item" href="#">ogg</a>
-      <a class="dropdown-item" href="#">m4a</a>
-      <div role="separator" class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Separated link</a>
-    </div>
-  </div>
-
-</div>
--->
-
-
-
-
-<!-- audio -->
-<!--
-<div class="input-group mb-3">
-  <select class="custom-select" id="inputGroupSelect02">
-    <option selected>Choose...</option>
-    <option value="1">mp3</option>
-    <option value="2">ogg</option>
-    <option value="3">m4a</option>
-  </select>
-  <div class="input-group-append">
-    <label class="input-group-text" for="inputGroupSelect02">audio</label>
-  </div>
-</div>
--->
-
-<!-- video -->
-<!--
-<div class="input-group mb-3">
-  <select class="custom-select" id="inputGroupSelect02">
-    <option selected>Choose...</option>
-    <option value="1">mp4</option>
-    <option value="2">...</option>
-    <option value="3">...</option>
-  </select>
-  <div class="input-group-append">
-    <label class="input-group-text" for="inputGroupSelect02">video</label>
-  </div>
-</div>
--->
-
-
-
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Audio</button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">mp3</a>
+              <a class="dropdown-item" href="#">ogg</a>
+              <a class="dropdown-item" href="#">m4a</a>
+              <div role="separator" class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+          </div>
+      </div>
+      -->
 
         <!-- empty line -->
         <div class="row">
             &nbsp;
         </div>
 
-
         <!-- show log -->
         <div class="row">
             <div class="col-12">
-            <textarea class="form-control" id="textareaLogOutput" name="textareaLogOutput" title="application log" readonly rows="6" style="min-width: 100%">
+            <textarea class="form-control" id="textareaLogOutput" name="textareaLogOutput" title="application log" readonly rows="12" style="min-width: 100%">
             </textarea>
         </div>
         </div>
@@ -172,61 +122,9 @@
             <div class="col-12">
             <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm" title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
             <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
+            <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right" onclick="uiReset();"><i class="fas fa-redo-alt"></i> Reset</button>
         </div>
         </div>
-
-
-        <!-- reset UI -->
-        <div class="row float-right">
-            <div class="col-12">
-            <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right" onclick="resetUI();"><i class="fas fa-redo-alt"></i> Reset</button>
-        </div>
-        </div>
-
-
-
-
-<footer class="pt-4 my-md-5 pt-md-5 border-top">
-        <div class="row">
-
-            <!-- logo and name -->
-          <div class="col-12 col-md">
-            <img class="mb-2" src="img/icon/icon.png" alt="" width="24" height="24">
-            <small class="d-block mb-3 text-muted">by yafp</small>
-          </div>
-
-          <!-- media-dupes -->
-          <div class="col-6 col-md">
-            <h5>media-dupes</h5>
-            <ul class="list-unstyled text-small">
-              <li><a class="text-muted" href="#" onclick="openURL('https://github.com/yafp/media-dupes')">homepage</a></li>
-              <li><a class="text-muted" href="#" onclick="openURL('https://github.com/yafp/media-dupes/blob/master/docs/CHANGELOG.md')">changelog</a></li>
-              <li><a class="text-muted" href="#" onclick="openURL('https://github.com/yafp/media-dupes/releases')">releases</a></li>
-            </ul>
-          </div>
-
-          <!-- electron -->
-          <div class="col-6 col-md">
-            <h5>electron</h5>
-            <ul class="list-unstyled text-small">
-              <li><a class="text-muted" href="#">electron <span id="electron-version"></span></a></li>
-              <li><a class="text-muted" href="#">chrome <span id="chrome-version"></span></a></li>
-              <li><a class="text-muted" href="#">node.js <span id="node-version"></span></a></li>
-            </ul>
-          </div>
-
-          <!-- youtube-dl -->
-          <div class="col-6 col-md">
-            <h5>youtube-dl</h5>
-            <ul class="list-unstyled text-small">
-              <li><a class="text-muted" href="#">documentation</a></li>
-            </ul>
-          </div>
-
-
-        </div>
-      </footer>
-
 
 </div>
 <!-- container -->
@@ -241,8 +139,13 @@
 // execute on ready
 $( document ).ready(function()
 {
-    console.log( "ready" );
+    console.log( 'ready' );
+
+    // check for media-dupes updates
     searchUpdate();
+
+    // check if requirements are installed
+    checkForDeps();
 });
 </script>
 
