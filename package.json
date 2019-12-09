@@ -2,8 +2,8 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.1.20191208",
-  "description": "A minimal media duplicator for common media services like youtube",
+  "version": "0.1.0",
+  "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -42,7 +42,7 @@
     "duplicator",
     "mirror"
   ],
-  "author": "yafp",
+  "author": "yafp <fidel@yafp.de>",
   "license": "GPL-3.0",
   "build": {
     "productName": "media-dupes",
@@ -52,7 +52,7 @@
       "docs/CHANGELOG.md",
       "README.md"
     ],
-    "asar": true,
+    "asar": false,
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-mac.${ext}",
@@ -99,12 +99,12 @@
     "linux": {
       "executableName": "media-dupes",
       "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
-      "description": "A minimal media duplicator for common media services like youtube",
+      "description": "a minimal media duplicator for common media services like youtube",
       "category": "Network",
       "desktop": {
         "Terminal": "false",
         "Type": "Application",
-        "Categories": "GTK;GNOME;Network;Email;Chat;InstantMessaging;"
+        "Categories": "GTK;GNOME;Network;Utility;AudioVideo;"
       },
       "target": [
         {
@@ -176,10 +176,10 @@
     "@sentry/electron": "^1.1.0-beta.0",
     "about-window": "^1.13.2",
     "bootstrap": "^4.4.1",
+    "ffmpeg-static-electron": "^2.0.1",
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.0",
-    "youtube-dl": "^2.1.0",
-    "ytdl-core": "^1.0.3"
+    "youtube-dl": "^2.1.0"
   }
 }
