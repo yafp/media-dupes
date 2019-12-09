@@ -43,17 +43,31 @@
 
 
     <section>
-        <article><h1>media-dupes</h1>
-<p><strong>A minimal media duplicator for common media services like youtube</strong></p>
+        <article><p align="center">
+  <a href="#"><img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/logo/256x256.png" width="256"></a>
+</p>
+<div align="center">
+  <h1>media-dupes</h1>
+<p>a minimal media duplicator for common media services like youtube</p>
+<p><a href="https://www.codacy.com/manual/yafp/media-dupes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yafp/media-dupes&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/0c30508f8add43ee8fbb62c2a669e76b" alt="Codacy Badge"></a>
+<img src="https://img.shields.io/github/release/yafp/media-dupes.svg?style=flat" alt="GitHub Current Release">
+<img src="https://img.shields.io/github/release-date/yafp/media-dupes.svg?style=flat" alt="GitHub Release Date">
+<img src="https://img.shields.io/github/downloads/yafp/media-dupes/total.svg" alt="GitHub Download All releases">
+<img src="https://img.shields.io/github/last-commit/yafp/media-dupes.svg?style=flat" alt="GitHub Last Commit">
+<img src="https://img.shields.io/github/issues-raw/yafp/media-dupes.svg?style=flat" alt="GitHub Issues Open">
+<a href="https://github.com/yafp//graphs/contributors/"><img src="https://img.shields.io/github/contributors/yafp/media-dupes.svg" alt="GitHub contributors"></a>
+<a href="https://github.com/yafp/media-dupes/pulls?q=is:pr+is:merged"><img src="https://img.shields.io/github/issues-pr-closed-raw/yafp/media-dupes.svg?label=merged+PRs" alt="Merged PRs"></a>
+<img src="https://img.shields.io/github/license/yafp/media-dupes.svg" alt="GitHub License"></p>
+<p><img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/screenshots/ui_latest.png" alt="ui"></p>
+</div>
 <h2>about</h2>
 <ul>
-<li>based on electron</li>
-<li>is using youtube-dl</li>
-</ul>
-<h2>functions</h2>
-<ul>
-<li>Download video from common media services</li>
-<li>Extract and download audio from common media services</li>
+<li>available for <img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/linux_32x32.png" alt="linux"> linux, <img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/apple_32x32.png" alt="apple"> macOS and <img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/windows_32x32.png" alt="windows"> windows.</li>
+<li>based on <code>electron</code></li>
+<li>using <code>youtube-dl</code> and <code>ffmpeg</code></li>
+<li>downloads video from common media services</li>
+<li>downloads audio from common media services</li>
+<li>free and open source</li>
 </ul>
 <h2>changelog</h2>
 <p>Please see the <a href="docs/CHANGELOG.md">changlog</a> for more details.</p>
@@ -67,7 +81,6 @@
 <ul>
 <li>media-dupes is using sentry to collect error reports. This helps heavily finding bugs which might occur only in some specific use-cases. Please see the sentry privacy policy for more details.</li>
 <li>media-dupes is not tracking it's users (i.e. using Google Analytics or similar)</li>
-<li>All data is stored locally only.</li>
 </ul>
 <p>You are always welcome to check and even improve the code.</p>
 <h2>disclosure</h2>
@@ -82,13 +95,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadAudio">downloadAudio</a></li><li><a href="global.html#downloadVideo">downloadVideo</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#resetUI">resetUI</a></li><li><a href="global.html#resetUiLog">resetUiLog</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#uiLogAppend">uiLogAppend</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiLogAppend">uiLogAppend</a></li><li><a href="global.html#uiLogReset">uiLogReset</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#validURL">validURL</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Dec 06 2019 22:43:02 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon Dec 09 2019 15:18:47 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
