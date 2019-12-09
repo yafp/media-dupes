@@ -26,15 +26,15 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.1.0 (2019xxyy)
+### media-dupes 0.1.0 (20191209)
 #### ```Added```
 * Initial version of media-dupes
 * Core functions
-  * Downloading audio. See [#2](https://github.com/yafp/ttth/issues/2)
   * Download video. See [#1](https://github.com/yafp/ttth/issues/1)
+  * Downloading/extracting audio. See [#2](https://github.com/yafp/ttth/issues/2)
+* Minor functions
   * Show extractor list.See [#4](https://github.com/yafp/ttth/issues/4)
   * Open local download folder
-* Minor
   * Application menu
   * about window
   * check for software updates. See [#3](https://github.com/yafp/ttth/issues/3)
