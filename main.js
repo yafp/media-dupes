@@ -4,6 +4,14 @@ const shell = require('electron').shell
 const path = require('path')
 const openAboutWindow = require('about-window').default // for: about-window
 
+// The following requires are not really needed - but it mutes 'npm-check' regarding NOTUSED
+require("jquery"); 
+require("@fortawesome/fontawesome-free"); 
+require("popper.js");
+// CAUTION: jquery, fontawesome and popper might cost startup time
+//
+//require('bootstrap'); // this breaks everything, whyever
+
 // ----------------------------------------------------------------------------
 // ERROR-HANDLING
 // ----------------------------------------------------------------------------
@@ -40,9 +48,9 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
-    minWidth: 800,
-    height: 800,
-    minHeight: 800,
+    minWidth: 600,
+    height: 750,
+    minHeight: 750,
     icon: path.join(__dirname, 'app/img/icon/icon.png'),
 
     webPreferences: {
@@ -51,7 +59,7 @@ function createWindow () {
     }
   })
 
-  // Call from renderer: Open folder with user configured services
+  // Call from renderer: Open general download folder
   ipcMain.on('openUserDownloadFolder', (event) => {
     if (shell.openItem(downloadTarget) === true) {
       console.log('Opened the user download folder (ipcMain)')
@@ -312,7 +320,7 @@ function createMenu () {
 */
 function forceSingleAppInstance () {
   if (!gotTheLock) {
-    // writeLog("error", "forceSingleAppInstance ::: There is already another instance of tttth");
+    console.log("forceSingleAppInstance ::: There is already another instance of media-dupes");
     app.quit() // quit the second instance
   } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
