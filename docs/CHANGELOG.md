@@ -24,6 +24,30 @@ The following categories are used:
 * ```Security```: in case of vulnerabilities.
 
 
+
+***
+
+### media-dupes 0.2.0 (201912xx)
+#### ```Added```
+* Added icon to os-notifications. See [#5](https://github.com/yafp/ttth/issues/5)
+* Custom-titlebar (merging menu and titlebar to one line). See [#6](https://github.com/yafp/ttth/issues/6)
+* Added support for urgent window after finishing all download jobs. See [#7](https://github.com/yafp/ttth/issues/7)
+* Added loading/spinner to show ongoing download process. See [#8](https://github.com/yafp/ttth/issues/8)
+* Added an intro to the UI using introJs. See [#9](https://github.com/yafp/ttth/issues/9)
+
+
+#### ```Changed```
+* Button 'Downloads' now directly opens ~/Downloads/media-dupes if it exists. Otherwise it opens ~/Downloads. See [#9](https://github.com/yafp/ttth/issues/9)
+* Dependencies check on launch is now searching for youtube-dl as well.
+* Dependencies
+  * Updated electron from 7.1.3 to 7.1.4
+* Normalized code style using standardx
+* Improved youtube-dl flags
+  * added: `--add-metadata` for video. See [#10](https://github.com/yafp/ttth/issues/10)
+  * added: `--embed-thumbnail` for audio. See [#11](https://github.com/yafp/ttth/issues/11)
+  * added: `--ignore-errors` for audio & video. See [#12](https://github.com/yafp/ttth/issues/12)
+* Log section now auto-scrolls to bottom of log while downloading content. See [#13](https://github.com/yafp/ttth/issues/13)
+
 ***
 
 ### media-dupes 0.1.0 (20191209)
