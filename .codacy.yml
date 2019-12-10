@@ -1,5 +1,6 @@
 ---
 exclude_paths:
+  - 'app/lib/**'
   - 'docs/**'
   - 'docs/**/*'
   - 'docs/jsdocs/**/*'
