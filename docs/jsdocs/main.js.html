@@ -33,8 +33,8 @@ const path = require('path')
 const openAboutWindow = require('about-window').default // for: about-window
 
 // The following requires are not really needed - but it mutes 'npm-check' regarding NOTUSED
-require("jquery"); 
-require("@fortawesome/fontawesome-free"); 
+require("jquery");
+require("@fortawesome/fontawesome-free");
 require("popper.js");
 // CAUTION: jquery, fontawesome and popper might cost startup time
 //
@@ -60,7 +60,6 @@ const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handl
 const urlGitHubGeneral = 'https://github.com/yafp/media-dupes'
 const urlGitHubIssues = 'https://github.com/yafp/media-dupes/issues'
 const urlGitHubChangelog = 'https://github.com/yafp/media-dupes/blob/master/docs/CHANGELOG.md'
-const urlGitHubFAQ = 'https://github.com/yafp/media-dupes/blob/master/docs/FAQ.md'
 const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases'
 
 // ----------------------------------------------------------------------------
@@ -73,45 +72,51 @@ const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases'
 * @description Creates the mainWindow
 */
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 800,
-    minWidth: 600,
-    height: 750,
-    minHeight: 750,
-    icon: path.join(__dirname, 'app/img/icon/icon.png'),
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 800,
+        minWidth: 600,
+        height: 750,
+        minHeight: 750,
+        frame: false, // false results in a borderless window. Needed for custom titlebar
+        icon: path.join(__dirname, 'app/img/icon/icon.png'),
 
-    webPreferences: {
-      nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+        webPreferences: {
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.js')
+        }
+    })
 
-  // Call from renderer: Open general download folder
-  ipcMain.on('openUserDownloadFolder', (event) => {
-    if (shell.openItem(downloadTarget) === true) {
-      console.log('Opened the user download folder (ipcMain)')
-    } else {
-      console.log('Failed to open the user download folder (ipcMain)')
-    }
-  })
+    // Call from renderer: Open general download folder
+    ipcMain.on('openUserDownloadFolder', (event) => {
+        if (shell.openItem(downloadTarget) === true) {
+            console.log('Opened the user download folder (ipcMain)')
+        } else {
+            console.log('Failed to open the user download folder (ipcMain)')
+        }
+    })
 
-  const downloadTarget = app.getPath('downloads')
-  global.sharedObj = { prop1: downloadTarget }
+    // Call from renderer: Option: Urgent window
+    ipcMain.on("makeWindowUrgent", function() {
+        mainWindow.flashFrame(true);
+    });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('app/index.html')
+    const downloadTarget = app.getPath('downloads')
+    global.sharedObj = { prop1: downloadTarget }
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+    // and load the index.html of the app.
+    mainWindow.loadFile('app/index.html')
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools()
+
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function () {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null
+    })
 }
 
 /**
@@ -120,8 +125,8 @@ function createWindow () {
 * @description Creates the application menu
 */
 function createMenu () {
-  // Create a custom menu
-  var menu = Menu.buildFromTemplate([
+    // Create a custom menu
+    var menu = Menu.buildFromTemplate([
 
     // Menu: File
     {
@@ -347,26 +352,26 @@ function createMenu () {
 * @description Takes care that there is only 1 instance of this app running
 */
 function forceSingleAppInstance () {
-  if (!gotTheLock) {
-    console.log("forceSingleAppInstance ::: There is already another instance of media-dupes");
-    app.quit() // quit the second instance
-  } else {
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
-      // Someone tried to run a second instance, we should focus our first instance window.
-      if (mainWindow) {
-        if (mainWindow === null) // #134
-        {
-          // do nothing - there is no mainwindow - most likely we are on macOS
-        } else // mainWindow exists
-        {
-          if (mainWindow.isMinimized()) {
-            mainWindow.restore()
-          }
-          mainWindow.focus()
-        }
-      }
-    })
-  }
+    if (!gotTheLock) {
+        console.log("forceSingleAppInstance ::: There is already another instance of media-dupes");
+        app.quit() // quit the second instance
+    } else {
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            // Someone tried to run a second instance, we should focus our first instance window.
+            if (mainWindow) {
+                if (mainWindow === null) // #134
+                {
+                    // do nothing - there is no mainwindow - most likely we are on macOS
+                } else // mainWindow exists
+                {
+                    if (mainWindow.isMinimized()) {
+                        mainWindow.restore()
+                    }
+                    mainWindow.focus()
+                }
+            }
+        })
+    }
 }
 
 // This method will be called when Electron has finished
@@ -375,22 +380,22 @@ function forceSingleAppInstance () {
 //
 // app.on('ready', createWindow)
 app.on('ready', function () {
-  forceSingleAppInstance() // check for single instance
-  createWindow() // create the application UI
-  createMenu() // create the application menu
+    forceSingleAppInstance() // check for single instance
+    createWindow() // create the application UI
+    createMenu() // create the application menu
 })
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') app.quit()
+    // On macOS it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('activate', function () {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) createWindow()
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (mainWindow === null) createWindow()
 })
 </code></pre>
         </article>
@@ -402,13 +407,13 @@ app.on('activate', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiLogAppend">uiLogAppend</a></li><li><a href="global.html#uiLogReset">uiLogReset</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#validURL">validURL</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiLogAppend">uiLogAppend</a></li><li><a href="global.html#uiLogReset">uiLogReset</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#validURL">validURL</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon Dec 09 2019 15:18:47 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Dec 10 2019 08:07:43 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
