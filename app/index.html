@@ -20,15 +20,19 @@
     <link rel="stylesheet" href="../node_modules/noty/lib/themes/bootstrap-v4.css">
     <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
 
+    <!-- introJS -->
+    <link rel="stylesheet" href="lib/intro.js/2.9.3/minified/introjs.min.css">
+    <link rel="stylesheet" href="lib/intro.js/2.9.3/themes/introjs-modern.css">
+    <script type="text/javascript" src="lib/intro.js/2.9.3/minified/intro.min.js" defer></script>
+
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css" >
-
 
     <title>media-dupes</title>
 </head>
 
 <body>
-    <div class="container mediaDupes_nonSelectableText">
+    <div class="container mediaDupes_nonSelectableText" data-step="9" data-intro="Enjoy">
 
         <!-- empty line -->
         <div class="row">
@@ -36,25 +40,35 @@
         </div>
 
         <!-- Heading: -->
-        <div class="row">
+        <div class="row" data-step="1" data-intro="Welcome to media-dupes, a minimal media duplicator for common media services like youtube. The following intro explains how to use this application.">
             <div class="col-12">
+
+            <!-- spinner -->
+            <div id="md_spinner" name="md_spinner" class="spinner-grow text-success float-left" role="status" hidden>
+                <span class="sr-only">Loading...</span>
+            </div>
+
+            <!-- app name -->
             <h3><img src="img/128x128.png" height="32">media-dupes</h3>
+
+            <!-- app description -->
             <h6>a minimal media duplicator for common media services like youtube</h6>
+
         </div>
         </div>
 
         <!-- add URL -->
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="add your url here" id="inputNewUrl" name="inputNewUrl">
+            <input type="text" class="form-control" placeholder="paste your url here" id="inputNewUrl" name="inputNewUrl" data-step="2" data-intro="Paste your media-service URL into this field ( Example: http://www.youtube.com/watch?v=90AiXO1pAiA )">
             <div class="input-group-append">
-                <button class="btn btn-secondary" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();"><i class="fas fa-plus"></i></button>
+                <button class="btn btn-secondary" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing this button"><i class="fas fa-plus"></i> Add URL</button>
             </div>
         </div>
 
         <!-- show urls -->
         <div class="row">
             <div class="col-12">
-            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" readonly rows="8" style="min-width: 100%">
+            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" placeholder="todo-list" readonly rows="8" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here. You could now add more URLs like you already did OR continue processing this todo-list">
             </textarea>
         </div>
         </div>
@@ -66,9 +80,32 @@
 
         <!-- start buttons-->
         <div class="row">
-            <div class="col-12">
-            <button id="buttonStartVideo" name="buttonStartVideo" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as video files" onclick="downloadContent('video');" disabled><i class="fas fa-video"></i> Grab video</button> &nbsp;
-            <button id="buttonStartAudio" name="buttonStartAudio" type="button" class="btn btn-success" title="Start downloading all content from todo-list and store them as audio files" onclick="downloadContent('audio');" disabled><i class="fas fa-music"></i> Grab audio</button>
+            <div class="col-12" data-step="5" data-intro="Start the download by pressing one of this two buttons">
+            <button 
+                id="buttonStartVideo" 
+                name="buttonStartVideo" 
+                type="button" 
+                class="btn btn-success" 
+                title="Start downloading all content from todo-list and store them as video files" 
+                onclick="downloadContent('video');" 
+                disabled
+                data-step="6" 
+                data-intro="The grab video button handles videos"
+                >
+                <i class="fas fa-video"></i> Grab video</button> &nbsp;
+
+            <button 
+                id="buttonStartAudio" 
+                name="buttonStartAudio" 
+                type="button" 
+                class="btn btn-success" 
+                title="Start downloading all content from todo-list and store them as audio files" 
+                onclick="downloadContent('audio');" 
+                disabled
+                data-step="7" 
+                data-intro="The grab audio button handles audio"
+                >
+                <i class="fas fa-music"></i> Grab audio</button>
         </div>
         </div>
 
@@ -107,7 +144,7 @@
         <!-- show log -->
         <div class="row">
             <div class="col-12">
-            <textarea class="form-control" id="textareaLogOutput" name="textareaLogOutput" title="application log" readonly rows="12" style="min-width: 100%">
+            <textarea class="form-control" id="textareaLogOutput" name="textareaLogOutput" title="application log" placeholder="output" readonly rows="12" style="min-width: 100%" data-step="8" data-intro="You can follow the download process here">
             </textarea>
         </div>
         </div>
@@ -120,12 +157,12 @@
         <!-- extra buttons-->
         <div class="row">
             <div class="col-12">
-            <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm" title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
-            <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
-            <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right" onclick="uiReset();"><i class="fas fa-redo-alt"></i> Reset</button>
+                <button id="buttonShowHelp" name="buttonShowHelp" type="button" class="btn btn-outline-secondary btn-sm" title="Shows a small media-dupes intro to explain how it works" onclick="startIntro();"><i class="fas fa-info"></i> Intro</button>
+                <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm  title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
+                <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
+                <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right" title="Reset the user-interface (UI)" onclick="uiReset();"><i class="fas fa-redo-alt"></i> Reset</button>
+            </div>
         </div>
-        </div>
-
 </div>
 <!-- container -->
 
@@ -139,13 +176,19 @@
 // execute on ready
 $( document ).ready(function()
 {
-    console.log( 'ready' );
+    console.log( 'ready' )
+
+    // init titleBar
+    initTitlebar()
+
+    // init the UI
+    uiReset();
 
     // check for media-dupes updates
-    searchUpdate();
+    searchUpdate()
 
     // check if requirements are installed
-    checkForDeps();
+    checkForDeps()
 });
 </script>
 
