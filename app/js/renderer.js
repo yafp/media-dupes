@@ -9,6 +9,10 @@ require('./js/crashReporting.js')
 // ----------------------------------------------------------------------------
 var arrayUserUrls = []
 
+// Settings variables
+var settingAudioFormat = 'mp3' // default mp3
+var settingCustomDownloadDir = '' // default
+
 /**
 * @name initTitlebar
 * @summary Init the titlebar for the frameless mainWindow
@@ -88,6 +92,7 @@ function showNotifcation (title = 'media-dupes', message) {
 * @description Shows the loading animation / download spinner
 */
 function loadingAnimationShow () {
+    console.log("loadingAnimationShow ::: Showing spinner")
     $('#md_spinner').attr('hidden', false)
 }
 
@@ -97,6 +102,7 @@ function loadingAnimationShow () {
 * @description Hides the loading animation / download spinner
 */
 function loadingAnimationHide () {
+    console.log("loadingAnimationShow ::: Hiding spinner")
     $('#md_spinner').attr('hidden', true)
 }
 
@@ -111,7 +117,7 @@ function checkForDeps () {
     // youtube-dl
     //
     const youtubedl = require('youtube-dl')
-    console.log("checkForDeps ::: Searching youtube-dl ...")
+    console.log('checkForDeps ::: Searching youtube-dl ...')
     var youtubeDl = youtubedl.getYtdlBinary()
     if (youtubeDl === '') {
         countErrors = countErrors + 1
@@ -121,8 +127,6 @@ function checkForDeps () {
         // hide both buttons (video and audio)
         $('#buttonStartVideo').hide()
         $('#buttonStartAudio').hide()
-        
-        
     } else {
         console.log('checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
     }
@@ -160,6 +164,9 @@ function uiReset () {
     // disable start button
     startButtonsDisable()
 
+    // ensure some buttons are enabled
+    otherButtonsEnable()
+
     // empty todo-list textarea
     toDoListReset()
 
@@ -170,6 +177,259 @@ function uiReset () {
     loadingAnimationHide()
 
     console.log('uiReset ::: Finished resetting the UI')
+}
+
+/**
+* @name settingsSelectCustomTargetDir
+* @summary Let the user choose a custom download target directory
+* @description Is triggered via button on settings.html.
+*/
+function settingsSelectCustomTargetDir () {
+    console.log('settingsSelectCustomTargetDir ::: Opening dialog to select a new download target ...')
+
+    const options = { properties: ['openDirectory'] }
+
+    const { dialog } = require('electron').remote
+    dialog.showOpenDialog(options).then(res => {
+        console.log(res.filePaths)
+
+        if (res.filePaths !== '') {
+            // save the value
+            writeLocalUserSetting('CustomDownloadDir', res.filePaths.toString())
+
+            // show it in the UI
+            $('#inputCustomTargetDir').val(res.filePaths)
+        }
+    })
+}
+
+/**
+* @name settingsResetCustomTargetDir
+* @summary Let the user reset the custom download target directory
+* @description Is triggered via button on settings.html.
+*/
+function settingsResetCustomTargetDir () {
+    console.log('settingsResetCustomTargetDir ::: Deleting the custom download target')
+
+    var newValue = ''
+
+    // save the value
+    writeLocalUserSetting('CustomDownloadDir', newValue)
+
+    // show it in the UI
+    $('#inputCustomTargetDir').val(newValue)
+
+    // update global var
+    settingCustomDownloadDir = newValue
+}
+
+/**
+* @name settingsBackToMain
+* @summary Navigate back to index.html
+* @description Is triggered via button on settings.html. Calls method on main.js which loads index.html back to the application window
+*/
+function settingsBackToMain () {
+    // reload main UI
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('mainUiLoad')
+}
+
+/**
+* @name settingsUiLoad
+* @summary Navigate to setting.html
+* @description Is triggered via button on index.html. Calls method on main.js which loads setting.html to the application window
+*/
+function settingsUiLoad () {
+    // load settings UI
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('settingsUiLoad')
+}
+
+/**
+* @name writeLocalUserSetting
+* @summary Write to electron-json-storage
+* @description Writes a value for a given key to electron-json-storage
+* @param key - Name of storage key
+* @param value - New value
+*/
+function writeLocalUserSetting (key, value) {
+    const storage = require('electron-json-storage')
+    const remote = require('electron').remote
+    const app = remote.app
+    const path = require('path')
+
+    // get default storage path
+    const defaultDataPath = storage.getDefaultDataPath()
+
+    // set new path for userUsettings
+    const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
+    storage.setDataPath(userSettingsPath)
+
+    // write the user setting
+    storage.set(key, { setting: value }, function (error) {
+        if (error) {
+            throw error
+        }
+        console.log('writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
+
+        showNoty('success', 'Set <b>' + key + '</b> to <b>' + value + '</b>.')
+    })
+}
+
+/**
+* @name readLocalUserSetting
+* @summary Read from local storage
+* @description Reads a value stored in local storage (for a given key)
+* @param key - Name of local storage key
+* @param optional Boolean used for an ugly hack
+*/
+function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
+    const storage = require('electron-json-storage')
+    const remote = require('electron').remote
+    const app = remote.app
+    const path = require('path')
+
+    console.log('readLocalUserSetting ::: Trying to read value of key: ' + key)
+
+    // get default storage path
+    const defaultDataPath = storage.getDefaultDataPath()
+
+    // change path for userSettings
+    const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
+    storage.setDataPath(userSettingsPath)
+
+    // read the json file
+    storage.get(key, function (error, data) {
+        if (error) {
+            throw error
+        }
+
+        var value = data.setting
+
+        console.log('readLocalUserSetting ::: key: _' + key + '_ - got value: _' + value + '_')
+
+        // Setting: CustomDownloadDir
+        //
+        if (key === 'CustomDownloadDir') {
+            // not configured
+            if ((value === null) || (value === undefined)) {
+            // if(value === null) {
+                console.warn('readLocalUserSetting ::: No user setting found for: ' + key)
+                settingCustomDownloadDir = '' // default
+            } else {
+                console.log('readLocalUserSetting ::: Found configured ' + key + ' with value: ' + value)
+
+                // check if directory exists
+                if (isDirectoryAvailable(value)) {
+                    // check if directory exists
+                    if (isDirectoryWriteable(value)) {
+                        // seems like everything is ok
+
+                        // update global var
+                        settingCustomDownloadDir = value
+                    } else {
+                        console.error('readLocalUserSetting ::: Configured custom download dir _' + value + '_ exists BUT is not writeable. Gonna reset the user-setting')
+                        value = ''
+                        settingCustomDownloadDir = value // update the global dir
+
+                        // delete the config
+                        storage.remove('CustomDownloadDir', function (error) {
+                            if (error) throw error
+                        })
+                    }
+                } else {
+                    console.error('readLocalUserSetting ::: Configured custom download dir _' + value + '_ does not exists. Gonna reset the user-setting')
+                    value = ''
+                    settingCustomDownloadDir = value // update the global dir
+
+                    // delete the config
+                    storage.remove('CustomDownloadDir', function (error) {
+                        if (error) throw error
+                    })
+                }
+
+                // Update UI select
+                if (optionalUpdateSettingUI === true) {
+                    $('#inputCustomTargetDir').val(value)
+                }
+            }
+        }
+        // end: CustomDownloadDir
+
+        // Setting: AudioFormat
+        //
+        if (key === 'AudioFormat') {
+            // not configured
+            if ((value === null) || (value === undefined)) {
+            // if(value === null) {
+                console.warn('readLocalUserSetting ::: No user setting found for: ' + key)
+                settingAudioFormat = 'mp3' // default
+            } else {
+                console.log('readLocalUserSetting ::: Found configured ' + key + ' with value: ' + value)
+
+                // update global var
+                settingAudioFormat = value
+
+                if (optionalUpdateSettingUI === true) {
+                    // Update select
+                    $('#inputGroupSelectAudio').val(value)
+                }
+            }
+        }
+        // end: AudioFormat
+    })
+}
+
+/**
+* @name settingAudioFormatSave
+* @summary Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
+* @description Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
+*/
+function settingAudioFormatSave () {
+    // get value from UI select inputGroupSelectAudio
+    var userSelectedAudioFormat = $('#inputGroupSelectAudio').val()
+    console.log('settingAudioFormatSave ::: User selected the audio format: _' + userSelectedAudioFormat + '_.')
+
+    // store this value in a json file
+    writeLocalUserSetting('AudioFormat', userSelectedAudioFormat)
+}
+
+/**
+* @name userSettingsLoadAllOnAppStart
+* @summary Reads all user-setting-files and fills some global variables
+* @description Reads all user-setting-files and fills some global variables
+*/
+function userSettingsLoadAllOnAppStart () {
+    // Custom download dir
+    readLocalUserSetting('CustomDownloadDir')
+
+    // load configured audio format
+    readLocalUserSetting('AudioFormat')
+}
+
+/**
+* @name userSettingsLoadAllOnSettingsUiLoad
+* @summary Reads all user-setting-files and fills some global variables and adjusts the settings UI
+* @description Reads all user-setting-files and fills some global variables and adjusts the settings UI
+*/
+function userSettingsLoadAllOnSettingsUiLoad () {
+    // Custom download dir
+    readLocalUserSetting('CustomDownloadDir', true)
+
+    // load configured audio format and update the settings UI
+    readLocalUserSetting('AudioFormat', true)
+}
+
+/**
+* @name settingsFolderOpen
+* @summary Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
+* @description Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
+*/
+function settingsFolderOpen () {
+    console.log('settingsFolderOpen ::: User wants to open its config folder.')
+
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('settingsFolderOpen')
 }
 
 /**
@@ -287,6 +547,43 @@ function startButtonsDisable () {
 }
 
 /**
+* @name otherButtonsEnable
+* @summary Enables some of the footer buttons when a download is finished
+* @description Is executed when a download task has ended by the user
+*/
+function otherButtonsEnable () {
+    // disable some buttons
+
+    // add URL
+    $('#buttonAddUrl').prop('disabled', false) // add url
+
+    // footer
+    $('#buttonShowSettings').prop('disabled', false) // settings
+    $('#buttonShowHelp').prop('disabled', false) // help / intro
+    $('#buttonShowExtractors').prop('disabled', false) // showExtractors
+
+    console.log('otherButtonsDisable ::: Did disable both start buttons')
+}
+
+/**
+* @name otherButtonsDisable
+* @summary Disables some of the footer buttons while a download is running
+* @description Is executed when a download task is started by the user
+*/
+function otherButtonsDisable () {
+    // disable some buttons
+
+    // add URL
+    $('#buttonAddUrl').prop('disabled', true) // add url
+
+    $('#buttonShowSettings').prop('disabled', true) // settings
+    $('#buttonShowHelp').prop('disabled', true) // help / intro
+    $('#buttonShowExtractors').prop('disabled', true) // showExtractors
+
+    console.log('otherButtonsDisable ::: Did disable both start buttons')
+}
+
+/**
 * @name uiLogReset
 * @summary Resetts the log textarea
 * @description Resetts the log textarea
@@ -321,98 +618,135 @@ function downloadContent (mode) {
     // url = 'https://vimeo.com/120828152'
     // url = 'https://soundcloud.com/jakarta-records/suff-daddy-feat-ill-camille-jlamotta-magic-taken-from-seasons-in-jakarta'
 
-    // Prepare UI
+    // What is the target dir
     //
-    uiLogReset() // start new job - clean up loag before
-    startButtonsDisable() // disable the start buttons
-    loadingAnimationShow() // start download animation / spinner
+    var detectedDownloadDir = getDownloadDirectory()
+    console.log('downloadContent ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    console.log('downloadContent ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
 
-    // require some stuff
-    const youtubedl = require('youtube-dl')
-    const { remote } = require('electron')
-    const path = require('path')
+    if (detectedDownloadDir[0]) {
+        // Prepare UI
+        //
+        uiLogReset() // start new job - clean up loag before
+        startButtonsDisable() // disable the start buttons
+        otherButtonsDisable() // disables some other buttons
+        loadingAnimationShow() // start download animation / spinner
 
-    var targetPath = remote.getGlobal('sharedObj').prop1
-    var youtubeDlParameter = ''
+        // require some stuff
+        const youtubedl = require('youtube-dl')
+        const { remote } = require('electron')
+        const path = require('path')
 
-    // Define the youtube-dl parameters depending on the mode (audio vs video)
-    switch (mode) {
-    case 'audio':
-        var ffmpeg = require('ffmpeg-static-electron')
-        console.log('downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+        var targetPath = detectedDownloadDir[1]
+        console.log('Download target is set to: ' + targetPath)
 
-        // youtubeDlParameter = ['-f', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '-o', path.join(targetPath, 'media-dupes', '%(title)s-%(id)s.%(ext)s')]
-        youtubeDlParameter = ['--format', 'bestaudio', '--extract-audio', '--audio-format', 'mp3', '--audio-quality', '0', '--embed-thumbnail', '--ignore-errors', '--output', path.join(targetPath, 'media-dupes', '%(title)s-%(id)s.%(ext)s'), '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path]
-        break
+        var youtubeDlParameter = ''
 
-    case 'video':
-        youtubeDlParameter = ['--format', 'best', '--output', '--add-metadata', '--ignore-errors', path.join(targetPath, 'media-dupes', '%(title)s-%(id)s.%(ext)s')]
-        break
+        // Define the youtube-dl parameters depending on the mode (audio vs video)
+        switch (mode) {
+        case 'audio':
+            var ffmpeg = require('ffmpeg-static-electron')
+            console.log('downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
 
-    default:
-        showNoty('error', 'Unexpected download case. Please report this issue')
-        return
-    }
+            console.log('downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
 
+            // generic parameter / flags
+            youtubeDlParameter = [
+                '--format', 'bestaudio',
+                '--extract-audio',
+                '--audio-format', settingAudioFormat,
+                '--audio-quality', '0',
+                // '--embed-thumbnail', // FIXME: does not work with wav, ogg, m4a - throws errors
+                '--ignore-errors',
+                '--output', path.join(targetPath, '%(title)s-%(id)s.%(ext)s'),
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path
+            ]
 
-    // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
-    if (typeof arrayUserUrls == "undefined" || !(arrayUserUrls instanceof Array)) {
-        showNoty('error', 'Unexpected issue in function downloadContent. Please report this')
-        return
-    }
-
-    // assuming we got an array 
-    // for each item of the array
-    //
-    var arrayLength = arrayUserUrls.length
-    for (var i = 0; i < arrayLength; i++) {
-        var url = arrayUserUrls[i]
-
-        console.log('downloadContent ::: Processing URL: _' + url + '_.')
-        console.log('downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.');
-        console.log('downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
-
-        uiLogAppend('Processing: ' + url)
-
-        const video = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
-
-            
-
-            if (err) {
-                showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err)
-                throw err
+            // prepend/add some case-specific parameter / flag
+            if (settingAudioFormat === 'mp3') {
+                youtubeDlParameter.unshift('--embed-thumbnail') // prepend
             }
+            break
 
-            // show progress
-            console.log(output.join('\n'))
-            uiLogAppend(output.join('\n'))
+        case 'video':
+            youtubeDlParameter = [
+                '--format', 'best',
+                '--output', path.join(targetPath, '%(title)s-%(id)s.%(ext)s'),
+                '--add-metadata',
+                '--ignore-errors'
+            ]
+            break
 
-            // scroll log textarea to the end
-            $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
+        default:
+            console.error('downloadContent ::: Unspecified mode. This should never happen.')
+            showNoty('error', 'Unexpected download mode. Please report this issue')
+            return
+        }
 
-            // finish
-            console.log('downloadContent ::: Finished downloading _' + url + '_.')
-            uiLogAppend('Finished downloading: ' + url)
-            showNoty('success', 'Finished downloading <b>' + url + '</b>.')
+        // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
+        if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
+            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent. Please report this')
+            return
+        }
 
-            // Final notification
-            if (i === arrayLength) {
-                showNotifcation('media-dupes', 'Finished downloading ' + i + ' url(s).')
-                toDoListReset()
+        // assuming we got an array
+        // for each item of the array
+        //
+        var arrayLength = arrayUserUrls.length
+        for (var i = 0; i < arrayLength; i++) {
+            var url = arrayUserUrls[i]
 
-                // make window urgent after having finished downloading. See #7
-                const { ipcRenderer } = require('electron')
-                ipcRenderer.send('makeWindowUrgent')
+            //Sentry.captureMessage('Download single url')
+            registerEvent('downloadSingleUrl')
 
-                loadingAnimationHide() // start download animation / spinner
+            console.log('downloadContent ::: Processing URL: _' + url + '_.')
+            console.log('downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+            console.log('downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
+
+            uiLogAppend('Processing: ' + url)
+
+            const video = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
+                if (err) {
+                    // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err)
+                    throw err
+                }
+
+                // show progress
+                console.log(output.join('\n'))
+                uiLogAppend(output.join('\n'))
 
                 // scroll log textarea to the end
                 $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
-            }
-        })
-    }
 
-    console.log('downloadContent ::: All download processes are now started')
+                // finish
+                console.log('downloadContent ::: Finished downloading _' + url + '_.')
+                uiLogAppend('Finished downloading: ' + url)
+                showNoty('success', 'Finished downloading <b>' + url + '</b>.')
+
+                // Final notification
+                if (i === arrayLength) {
+                    showNotifcation('media-dupes', 'Finished downloading ' + i + ' url(s).')
+                    toDoListReset()
+
+                    // make window urgent after having finished downloading. See #7
+                    const { ipcRenderer } = require('electron')
+                    ipcRenderer.send('makeWindowUrgent')
+
+                    loadingAnimationHide() // start download animation / spinner
+
+                    otherButtonsEnablew() // enable some of the buttons again
+
+                    // scroll log textarea to the end
+                    $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
+                }
+            })
+        }
+        console.log('downloadContent ::: All download processes are now started')
+    } // we got a target dir
+    else {
+        console.error('downloadContent ::: Unable to start a download, because no useable target dir was detectable')
+        showNoty('error', 'Aborted download, because no useable downloads directory was found', 0)
+    }
 }
 
 /**
@@ -423,7 +757,9 @@ function downloadContent (mode) {
 function showSupportedExtractors () {
     console.log('showSupportedExtractors ::: Loading list of all supported extractors...')
 
-    showNoty('info', 'Loading list of all supported platforms. This might take a while ....')
+    loadingAnimationShow()
+
+    registerEvent('showExtractors')
 
     const youtubedl = require('youtube-dl')
 
@@ -436,6 +772,8 @@ function showSupportedExtractors () {
 
         // show in textareaLogOutput
         textareaLogOutput.value = list.join('\n')
+
+        loadingAnimationHide()
     })
 
     console.log('showSupportedExtractors ::: Finished.')
@@ -448,6 +786,9 @@ function showSupportedExtractors () {
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
+
+    loadingAnimationShow()
+
     // when executed manually via menu -> user should see that update-check is running
     if (silent === false) {
         showNoty('info', 'Searching for updates')
@@ -522,18 +863,21 @@ function searchUpdate (silent = true) {
 
         console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases')
     })
-        .done(function () {
-            // console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases');
-        })
+    .done(function () {
+        // console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases');
+    })
 
-        .fail(function () {
-            console.log('searchUpdate ::: Checking ' + url + ' for available releases failed.')
-            showNoty('error', 'Checking <b>' + url + '</b> for available releases failed. Please troubleshoot your network connection.')
-        })
+    .fail(function () {
+        console.log('searchUpdate ::: Checking ' + url + ' for available releases failed.')
+        showNoty('error', 'Checking <b>' + url + '</b> for available releases failed. Please troubleshoot your network connection.')
+    })
 
-        .always(function () {
-            console.log('searchUpdate ::: Finished checking ' + url + ' for available releases')
-        })
+    .always(function () {
+        console.log('searchUpdate ::: Finished checking ' + url + ' for available releases')
+
+        loadingAnimationHide()
+    })
+
 }
 
 /**
@@ -565,19 +909,205 @@ function openURL (url) {
 * @description Triggers code in main.js to open the download folder of the user
 */
 function openUserDownloadFolder () {
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.send('openUserDownloadFolder')
+    loadingAnimationShow()
+
+    var detectedDownloadDir = getDownloadDirectory()
+
+    console.log('openUserDownloadFolder ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    console.log('openUserDownloadFolder ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
+
+    // if we gont a download folder which can be used
+    if (detectedDownloadDir[0]) {
+        const { ipcRenderer } = require('electron')
+        ipcRenderer.send('openUserDownloadFolder', detectedDownloadDir[1])
+    } else {
+        console.error('openUserDownloadFolder ::: Unable to find a download dir')
+        showNoty('error', 'Unable to find a working download dir.', 0)
+    }
+
+    loadingAnimationHide()
 }
 
-
-function startIntro() {
-    console.log("startIntro ::: User wants to see the intro. Here you go!")
+/**
+* @name startIntro
+* @summary start an intro / user tutorial
+* @description Starts a short intro / tutorial which explains the user-interface. Using introJs
+*/
+function startIntro () {
+    console.log('startIntro ::: User wants to see the intro. Here you go!')
     introJs().start()
+    registerEvent('showIntro')
 }
 
+/**
+* @name getDownloadDirectory
+* @summary Detects what the download target dir is
+* @description Validates which directory should be used as download target
+* @return boolean - Do we have a useable download dir
+* @return String - The detected download dir
+*/
+function getDownloadDirectory () {
+    console.log('getDownloadDirectory ::: Gonna check for the user download directory')
 
-// Call from main.js ::: startSearchUpdates
+    var targetPath = ''
+
+    // Check if there is a user-configured target defined
+    //
+    console.log('getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
+    targetPath = settingCustomDownloadDir.toString()
+    if (targetPath !== '') {
+        // User has configured a custom download dir
+        console.log('getDownloadDirectory ::: User configured custom download directory is configured to: _' + targetPath + '_.')
+
+        // check if that directory still exists
+        if (isDirectoryAvailable(targetPath)) {
+            // the custom dir exists
+
+            // check if it is writeable
+            if (isDirectoryWriteable(targetPath)) {
+                console.log('getDownloadDirectory :::The custom download dir ' + targetPath + ' is writeable. We are all good and gonna use it now')
+                return [true, targetPath]
+            } else {
+                // folder exists but is not writeable
+                console.error('getDownloadDirectory :::The custom download dir ' + targetPath + ' exists but is not writeable. Gonna fallback to default')
+                showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default')
+                writeLocalUserSetting('CustomDownloadDir', '')
+                settingCustomDownloadDir = ''
+            }
+        } else {
+            // the configured dir does not exists anymore
+            console.error('getDownloadDirectory :::The custom download dir ' + targetPath + ' does not exists. Gonna fallback to default')
+            showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> does not exists anymore. Gonna reset the custom setting now back to default')
+            writeLocalUserSetting('CustomDownloadDir', '')
+            settingCustomDownloadDir = ''
+        }
+    }
+    // end checking custom dir
+
+    // check the default download dir
+    //
+    console.log('getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
+    // use the default download target
+    const { remote } = require('electron')
+    targetPath = remote.getGlobal('sharedObj').prop1
+
+    // check if that directory still exists
+    if (isDirectoryAvailable(targetPath)) {
+        // the default download folder exists
+        console.log('getDownloadDirectory ::: The default download location ' + targetPath + ' exists')
+
+        // check if it is writeable
+        if (isDirectoryWriteable(targetPath)) {
+            console.log('getDownloadDirectory ::: The default download location ' + targetPath + ' exists and is writeable. We are all good and gonna use it now')
+            return [true, targetPath]
+        } else {
+            // folder exists but is not writeable
+            console.error('getDownloadDirectory ::: The default download location ' + targetPath + ' exists but is not writeable. This is a major problem')
+            showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default', 0)
+            return [false, '']
+        }
+    } else {
+        // was unable to detect a download folder
+        console.error('getDownloadDirectory ::: Was unable to detect an existing default download location')
+        // should force the user to set a custom one
+        showNoty('error', 'Unable to detect an existing default download location. Please configure a custom download directory in the application settings', 0)
+        return [false, '']
+    }
+}
+
+/**
+* @name isDirectoryAvailable
+* @summary Checks if a given directory exists
+* @description Checks if a given directory exists
+* @param dirPath The directory path which should be checked
+* @return boolean
+*/
+function isDirectoryAvailable (dirPath) {
+    if (dirPath !== '') {
+        const fs = require('fs')
+        if (fs.existsSync(dirPath)) {
+            console.log('isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
+            return true
+        } else {
+            console.error('isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exists')
+            return false
+        }
+    } else {
+        console.error('isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
+    }
+}
+
+/**
+* @name isDirectoryWriteable
+* @summary Checks if a given directory is writeable
+* @description Checks if a given directory is writeable
+* @param dirPath The directory path which should be checked
+* @return boolean
+*/
+function isDirectoryWriteable (dirPath) {
+    if (dirPath !== '') {
+        const fs = require('fs')
+
+        // sync: check if folder is writeable
+        try {
+            fs.accessSync(dirPath, fs.constants.W_OK)
+            console.log('isDirectoryWriteable ::: Directory ' + dirPath + ' is writeable')
+            return true
+        } catch (err) {
+            console.error('isDirectoryWriteable ::: Directory ' + dirPath + ' is not writeable')
+            return false
+        }
+    } else {
+        console.error('isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty')
+    }
+}
+
+function userSettingsShowYoutubeDLInfo () {
+    const youtubedl = require('youtube-dl')
+    console.log('userSettingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
+    var youtubeDl = youtubedl.getYtdlBinary()
+    if (youtubeDl === '') {
+        console.error('userSettingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
+        showNoty('error', 'Unable to find dependency <b>youtube-dl</b>.', 0)
+    } else {
+        console.log('userSettingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
+        // show in UI
+        $('#userSettingsYouTubeDLPathInfo').val(youtubeDl)
+    }
+}
+
+function userSettingsShowFfmpegInfo () {
+    var ffmpeg = require('ffmpeg-static-electron')
+    console.log('userSettingsShowFfmpegInfo ::: Searching ffmpeg ...')
+    if (ffmpeg === '') {
+        console.error('userSettingsShowFfmpegInfo ::: Unable to find ffmpeg')
+        showNoty('error', 'Unable to find dependency <b>ffmpeg</b>.', 0)
+    } else {
+        console.log('userSettingsShowFfmpegInfo ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+
+        // show in UI
+        $('#userSettingsFfmpegPathInfo').val(ffmpeg.path)
+    }
+}
+
+// Call from main.js ::: startSearchUpdates - verbose
 //
-require('electron').ipcRenderer.on('startSearchUpdates', function () {
+require('electron').ipcRenderer.on('startSearchUpdatesVerbose', function () {
     searchUpdate(false) // silent = false. Forces result feedback, even if no update is available
+})
+
+
+// Call from main.js ::: startSearchUpdates - verbose
+//
+require('electron').ipcRenderer.on('startSearchUpdatesSilent', function () {
+    searchUpdate(true) // silent = false. Forces result feedback, even if no update is available
+})
+
+
+
+
+// Call from main.js ::: openSettings
+//
+require('electron').ipcRenderer.on('openSettings', function () {
+    settingsUiLoad();
 })
