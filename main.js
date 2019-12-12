@@ -2,6 +2,7 @@
 const { app, BrowserWindow, electron, ipcMain, Menu } = require('electron')
 const shell = require('electron').shell
 const path = require('path')
+const fs = require('fs')
 const openAboutWindow = require('about-window').default // for: about-window
 
 // The following requires are not really needed - but it mutes 'npm-check' regarding NOTUSED
@@ -27,6 +28,7 @@ require('./app/js/crashReporting.js')
 let mainWindow
 
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
+const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
 // project-urls
 const urlGitHubGeneral = 'https://github.com/yafp/media-dupes'
@@ -38,18 +40,73 @@ const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases'
 // FUNCTIONS
 // ----------------------------------------------------------------------------
 
+function doLog (type, message) {
+    const log = require('electron-log')
+    // electron-log can: error, warn, info, verbose, debug, silly
+    switch (type) {
+    case 'info':
+        log.info('M: ' + message)
+        break
+
+    case 'warn':
+        log.warn('M: ' + message)
+        break
+
+    case 'error':
+        log.error('M: ' + message)
+        break
+
+    default:
+        log.silly('M: ' + message)
+            // code block
+    }
+}
+
 /**
 * @name createWindow
 * @summary Creates the mainWindow
-* @description Creates the mainWindow
+* @description Creates the mainWindow (restores window position and size of possible)
 */
 function createWindow () {
+    doLog('info', 'createWindow ::: Starting to create the application windows')
+
+    // Check last window position and size from user data
+    var windowWidth
+    var windowHeight
+    var windowPositionX
+    var windowPositionY
+
+    // Read a local config file
+    var customUserDataPath = path.join(defaultUserDataPath, 'MediaDupesWindowPosSize.json')
+    var data
+    try {
+        data = JSON.parse(fs.readFileSync(customUserDataPath, 'utf8'))
+
+        // size
+        windowWidth = data.bounds.width
+        windowHeight = data.bounds.height
+
+        // position
+        windowPositionX = data.bounds.x
+        windowPositionY = data.bounds.y
+
+        doLog('info', 'createWindow ::: Got last window position and size information from _' + customUserDataPath + '_.')
+    } catch (e) {
+        doLog('warn', 'createWindow ::: No last window position and size information found in _' + customUserDataPath + '_. Using fallback values')
+
+        // set some default values for window size
+        windowWidth = 800
+        windowHeight = 770
+    }
+
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 800,
+        titleBarStyle: 'hidden', // needed for custom-electron-titlebar
+        show: false, // hide until: ready-to-show
+        width: windowWidth,
         minWidth: 600,
-        height: 750,
-        minHeight: 750,
+        height: windowHeight,
+        minHeight: 770,
         frame: false, // false results in a borderless window. Needed for custom titlebar
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
 
@@ -59,26 +116,65 @@ function createWindow () {
         }
     })
 
-    // Call from renderer: Open general download folder
-    ipcMain.on('openUserDownloadFolder', (event) => {
+    // Restore window position if possible
+    //
+    // requirements: found values in MediaDupesWindowPosSize.json from the previous session
+    if ((typeof windowPositionX !== 'undefined') && (typeof windowPositionY !== 'undefined')) {
+        mainWindow.setPosition(windowPositionX, windowPositionY)
+    }
 
-        if (shell.openItem(path.join(downloadTarget, 'media-dupes')) === true) {
-          console.log('Opened the media-dupes subfolder in users download folder (ipcMain)')
+    // Call from renderer: Open download folder
+    ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
+        doLog('info', 'Trying to open the download directory _' + userSettingValue + '_.')
+
+        // try to open it
+        if (shell.openItem(userSettingValue) === true) {
+            doLog('info', 'Opened the media-dupes download folder (ipcMain)')
         } else {
-            if (shell.openItem(downloadTarget) === true) {
-                console.log('Opened the generic download folder of the user (ipcMain)')
-            } else {
-                console.log('Failed to open the user download folder (ipcMain)')
-            }
+            doLog('error', 'Failed to open the user download folder (ipcMain)')
         }
     })
 
-    // Call from renderer: Option: Urgent window
+    // Call from renderer: Open download folder
+    ipcMain.on('settingsFolderOpen', (event) => {
+        doLog('info', 'Opened the users settings folder (ipcMain)')
+
+        const storage = require('electron-json-storage')
+
+        // get default storage path
+        const defaultDataPath = storage.getDefaultDataPath()
+
+        // change path for userSettings
+        const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
+
+        if (shell.openItem(userSettingsPath) === true) {
+            doLog('info', 'Opened the media-dupes subfolder in users download folder (ipcMain)')
+        } else {
+            doLog('error', 'Failed to open the user download folder (ipcMain)')
+        }
+    })
+
+    // Call from renderer: Open download folder
+    ipcMain.on('open-dialog-paths-selected', (event) => {
+        doLog('error', '............')
+    })
+
+    // Call from renderer:  Urgent window
     ipcMain.on('makeWindowUrgent', function () {
         mainWindow.flashFrame(true)
     })
 
-    const downloadTarget = app.getPath('downloads')
+    // Call from renderer: Option: load main UI
+    ipcMain.on('mainUiLoad', function () {
+        mainWindow.loadFile('app/index.html')
+    })
+
+    // Call from renderer: Option: load settings UI
+    ipcMain.on('settingsUiLoad', function () {
+        mainWindow.loadFile('app/settings.html')
+    })
+
+    var downloadTarget = app.getPath('downloads')
     global.sharedObj = { prop1: downloadTarget }
 
     // and load the index.html of the app.
@@ -87,8 +183,45 @@ function createWindow () {
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 
+    // show the formerly hidden main window as it is fully ready now
+    mainWindow.on("ready-to-show", function()
+    {
+        mainWindow.show();
+        mainWindow.focus();
+        doLog("info", "createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)");
+
+        // check for media-dupes updates
+        mainWindow.webContents.send('startSearchUpdatesSilent')
+    });
+
+    // Emitted before the window is closed.
+    //
+    mainWindow.on('close', function () {
+        doLog('info', 'createWindow ::: mainWindow will close (event: close)')
+
+        // get window position and size
+        var data = {
+            bounds: mainWindow.getBounds()
+        }
+
+        // define target path (in user data)
+        var customUserDataPath = path.join(defaultUserDataPath, 'MediaDupesWindowPosSize.json')
+
+        // try to write
+        fs.writeFile(customUserDataPath, JSON.stringify(data), function (err) {
+            if (err) {
+                doLog('error', 'storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + err + '_ (event: close)')
+                return console.log(err)
+            }
+
+            doLog('info', 'mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
+        })
+    })
+
     // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
+    //
+    mainWindow.on('closed', function (event) {
+        doLog('info', 'createWindow ::: mainWindow is closed (event: closed)')
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
@@ -109,6 +242,17 @@ function createMenu () {
         {
             label: 'File',
             submenu: [
+                // Settings
+                {
+                    label: 'Settings',
+                    click () {
+                        mainWindow.webContents.send('openSettings')
+                    },
+                    accelerator: 'CmdOrCtrl+,'
+                },
+                {
+                    type: 'separator'
+                },
                 // Exit
                 {
                     role: 'quit',
@@ -191,16 +335,6 @@ function createMenu () {
                         }
                     },
                     accelerator: 'F11' // is most likely predefined on osx - results in: doesnt work on osx
-                },
-                {
-                    role: 'hide',
-                    label: 'Hide',
-                    click (item, mainWindow) {
-                        mainWindow.hide()
-                        // mainWindow.reload();
-                    },
-                    accelerator: 'CmdOrCtrl+H',
-                    enabled: true
                 },
                 {
                     role: 'minimize',
@@ -296,7 +430,7 @@ function createMenu () {
                 {
                     label: 'Search updates',
                     click (item, mainWindow) {
-                        mainWindow.webContents.send('startSearchUpdates')
+                        mainWindow.webContents.send('startSearchUpdatesVerbose')
                     },
                     enabled: true,
                     accelerator: 'F9'
@@ -330,7 +464,7 @@ function createMenu () {
 */
 function forceSingleAppInstance () {
     if (!gotTheLock) {
-        console.log('forceSingleAppInstance ::: There is already another instance of media-dupes')
+        doLog('warn', 'forceSingleAppInstance ::: There is already another instance of media-dupes')
         app.quit() // quit the second instance
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
