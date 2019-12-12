@@ -12,6 +12,15 @@ h3{
     color: gray;
 }
 
+h4{
+    color: #c0392b;
+}
+
+h5{
+    color: gray;
+}
+
+
 h6{
     text-align: right;
     color: gray;
@@ -21,6 +30,12 @@ h6{
 .btn
 {
     /* min-width: 100px;*/
+}
+
+
+.btnDefaultSize
+{
+    min-width: 80px;
 }
 
 
