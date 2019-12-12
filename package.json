@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.2.20191210",
+  "version": "0.2.20191212",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -59,7 +59,7 @@
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}-mac.${ext}",
       "target": [
-        "default"
+        "dmg"
       ]
     },
     "dmg": {
@@ -179,16 +179,18 @@
     "standardx": "^5.0.0"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.11.2",
+    "@fortawesome/fontawesome-free": "^5.12.0",
     "@sentry/electron": "^1.1.0-beta.0",
     "about-window": "^1.13.2",
     "bootstrap": "^4.4.1",
+    "electron-json-storage": "^4.1.8",
+    "electron-log": "^4.0.0",
     "ffmpeg-static-electron": "^2.0.1",
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "pj-custom-electron-titlebar": "^3.1.6",
     "popper.js": "^1.16.0",
-    "youtube-dl": "^2.1.0"
+    "youtube-dl": "^2.2.0"
   },
   "standardx": {
     "ignore": [
