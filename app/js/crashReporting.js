@@ -27,7 +27,13 @@ Sentry.init({
 // simple way to force a crash:
 // myUndefinedFunction();
 
-Sentry.captureMessage('Init completed')
+//Sentry.captureMessage('Init completed')
+
+
+function registerEvent(eventText) {
+    Sentry.captureMessage(eventText)
+}
+
 
 // ----------------------------------------------------------------------------
 // Error Handling using: electron-unhandled (https://github.com/sindresorhus/electron-unhandled)
