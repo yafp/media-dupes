@@ -27,8 +27,8 @@ a minimal media duplicator for common media services like youtube
 ## about media-dupes
 media-dupes can:
 
-* downloads video from common media services
-* downloads audio from common media services
+* download video from common media services
+* download audio from common media services
 
 media-dupes is:
 
