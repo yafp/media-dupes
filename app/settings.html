@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <!-- jquery -->
+    <script>window.$ = window.jQuery = require("jquery");</script>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- fontawesome -->
+    <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js" defer></script>
+
+    <!-- noty -->
+    <link rel="stylesheet" href="../node_modules/noty/lib/noty.css" >
+    <link rel="stylesheet" href="../node_modules/noty/lib/themes/bootstrap-v4.css">
+    <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
+
+    <!-- project css -->
+    <link rel="stylesheet" href="css/core.css" >
+
+    <title>media-dupes</title>
+</head>
+
+<body>
+    <div class="container mediaDupes_nonSelectableText">
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+
+        <!-- Heading: -->
+        <div class="row" data-step="1" data-intro="<h5>Intro</h5>Welcome to <b>media-dupes</b>, a minimal media duplicator for common media services like youtube.<br><br>The following intro explains how to use this application.">
+            <div class="col-12">
+                <!-- app name -->
+                <h3><img src="img/128x128.png" height="32">media-dupes</h3>
+
+                <!-- app description -->
+                <h6>a minimal media duplicator for common media services like youtube</h6>
+            </div>
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- Settings header -->
+        <div class="row">
+            <h4>Settings</h4>
+        </div>
+
+        <!-- Header: User-Settings -->
+        <div class="row">
+            <h5><i class="fas fa-cog" onclick="settingsFolderOpen();"></i> User-Settings</h5>
+        </div>
+
+         <!-- Custom Download directory -->
+        <div class="row">
+            <h6>Custom download directory <small class="text-danger"> (experimental)</small></h6>
+        </div>
+
+        <!-- custom output path -->
+        <div class="row">
+            <div class="input-group mb-3">
+                <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control" placeholder="custom download directory" readonly>
+                <div class="input-group-append">
+                    <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm btnDefaultSize" onclick="settingsSelectCustomTargetDir()"><i class="far fa-folder-open"></i> Choose</button>
+                    <button id="buttonSettingsResetCustomTargetDir" name="buttonSettingsResetCustomTargetDir" class="btn btn-danger btn-sm btnDefaultSize" onclick="settingsResetCustomTargetDir()"><i class="fas fa-eraser"></i> Reset</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Audio header -->
+        <div class="row">
+            <h6>Audio formats</h6>
+        </div>
+
+        <!-- audio settings -->
+        <div class="row">
+           <div class="input-group">
+                <select class="custom-select" id="inputGroupSelectAudio">
+                    <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
+                    <option value="m4a" title="MPEG 4 Audio">.m4a </option>
+                    <option value="wav" title="Waveform Audio File Format">.wav </option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-success btnDefaultSize" type="button" onclick="settingAudioFormatSave();">Set</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- Header: Dependencies -->
+        <div class="row">
+            <h5><i class="fas fa-cubes"></i> Dependencies</h5>
+        </div>
+
+        <!-- youtube-dl header -->
+        <div class="row">
+            <h6>youtube-dl</h6>
+        </div>
+
+        <div class="row">
+            <input type="text" class="form-control" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+
+        <!-- ffmpeg header -->
+        <div class="row">
+            <h6>ffmpeg</h6>
+        </div>
+
+        <div class="row">
+            <input type="text" class="form-control" placeholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- empty line -->
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <!-- extra buttons-->
+        <div class="row float-right">
+            <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom btnDefaultSize" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
+        </div>
+
+    </div>
+    <!-- container -->
+
+
+    <!-- You can also require other files to run in this process -->
+    <script src="js/renderer.js"></script>
+
+</body>
+
+<script>
+// execute on ready
+$( document ).ready(function()
+{
+    console.log( 'settings.html ready' )
+
+    // init titleBar
+    initTitlebar()
+
+    // load all user settings
+    userSettingsLoadAllOnSettingsUiLoad()
+
+    // load dependency informations
+    userSettingsShowYoutubeDLInfo()
+    userSettingsShowFfmpegInfo()
+
+});
+</script>
+
+</html>
