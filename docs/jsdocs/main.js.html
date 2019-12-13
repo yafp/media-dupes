@@ -124,7 +124,7 @@ function createWindow () {
 
         // set some default values for window size
         windowWidth = 800
-        windowHeight = 770
+        windowHeight = 790
     }
 
     // Create the browser window.
@@ -134,7 +134,7 @@ function createWindow () {
         width: windowWidth,
         minWidth: 600,
         height: windowHeight,
-        minHeight: 770,
+        minHeight: 790,
         frame: false, // false results in a borderless window. Needed for custom titlebar
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
 
@@ -166,11 +166,6 @@ function createWindow () {
     // Call from renderer: Open download folder
     ipcMain.on('settingsFolderOpen', (event) => {
         doLog('info', 'Opened the users settings folder (ipcMain)')
-
-        const storage = require('electron-json-storage')
-
-        // get default storage path
-        const defaultDataPath = storage.getDefaultDataPath()
 
         // change path for userSettings
         const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
@@ -212,15 +207,14 @@ function createWindow () {
     // mainWindow.webContents.openDevTools()
 
     // show the formerly hidden main window as it is fully ready now
-    mainWindow.on("ready-to-show", function()
-    {
-        mainWindow.show();
-        mainWindow.focus();
-        doLog("info", "createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)");
+    mainWindow.on('ready-to-show', function () {
+        mainWindow.show()
+        mainWindow.focus()
+        doLog('info', 'createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
 
         // check for media-dupes updates
         mainWindow.webContents.send('startSearchUpdatesSilent')
-    });
+    })
 
     // Emitted before the window is closed.
     //
@@ -546,13 +540,13 @@ app.on('activate', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#otherButtonsDisable">otherButtonsDisable</a></li><li><a href="global.html#otherButtonsEnable">otherButtonsEnable</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiLogAppend">uiLogAppend</a></li><li><a href="global.html#uiLogReset">uiLogReset</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#userSettingsLoadAllOnAppStart">userSettingsLoadAllOnAppStart</a></li><li><a href="global.html#userSettingsLoadAllOnSettingsUiLoad">userSettingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#otherButtonsDisable">otherButtonsDisable</a></li><li><a href="global.html#otherButtonsEnable">otherButtonsEnable</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiLogAppend">uiLogAppend</a></li><li><a href="global.html#uiLogReset">uiLogReset</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#userSettingsLoadAllOnAppStart">userSettingsLoadAllOnAppStart</a></li><li><a href="global.html#userSettingsLoadAllOnSettingsUiLoad">userSettingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#userSettingsShowFfmpegInfo">userSettingsShowFfmpegInfo</a></li><li><a href="global.html#userSettingsShowYoutubeDLInfo">userSettingsShowYoutubeDLInfo</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Dec 12 2019 15:14:51 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Dec 13 2019 14:03:25 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
