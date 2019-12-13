@@ -27,7 +27,7 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.2.0 (201912xx)
+### media-dupes 0.2.0 (20191213)
 #### ```Added```
 * Added icon to os-notifications. See [#5](https://github.com/yafp/media-dupes/issues/5)
 * Added custom-titlebar (merging menu and titlebar to one line). See [#6](https://github.com/yafp/media-dupes/issues/6)
@@ -39,21 +39,26 @@ The following categories are used:
   * Added support for custom download dir
 * Added settings entry to the 'File' menu. See [#19](https://github.com/yafp/media-dupes/issues/19)
 * Added support for save and restore window position and size. See [#20](https://github.com/yafp/media-dupes/issues/20)
+* Added auto-paste of urls on focus. See [#24](https://github.com/yafp/media-dupes/issues/24)
 
 
 #### ```Changed```
-* Button 'Downloads' now directly opens ~/Downloads/media-dupes if it exists. Otherwise it opens ~/Downloads. See [#9](https://github.com/yafp/media-dupes/issues/9)
-* Dependencies check on launch is now searching for youtube-dl as well.
+* Download directory / handling
+  * Audio: downloads are now located in a sub-directory 'Audio' inside the target download dir
+  * Audio: media-dupes tries to create download specific directories inside Audio to improve handling of albums. If that fails the download lands in a subfolder called NA-NA
+* Dependencies check on application launch is now searching for youtube-dl as well.
 * Dependencies
   * Updated electron from 7.1.3 to 7.1.4
   * Updated youtube-dl from 2.1.0 to 2.2.0
   * Updated fontawesome from 5.11.2 to 5.12.0
+  * Updated sentry from 1.1.0-beta to 1.1.0
 * Normalized code style using standardx
 * Improved youtube-dl flag usage
   * added: `--add-metadata` for video. See [#10](https://github.com/yafp/media-dupes/issues/10)
   * added: `--embed-thumbnail` for audio/mp3. See [#11](https://github.com/yafp/media-dupes/issues/11)
   * added: `--ignore-errors` for audio & video. See [#12](https://github.com/yafp/media-dupes/issues/12)
 * Log section now auto-scrolls to bottom of log while downloading content. See [#13](https://github.com/yafp/media-dupes/issues/13)
+* Log section is now showing more informations as we are now using the youtube-dl flag `--verbose`
 
 #### ```Removed```
 * Menu
