@@ -82,7 +82,7 @@ function showNotifcation (title = 'media-dupes', message) {
     })
 
     myNotification.onclick = () => {
-        console.log('Notification clicked')
+        console.log('showNotification ::: Notification clicked')
     }
 }
 
@@ -92,7 +92,7 @@ function showNotifcation (title = 'media-dupes', message) {
 * @description Shows the loading animation / download spinner
 */
 function loadingAnimationShow () {
-    console.log("loadingAnimationShow ::: Showing spinner")
+    console.log('loadingAnimationShow ::: Showing spinner')
     $('#md_spinner').attr('hidden', false)
 }
 
@@ -102,7 +102,7 @@ function loadingAnimationShow () {
 * @description Hides the loading animation / download spinner
 */
 function loadingAnimationHide () {
-    console.log("loadingAnimationShow ::: Hiding spinner")
+    console.log('loadingAnimationHide ::: Hiding spinner')
     $('#md_spinner').attr('hidden', true)
 }
 
@@ -144,7 +144,6 @@ function checkForDeps () {
         $('#buttonStartAudio').hide()
     } else {
         console.log('checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
-        // console.log( ffmpeg)
     }
 
     console.log('checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
@@ -194,11 +193,15 @@ function settingsSelectCustomTargetDir () {
         console.log(res.filePaths)
 
         if (res.filePaths !== '') {
-            // save the value
-            writeLocalUserSetting('CustomDownloadDir', res.filePaths.toString())
+            var newValue = res.filePaths.toString()
+
+            // save the value to user-config
+            writeLocalUserSetting('CustomDownloadDir', newValue)
 
             // show it in the UI
-            $('#inputCustomTargetDir').val(res.filePaths)
+            $('#inputCustomTargetDir').val(newValue)
+
+            console.log('settingsSelectCustomTargetDir ::: User selected the following directory: _' + newValue + '_.')
         }
     })
 }
@@ -209,7 +212,7 @@ function settingsSelectCustomTargetDir () {
 * @description Is triggered via button on settings.html.
 */
 function settingsResetCustomTargetDir () {
-    console.log('settingsResetCustomTargetDir ::: Deleting the custom download target')
+    console.log('settingsResetCustomTargetDir ::: Resetting the custom download target')
 
     var newValue = ''
 
@@ -258,9 +261,6 @@ function writeLocalUserSetting (key, value) {
     const app = remote.app
     const path = require('path')
 
-    // get default storage path
-    const defaultDataPath = storage.getDefaultDataPath()
-
     // set new path for userUsettings
     const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
     storage.setDataPath(userSettingsPath)
@@ -290,9 +290,6 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
     const path = require('path')
 
     console.log('readLocalUserSetting ::: Trying to read value of key: ' + key)
-
-    // get default storage path
-    const defaultDataPath = storage.getDefaultDataPath()
 
     // change path for userSettings
     const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
@@ -499,9 +496,6 @@ function updateToDoList () {
         startButtonsEnable()
     }
 
-    // TODO:
-    // change background of single lines odd/even
-
     console.log('updateToDoList ::: Added new url to todo-list')
 }
 
@@ -554,6 +548,8 @@ function startButtonsDisable () {
 function otherButtonsEnable () {
     // disable some buttons
 
+    $('#inputNewUrl').prop('disabled', false) // url input field
+
     // add URL
     $('#buttonAddUrl').prop('disabled', false) // add url
 
@@ -562,7 +558,7 @@ function otherButtonsEnable () {
     $('#buttonShowHelp').prop('disabled', false) // help / intro
     $('#buttonShowExtractors').prop('disabled', false) // showExtractors
 
-    console.log('otherButtonsDisable ::: Did disable both start buttons')
+    console.log('otherButtonsEnable ::: Did enable some other UI elements')
 }
 
 /**
@@ -573,14 +569,15 @@ function otherButtonsEnable () {
 function otherButtonsDisable () {
     // disable some buttons
 
-    // add URL
+    $('#inputNewUrl').prop('disabled', true) // url input field
+
     $('#buttonAddUrl').prop('disabled', true) // add url
 
     $('#buttonShowSettings').prop('disabled', true) // settings
     $('#buttonShowHelp').prop('disabled', true) // help / intro
     $('#buttonShowExtractors').prop('disabled', true) // showExtractors
 
-    console.log('otherButtonsDisable ::: Did disable both start buttons')
+    console.log('otherButtonsDisable ::: Did disable some other UI elements')
 }
 
 /**
@@ -614,9 +611,11 @@ function downloadContent (mode) {
 
     // example urls
     //
-    // url = 'http://www.youtube.com/watch?v=90AiXO1pAiA'
-    // url = 'https://vimeo.com/120828152'
-    // url = 'https://soundcloud.com/jakarta-records/suff-daddy-feat-ill-camille-jlamotta-magic-taken-from-seasons-in-jakarta'
+    // YOUTUBE:         http://www.youtube.com/watch?v=90AiXO1pAiA
+    // VIMEO:           https://vimeo.com/315670384
+    // SOUNDCLOUD:      https://soundcloud.com/jperiod/rise-up-feat-black-thought-2
+    // BANDCAMP:        https://nosferal.bandcamp.com/album/nosferal-ep-mini-album
+    // ZDF:             https://www.zdf.de/serien/bad-banks/staffeltrailer-106.html
 
     // What is the target dir
     //
@@ -624,6 +623,7 @@ function downloadContent (mode) {
     console.log('downloadContent ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
     console.log('downloadContent ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
 
+    // if we got a valid download dir
     if (detectedDownloadDir[0]) {
         // Prepare UI
         //
@@ -638,7 +638,7 @@ function downloadContent (mode) {
         const path = require('path')
 
         var targetPath = detectedDownloadDir[1]
-        console.log('Download target is set to: ' + targetPath)
+        console.log('downloadContent ::: Download target is set to: _' + targetPath + '_.')
 
         var youtubeDlParameter = ''
 
@@ -652,13 +652,13 @@ function downloadContent (mode) {
 
             // generic parameter / flags
             youtubeDlParameter = [
+                '--verbose',
                 '--format', 'bestaudio',
                 '--extract-audio',
                 '--audio-format', settingAudioFormat,
                 '--audio-quality', '0',
-                // '--embed-thumbnail', // FIXME: does not work with wav, ogg, m4a - throws errors
                 '--ignore-errors',
-                '--output', path.join(targetPath, '%(title)s-%(id)s.%(ext)s'),
+                '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'),
                 '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path
             ]
 
@@ -670,6 +670,7 @@ function downloadContent (mode) {
 
         case 'video':
             youtubeDlParameter = [
+                '--verbose',
                 '--format', 'best',
                 '--output', path.join(targetPath, '%(title)s-%(id)s.%(ext)s'),
                 '--add-metadata',
@@ -696,7 +697,7 @@ function downloadContent (mode) {
         for (var i = 0; i < arrayLength; i++) {
             var url = arrayUserUrls[i]
 
-            //Sentry.captureMessage('Download single url')
+            // Sentry.captureMessage('Download single url')
             registerEvent('downloadSingleUrl')
 
             console.log('downloadContent ::: Processing URL: _' + url + '_.')
@@ -708,6 +709,7 @@ function downloadContent (mode) {
             const video = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
                 if (err) {
                     // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err)
+                    console.error('downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
                     throw err
                 }
 
@@ -734,7 +736,7 @@ function downloadContent (mode) {
 
                     loadingAnimationHide() // start download animation / spinner
 
-                    otherButtonsEnablew() // enable some of the buttons again
+                    otherButtonsEnable() // enable some of the buttons again
 
                     // scroll log textarea to the end
                     $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
@@ -742,8 +744,7 @@ function downloadContent (mode) {
             })
         }
         console.log('downloadContent ::: All download processes are now started')
-    } // we got a target dir
-    else {
+    } else {
         console.error('downloadContent ::: Unable to start a download, because no useable target dir was detectable')
         showNoty('error', 'Aborted download, because no useable downloads directory was found', 0)
     }
@@ -764,14 +765,24 @@ function showSupportedExtractors () {
     const youtubedl = require('youtube-dl')
 
     youtubedl.getExtractors(true, function (err, list) {
+        if (err) {
+            console.error('showSupportedExtractors ::: Unable to get youtube-dl extractors.')
+            throw err
+        }
+
         console.log('Found ' + list.length + ' extractors')
 
         for (let i = 0; i < list.length; i++) {
-            console.log(list[i])
+            console.log('showSupportedExtractors ::: ' + list[i])
         }
 
         // show in textareaLogOutput
         textareaLogOutput.value = list.join('\n')
+
+        console.log('Found ' + list.length + ' extractors')
+
+        // scroll log textarea to the end
+        $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
 
         loadingAnimationHide()
     })
@@ -786,7 +797,6 @@ function showSupportedExtractors () {
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
-
     loadingAnimationShow()
 
     // when executed manually via menu -> user should see that update-check is running
@@ -863,21 +873,20 @@ function searchUpdate (silent = true) {
 
         console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases')
     })
-    .done(function () {
+        .done(function () {
         // console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases');
-    })
+        })
 
-    .fail(function () {
-        console.log('searchUpdate ::: Checking ' + url + ' for available releases failed.')
-        showNoty('error', 'Checking <b>' + url + '</b> for available releases failed. Please troubleshoot your network connection.')
-    })
+        .fail(function () {
+            console.log('searchUpdate ::: Checking ' + url + ' for available releases failed.')
+            showNoty('error', 'Checking <b>' + url + '</b> for available releases failed. Please troubleshoot your network connection.')
+        })
 
-    .always(function () {
-        console.log('searchUpdate ::: Finished checking ' + url + ' for available releases')
+        .always(function () {
+            console.log('searchUpdate ::: Finished checking ' + url + ' for available releases')
 
-        loadingAnimationHide()
-    })
-
+            loadingAnimationHide()
+        })
 }
 
 /**
@@ -1062,6 +1071,11 @@ function isDirectoryWriteable (dirPath) {
     }
 }
 
+/**
+* @name userSettingsShowYoutubeDLInfo
+* @summary Searches the youtube-binary and shows it in the settings dialog
+* @description Searches the youtube-binary and shows it in the settings dialog
+*/
 function userSettingsShowYoutubeDLInfo () {
     const youtubedl = require('youtube-dl')
     console.log('userSettingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
@@ -1076,6 +1090,11 @@ function userSettingsShowYoutubeDLInfo () {
     }
 }
 
+/**
+* @name userSettingsShowFfmpegInfo
+* @summary Searches the ffmpeg-binary and shows it in the settings dialog
+* @description Searches the ffmpeg-binary and shows it in the settings dialog
+*/
 function userSettingsShowFfmpegInfo () {
     var ffmpeg = require('ffmpeg-static-electron')
     console.log('userSettingsShowFfmpegInfo ::: Searching ffmpeg ...')
@@ -1090,12 +1109,57 @@ function userSettingsShowFfmpegInfo () {
     }
 }
 
+/**
+* @name checkUrlInputField
+* @summary Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
+* @description Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
+*/
+function checkUrlInputField() {
+    console.log('checkUrlInputField ::: Triggered on focus')
+
+    // get current content of field
+    var currentContentOfUrlInputField = $('#inputNewUrl').val()
+
+    // if the field is empty - continue
+    if (currentContentOfUrlInputField === '') {
+
+        // get content of clipboard
+        const { clipboard } = require('electron')
+        var currentClipboardContent = clipboard.readText()
+        console.log('checkUrlInputField ::: Clipboard currently contains: _' + currentClipboardContent + '_.')
+
+        // check if it is a valid url - if so paste it
+        var isUrlValid = validURL(currentClipboardContent)
+        if (isUrlValid) {
+            // paste it
+            $('#inputNewUrl').val(currentClipboardContent)
+
+            // select it entirely
+            $('#inputNewUrl').select()
+
+            console.log('checkUrlInputField ::: Clipboard contains a valid URL - pasted it into the input field.')
+        }
+    }
+}
+
+/**
+* @name onEnter
+* @summary Executed on keypress inside url-input-field
+* @description Checks if the key-press was the ENTEr-key - if so simulates a press of the button ADD URL
+*/
+function onEnter (event) {
+    var code = 0
+    code = event.keyCode
+    if (code === 13) {
+        addURL() // simulare click on ADD URL buttom
+    }
+}
+
 // Call from main.js ::: startSearchUpdates - verbose
 //
 require('electron').ipcRenderer.on('startSearchUpdatesVerbose', function () {
     searchUpdate(false) // silent = false. Forces result feedback, even if no update is available
 })
-
 
 // Call from main.js ::: startSearchUpdates - verbose
 //
@@ -1103,11 +1167,8 @@ require('electron').ipcRenderer.on('startSearchUpdatesSilent', function () {
     searchUpdate(true) // silent = false. Forces result feedback, even if no update is available
 })
 
-
-
-
 // Call from main.js ::: openSettings
 //
 require('electron').ipcRenderer.on('openSettings', function () {
-    settingsUiLoad();
+    settingsUiLoad()
 })
