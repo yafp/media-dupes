@@ -96,7 +96,7 @@ function createWindow () {
 
         // set some default values for window size
         windowWidth = 800
-        windowHeight = 770
+        windowHeight = 790
     }
 
     // Create the browser window.
@@ -106,7 +106,7 @@ function createWindow () {
         width: windowWidth,
         minWidth: 600,
         height: windowHeight,
-        minHeight: 770,
+        minHeight: 790,
         frame: false, // false results in a borderless window. Needed for custom titlebar
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
 
@@ -138,11 +138,6 @@ function createWindow () {
     // Call from renderer: Open download folder
     ipcMain.on('settingsFolderOpen', (event) => {
         doLog('info', 'Opened the users settings folder (ipcMain)')
-
-        const storage = require('electron-json-storage')
-
-        // get default storage path
-        const defaultDataPath = storage.getDefaultDataPath()
 
         // change path for userSettings
         const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
@@ -184,15 +179,14 @@ function createWindow () {
     // mainWindow.webContents.openDevTools()
 
     // show the formerly hidden main window as it is fully ready now
-    mainWindow.on("ready-to-show", function()
-    {
-        mainWindow.show();
-        mainWindow.focus();
-        doLog("info", "createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)");
+    mainWindow.on('ready-to-show', function () {
+        mainWindow.show()
+        mainWindow.focus()
+        doLog('info', 'createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
 
         // check for media-dupes updates
         mainWindow.webContents.send('startSearchUpdatesSilent')
-    });
+    })
 
     // Emitted before the window is closed.
     //
