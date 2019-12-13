@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.2.20191212",
+  "version": "0.2.0",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -180,7 +180,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
-    "@sentry/electron": "^1.1.0-beta.0",
+    "@sentry/electron": "^1.1.0",
     "about-window": "^1.13.2",
     "bootstrap": "^4.4.1",
     "electron-json-storage": "^4.1.8",
