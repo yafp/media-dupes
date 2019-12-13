@@ -27,47 +27,51 @@
 </head>
 
 <body>
-    <div class="container mediaDupes_nonSelectableText">
-
-        <!-- empty line -->
+    <div class="container-fluid mediaDupes_nonSelectableText">
+         <!-- empty line -->
         <div class="row">
             &nbsp;
         </div>
 
 
         <!-- Heading: -->
-        <div class="row" data-step="1" data-intro="<h5>Intro</h5>Welcome to <b>media-dupes</b>, a minimal media duplicator for common media services like youtube.<br><br>The following intro explains how to use this application.">
+        <div class="row">
             <div class="col-12">
                 <!-- app name -->
-                <h3><img src="img/128x128.png" height="32">media-dupes</h3>
+                <h2><img src="img/128x128.png" height="32">media-dupes</h2>
 
                 <!-- app description -->
-                <h6>a minimal media duplicator for common media services like youtube</h6>
+                <h3>a minimal media duplicator for common media services like youtube</h3>
             </div>
         </div>
 
         <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid">
             &nbsp;
         </div>
 
         <!-- Settings header -->
-        <div class="row">
+        <div class="row-fluid">
             <h4>Settings</h4>
         </div>
 
-        <!-- Header: User-Settings -->
-        <div class="row">
+         <!-- empty line -->
+        <div class="row-fluid">
+            &nbsp;
+        </div>
+
+         <!-- Header: User-Settings -->
+        <div class="row-fluid">
             <h5><i class="fas fa-cog" onclick="settingsFolderOpen();"></i> User-Settings</h5>
         </div>
 
          <!-- Custom Download directory -->
-        <div class="row">
+        <div class="row-fluid">
             <h6>Custom download directory <small class="text-danger"> (experimental)</small></h6>
         </div>
 
         <!-- custom output path -->
-        <div class="row">
+        <div class="row-fluid">
             <div class="input-group mb-3">
                 <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control" placeholder="custom download directory" readonly>
                 <div class="input-group-append">
@@ -77,14 +81,13 @@
             </div>
         </div>
 
-
         <!-- Audio header -->
-        <div class="row">
+        <div class="row-fluid">
             <h6>Audio formats</h6>
         </div>
 
         <!-- audio settings -->
-        <div class="row">
+        <div class="row-fluid">
            <div class="input-group">
                 <select class="custom-select" id="inputGroupSelectAudio">
                     <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
@@ -98,58 +101,88 @@
         </div>
 
         <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid">
+            &nbsp;
+        </div>
+
+         <!-- empty line -->
+        <div class="row-fluid">
             &nbsp;
         </div>
 
         <!-- Header: Dependencies -->
-        <div class="row">
+        <div class="row-fluid">
             <h5><i class="fas fa-cubes"></i> Dependencies</h5>
         </div>
 
         <!-- youtube-dl header -->
-        <div class="row">
+        <div class="row-fluid">
             <h6>youtube-dl</h6>
         </div>
 
-        <div class="row">
+        <div class="row-fluid">
             <input type="text" class="form-control" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
         </div>
 
         <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid">
             &nbsp;
         </div>
 
-
         <!-- ffmpeg header -->
-        <div class="row">
+        <div class="row-fluid">
             <h6>ffmpeg</h6>
         </div>
 
-        <div class="row">
+        <div class="row-fluid">
             <input type="text" class="form-control" placeholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
         </div>
 
         <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid">
             &nbsp;
         </div>
 
         <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid">
             &nbsp;
         </div>
 
         <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid">
             &nbsp;
         </div>
 
         <!-- extra buttons-->
-        <div class="row float-right">
+        <div class="row-fluid float-right">
             <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom btnDefaultSize" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
         </div>
+
+
+
+
+
+
+
+
+
+    </div>
+    <!-- end container-fluid -->
+
+
+
+
+
+
+
+    <!-- container -->
+    <div class="container mediaDupes_nonSelectableText">
+
+       
+
+        
+
+       
 
     </div>
     <!-- container -->

@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <div class="container mediaDupes_nonSelectableText" data-step="9" data-intro="<h5>Enjoy</h5>">
+    <div class="container-fluid mediaDupes_nonSelectableText" data-step="9" data-intro="<h5>Enjoy</h5>">
 
         <!-- empty line -->
         <div class="row">&nbsp;</div>
@@ -47,16 +47,21 @@
                 </div>
 
                 <!-- app name -->
-                <h3><img src="img/128x128.png" height="32">media-dupes</h3>
+                <h2><img src="img/128x128.png" height="32">media-dupes</h2>
 
                 <!-- app description -->
-                <h6>a minimal media duplicator for common media services like youtube</h6>
+                <h3>a minimal media duplicator for common media services like youtube</h3>
             </div>
+        </div>
+
+         <!-- empty line -->
+        <div class="row-fluid">
+            &nbsp;
         </div>
 
         <!-- add URL -->
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="paste your url" id="inputNewUrl" name="inputNewUrl" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
+            <input type="text" class="form-control" placeholder="paste your url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
                 <button class="btn btn-secondary btn-sm btnDefaultSize" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
             </div>

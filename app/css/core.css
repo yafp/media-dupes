@@ -7,9 +7,19 @@
 }
 
 
+/* ########################################################################## */
+/* HEADINGS */
+/* ########################################################################## */
+h2{
+    text-align: right;
+    color: gray;
+    font-size: 24px;
+}
+
 h3{
     text-align: right;
     color: gray;
+    font-size: 16px;
 }
 
 h4{
@@ -20,24 +30,38 @@ h5{
     color: gray;
 }
 
-
 h6{
-    text-align: right;
     color: gray;
 }
 
+/* ########################################################################## */
+/* TEXTAREA */
+/* ########################################################################## */
+textarea {
+    font-size: 12px !important;
+    font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
 
-.btn
-{
-    /* min-width: 100px;*/
+    /* - see #23
+    background-image: linear-gradient(#F1F1F1 50%, #F9F9F9 50%);
+    background-size: 100% 36px;
+    border: 1px solid #CCC;
+    width: 100%;
+    height: 400px;
+    line-height: 12px;
+    margin: 0 auto;
+    padding: 2px 20px;
+    */
 }
 
 
+/* ########################################################################## */
+/* BUTTONS */
+/* ########################################################################## */
 .btnDefaultSize
 {
     min-width: 80px;
 }
-
 
 
 /* ########################################################################## */
@@ -77,19 +101,9 @@ cssbody {
     animation: fadein 0.5s;
 }
 
-
-
-
-
-textarea {
-    font-size: 12px !important;
-    font-weight: bold;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-}
-
-
-
-
+/* ########################################################################## */
+/* ?? */
+/* ########################################################################## */
 .pt-4
 {
     font-size: 8pt;
