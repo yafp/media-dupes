@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.2.0",
+  "version": "0.3.20191214",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -57,6 +57,10 @@
     "asar": false,
     "mac": {
       "category": "public.app-category.productivity",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/linux/*",
+        "!node_modules/ffmpeg-static-electron/bin/win/*"
+      ],
       "artifactName": "${productName}-${version}-mac.${ext}",
       "target": [
         "dmg"
@@ -83,6 +87,10 @@
     "win": {
       "icon": "resources/installer/icon.ico",
       "publisherName": "yafp",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/linux/*",
+        "!node_modules/ffmpeg-static-electron/bin/mac/*"
+      ],
       "artifactName": "${productName}-${version}-win-${arch}.${ext}",
       "target": [
         "zip",
@@ -100,6 +108,10 @@
     },
     "linux": {
       "executableName": "media-dupes",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/win/*",
+        "!node_modules/ffmpeg-static-electron/bin/mac/*"
+      ],
       "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
       "description": "a minimal media duplicator for common media services like youtube",
       "category": "Network",
@@ -169,7 +181,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "electron": "^7.1.4",
+    "electron": "^7.1.5",
     "electron-builder": "^21.2.0",
     "electron-packager": "^14.1.1",
     "eslint": "^6.7.2",
