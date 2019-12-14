@@ -706,9 +706,56 @@ function downloadContent (mode) {
 
             uiLogAppend('Processing: ' + url)
 
+
+            try {
+                const video = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
+                    if (err) {
+                        //showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err)
+                        showDialog("error", "Alert", "Downloading failed", "Failed to download the url:\n" + url + "\n\nError:\n" + err);
+                        console.error('downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
+                        throw err
+                    }
+
+                    // show progress
+                    console.log(output.join('\n'))
+                    uiLogAppend(output.join('\n'))
+
+                    // scroll log textarea to the end
+                    $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
+
+                    // finish
+                    console.log('downloadContent ::: Finished downloading _' + url + '_.')
+                    uiLogAppend('Finished downloading: ' + url)
+                    showNoty('success', 'Finished downloading <b>' + url + '</b>.')
+
+                    // Final notification
+                    if (i === arrayLength) {
+                        showNotifcation('media-dupes', 'Finished downloading ' + i + ' url(s).')
+                        toDoListReset()
+
+                        // make window urgent after having finished downloading. See #7
+                        const { ipcRenderer } = require('electron')
+                        ipcRenderer.send('makeWindowUrgent')
+
+                        loadingAnimationHide() // start download animation / spinner
+
+                        otherButtonsEnable() // enable some of the buttons again
+
+                        // scroll log textarea to the end
+                        $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
+                    }
+                })
+
+            } catch (err){
+                showNoty("error", "funky new catch", 0)
+            }
+
+            // baustelle
+            /*
             const video = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
                 if (err) {
-                    // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err)
+                    //showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err)
+                    showDialog("error", "Alert", "Downloading failed", "Failed to download the url:\n" + url + "\n\nError:\n" + err);
                     console.error('downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
                     throw err
                 }
@@ -742,6 +789,10 @@ function downloadContent (mode) {
                     $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight)
                 }
             })
+            */
+
+
+
         }
         console.log('downloadContent ::: All download processes are now started')
     } else {
@@ -1063,7 +1114,7 @@ function isDirectoryWriteable (dirPath) {
             console.log('isDirectoryWriteable ::: Directory ' + dirPath + ' is writeable')
             return true
         } catch (err) {
-            console.error('isDirectoryWriteable ::: Directory ' + dirPath + ' is not writeable')
+            console.error('isDirectoryWriteable ::: Directory ' + dirPath + ' is not writeable. Error: ' + err)
             return false
         }
     } else {
@@ -1153,6 +1204,35 @@ function onEnter (event) {
     if (code === 13) {
         addURL() // simulare click on ADD URL buttom
     }
+}
+
+
+/**
+* @name showDialog
+* @summary Shows a dialog
+* @description Displays a dialog
+* @param dialogType - Can be "none", "info", "error", "question" or "warning"
+* @param dialogTitle - The title text
+* @param dialogMessage - The message of the dialog
+* @param dialogDetail - The detail text
+*/
+function showDialog(dialogType, dialogTitle, dialogMessage, dialogDetail)
+{
+    // https://electronjs.org/docs/api/dialog
+    const { dialog } = require('electron').remote
+
+    const options = {
+        type: dialogType,
+        buttons: ["OK"],
+        defaultId: 2,
+        title: dialogTitle,
+        message: dialogMessage,
+        detail: dialogDetail,
+    };
+
+    dialog.showMessageBox(null, options, (response, checkboxChecked) => {
+            //console.log(response);
+    });
 }
 
 // Call from main.js ::: startSearchUpdates - verbose

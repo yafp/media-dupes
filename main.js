@@ -62,6 +62,7 @@ function doLog (type, message) {
     }
 }
 
+
 /**
 * @name createWindow
 * @summary Creates the mainWindow
