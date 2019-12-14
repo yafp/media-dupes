@@ -18,6 +18,7 @@
     * --write-all-thumbnails ?
     * --geo-bypass to Bypass geographic restriction via faking X-Forwarded-For HTTP header. No idea if that might be helpful to add or not
 * ffmpeg-static-electron: currently my Windows build contains the bin files for linux and mac as well. Why? Assuming cause: electron-packager doesnt know it better.
+* control icon sizes
 
 ### urls
 * youtube-dl repository: https://github.com/ytdl-org/youtube-dl

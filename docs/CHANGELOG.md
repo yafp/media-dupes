@@ -24,6 +24,21 @@ The following categories are used:
 * ```Security```: in case of vulnerabilities.
 
 
+***
+
+### media-dupes 0.3.0 (2019xxyy)
+#### ```Added```
+* Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues25)
+
+#### ```Changed```
+* Reduced build size by only adding ffmpeg for the actual platform. See [#22](https://github.com/yafp/media-dupes/issues22)
+* Dependencies
+  * Updated electron from 7.1.4 to 7.1.5
+
+#### ```Fixed```
+* Fixed issue where the search for software updates was launched twice on application start. See [#26](https://github.com/yafp/media-dupes/issues26)
+
+
 
 ***
 
