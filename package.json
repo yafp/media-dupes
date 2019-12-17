@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.3.20191214",
+  "version": "0.3.20191217",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -58,6 +58,7 @@
     "mac": {
       "category": "public.app-category.productivity",
       "files": [
+        "node_modules/ffmpeg-static-electron/bin/mac/{arch}/ffmpeg",
         "!node_modules/ffmpeg-static-electron/bin/linux/*",
         "!node_modules/ffmpeg-static-electron/bin/win/*"
       ],
@@ -88,6 +89,7 @@
       "icon": "resources/installer/icon.ico",
       "publisherName": "yafp",
       "files": [
+        "node_modules/ffmpeg-static-electron/bin/win/{arch}/ffmpeg.exe",
         "!node_modules/ffmpeg-static-electron/bin/linux/*",
         "!node_modules/ffmpeg-static-electron/bin/mac/*"
       ],
@@ -109,6 +111,7 @@
     "linux": {
       "executableName": "media-dupes",
       "files": [
+        "node_modules/ffmpeg-static-electron/bin/linux/{arch}/ffmpeg",
         "!node_modules/ffmpeg-static-electron/bin/win/*",
         "!node_modules/ffmpeg-static-electron/bin/mac/*"
       ],
@@ -179,6 +182,7 @@
     ]
   },
   "devDependencies": {
+    "@doyensec/electronegativity": "^1.4.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "electron": "^7.1.5",
@@ -198,11 +202,12 @@
     "electron-json-storage": "^4.1.8",
     "electron-log": "^4.0.0",
     "ffmpeg-static-electron": "^2.0.1",
+    "intro.js": "^2.9.3",
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "pj-custom-electron-titlebar": "^3.1.6",
     "popper.js": "^1.16.0",
-    "youtube-dl": "^2.2.0"
+    "youtube-dl": "^2.3.0"
   },
   "standardx": {
     "ignore": [
