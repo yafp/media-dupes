@@ -158,34 +158,8 @@
             <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom btnDefaultSize" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
         </div>
 
-
-
-
-
-
-
-
-
     </div>
     <!-- end container-fluid -->
-
-
-
-
-
-
-
-    <!-- container -->
-    <div class="container mediaDupes_nonSelectableText">
-
-       
-
-        
-
-       
-
-    </div>
-    <!-- container -->
 
 
     <!-- You can also require other files to run in this process -->
@@ -202,13 +176,15 @@ $( document ).ready(function()
     // init titleBar
     initTitlebar()
 
-    // load all user settings
+     // load all user settings
     userSettingsLoadAllOnSettingsUiLoad()
 
     // load dependency informations
     userSettingsShowYoutubeDLInfo()
     userSettingsShowFfmpegInfo()
 
+    // Fades in page on load
+    $('body').fadeIn(1000);
 });
 </script>
 

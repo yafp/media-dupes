@@ -21,9 +21,9 @@
     <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
 
     <!-- introJS -->
-    <link rel="stylesheet" href="lib/intro.js/2.9.3/minified/introjs.min.css">
-    <link rel="stylesheet" href="lib/intro.js/2.9.3/themes/introjs-modern.css">
-    <script type="text/javascript" src="lib/intro.js/2.9.3/minified/intro.min.js" defer></script>
+    <link rel="stylesheet" href="../node_modules/intro.js/minified/introjs.min.css" >
+    <link rel="stylesheet" href="../node_modules/intro.js/themes/introjs-modern.css" >
+    <script type="text/javascript" src="../node_modules/intro.js/minified/intro.min.js" defer></script>
 
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css" >
@@ -70,7 +70,7 @@
         <!-- show todo-list -->
         <div class="row">
             <div class="col-12">
-            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" placeholder="todo-list" readonly rows="8" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
+            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" placeholder="todo-list" readonly rows="6" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
             </textarea>
         </div>
         </div>
@@ -162,22 +162,29 @@ $( document ).ready(function()
 {
     console.log( 'index.html ready' )
 
-    registerEvent('isReady')
-
     // init titleBar
     initTitlebar()
 
-    // init the UI
-    uiReset();
-
-    // check for media-dupes updates
-    //searchUpdate() // see #26
-
     // check if requirements are installed
-    checkForDeps()
+    // FIXME
+    //checkForDeps()
+
+    // init CKeditor
+    initCKeditor();
 
     // load user settings
     userSettingsLoadAllOnAppStart()
+
+    // Fades in page on load
+    $('body').fadeIn(1000);
+
+    registerEvent('isReady')
+
+    // init the UI
+    //uiReset();
+
+    // check for media-dupes updates
+    //searchUpdate() // see #26
 });
 </script>
 
