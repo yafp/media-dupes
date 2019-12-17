@@ -28,17 +28,23 @@ The following categories are used:
 
 ### media-dupes 0.3.0 (2019xxyy)
 #### ```Added```
-* Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues25)
+* Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues/25)
 
 #### ```Changed```
-* Reduced build size by only adding ffmpeg for the actual platform. See [#22](https://github.com/yafp/media-dupes/issues22)
+* Reduced build size by only adding ffmpeg for the actual platform. See [#22](https://github.com/yafp/media-dupes/issues/22)
+* Improved url detection from clipboard (trim leading and trailing blanks). See [#28](https://github.com/yafp/media-dupes/issues/28)
+* Downloading: Added decode function for user urls to avoid the risk of malformed urls. See [#25](https://github.com/yafp/media-dupes/issues/25)
+* Added fade-in effect to load process of the .html files (index.html and settings.html).
+* Extractors: Show extraxtorts list now shows an error notification if fetching them fails. See [#27](https://github.com/yafp/media-dupes/issues/27)
+* Improved adding urls (trim leading and trailing blanks). See [#28](https://github.com/yafp/media-dupes/issues/28)
+* Using intro.js now via npm. See [#21](https://github.com/yafp/media-dupes/issues/21)
 * Dependencies
   * Updated electron from 7.1.4 to 7.1.5
+  * Updated youtube-dl from 2.2.0 to 2.3.0
 
 #### ```Fixed```
-* Fixed issue where the search for software updates was launched twice on application start. See [#26](https://github.com/yafp/media-dupes/issues26)
-
-
+* Fixed issue where the search for software updates was launched twice on application start. See [#26](https://github.com/yafp/media-dupes/issues/26)
+* Fixed an issue where the Loading-animation might be hidden, while it should be still displayed.
 
 ***
 
