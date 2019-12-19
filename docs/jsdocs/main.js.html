@@ -59,33 +59,38 @@ const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handl
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
 // project-urls
-const urlGitHubGeneral = 'https://github.com/yafp/media-dupes'
-const urlGitHubIssues = 'https://github.com/yafp/media-dupes/issues'
-const urlGitHubChangelog = 'https://github.com/yafp/media-dupes/blob/master/docs/CHANGELOG.md'
-const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases'
+const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js')
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS
 // ----------------------------------------------------------------------------
 
+/**
+* @name doLog
+* @summary Writes console output for the main process
+* @description Writes console output for the main process
+* @param type - String which defines the log type
+* @param message - String which defines the log message
+*/
 function doLog (type, message) {
+    const prefix = '[   Main   ] '
     const log = require('electron-log')
     // electron-log can: error, warn, info, verbose, debug, silly
     switch (type) {
     case 'info':
-        log.info('M: ' + message)
+        log.info(prefix + message)
         break
 
     case 'warn':
-        log.warn('M: ' + message)
+        log.warn(prefix + message)
         break
 
     case 'error':
-        log.error('M: ' + message)
+        log.error(prefix + message)
         break
 
     default:
-        log.silly('M: ' + message)
+        log.silly(prefix + message)
             // code block
     }
 }
@@ -129,17 +134,19 @@ function createWindow () {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        titleBarStyle: 'hidden', // needed for custom-electron-titlebar
+        frame: false, // false results in a borderless window. Needed for custom titlebar
+        titleBarStyle: 'hidden', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
+        backgroundColor: '#ffffff', // since 0.3.0
         show: false, // hide until: ready-to-show
+        center: true, // Show window in the center of the screen. (since 0.3.0)
         width: windowWidth,
         minWidth: 600,
         height: windowHeight,
         minHeight: 790,
-        frame: false, // false results in a borderless window. Needed for custom titlebar
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
-
         webPreferences: {
             nodeIntegration: true,
+            webSecurity: true, // introduced in 0.3.0
             preload: path.join(__dirname, 'preload.js')
         }
     })
@@ -153,33 +160,28 @@ function createWindow () {
 
     // Call from renderer: Open download folder
     ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
-        doLog('info', 'Trying to open the download directory _' + userSettingValue + '_.')
+        doLog('info', 'createWindow ::: Trying to open the download directory _' + userSettingValue + '_.')
 
         // try to open it
         if (shell.openItem(userSettingValue) === true) {
-            doLog('info', 'Opened the media-dupes download folder (ipcMain)')
+            doLog('info', 'createWindow :::  Opened the media-dupes download folder (ipcMain)')
         } else {
-            doLog('error', 'Failed to open the user download folder (ipcMain)')
+            doLog('error', 'createWindow ::: Failed to open the user download folder (ipcMain)')
         }
     })
 
     // Call from renderer: Open download folder
     ipcMain.on('settingsFolderOpen', (event) => {
-        doLog('info', 'Opened the users settings folder (ipcMain)')
+        doLog('info', 'createWindow ::: Opened the users settings folder (ipcMain)')
 
         // change path for userSettings
         const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
 
         if (shell.openItem(userSettingsPath) === true) {
-            doLog('info', 'Opened the media-dupes subfolder in users download folder (ipcMain)')
+            doLog('info', 'createWindow ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
         } else {
-            doLog('error', 'Failed to open the user download folder (ipcMain)')
+            doLog('error', 'createWindow ::: Failed to open the user download folder (ipcMain)')
         }
-    })
-
-    // Call from renderer: Open download folder
-    ipcMain.on('open-dialog-paths-selected', (event) => {
-        doLog('error', '............')
     })
 
     // Call from renderer:  Urgent window
@@ -232,11 +234,11 @@ function createWindow () {
         // try to write
         fs.writeFile(customUserDataPath, JSON.stringify(data), function (err) {
             if (err) {
-                doLog('error', 'storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + err + '_ (event: close)')
+                doLog('error', 'createWindow ::: storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + err + '_ (event: close)')
                 return console.log(err)
             }
 
-            doLog('info', 'mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
+            doLog('info', 'createWindow ::: mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
         })
     })
 
@@ -540,13 +542,13 @@ app.on('activate', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#editorAppend">editorAppend</a></li><li><a href="global.html#editorReset">editorReset</a></li><li><a href="global.html#editorScrollToEnd">editorScrollToEnd</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#otherButtonsDisable">otherButtonsDisable</a></li><li><a href="global.html#otherButtonsEnable">otherButtonsEnable</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#userSettingsLoadAllOnAppStart">userSettingsLoadAllOnAppStart</a></li><li><a href="global.html#userSettingsLoadAllOnSettingsUiLoad">userSettingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#userSettingsShowFfmpegInfo">userSettingsShowFfmpegInfo</a></li><li><a href="global.html#userSettingsShowYoutubeDLInfo">userSettingsShowYoutubeDLInfo</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogRenderer">doLogRenderer</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#fullyDecodeURI">fullyDecodeURI</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#otherButtonsDisable">otherButtonsDisable</a></li><li><a href="global.html#otherButtonsEnable">otherButtonsEnable</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Dec 17 2019 15:03:19 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Dec 19 2019 11:54:15 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

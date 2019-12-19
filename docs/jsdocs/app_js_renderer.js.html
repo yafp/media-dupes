@@ -26,7 +26,13 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// ----------------------------------------------------------------------------
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+// ----------------------------------------------------------------------------
+// IMPORT
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
 require('./js/crashReporting.js')
@@ -37,10 +43,8 @@ require('./js/crashReporting.js')
 // ----------------------------------------------------------------------------
 var arrayUserUrls = []
 
-// let editor
-
 // Settings variables
-var settingAudioFormat = 'mp3' // default mp3
+var settingAudioFormat = 'mp3' // default is set to mp3
 var settingCustomDownloadDir = '' // default
 
 /**
@@ -77,6 +81,37 @@ function initTitlebar () {
     // Trying to update the title
     //
     // myTitlebar.updateTitle('media-dupes');
+
+    doLogRenderer('info', 'initTitlebar ::: Initialized custom titlebar')
+}
+
+/**
+* @name doLogRenderer
+* @summary Writes console output for the renderer process
+* @description Writes console output for the renderer process
+* @param type - String which defines the log type
+* @param message - String which defines the log message
+*/
+function doLogRenderer (type, message) {
+    const prefix = '[ Renderer ] '
+    const log = require('electron-log')
+    // electron-log can: error, warn, info, verbose, debug, silly
+    switch (type) {
+    case 'info':
+        log.info(prefix + message)
+        break
+
+    case 'warn':
+        log.warn(prefix + message)
+        break
+
+    case 'error':
+        log.error(prefix + message)
+        break
+
+    default:
+        log.silly(prefix + message)
+    }
 }
 
 /**
@@ -112,8 +147,35 @@ function showNotifcation (title = 'media-dupes', message) {
     })
 
     myNotification.onclick = () => {
-        console.log('showNotification ::: Notification clicked')
+        doLogRenderer('info', 'showNotification ::: Notification clicked')
     }
+}
+
+/**
+* @name showDialog
+* @summary Shows a dialog
+* @description Displays a dialog
+* @param dialogType - Can be "none", "info", "error", "question" or "warning"
+* @param dialogTitle - The title text
+* @param dialogMessage - The message of the dialog
+* @param dialogDetail - The detail text
+*/
+function showDialog (dialogType, dialogTitle, dialogMessage, dialogDetail) {
+    // Documentatiion: https://electronjs.org/docs/api/dialog
+    const { dialog } = require('electron').remote
+
+    const options = {
+        type: dialogType,
+        buttons: ['OK'],
+        defaultId: 2,
+        title: dialogTitle,
+        message: dialogMessage,
+        detail: dialogDetail
+    }
+
+    dialog.showMessageBox(null, options, (response, checkboxChecked) => {
+        // doLogRenderer('info', response);
+    })
 }
 
 /**
@@ -122,7 +184,7 @@ function showNotifcation (title = 'media-dupes', message) {
 * @description Shows the loading animation / download spinner
 */
 function loadingAnimationShow () {
-    console.log('loadingAnimationShow ::: Showing spinner')
+    doLogRenderer('info', 'loadingAnimationShow ::: Showing spinner')
     $('#md_spinner').attr('hidden', false)
 }
 
@@ -132,14 +194,44 @@ function loadingAnimationShow () {
 * @description Hides the loading animation / download spinner
 */
 function loadingAnimationHide () {
-    console.log('loadingAnimationHide ::: Hiding spinner')
+    doLogRenderer('info', 'loadingAnimationHide ::: Hiding spinner')
     $('#md_spinner').attr('hidden', true)
+}
+
+/**
+* @name logScrollToEnd
+* @summary Scrolls the UI log to the end / latest entry
+* @description Scrolls the UI log to the end / latest entry
+*/
+function logScrollToEnd () {
+    $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight) // scroll log textarea to the end
+}
+
+/**
+* @name logReset
+* @summary Resets the content of the ui log
+* @description Resets the content of the ui log
+*/
+function logReset () {
+    document.getElementById('textareaLogOutput').value = ''
+    doLogRenderer('info', 'logReset ::: Did reset the log-textarea')
+}
+
+/**
+* @name logAppend
+* @summary Appends text to the log textarea
+* @description Appends text to the log textarea
+*/
+function logAppend (newLine) {
+    $('#textareaLogOutput').val(function (i, text) {
+        return text + newLine + '\n'
+    })
 }
 
 /**
 * @name checkForDeps
 * @summary Checks for missing dependencies
-* @description Checks on startup for missing dependencies
+* @description Checks on startup for missing dependencies (youtube-dl and ffmpeg). Both are bundles and should be find
 */
 function checkForDeps () {
     var countErrors = 0
@@ -147,36 +239,36 @@ function checkForDeps () {
     // youtube-dl
     //
     const youtubedl = require('youtube-dl')
-    console.log('checkForDeps ::: Searching youtube-dl ...')
+    doLogRenderer('info', 'checkForDeps ::: Searching youtube-dl ...')
     var youtubeDl = youtubedl.getYtdlBinary()
     if (youtubeDl === '') {
         countErrors = countErrors + 1
-        console.error('checkForDeps ::: Unable to find youtube-dl')
+        doLogRenderer('error', 'checkForDeps ::: Unable to find youtube-dl')
         showNoty('error', 'Unable to find dependency &lt;b>youtube-dl&lt;/b>. All download function are now disabled, sorry', 0)
 
         // hide both buttons (video and audio)
         $('#buttonStartVideo').hide()
         $('#buttonStartAudio').hide()
     } else {
-        console.log('checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
+        doLogRenderer('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
     }
 
     // ffmpeg
     //
-    console.log('checkForDeps ::: Searching ffmpeg ...')
+    doLogRenderer('info', 'checkForDeps ::: Searching ffmpeg ...')
     var ffmpeg = require('ffmpeg-static-electron')
     if (ffmpeg === '') {
         countErrors = countErrors + 1
-        console.error('checkForDeps ::: Unable to find ffmpeg')
+        doLogRenderer('error', 'checkForDeps ::: Unable to find ffmpeg')
         showNoty('error', 'Unable to find dependency &lt;b>ffmpeg&lt;/b>. Extracting audio is now disabled, sorry', 0)
 
         // hide audio button
         $('#buttonStartAudio').hide()
     } else {
-        console.log('checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+        doLogRenderer('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
     }
 
-    console.log('checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
+    doLogRenderer('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
 }
 
 /**
@@ -185,7 +277,7 @@ function checkForDeps () {
 * @description Resets the UI back to default
 */
 function uiReset () {
-    console.log('uiReset ::: Starting to reset the UI')
+    doLogRenderer('info', 'uiReset ::: Starting to reset the UI')
 
     // empty input file
     $('#inputNewUrl').val('')
@@ -200,12 +292,23 @@ function uiReset () {
     toDoListReset()
 
     // empty log textarea
-    editorReset()
+    logReset()
 
     // animation / spinner hide
     loadingAnimationHide()
 
-    console.log('uiReset ::: Finished resetting the UI')
+    doLogRenderer('info', 'uiReset ::: Finished resetting the UI')
+}
+
+/**
+* @name uiMakeUrgent
+* @summary Tells the main process to mark the application as urgent (blinking in task manager)
+* @description Is used to inform the user about an important state-change (all downloads finished). Triggers code in main.js which does the actual work
+*/
+function uiMakeUrgent () {
+    // make window urgent after having finished downloading. See #7
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('makeWindowUrgent')
 }
 
 /**
@@ -214,24 +317,25 @@ function uiReset () {
 * @description Is triggered via button on settings.html.
 */
 function settingsSelectCustomTargetDir () {
-    console.log('settingsSelectCustomTargetDir ::: Opening dialog to select a new download target ...')
+    doLogRenderer('info', 'settingsSelectCustomTargetDir ::: User wants to set a custom download directory')
+    doLogRenderer('info', 'settingsSelectCustomTargetDir ::: Now opening dialog to select a new download target')
 
     const options = { properties: ['openDirectory'] }
 
     const { dialog } = require('electron').remote
     dialog.showOpenDialog(options).then(res => {
-        console.log(res.filePaths)
+        doLogRenderer('warn', '_' + res.filePaths + '_')
 
-        if (res.filePaths !== '') {
+        if (res.filePaths.length === 0) {
+            doLogRenderer('warn', 'settingsSelectCustomTargetDir ::: User aborted selecting a custom download directory path in settings')
+            showNoty('warning', 'You aborted the definition of a custom download directory')
+        }
+        else
+        {
             var newValue = res.filePaths.toString()
-
-            // save the value to user-config
-            writeLocalUserSetting('CustomDownloadDir', newValue)
-
-            // show it in the UI
-            $('#inputCustomTargetDir').val(newValue)
-
-            console.log('settingsSelectCustomTargetDir ::: User selected the following directory: _' + newValue + '_.')
+            writeLocalUserSetting('CustomDownloadDir', newValue) // save the value to user-config
+            $('#inputCustomTargetDir').val(newValue) // show it in the UI
+            doLogRenderer('info', 'settingsSelectCustomTargetDir ::: User selected the following directory: _' + newValue + '_.')
         }
     })
 }
@@ -242,18 +346,12 @@ function settingsSelectCustomTargetDir () {
 * @description Is triggered via button on settings.html.
 */
 function settingsResetCustomTargetDir () {
-    console.log('settingsResetCustomTargetDir ::: Resetting the custom download target.')
+    doLogRenderer('info', 'settingsResetCustomTargetDir ::: Resetting the custom download target.')
 
-    var newValue = ''
-
-    // save the value
-    writeLocalUserSetting('CustomDownloadDir', newValue)
-
-    // show it in the UI
-    $('#inputCustomTargetDir').val(newValue)
-
-    // update global var
-    settingCustomDownloadDir = newValue
+    var newValue = '' 
+    writeLocalUserSetting('CustomDownloadDir', newValue) // save the value
+    $('#inputCustomTargetDir').val(newValue) // show it in the UI
+    settingCustomDownloadDir = newValue // update global var
 }
 
 /**
@@ -279,6 +377,48 @@ function settingsUiLoad () {
 }
 
 /**
+* @name settingAudioFormatSave
+* @summary Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
+* @description Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
+*/
+function settingAudioFormatSave () {
+    var userSelectedAudioFormat = $('#inputGroupSelectAudio').val() // get value from UI select inputGroupSelectAudio
+    doLogRenderer('info', 'settingAudioFormatSave ::: User selected the audio format: _' + userSelectedAudioFormat + '_.')
+    writeLocalUserSetting('AudioFormat', userSelectedAudioFormat) // store this value in a json file
+}
+
+/**
+* @name settingsLoadAllOnAppStart
+* @summary Reads all user-setting-files and fills some global variables
+* @description Reads all user-setting-files and fills some global variables
+*/
+function settingsLoadAllOnAppStart () {
+    readLocalUserSetting('CustomDownloadDir') // get setting for Custom download dir
+    readLocalUserSetting('AudioFormat') // get setting for configured audio format
+}
+
+/**
+* @name settingsLoadAllOnSettingsUiLoad
+* @summary Reads all user-setting-files and fills some global variables and adjusts the settings UI
+* @description Reads all user-setting-files and fills some global variables and adjusts the settings UI
+*/
+function settingsLoadAllOnSettingsUiLoad () {
+    readLocalUserSetting('CustomDownloadDir', true) // Custom download dir
+    readLocalUserSetting('AudioFormat', true) // load configured audio format and update the settings UI
+}
+
+/**
+* @name settingsFolderOpen
+* @summary Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
+* @description Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
+*/
+function settingsFolderOpen () {
+    doLogRenderer('info', 'settingsFolderOpen ::: User wants to open its config folder.')
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('settingsFolderOpen')
+}
+
+/**
 * @name writeLocalUserSetting
 * @summary Write to electron-json-storage
 * @description Writes a value for a given key to electron-json-storage
@@ -300,7 +440,7 @@ function writeLocalUserSetting (key, value) {
         if (error) {
             throw error
         }
-        console.log('writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
+        doLogRenderer('info', 'writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
 
         showNoty('success', 'Set &lt;b>' + key + '&lt;/b> to &lt;b>' + value + '&lt;/b>.')
     })
@@ -319,7 +459,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
     const app = remote.app
     const path = require('path')
 
-    console.log('readLocalUserSetting ::: Trying to read value of key: _' + key + '_.')
+    doLogRenderer('info', 'readLocalUserSetting ::: Trying to read value of key: _' + key + '_.')
 
     // change path for userSettings
     const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
@@ -333,7 +473,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 
         var value = data.setting
 
-        console.log('readLocalUserSetting ::: key: _' + key + '_ - got value: _' + value + '_.')
+        doLogRenderer('info', 'readLocalUserSetting ::: key: _' + key + '_ - got value: _' + value + '_.')
 
         // Setting: CustomDownloadDir
         //
@@ -341,10 +481,10 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             // not configured
             if ((value === null) || (value === undefined)) {
             // if(value === null) {
-                console.warn('readLocalUserSetting ::: No user setting found for: _' + key + '_.')
+                doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingCustomDownloadDir = '' // default
             } else {
-                console.log('readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+                doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
 
                 // check if directory exists
                 if (isDirectoryAvailable(value)) {
@@ -355,7 +495,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
                         // update global var
                         settingCustomDownloadDir = value
                     } else {
-                        console.error('readLocalUserSetting ::: Configured custom download dir _' + value + '_ exists BUT is not writeable. Gonna reset the user-setting.')
+                        doLogRenderer('error', 'readLocalUserSetting ::: Configured custom download dir _' + value + '_ exists BUT is not writeable. Gonna reset the user-setting.')
                         value = ''
                         settingCustomDownloadDir = value // update the global dir
 
@@ -365,7 +505,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
                         })
                     }
                 } else {
-                    console.error('readLocalUserSetting ::: Configured custom download dir _' + value + '_ does not exists. Gonna reset the user-setting.')
+                    doLogRenderer('error', 'readLocalUserSetting ::: Configured custom download dir _' + value + '_ does not exists. Gonna reset the user-setting.')
                     value = ''
                     settingCustomDownloadDir = value // update the global dir
 
@@ -389,10 +529,10 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             // not configured
             if ((value === null) || (value === undefined)) {
             // if(value === null) {
-                console.warn('readLocalUserSetting ::: No user setting found for: _' + key + '_.')
+                doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingAudioFormat = 'mp3' // default
             } else {
-                console.log('readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+                doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
 
                 // update global var
                 settingAudioFormat = value
@@ -408,55 +548,32 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 }
 
 /**
-* @name settingAudioFormatSave
-* @summary Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
-* @description Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
+* @name checkUrlInputField
+* @summary Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
+* @description Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
 */
-function settingAudioFormatSave () {
-    // get value from UI select inputGroupSelectAudio
-    var userSelectedAudioFormat = $('#inputGroupSelectAudio').val()
-    console.log('settingAudioFormatSave ::: User selected the audio format: _' + userSelectedAudioFormat + '_.')
+function checkUrlInputField () {
+    doLogRenderer('info', 'checkUrlInputField ::: Triggered on focus')
 
-    // store this value in a json file
-    writeLocalUserSetting('AudioFormat', userSelectedAudioFormat)
-}
+    // get current content of field
+    var currentContentOfUrlInputField = $('#inputNewUrl').val()
 
-/**
-* @name userSettingsLoadAllOnAppStart
-* @summary Reads all user-setting-files and fills some global variables
-* @description Reads all user-setting-files and fills some global variables
-*/
-function userSettingsLoadAllOnAppStart () {
-    // Custom download dir
-    readLocalUserSetting('CustomDownloadDir')
+    // if the field is empty - continue
+    if (currentContentOfUrlInputField === '') {
+        // get content of clipboard
+        const { clipboard } = require('electron')
+        var currentClipboardContent = clipboard.readText()
+        currentClipboardContent = currentClipboardContent.trim() // remove leading and trailing blanks
+        doLogRenderer('info', 'checkUrlInputField ::: Clipboard currently contains: _' + currentClipboardContent + '_.')
 
-    // load configured audio format
-    readLocalUserSetting('AudioFormat')
-}
-
-/**
-* @name userSettingsLoadAllOnSettingsUiLoad
-* @summary Reads all user-setting-files and fills some global variables and adjusts the settings UI
-* @description Reads all user-setting-files and fills some global variables and adjusts the settings UI
-*/
-function userSettingsLoadAllOnSettingsUiLoad () {
-    // Custom download dir
-    readLocalUserSetting('CustomDownloadDir', true)
-
-    // load configured audio format and update the settings UI
-    readLocalUserSetting('AudioFormat', true)
-}
-
-/**
-* @name settingsFolderOpen
-* @summary Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
-* @description Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
-*/
-function settingsFolderOpen () {
-    console.log('settingsFolderOpen ::: User wants to open its config folder.')
-
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.send('settingsFolderOpen')
+        // check if it is a valid url - if so paste it
+        var isUrlValid = validURL(currentClipboardContent)
+        if (isUrlValid) {
+            $('#inputNewUrl').val(currentClipboardContent) // paste it
+            $('#inputNewUrl').select() // select it entirely
+            doLogRenderer('info', 'checkUrlInputField ::: Clipboard contains a valid URL - pasted it into the input field.')
+        }
+    }
 }
 
 /**
@@ -477,6 +594,19 @@ function validURL (str) {
 }
 
 /**
+* @name onEnter
+* @summary Executed on keypress inside url-input-field
+* @description Checks if the key-press was the ENTEr-key - if so simulates a press of the button ADD URL
+*/
+function onEnter (event) {
+    var code = 0
+    code = event.keyCode
+    if (code === 13) {
+        addURL() // simulare click on ADD URL buttom
+    }
+}
+
+/**
 * @name addURL
 * @summary Handles the url add click of the user
 * @description Handles the url add click of the user
@@ -491,18 +621,42 @@ function addURL () {
     if (newUrl !== '') {
         var isUrlValid = validURL(newUrl)
         if (isUrlValid) {
-            console.log('addURL ::: Adding new url: _' + newUrl + '_.')
+            // check if url is supported
+            //
+            // problem: this takes time
+            //
+            /*
+            const youtubedl = require('youtube-dl')
+            youtubedl.exec(newUrl, ['-j', ], {}, function(err, output) {
+                if (err)
+                {
+                    showNoty('error', 'The url ' + newUrl + ' is not supported.')
+                    doLogRenderer('error', 'addUrl ::: The url ' + newUrl + ' is not supported. Check extractor list for more details')
+                    throw err
+                }
+                else
+                {
+                    doLogRenderer('info', 'addURL ::: The url is supported by youtube-dl')
+
+                    // continue ...
+                }
+            })
+            */
+
+            doLogRenderer('info', 'addURL ::: Adding new url: _' + newUrl + '_.')
 
             // append to array
             arrayUserUrls.push(newUrl)
 
             // update todo list
-            updateToDoList()
+            toDoListUpdate()
+
+            logAppend('Added ' + newUrl + ' to todo list')
 
             // reset input
             $('#inputNewUrl').val('')
         } else {
-            console.error('addURL ::: Detected invalid url: _' + newUrl + '_.')
+            doLogRenderer('error', 'addURL ::: Detected invalid url: _' + newUrl + '_.')
             showNoty('error', 'Please insert a valid url (reason: was invalid)')
         }
     } else {
@@ -511,11 +665,11 @@ function addURL () {
 }
 
 /**
-* @name updateToDoList
+* @name toDoListUpdate
 * @summary Updates the todo-list after a user added an url
 * @description Updates the todo-list after a user added an url
 */
-function updateToDoList () {
+function toDoListUpdate () {
     // remove duplicate entries in array
     arrayUserUrls = $.unique(arrayUserUrls)
 
@@ -529,7 +683,7 @@ function updateToDoList () {
         startButtonsEnable()
     }
 
-    console.log('updateToDoList ::: Added new url to todo-list')
+    doLogRenderer('info', 'toDoListUpdate ::: Added new url to todo-list')
 }
 
 /**
@@ -538,13 +692,9 @@ function updateToDoList () {
 * @description Resets the todo-list textarea
 */
 function toDoListReset () {
-    // reset the array
-    arrayUserUrls = []
-
-    // reset todo-list
-    textareaTodoList.value = ''
-
-    console.log('toDoListReset ::: Did reset the todolist-textarea')
+    arrayUserUrls = [] // reset the array
+    document.getElementById('textareaTodoList').value = '' // reset todo-list in UI
+    doLogRenderer('info', 'toDoListReset ::: Did reset the todolist-textarea')
 }
 
 /**
@@ -553,11 +703,11 @@ function toDoListReset () {
 * @description Is executed when the todo-list contains at least 1 item
 */
 function startButtonsEnable () {
-    // disable start button
+    // enable start buttons
     $('#buttonStartVideo').prop('disabled', false)
     $('#buttonStartAudio').prop('disabled', false)
 
-    console.log('startButtonsEnable ::: Did enable both start buttons')
+    doLogRenderer('info', 'startButtonsEnable ::: Did enable both start buttons')
 }
 
 /**
@@ -566,11 +716,11 @@ function startButtonsEnable () {
 * @description Is executed when a download task is started by the user
 */
 function startButtonsDisable () {
-    // disable start button
+    // disable start buttons
     $('#buttonStartVideo').prop('disabled', true)
     $('#buttonStartAudio').prop('disabled', true)
 
-    console.log('startButtonsDisable ::: Did disable both start buttons')
+    doLogRenderer('info', 'startButtonsDisable ::: Did disable both start buttons')
 }
 
 /**
@@ -579,19 +729,13 @@ function startButtonsDisable () {
 * @description Is executed when a download task has ended by the user
 */
 function otherButtonsEnable () {
-    // disable some buttons
-
+    // enable some buttons
     $('#inputNewUrl').prop('disabled', false) // url input field
-
-    // add URL
     $('#buttonAddUrl').prop('disabled', false) // add url
-
-    // footer
     $('#buttonShowSettings').prop('disabled', false) // settings
     $('#buttonShowHelp').prop('disabled', false) // help / intro
     $('#buttonShowExtractors').prop('disabled', false) // showExtractors
-
-    console.log('otherButtonsEnable ::: Did enable some other UI elements')
+    doLogRenderer('info', 'otherButtonsEnable ::: Did enable some other UI elements')
 }
 
 /**
@@ -601,108 +745,12 @@ function otherButtonsEnable () {
 */
 function otherButtonsDisable () {
     // disable some buttons
-
     $('#inputNewUrl').prop('disabled', true) // url input field
-
     $('#buttonAddUrl').prop('disabled', true) // add url
-
     $('#buttonShowSettings').prop('disabled', true) // settings
     $('#buttonShowHelp').prop('disabled', true) // help / intro
     $('#buttonShowExtractors').prop('disabled', true) // showExtractors
-
-    console.log('otherButtonsDisable ::: Did disable some other UI elements')
-}
-
-function initCKeditor () {
-    console.log('initCKeditor ::: Starting to init the CKEditor')
-
-    /*
-     CKEDITOR.replace('editor1', {
-        //toolbar: [],
-        width: '100%',
-        height: 200
-    });
-    */
-
-    // START CKEDITOR
-    CKEDITOR.replace('editor1',
-        {
-            // show all editor commands
-            // console.log(CKEDITOR.instances.editor1.commands);
-            // placeholder = "Log output",
-
-            // key press handling
-            on:
-        {
-            instanceReady: function () {
-                console.log('initCKeditor ::: instance is now ready')
-                // CKEDITOR.instances.editor1.setPlaceholder('foooo');
-                CKEDITOR.instances.editor1.setReadOnly(true) // set RO mode
-                CKEDITOR.config.toolbarCanCollapse = true /* Enable collapse function for toolbar */
-            },
-
-            focus: function (event) {
-                console.log('initCKEditor ::: CKEditor got focus')
-            },
-
-            resize: function (event) {
-                // get new height of editor window
-                // editorHeight = event.editor.ui.space( "contents" ).getStyle( "height" );
-                // console.log("initCKeditor ::: CKEditor resized to: "+editorHeight);
-            }
-
-        }, // end: on
-
-            // other things
-            //
-            enterMode: CKEDITOR.ENTER_BR,
-            height: 200,
-            toolbarCanCollapse: true, // enable collapse option
-            toolbarStartupExpanded: false, // define collapsed as default
-            toolbar:
-        [
-            { name: 'basicstyles', items: ['Bold', 'Italic', 'Strike'] },
-            { name: 'document', items: ['Source'] }
-        ]
-        })
-}
-
-/**
-* @name editorAppend
-* @summary Appends text to the log editor
-* @description Appends text to the log editor
-* @param string - The text which should be append to log
-*/
-function editorAppend (string) {
-    // disable readonly mode
-    CKEDITOR.instances.editor1.setReadOnly(false)
-
-    // CKEDITOR.instances.editor1.insertHtml( '&lt;p>This is a new paragraph.&lt;/p>' );
-    CKEDITOR.instances.editor1.insertHtml(string + '&lt;br>')
-
-    // re-enable readonly
-    CKEDITOR.instances.editor1.setReadOnly(true)
-}
-
-/**
-* @name editorScrollToEnd
-* @summary Scrolls to the end of the log editor
-* @description Scrolls to the end of the log editor
-*/
-function editorScrollToEnd () {
-    var editor = CKEDITOR.instances.editor1
-    var jqDocument = $(editor.document.$)
-    var documentHeight = jqDocument.height()
-    jqDocument.scrollTop(documentHeight)
-}
-
-/**
-* @name editorReset
-* @summary Resets the content of the log editor
-* @description Resets the content of the log editor
-*/
-function editorReset () {
-    CKEDITOR.instances.editor1.setData('')
+    doLogRenderer('info', 'otherButtonsDisable ::: Did disable some other UI elements')
 }
 
 /**
@@ -718,7 +766,7 @@ function isEncoded (uri) {
 }
 
 /**
-* @name isEncoded
+* @name fullyDecodeURI
 * @summary Used to decode URLs
 * @description
 * param uri - The incoming uri
@@ -727,9 +775,8 @@ function isEncoded (uri) {
 function fullyDecodeURI (uri) {
     while (isEncoded(uri)) {
         uri = decodeURIComponent(uri)
-        console.log('fullyDecodeURI ::: URL: _' + uri + '_ is now fully decoded.')
+        doLogRenderer('info', 'fullyDecodeURI ::: URL: _' + uri + '_ is now fully decoded.')
     }
-
     return uri
 }
 
@@ -739,7 +786,7 @@ function fullyDecodeURI (uri) {
 * @description Does the actual download
 */
 function downloadContent (mode) {
-    console.log('downloadContent ::: Start with mode set to: _' + mode + '_.')
+    doLogRenderer('info', 'downloadContent ::: Start with mode set to: _' + mode + '_.')
 
     // example urls
     //
@@ -751,14 +798,14 @@ function downloadContent (mode) {
     // What is the target dir
     //
     var detectedDownloadDir = getDownloadDirectory()
-    console.log('downloadContent ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
-    console.log('downloadContent ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
+    doLogRenderer('info', 'downloadContent ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    doLogRenderer('info', 'downloadContent ::: Got a valid download target: _' + detectedDownloadDir[0] + '_.')
 
     // if we got a valid download dir
     if (detectedDownloadDir[0]) {
         // Prepare UI
         //
-        editorReset() // start new job - clean up loag before
+        //logReset() // resets the log
         startButtonsDisable() // disable the start buttons
         otherButtonsDisable() // disables some other buttons
         loadingAnimationShow() // start download animation / spinner
@@ -769,7 +816,7 @@ function downloadContent (mode) {
         const path = require('path')
 
         var targetPath = detectedDownloadDir[1]
-        console.log('downloadContent ::: Download target is set to: _' + targetPath + '_.')
+        doLogRenderer('info', 'downloadContent ::: Download target is set to: _' + targetPath + '_.')
 
         var youtubeDlParameter = ''
 
@@ -777,9 +824,8 @@ function downloadContent (mode) {
         switch (mode) {
         case 'audio':
             var ffmpeg = require('ffmpeg-static-electron')
-            console.log('downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
-
-            console.log('downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
+            doLogRenderer('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+            doLogRenderer('info', 'downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
 
             // generic parameter / flags
             youtubeDlParameter = [
@@ -804,7 +850,7 @@ function downloadContent (mode) {
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'best',
-                '--output', path.join(targetPath, '%(title)s-%(id)s.%(ext)s'),
+                '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'),
                 '--add-metadata',
                 '--ignore-errors'
             ]
@@ -812,7 +858,7 @@ function downloadContent (mode) {
             break
 
         default:
-            console.error('downloadContent ::: Unspecified mode. This should never happen.')
+            doLogRenderer('error', 'downloadContent ::: Unspecified mode. This should never happen.')
             showNoty('error', 'Unexpected download mode. Please report this issue')
             return
         }
@@ -823,8 +869,11 @@ function downloadContent (mode) {
             return
         }
 
+        doLogRenderer('info', 'downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+
+        // TODO
         // prepare array for urls throwing errors
-        var arrayUrlsThrowingErrors = []
+        //ar arrayUrlsThrowingErrors = []
 
         // assuming we got an array
         // for each item of the array
@@ -840,13 +889,10 @@ function downloadContent (mode) {
             url = fullyDecodeURI(url)
 
             registerEvent('downloadSingleUrl')
+            doLogRenderer('info', 'downloadContent ::: Processing URL: _' + url + '_.')
+            doLogRenderer('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
 
-            console.log('downloadContent ::: Processing URL: _' + url + '_.')
-            console.log('downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
-            console.log('downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
-
-            editorAppend('&lt;b>Processing: ... &lt;/b>')
-            editorAppend('&lt;b>Processing: &lt;/b>' + url)
+            logAppend('Processing: ' + url)
 
             // GetInfo
             //
@@ -857,19 +903,14 @@ function downloadContent (mode) {
                     throw err
                 }
 
-                editorAppend('&lt;b>Fetching url informations:&lt;/b>')
-                editorAppend('URL:' + info.url)
-                editorAppend('ID:' + info.id)
-                editorAppend('Title:' + info.title)
-
                 //
-                console.error('id:', info.id)
-                console.error('title:', info.title)
-                console.error('url:', info.url)
-                console.error('thumbnail:', info.thumbnail)
-                console.error('description:', info.description)
-                console.error('filename:', info._filename)
-                console.error('format id:', info.format_id)
+                doLogRenderer('error', 'id:', info.id)
+                doLogRenderer('error', 'title:', info.title)
+                doLogRenderer('error', 'url:', info.url)
+                doLogRenderer('error', 'thumbnail:', info.thumbnail)
+                doLogRenderer('error', 'description:', info.description)
+                doLogRenderer('error', 'filename:', info._filename)
+                doLogRenderer('error', 'format id:', info.format_id)
             })
             */
 
@@ -879,7 +920,7 @@ function downloadContent (mode) {
                 if (err) {
                     // showNoty('error', 'Downloading &lt;b>' + url + '&lt;/b> failed with error: ' + err, 0)
                     showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
-                    console.error('downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
+                    doLogRenderer('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
 
                     // remember troublesome url
                     arrayUrlsThrowingErrors.push(url)
@@ -888,15 +929,14 @@ function downloadContent (mode) {
                 }
 
                 // show progress
-                console.log(output.join('\n'))
-                editorAppend(output.join('\n'))
+                doLogRenderer('info', output.join('\n'))
+                logAppend(output.join('\n'))
 
-                // scroll log textarea to the end
-                editorScrollToEnd()
+                logScrollToEnd() // scroll log textarea to the end
 
                 // finish
-                console.log('downloadContent ::: Finished downloading _' + url + '_.')
-                editorAppend('&lt;b>Finished downloading: &lt;/b>' + url)
+                doLogRenderer('info', 'downloadContent ::: Finished downloading _' + url + '_.')
+                logAppend('Finished downloading: ' + url)
                 showNoty('success', 'Finished downloading &lt;b>' + url + '&lt;/b>.')
 
                 // Final notification
@@ -906,72 +946,52 @@ function downloadContent (mode) {
                     uiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
                     loadingAnimationHide() // stop download animation / spinner
                     otherButtonsEnable() // enable some of the buttons again
-                    editorScrollToEnd() // scroll log textarea to the end
+                    logScrollToEnd() // scroll log textarea to the end
                 }
             })
         }
-        console.log('downloadContent ::: All download processes are now started')
+        doLogRenderer('info', 'downloadContent ::: All download processes are now started')
     } else {
-        console.error('downloadContent ::: Unable to start a download, because no useable target dir was detectable')
+        doLogRenderer('error', 'downloadContent ::: Unable to start a download, because no useable target dir was detectable')
         showNoty('error', 'Aborted download, because no useable downloads directory was found', 0)
     }
 }
 
 /**
-* @name uiMakeUrgent
-* @summary Tells the main process to mark the application as urgent (blinking in task manager)
-* @description Is used to inform the user about an important state-change (all downloads finished). Triggers code in main.js which does the actual work
-*/
-function uiMakeUrgent () {
-    // make window urgent after having finished downloading. See #7
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.send('makeWindowUrgent')
-}
-
-/**
 * @name showSupportedExtractors
-* @summary Updates the todo-list after a user added an url
-* @description Updates the todo-list after a user added an url
+* @summary Shows a list of all currently supported extractors of youtube-dl
+* @description Shows a list of all currently supported extractors of youtube-dl
 */
 function showSupportedExtractors () {
-    console.log('showSupportedExtractors ::: Loading list of all supported extractors...')
-
+    doLogRenderer('info', 'showSupportedExtractors ::: Loading list of all supported extractors...')
     loadingAnimationShow()
-
+    logReset() // reset the log
     registerEvent('showExtractors')
 
-    // reset the log
-    editorReset()
-
     const youtubedl = require('youtube-dl')
-
     youtubedl.getExtractors(true, function (err, list) {
         if (err) {
             showNoty('error', 'Unable to get youtube-dl extractor list.', 0)
-            console.error('showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + err + '_.')
+            doLogRenderer('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + err + '_.')
             throw err
         }
 
-        console.log('showSupportedExtractors ::: Found ' + list.length + ' extractors')
-
-        // append to ui-log
-        editorAppend('&lt;b>Found ' + list.length + ' extractors:&lt;/b>')
+        doLogRenderer('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors')
 
         for (let i = 0; i &lt; list.length; i++) {
-            console.log('showSupportedExtractors ::: ' + list[i])
+            doLogRenderer('info', 'showSupportedExtractors ::: ' + list[i])
         }
 
-        editorAppend(list.join('&lt;br>')) // show all extractors in editor
+        // textareaLogOutput.value = list.join('\n')
+        document.getElementById('textareaLogOutput').value = list.join('\n')
 
-        editorAppend('&lt;b>' + list.length + ' extractors are currently supported&lt;/b>') // summary in editor
-        console.log('Found ' + list.length + ' extractors') // summary in console.
-
-        editorScrollToEnd() // scroll log textarea to the end
-
+        doLogRenderer('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
+        logAppend('\n\nFound ' + list.length + ' supported extractors')
+        logScrollToEnd() // scroll log textarea to the end
         loadingAnimationHide() // stop loading animation
     })
 
-    console.log('showSupportedExtractors ::: Finished.')
+    doLogRenderer('info', 'showSupportedExtractors ::: Finished.')
 }
 
 /**
@@ -991,12 +1011,13 @@ function searchUpdate (silent = true) {
     var remoteAppVersionLatest = '0.0.0'
     var localAppVersion = '0.0.0'
     var versions
-    var gitHubPath = 'yafp/media-dupes' // user/repo
-    var url = 'https://api.github.com/repos/' + gitHubPath + '/tags'
 
-    console.log('searchUpdate ::: Start checking _' + url + '_ for available releases')
+    // get API url
+    const { urlGitHubRepoTags } = require('./js/modules/githubUrls.js')
 
-    var updateStatus = $.get(url, function (data) {
+    doLogRenderer('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
+
+    var updateStatus = $.get(urlGitHubRepoTags, function (data) {
         3000 // in milliseconds
 
         // success
@@ -1007,19 +1028,19 @@ function searchUpdate (silent = true) {
         // get remote version
         //
         remoteAppVersionLatest = versions[0].name
-        // remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
+        //remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
 
         // get local version
         //
         localAppVersion = require('electron').remote.app.getVersion()
         // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-        console.log('searchUpdate ::: Local version: ' + localAppVersion)
-        console.log('searchUpdate ::: Latest public version: ' + remoteAppVersionLatest)
+        doLogRenderer('info', 'searchUpdate ::: Local version: ' + localAppVersion)
+        doLogRenderer('info', 'searchUpdate ::: Latest public version: ' + remoteAppVersionLatest)
 
         // Update available
         if (localAppVersion &lt; remoteAppVersionLatest) {
-            console.log('searchUpdate ::: Found update, notify user')
+            doLogRenderer('info', 'searchUpdate ::: Found update, notify user')
 
             // using a confirm dialog - since #150
             const Noty = require('noty')
@@ -1047,7 +1068,7 @@ function searchUpdate (silent = true) {
             // show the noty dialog
             n.show()
         } else {
-            console.log('searchUpdate ::: No newer version found.')
+            doLogRenderer('info', 'searchUpdate ::: No newer version found.')
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
@@ -1055,20 +1076,19 @@ function searchUpdate (silent = true) {
             }
         }
 
-        console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases')
+        doLogRenderer('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases')
     })
         .done(function () {
-        // console.log('searchUpdate ::: Successfully checked ' + url + ' for available releases');
+        // doLogRenderer('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
         })
 
         .fail(function () {
-            console.log('searchUpdate ::: Checking ' + url + ' for available releases failed.')
-            showNoty('error', 'Checking &lt;b>' + url + '&lt;/b> for available releases failed. Please troubleshoot your network connection.')
+            doLogRenderer('info', 'searchUpdate ::: Checking ' + urlGitHubRepoTags + ' for available releases failed.')
+            showNoty('error', 'Checking &lt;b>' + urlGitHubRepoTags + '&lt;/b> for available releases failed. Please troubleshoot your network connection.')
         })
 
         .always(function () {
-            console.log('searchUpdate ::: Finished checking ' + url + ' for available releases')
-
+            doLogRenderer('info', 'searchUpdate ::: Finished checking ' + urlGitHubRepoTags + ' for available releases')
             loadingAnimationHide()
         })
 }
@@ -1079,9 +1099,9 @@ function searchUpdate (silent = true) {
 * @description Opens the url https://github.com/yafp/media-dupes/releases in the default browser. Used in searchUpdate().
 */
 function openReleasesOverview () {
-    var url = 'https://github.com/yafp/media-dupes/releases'
-    console.log('openReleasesOverview ::: Opening _' + url + '_ to show available releases.')
-    openURL(url)
+    const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
+    doLogRenderer('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
+    openURL(urlGitHubReleases)
 }
 
 /**
@@ -1092,7 +1112,7 @@ function openReleasesOverview () {
 */
 function openURL (url) {
     const { shell } = require('electron')
-    console.log('openURL ::: Trying to open the url: _' + url + '_.')
+    doLogRenderer('info', 'openURL ::: Trying to open the url: _' + url + '_.')
     shell.openExternal(url)
 }
 
@@ -1104,15 +1124,15 @@ function openURL (url) {
 function openUserDownloadFolder () {
     var detectedDownloadDir = getDownloadDirectory()
 
-    console.log('openUserDownloadFolder ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
-    console.log('openUserDownloadFolder ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
+    doLogRenderer('info', 'openUserDownloadFolder ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    doLogRenderer('info', 'openUserDownloadFolder ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
 
     // if we gont a download folder which can be used
     if (detectedDownloadDir[0]) {
         const { ipcRenderer } = require('electron')
         ipcRenderer.send('openUserDownloadFolder', detectedDownloadDir[1])
     } else {
-        console.error('openUserDownloadFolder ::: Unable to find a download dir.')
+        doLogRenderer('error', 'openUserDownloadFolder ::: Unable to find a download dir.')
         showNoty('error', 'Unable to find a working download dir.', 0)
     }
 }
@@ -1123,7 +1143,8 @@ function openUserDownloadFolder () {
 * @description Starts a short intro / tutorial which explains the user-interface. Using introJs
 */
 function startIntro () {
-    console.log('startIntro ::: User wants to see the intro. Here you go!')
+    doLogRenderer('info', 'startIntro ::: User wants to see the intro. Here you go!')
+    const introJs = require('intro.js')
     introJs().start()
     registerEvent('showIntro')
 }
@@ -1136,17 +1157,17 @@ function startIntro () {
 * @return String - The detected download dir
 */
 function getDownloadDirectory () {
-    console.log('getDownloadDirectory ::: Gonna check for the user download directory')
+    doLogRenderer('info', 'getDownloadDirectory ::: Gonna check for the user download directory')
 
     var targetPath = ''
 
     // Check if there is a user-configured target defined
     //
-    console.log('getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
+    doLogRenderer('info', 'getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
     targetPath = settingCustomDownloadDir.toString()
     if (targetPath !== '') {
         // User has configured a custom download dir
-        console.log('getDownloadDirectory ::: User configured custom download directory is configured to: _' + targetPath + '_.')
+        doLogRenderer('info', 'getDownloadDirectory ::: User configured custom download directory is configured to: _' + targetPath + '_.')
 
         // check if that directory still exists
         if (isDirectoryAvailable(targetPath)) {
@@ -1154,18 +1175,18 @@ function getDownloadDirectory () {
 
             // check if it is writeable
             if (isDirectoryWriteable(targetPath)) {
-                console.log('getDownloadDirectory :::The custom download dir _' + targetPath + '_ is writeable. We are all good and gonna use it now')
+                doLogRenderer('info', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ is writeable. We are all good and gonna use it now')
                 return [true, targetPath]
             } else {
                 // folder exists but is not writeable
-                console.error('getDownloadDirectory :::The custom download dir _' + targetPath + '_ exists but is not writeable. Gonna fallback to default')
+                doLogRenderer('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ exists but is not writeable. Gonna fallback to default')
                 showNoty('error', 'Your configured custom download directory &lt;b>' + targetPath + '&lt;/b> exists but is not writeable. Gonna reset the custom setting now back to default')
                 writeLocalUserSetting('CustomDownloadDir', '')
                 settingCustomDownloadDir = ''
             }
         } else {
             // the configured dir does not exists anymore
-            console.error('getDownloadDirectory :::The custom download dir _' + targetPath + '_ does not exists. Gonna fallback to default')
+            doLogRenderer('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ does not exists. Gonna fallback to default')
             showNoty('error', 'Your configured custom download directory &lt;b>' + targetPath + '&lt;/b> does not exists anymore. Gonna reset the custom setting now back to default')
             writeLocalUserSetting('CustomDownloadDir', '')
             settingCustomDownloadDir = ''
@@ -1175,7 +1196,7 @@ function getDownloadDirectory () {
 
     // check the default download dir
     //
-    console.log('getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
+    doLogRenderer('info', 'getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
     // use the default download target
     const { remote } = require('electron')
     targetPath = remote.getGlobal('sharedObj').prop1
@@ -1183,21 +1204,21 @@ function getDownloadDirectory () {
     // check if that directory still exists
     if (isDirectoryAvailable(targetPath)) {
         // the default download folder exists
-        console.log('getDownloadDirectory ::: The default download location _' + targetPath + '_ exists')
+        doLogRenderer('info', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists')
 
         // check if it is writeable
         if (isDirectoryWriteable(targetPath)) {
-            console.log('getDownloadDirectory ::: The default download location _' + targetPath + '_ exists and is writeable. We are all good and gonna use it now')
+            doLogRenderer('info', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists and is writeable. We are all good and gonna use it now')
             return [true, targetPath]
         } else {
             // folder exists but is not writeable
-            console.error('getDownloadDirectory ::: The default download location _' + targetPath + '_ exists but is not writeable. This is a major problem')
+            doLogRenderer('error', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists but is not writeable. This is a major problem')
             showNoty('error', 'Your configured custom download directory &lt;b>' + targetPath + '&lt;/b> exists but is not writeable. Gonna reset the custom setting now back to default', 0)
             return [false, '']
         }
     } else {
         // was unable to detect a download folder
-        console.error('getDownloadDirectory ::: Was unable to detect an existing default download location')
+        doLogRenderer('error', 'getDownloadDirectory ::: Was unable to detect an existing default download location')
         // should force the user to set a custom one
         showNoty('error', 'Unable to detect an existing default download location. Please configure a custom download directory in the application settings', 0)
         return [false, '']
@@ -1215,14 +1236,14 @@ function isDirectoryAvailable (dirPath) {
     if (dirPath !== '') {
         const fs = require('fs')
         if (fs.existsSync(dirPath)) {
-            console.log('isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
+            doLogRenderer('info', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
             return true
         } else {
-            console.error('isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exists')
+            doLogRenderer('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exists')
             return false
         }
     } else {
-        console.error('isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
+        doLogRenderer('error', 'isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
     }
 }
 
@@ -1240,130 +1261,53 @@ function isDirectoryWriteable (dirPath) {
         // sync: check if folder is writeable
         try {
             fs.accessSync(dirPath, fs.constants.W_OK)
-            console.log('isDirectoryWriteable ::: Directory _' + dirPath + '_ is writeable')
+            doLogRenderer('info', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is writeable')
             return true
         } catch (err) {
-            console.error('isDirectoryWriteable ::: Directory _' + dirPath + '_ is not writeable. Error: _' + err + '_.')
+            doLogRenderer('error', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is not writeable. Error: _' + err + '_.')
             return false
         }
     } else {
-        console.error('isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty.')
+        doLogRenderer('error', 'isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty.')
     }
 }
 
 /**
-* @name userSettingsShowYoutubeDLInfo
+* @name settingsShowYoutubeDLInfo
 * @summary Searches the youtube-binary and shows it in the settings dialog
 * @description Searches the youtube-binary and shows it in the settings dialog
 */
-function userSettingsShowYoutubeDLInfo () {
+function settingsShowYoutubeDLInfo () {
     const youtubedl = require('youtube-dl')
-    console.log('userSettingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
+    doLogRenderer('info', 'settingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
     var youtubeDl = youtubedl.getYtdlBinary()
     if (youtubeDl === '') {
-        console.error('userSettingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
+        doLogRenderer('error', 'settingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
         showNoty('error', 'Unable to find dependency &lt;b>youtube-dl&lt;/b>.', 0)
     } else {
-        console.log('userSettingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
+        doLogRenderer('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
         // show in UI
         $('#userSettingsYouTubeDLPathInfo').val(youtubeDl)
     }
 }
 
 /**
-* @name userSettingsShowFfmpegInfo
+* @name settingsShowFfmpegInfo
 * @summary Searches the ffmpeg-binary and shows it in the settings dialog
 * @description Searches the ffmpeg-binary and shows it in the settings dialog
 */
-function userSettingsShowFfmpegInfo () {
+function settingsShowFfmpegInfo () {
     var ffmpeg = require('ffmpeg-static-electron')
-    console.log('userSettingsShowFfmpegInfo ::: Searching ffmpeg ...')
+    doLogRenderer('info', 'settingsShowFfmpegInfo ::: Searching ffmpeg ...')
     if (ffmpeg === '') {
-        console.error('userSettingsShowFfmpegInfo ::: Unable to find ffmpeg')
+        doLogRenderer('error', 'settingsShowFfmpegInfo ::: Unable to find ffmpeg')
         showNoty('error', 'Unable to find dependency &lt;b>ffmpeg&lt;/b>.', 0)
     } else {
-        console.log('userSettingsShowFfmpegInfo ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+        doLogRenderer('info', 'settingsShowFfmpegInfo ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
 
         // show in UI
         $('#userSettingsFfmpegPathInfo').val(ffmpeg.path)
     }
-}
-
-/**
-* @name checkUrlInputField
-* @summary Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
-* @description Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
-*/
-function checkUrlInputField () {
-    console.log('checkUrlInputField ::: Triggered on focus')
-
-    // get current content of field
-    var currentContentOfUrlInputField = $('#inputNewUrl').val()
-
-    // if the field is empty - continue
-    if (currentContentOfUrlInputField === '') {
-        // get content of clipboard
-        const { clipboard } = require('electron')
-        var currentClipboardContent = clipboard.readText()
-
-        // remove leading and trailing blanks
-        // currentClipboardContent.replace(/^\s+|\s+$/g, "");
-        currentClipboardContent = currentClipboardContent.trim()
-
-        console.log('checkUrlInputField ::: Clipboard currently contains: _' + currentClipboardContent + '_.')
-
-        // check if it is a valid url - if so paste it
-        var isUrlValid = validURL(currentClipboardContent)
-        if (isUrlValid) {
-            // paste it
-            $('#inputNewUrl').val(currentClipboardContent)
-
-            // select it entirely
-            $('#inputNewUrl').select()
-
-            console.log('checkUrlInputField ::: Clipboard contains a valid URL - pasted it into the input field.')
-        }
-    }
-}
-
-/**
-* @name onEnter
-* @summary Executed on keypress inside url-input-field
-* @description Checks if the key-press was the ENTEr-key - if so simulates a press of the button ADD URL
-*/
-function onEnter (event) {
-    var code = 0
-    code = event.keyCode
-    if (code === 13) {
-        addURL() // simulare click on ADD URL buttom
-    }
-}
-
-/**
-* @name showDialog
-* @summary Shows a dialog
-* @description Displays a dialog
-* @param dialogType - Can be "none", "info", "error", "question" or "warning"
-* @param dialogTitle - The title text
-* @param dialogMessage - The message of the dialog
-* @param dialogDetail - The detail text
-*/
-function showDialog (dialogType, dialogTitle, dialogMessage, dialogDetail) {
-    // https://electronjs.org/docs/api/dialog
-    const { dialog } = require('electron').remote
-
-    const options = {
-        type: dialogType,
-        buttons: ['OK'],
-        defaultId: 2,
-        title: dialogTitle,
-        message: dialogMessage,
-        detail: dialogDetail
-    }
-
-    dialog.showMessageBox(null, options, (response, checkboxChecked) => {
-        // console.log(response);
-    })
 }
 
 // Call from main.js ::: startSearchUpdates - verbose
@@ -1393,13 +1337,13 @@ require('electron').ipcRenderer.on('openSettings', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#editorAppend">editorAppend</a></li><li><a href="global.html#editorReset">editorReset</a></li><li><a href="global.html#editorScrollToEnd">editorScrollToEnd</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#otherButtonsDisable">otherButtonsDisable</a></li><li><a href="global.html#otherButtonsEnable">otherButtonsEnable</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#updateToDoList">updateToDoList</a></li><li><a href="global.html#userSettingsLoadAllOnAppStart">userSettingsLoadAllOnAppStart</a></li><li><a href="global.html#userSettingsLoadAllOnSettingsUiLoad">userSettingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#userSettingsShowFfmpegInfo">userSettingsShowFfmpegInfo</a></li><li><a href="global.html#userSettingsShowYoutubeDLInfo">userSettingsShowYoutubeDLInfo</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogRenderer">doLogRenderer</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#fullyDecodeURI">fullyDecodeURI</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#initTitlebar">initTitlebar</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#loadingAnimationHide">loadingAnimationHide</a></li><li><a href="global.html#loadingAnimationShow">loadingAnimationShow</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#otherButtonsDisable">otherButtonsDisable</a></li><li><a href="global.html#otherButtonsEnable">otherButtonsEnable</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startButtonsDisable">startButtonsDisable</a></li><li><a href="global.html#startButtonsEnable">startButtonsEnable</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Dec 17 2019 15:03:19 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Dec 19 2019 11:54:15 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
