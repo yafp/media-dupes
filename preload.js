@@ -1,3 +1,5 @@
+console.warn('preload.js ::: Starting')
+
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
@@ -10,3 +12,5 @@ window.addEventListener('DOMContentLoaded', () => {
         replaceText(`${type}-version`, process.versions[type])
     }
 })
+
+console.warn('preload.js ::: Finished')
