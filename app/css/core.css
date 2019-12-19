@@ -11,6 +11,12 @@ body{
     display: none;
 }
 
+.container-after-titlebar{
+    border-left: 1px solid #171717 !important;
+    border-right: 1px solid #171717 !important;
+    border-bottom: 1px solid #171717 !important;
+}
+
 
 /* ########################################################################## */
 /* HEADINGS */
