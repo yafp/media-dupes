@@ -31,33 +31,38 @@ const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handl
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
 // project-urls
-const urlGitHubGeneral = 'https://github.com/yafp/media-dupes'
-const urlGitHubIssues = 'https://github.com/yafp/media-dupes/issues'
-const urlGitHubChangelog = 'https://github.com/yafp/media-dupes/blob/master/docs/CHANGELOG.md'
-const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases'
+const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js')
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS
 // ----------------------------------------------------------------------------
 
+/**
+* @name doLog
+* @summary Writes console output for the main process
+* @description Writes console output for the main process
+* @param type - String which defines the log type
+* @param message - String which defines the log message
+*/
 function doLog (type, message) {
+    const prefix = '[   Main   ] '
     const log = require('electron-log')
     // electron-log can: error, warn, info, verbose, debug, silly
     switch (type) {
     case 'info':
-        log.info('M: ' + message)
+        log.info(prefix + message)
         break
 
     case 'warn':
-        log.warn('M: ' + message)
+        log.warn(prefix + message)
         break
 
     case 'error':
-        log.error('M: ' + message)
+        log.error(prefix + message)
         break
 
     default:
-        log.silly('M: ' + message)
+        log.silly(prefix + message)
             // code block
     }
 }
@@ -101,17 +106,19 @@ function createWindow () {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        titleBarStyle: 'hidden', // needed for custom-electron-titlebar
+        frame: false, // false results in a borderless window. Needed for custom titlebar
+        titleBarStyle: 'hidden', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
+        backgroundColor: '#ffffff', // since 0.3.0
         show: false, // hide until: ready-to-show
+        center: true, // Show window in the center of the screen. (since 0.3.0)
         width: windowWidth,
         minWidth: 600,
         height: windowHeight,
         minHeight: 790,
-        frame: false, // false results in a borderless window. Needed for custom titlebar
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
-
         webPreferences: {
             nodeIntegration: true,
+            webSecurity: true, // introduced in 0.3.0
             preload: path.join(__dirname, 'preload.js')
         }
     })
@@ -125,33 +132,28 @@ function createWindow () {
 
     // Call from renderer: Open download folder
     ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
-        doLog('info', 'Trying to open the download directory _' + userSettingValue + '_.')
+        doLog('info', 'createWindow ::: Trying to open the download directory _' + userSettingValue + '_.')
 
         // try to open it
         if (shell.openItem(userSettingValue) === true) {
-            doLog('info', 'Opened the media-dupes download folder (ipcMain)')
+            doLog('info', 'createWindow :::  Opened the media-dupes download folder (ipcMain)')
         } else {
-            doLog('error', 'Failed to open the user download folder (ipcMain)')
+            doLog('error', 'createWindow ::: Failed to open the user download folder (ipcMain)')
         }
     })
 
     // Call from renderer: Open download folder
     ipcMain.on('settingsFolderOpen', (event) => {
-        doLog('info', 'Opened the users settings folder (ipcMain)')
+        doLog('info', 'createWindow ::: Opened the users settings folder (ipcMain)')
 
         // change path for userSettings
         const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
 
         if (shell.openItem(userSettingsPath) === true) {
-            doLog('info', 'Opened the media-dupes subfolder in users download folder (ipcMain)')
+            doLog('info', 'createWindow ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
         } else {
-            doLog('error', 'Failed to open the user download folder (ipcMain)')
+            doLog('error', 'createWindow ::: Failed to open the user download folder (ipcMain)')
         }
-    })
-
-    // Call from renderer: Open download folder
-    ipcMain.on('open-dialog-paths-selected', (event) => {
-        doLog('error', '............')
     })
 
     // Call from renderer:  Urgent window
@@ -204,11 +206,11 @@ function createWindow () {
         // try to write
         fs.writeFile(customUserDataPath, JSON.stringify(data), function (err) {
             if (err) {
-                doLog('error', 'storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + err + '_ (event: close)')
+                doLog('error', 'createWindow ::: storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + err + '_ (event: close)')
                 return console.log(err)
             }
 
-            doLog('info', 'mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
+            doLog('info', 'createWindow ::: mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
         })
     })
 

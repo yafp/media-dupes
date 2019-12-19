@@ -26,20 +26,22 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.3.0 (2019xxyy)
+### media-dupes 0.3.0 (20191219)
 #### ```Added```
 * Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues/25)
+* Settings: Added buttons to visit youtube-dl and ffmpeg project pages. See [#29](https://github.com/yafp/media-dupes/issues/29)
 
 #### ```Changed```
 * Reduced build size by only adding ffmpeg for the actual platform. See [#22](https://github.com/yafp/media-dupes/issues/22)
 * Improved url detection from clipboard (trim leading and trailing blanks). See [#28](https://github.com/yafp/media-dupes/issues/28)
 * Downloading: Added decode function for user urls to avoid the risk of malformed urls. See [#25](https://github.com/yafp/media-dupes/issues/25)
 * Added fade-in effect to load process of the .html files (index.html and settings.html).
-* Extractors: Show extraxtorts list now shows an error notification if fetching them fails. See [#27](https://github.com/yafp/media-dupes/issues/27)
+* Extractors: Show extraxtors list now shows an error notification if fetching them fails. See [#27](https://github.com/yafp/media-dupes/issues/27)
 * Improved adding urls (trim leading and trailing blanks). See [#28](https://github.com/yafp/media-dupes/issues/28)
 * Using intro.js now via npm. See [#21](https://github.com/yafp/media-dupes/issues/21)
+* UI: Added a left/right/bottom border for the UI (css)
 * Dependencies
-  * Updated electron from 7.1.4 to 7.1.5
+  * Updated electron from 7.1.4 to 7.1.6
   * Updated youtube-dl from 2.2.0 to 2.3.0
 
 #### ```Fixed```

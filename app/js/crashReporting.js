@@ -7,7 +7,7 @@ const { crashReporter } = require('electron')
 crashReporter.start({
     productName: 'media-dupes',
     companyName: 'yafp',
-    submitURL: 'https://sentry.io/api/1757940/minidump/?sentry_key=bbaa8fa09ca84a8da6a545c04d086859', // ?
+    submitURL: 'https://sentry.io/api/1757940/minidump/?sentry_key=bbaa8fa09ca84a8da6a545c04d086859',
     uploadToServer: false
 })
 // To simulate a crash - execute: process.crash();
@@ -32,6 +32,8 @@ Sentry.init({
 function registerEvent (eventText) {
     Sentry.captureMessage(eventText)
 }
+
+// export { registerEvent }
 
 // ----------------------------------------------------------------------------
 // Error Handling using: electron-unhandled (https://github.com/sindresorhus/electron-unhandled)

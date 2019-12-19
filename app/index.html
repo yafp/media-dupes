@@ -32,13 +32,13 @@
 </head>
 
 <body>
-    <div class="container-fluid mediaDupes_nonSelectableText" data-step="9" data-intro="<h5>Enjoy</h5>">
+    <div class="container-fluid mediaDupes_nonSelectableText">
 
         <!-- empty line -->
-        <div class="row">&nbsp;</div>
+        <div class="row-fluid">&nbsp;</div>
 
         <!-- Heading: -->
-        <div class="row" data-step="1" data-intro="<h5>Intro</h5>Welcome to <b>media-dupes</b>, a minimal media duplicator for common media services like youtube.<br><br>The following intro explains how to use this application.">
+        <div class="row-fluid" data-step="1" data-intro="<h5>Intro</h5>Welcome to <b>media-dupes</b>, a minimal media duplicator for common media services like youtube.<br><br>The following intro explains how to use this application.">
             <div class="col-12">
 
                 <!-- spinner -->
@@ -55,13 +55,13 @@
         </div>
 
          <!-- empty line -->
-        <div class="row-fluid">
+        <div class="row">
             &nbsp;
         </div>
 
         <!-- add URL -->
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="paste your url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
+            <input type="text" class="form-control" placeholder="url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
                 <button class="btn btn-secondary btn-sm btnDefaultSize" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
             </div>
@@ -145,7 +145,6 @@
         </div>
         <!-- footer -->
 
-
     </div>
     <!-- container -->
 
@@ -166,14 +165,10 @@ $( document ).ready(function()
     initTitlebar()
 
     // check if requirements are installed
-    // FIXME
-    //checkForDeps()
-
-    // init CKeditor
-    initCKeditor();
+    checkForDeps()
 
     // load user settings
-    userSettingsLoadAllOnAppStart()
+    settingsLoadAllOnAppStart()
 
     // Fades in page on load
     $('body').fadeIn(1000);
@@ -181,10 +176,7 @@ $( document ).ready(function()
     registerEvent('isReady')
 
     // init the UI
-    //uiReset();
-
-    // check for media-dupes updates
-    //searchUpdate() // see #26
+    uiReset();
 });
 </script>
 
