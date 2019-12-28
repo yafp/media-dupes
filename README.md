@@ -8,6 +8,7 @@
 a minimal media duplicator for common media services like youtube
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c30508f8add43ee8fbb62c2a669e76b)](https://www.codacy.com/manual/yafp/media-dupes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yafp/media-dupes&amp;utm_campaign=Badge_Grade)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/k4c1nve3xejgolbr?svg=true)](https://ci.appveyor.com/project/yafp/media-dupes)
 [![Build Status](https://travis-ci.org/yafp/media-dupes.svg?branch=master)](https://travis-ci.org/yafp/media-dupes)
 ![GitHub Current Release](https://img.shields.io/github/release/yafp/media-dupes.svg?style=flat)
 ![GitHub Release Date](https://img.shields.io/github/release-date/yafp/media-dupes.svg?style=flat)
