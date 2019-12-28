@@ -526,11 +526,19 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             if ((value === null) || (value === undefined)) {
                 doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingEnableErrorReporting = true // default
+                enableSentry()
             } else {
                 doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
 
                 // update global var
                 settingEnableErrorReporting = value
+
+                if(settingEnableErrorReporting === true) {
+                    enableSentry()
+                } else {
+                    disableSentry()
+                }
+
 
                 if (optionalUpdateSettingUI === true) {
                     // Update select
@@ -1312,10 +1320,15 @@ function settingsToggleErrorReporting() {
     if ($("#checkboxEnableErrorReporting").is(":checked")) {
         doLogRenderer('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
         writeLocalUserSetting('enableErrorReporting', true)
+        enableSentry()
+        //myUndefinedFunctionFromRendererAfterEnable()
+
     }
     else {
         doLogRenderer('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
         writeLocalUserSetting('enableErrorReporting', false)
+        disableSentry()
+        //myUndefinedFunctionFromRendererAfterDisable()
     }
 }
 

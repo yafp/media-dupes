@@ -17,7 +17,7 @@ require('popper.js')
 // ERROR-HANDLING
 // ----------------------------------------------------------------------------
 //
-require('./app/js/crashReporting.js')
+require('./app/js/errorReporting.js')
 // myUndefinedFunctionFromMain();
 
 // ----------------------------------------------------------------------------

@@ -30,6 +30,20 @@ Sentry.init({
 // simple way to force a crash:
 // myUndefinedFunction();
 
+
+function enableSentry () {
+    Sentry.getCurrentHub().getClient().getOptions().enabled = true;
+    console.warn("Sentry is now enabled")
+}
+
+function disableSentry () {
+    Sentry.getCurrentHub().getClient().getOptions().enabled = false;
+    console.warn("Sentry is now disabled")
+}
+
+
+
+
 // ----------------------------------------------------------------------------
 // Error Handling using: electron-unhandled (https://github.com/sindresorhus/electron-unhandled)
 // ----------------------------------------------------------------------------
