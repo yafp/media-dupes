@@ -6,5 +6,6 @@ exclude_paths:
   - 'docs/jsdocs/**/*'
   - '.github/**'
   - '.github/**/*'
+  - 'test/*'
   - 'LICENSE'
   - 'README.md'
