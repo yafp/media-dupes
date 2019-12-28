@@ -2,7 +2,7 @@
     "name": "media-dupes",
     "productName": "media-dupes",
     "desktopName": "media-dupes.desktop",
-    "version": "0.3.0",
+    "version": "0.3.20191225",
     "description": "a minimal media duplicator for common media services like youtube",
     "main": "main.js",
     "scripts": {
@@ -26,24 +26,24 @@
         "build-linux": "electron-builder --linux"
     },
     "repository": {
-      "type": "git",
-      "url": "https://github.com/yafp/media-dupes"
+        "type": "git",
+        "url": "https://github.com/yafp/media-dupes"
     },
     "bugs": {
-      "url": "https://github.com/yafp/media-dupes/issues"
+        "url": "https://github.com/yafp/media-dupes/issues"
     },
     "contributors": [
-      "Florian Poeck <fidel@yafp.de> (https://yafp.de)"
+        "Florian Poeck <fidel@yafp.de> (https://yafp.de)"
     ],
     "homepage": "https://github.com/yafp/media-dupes",
     "keywords": [
-      "youtube",
-      "download",
-      "media",
-      "dupes",
-      "duplicator",
-      "extractor",
-      "mirror"
+        "youtube",
+        "download",
+        "media",
+        "dupes",
+        "duplicator",
+        "extractor",
+        "mirror"
     ],
     "author": "yafp <fidel@yafp.de>",
     "license": "GPL-3.0",
@@ -51,9 +51,9 @@
         "productName": "media-dupes",
         "appId": "de.yafp.media-dupes",
         "extraFiles": [
-          "LICENSE",
-          "docs/CHANGELOG.md",
-          "README.md"
+            "LICENSE",
+            "docs/CHANGELOG.md",
+            "README.md"
         ],
         "asar": false,
         "mac": {
@@ -110,45 +110,59 @@
         "linux": {
             "executableName": "media-dupes",
             "files": [
-              "!node_modules/ffmpeg-static-electron/bin/win/*",
-              "!node_modules/ffmpeg-static-electron/bin/mac/*"
+                "!node_modules/ffmpeg-static-electron/bin/win/*",
+                "!node_modules/ffmpeg-static-electron/bin/mac/*"
             ],
             "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
             "description": "a minimal media duplicator for common media services like youtube",
             "category": "Network",
             "desktop": {
-              "Terminal": "false",
-              "Type": "Application",
-              "Categories": "GTK;GNOME;Network;Utility;AudioVideo;"
+                "Terminal": "false",
+                "Type": "Application",
+                "Categories": "GTK;GNOME;Network;Utility;AudioVideo;"
             },
             "target": [
                 {
                     "target": "zip",
-                    "arch": ["x64"]
+                    "arch": [
+                        "x64"
+                    ]
                 },
                 {
                     "target": "AppImage",
-                    "arch": ["x64"]
+                    "arch": [
+                        "x64"
+                    ]
                 },
                 {
-                  "target": "deb",
-                  "arch": ["x64"]
+                    "target": "deb",
+                    "arch": [
+                        "x64"
+                    ]
                 },
                 {
-                  "target": "snap",
-                  "arch": ["x64"]
+                    "target": "snap",
+                    "arch": [
+                        "x64"
+                    ]
                 },
                 {
-                  "target": "pacman",
-                  "arch": ["x64"]
+                    "target": "pacman",
+                    "arch": [
+                        "x64"
+                    ]
                 },
                 {
-                  "target": "freebsd",
-                  "arch": ["x64"]
+                    "target": "freebsd",
+                    "arch": [
+                        "x64"
+                    ]
                 },
                 {
-                  "target": "rpm",
-                  "arch": ["x64"]
+                    "target": "rpm",
+                    "arch": [
+                        "x64"
+                    ]
                 }
             ]
         },
@@ -168,10 +182,10 @@
     "devDependencies": {
         "chai": "^4.2.0",
         "chai-as-promised": "^7.1.1",
-        "electron": "^7.1.6",
+        "electron": "^7.1.7",
         "electron-builder": "^21.2.0",
         "electron-packager": "^14.1.1",
-        "eslint": "^6.7.2",
+        "eslint": "^6.8.0",
         "jsdoc": "^3.6.3",
         "mocha": "^6.2.2",
         "spectron": "^9.0.0",
@@ -183,7 +197,7 @@
         "about-window": "^1.13.2",
         "bootstrap": "^4.4.1",
         "electron-json-storage": "^4.1.8",
-        "electron-log": "^4.0.0",
+        "electron-log": "^4.0.2",
         "ffmpeg-static-electron": "^2.0.1",
         "intro.js": "^2.9.3",
         "jquery": "^3.4.1",
