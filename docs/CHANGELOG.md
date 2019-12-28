@@ -26,6 +26,25 @@ The following categories are used:
 
 ***
 
+### media-dupes 0.x.y (2019xxyy)
+#### ```Added```
+* Error reporting using sentry is now optional via application settings. See [#31](https://github.com/yafp/media-dupes/issues/31)
+
+#### ```Changed```
+* Dependencies
+  * Updated electron from 7.1.6 to 7.1.7
+  * Updated electron-log from 4.0.0 to 4.0.2
+  * Updated eslint from 6.7.2 to 6.8.0
+* Sentry: Enabled debug mode
+
+
+#### ```Removed```
+* Removed any sentry usage which was not error-focused. See [#31](https://github.com/yafp/media-dupes/issues/31)
+
+
+
+***
+
 ### media-dupes 0.3.0 (20191219)
 #### ```Added```
 * Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues/25)

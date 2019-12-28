@@ -33,7 +33,6 @@
             &nbsp;
         </div>
 
-
         <!-- Heading: -->
         <div class="row">
             <div class="col-12">
@@ -53,11 +52,6 @@
         <!-- Settings header -->
         <div class="row-fluid">
             <h4>Settings</h4>
-        </div>
-
-         <!-- empty line -->
-        <div class="row-fluid">
-            &nbsp;
         </div>
 
          <!-- Header: User-Settings -->
@@ -129,11 +123,6 @@
             </div>
         </div>
 
-        <!-- empty line -->
-        <div class="row-fluid">
-            &nbsp;
-        </div>
-
         <!-- ffmpeg header -->
         <div class="row-fluid">
             <h6>ffmpeg</h6>
@@ -153,9 +142,19 @@
             &nbsp;
         </div>
 
-        <!-- empty line -->
+        <!-- Header: Error reportng using sentry -->
         <div class="row-fluid">
-            &nbsp;
+            <h5><i class="fas fa-bug"></i> Error Reporting</h5>
+        </div>
+
+        <!-- Option to enable or disable error reporting -->
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" aria-label="Checkbox for following text input" onclick="settingsToggleErrorReporting();">
+                </div>
+            </div>
+            <input type="text" class="form-control" value="Enable error reporting to improve the project code." aria-label="Text input with checkbox" disabled>
         </div>
 
         <!-- empty line -->
@@ -163,7 +162,7 @@
             &nbsp;
         </div>
 
-        <!-- extra buttons-->
+        <!-- back buttons-->
         <div class="row-fluid float-right">
             <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom btnDefaultSize" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
         </div>
@@ -174,7 +173,7 @@
 
     <!-- You can also require other files to run in this process -->
     <script src="js/renderer.js"></script>
-    <script src="js/crashReporting.js"></script>
+    <script src="js/errorReporting.js"></script>
 
 </body>
 
@@ -196,8 +195,6 @@ $( document ).ready(function()
 
     // Fades in page on load
     $('body').fadeIn(1000);
-
-    registerEvent('isReadySettings')
 });
 </script>
 

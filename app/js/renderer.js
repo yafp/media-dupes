@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
-require('./js/crashReporting.js')
+require('./js/errorReporting.js')
 // myUndefinedFunctionFromRenderer();
 
 // ----------------------------------------------------------------------------
@@ -18,6 +18,7 @@ var arrayUserUrls = []
 // Settings variables
 var settingAudioFormat = 'mp3' // default is set to mp3
 var settingCustomDownloadDir = '' // default
+var settingEnableErrorReporting = true
 
 /**
 * @name initTitlebar
@@ -320,7 +321,7 @@ function settingsSelectCustomTargetDir () {
 function settingsResetCustomTargetDir () {
     doLogRenderer('info', 'settingsResetCustomTargetDir ::: Resetting the custom download target.')
 
-    var newValue = '' 
+    var newValue = ''
     writeLocalUserSetting('CustomDownloadDir', newValue) // save the value
     $('#inputCustomTargetDir').val(newValue) // show it in the UI
     settingCustomDownloadDir = newValue // update global var
@@ -367,6 +368,7 @@ function settingAudioFormatSave () {
 function settingsLoadAllOnAppStart () {
     readLocalUserSetting('CustomDownloadDir') // get setting for Custom download dir
     readLocalUserSetting('AudioFormat') // get setting for configured audio format
+    readLocalUserSetting('enableErrorReporting')
 }
 
 /**
@@ -377,6 +379,7 @@ function settingsLoadAllOnAppStart () {
 function settingsLoadAllOnSettingsUiLoad () {
     readLocalUserSetting('CustomDownloadDir', true) // Custom download dir
     readLocalUserSetting('AudioFormat', true) // load configured audio format and update the settings UI
+    readLocalUserSetting('enableErrorReporting', true)
 }
 
 /**
@@ -442,9 +445,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
         if (error) {
             throw error
         }
-
         var value = data.setting
-
         doLogRenderer('info', 'readLocalUserSetting ::: key: _' + key + '_ - got value: _' + value + '_.')
 
         // Setting: CustomDownloadDir
@@ -516,6 +517,34 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             }
         }
         // end: AudioFormat
+
+
+        // Setting: enableErrorReporting
+        //
+        if (key === 'enableErrorReporting') {
+            // not configured
+            if ((value === null) || (value === undefined)) {
+                doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
+                settingEnableErrorReporting = true // default
+            } else {
+                doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+
+                // update global var
+                settingEnableErrorReporting = value
+
+                if (optionalUpdateSettingUI === true) {
+                    // Update select
+                    if(settingEnableErrorReporting === true) {
+                        $('#checkboxEnableErrorReporting').prop('checked', true)
+                    }
+                    else {
+                        $('#checkboxEnableErrorReporting').prop('checked', false)
+                    }
+                }
+            }
+        }
+        // end: enableErrorReporting
+
     })
 }
 
@@ -815,7 +844,6 @@ function downloadContent (mode) {
             if (settingAudioFormat === 'mp3') {
                 youtubeDlParameter.unshift('--embed-thumbnail') // prepend
             }
-            registerEvent('downloadAudio')
             break
 
         case 'video':
@@ -826,7 +854,6 @@ function downloadContent (mode) {
                 '--add-metadata',
                 '--ignore-errors'
             ]
-            registerEvent('downloadVideo')
             break
 
         default:
@@ -845,7 +872,7 @@ function downloadContent (mode) {
 
         // TODO
         // prepare array for urls throwing errors
-        //ar arrayUrlsThrowingErrors = []
+        var arrayUrlsThrowingErrors = []
 
         // assuming we got an array
         // for each item of the array
@@ -860,7 +887,6 @@ function downloadContent (mode) {
             // url = decodeURI(url);
             url = fullyDecodeURI(url)
 
-            registerEvent('downloadSingleUrl')
             doLogRenderer('info', 'downloadContent ::: Processing URL: _' + url + '_.')
             doLogRenderer('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
 
@@ -938,7 +964,6 @@ function showSupportedExtractors () {
     doLogRenderer('info', 'showSupportedExtractors ::: Loading list of all supported extractors...')
     loadingAnimationShow()
     logReset() // reset the log
-    registerEvent('showExtractors')
 
     const youtubedl = require('youtube-dl')
     youtubedl.getExtractors(true, function (err, list) {
@@ -1118,7 +1143,6 @@ function startIntro () {
     doLogRenderer('info', 'startIntro ::: User wants to see the intro. Here you go!')
     const introJs = require('intro.js')
     introJs().start()
-    registerEvent('showIntro')
 }
 
 /**
@@ -1258,8 +1282,7 @@ function settingsShowYoutubeDLInfo () {
         showNoty('error', 'Unable to find dependency <b>youtube-dl</b>.', 0)
     } else {
         doLogRenderer('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
-        // show in UI
-        $('#userSettingsYouTubeDLPathInfo').val(youtubeDl)
+        $('#userSettingsYouTubeDLPathInfo').val(youtubeDl) // show in UI
     }
 }
 
@@ -1276,11 +1299,26 @@ function settingsShowFfmpegInfo () {
         showNoty('error', 'Unable to find dependency <b>ffmpeg</b>.', 0)
     } else {
         doLogRenderer('info', 'settingsShowFfmpegInfo ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
-
-        // show in UI
-        $('#userSettingsFfmpegPathInfo').val(ffmpeg.path)
+        $('#userSettingsFfmpegPathInfo').val(ffmpeg.path) // show in UI
     }
 }
+
+/**
+* @name settingsToggleErrorReporting
+* @summary Enables or disabled the error reporting function
+* @description Enables or disabled the error reporting function
+*/
+function settingsToggleErrorReporting() {
+    if ($("#checkboxEnableErrorReporting").is(":checked")) {
+        doLogRenderer('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
+        writeLocalUserSetting('enableErrorReporting', true)
+    }
+    else {
+        doLogRenderer('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
+        writeLocalUserSetting('enableErrorReporting', false)
+    }
+}
+
 
 // Call from main.js ::: startSearchUpdates - verbose
 //

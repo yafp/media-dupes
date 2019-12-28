@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
 
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
 
     <!-- jquery -->
-    <script>window.$ = window.jQuery = require("jquery");</script>
+    <script>
+        window.$ = window.jQuery = require("jquery");
+    </script>
 
     <!-- bootstrap -->
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <!-- fontawesome -->
     <script src="../node_modules/@fortawesome/fontawesome-free/js/all.min.js" defer></script>
 
     <!-- noty -->
-    <link rel="stylesheet" href="../node_modules/noty/lib/noty.css" >
+    <link rel="stylesheet" href="../node_modules/noty/lib/noty.css">
     <link rel="stylesheet" href="../node_modules/noty/lib/themes/bootstrap-v4.css">
     <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
 
     <!-- introJS -->
-    <link rel="stylesheet" href="../node_modules/intro.js/minified/introjs.min.css" >
-    <link rel="stylesheet" href="../node_modules/intro.js/themes/introjs-modern.css" >
+    <link rel="stylesheet" href="../node_modules/intro.js/minified/introjs.min.css">
+    <link rel="stylesheet" href="../node_modules/intro.js/themes/introjs-modern.css">
     <script type="text/javascript" src="../node_modules/intro.js/minified/intro.min.js" defer></script>
 
     <!-- project css -->
-    <link rel="stylesheet" href="css/core.css" >
+    <link rel="stylesheet" href="css/core.css">
 
     <title>media-dupes</title>
 </head>
@@ -151,7 +158,7 @@
 
     <!-- You can also require other files to run in this process -->
     <script src="js/renderer.js"></script>
-    <script src="js/crashReporting.js"></script>
+    <script src="js/errorReporting.js"></script>
 
 </body>
 
@@ -172,8 +179,6 @@ $( document ).ready(function()
 
     // Fades in page on load
     $('body').fadeIn(1000);
-
-    registerEvent('isReady')
 
     // init the UI
     uiReset();
