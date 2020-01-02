@@ -7,13 +7,14 @@
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
-require('./js/errorReporting.js')
+const errorReporting = require('./js/errorReporting.js')
 // myUndefinedFunctionFromRenderer();
 
 // ----------------------------------------------------------------------------
 // VARIABLES
 // ----------------------------------------------------------------------------
-var arrayUserUrls = []
+var arrayUserUrls = [] // contains the urls which should be downloaded
+var arrayUrlsThrowingErrors = [] // coontains urls which throws errors while trying to download
 
 // Settings variables
 var settingAudioFormat = 'mp3' // default is set to mp3
@@ -56,6 +57,33 @@ function initTitlebar () {
     // myTitlebar.updateTitle('media-dupes');
 
     doLogRenderer('info', 'initTitlebar ::: Initialized custom titlebar')
+}
+
+function checkForYTDLUpdates () {
+    // get path of youtube-dl binary
+    const youtubedl = require('youtube-dl')
+    const downloader = require('youtube-dl/lib/downloader')
+    const remote = require('electron').remote
+    const app = remote.app
+    const path = require('path')
+    const userDataPath = path.join(app.getPath('userData'), 'youtube-dl')
+
+    doLogRenderer('info', 'checkForYTDLUpdates ::: Searching youtube-dl binary')
+    var youtubeDlBinaryPath = youtubedl.getYtdlBinary()
+    doLogRenderer('info', 'checkForYTDLUpdates ::: Found binary in: _' + youtubeDlBinaryPath + '_.')
+
+    // start downloading latest youtube-dl binary to custom path
+    downloader(userDataPath, function error (err, done) {
+        'use strict'
+        if (err) {
+            doLogRenderer('error', 'checkForYTDLUpdates ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
+            throw err
+        }
+        doLogRenderer('info', 'checkForYTDLUpdates ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
+
+        console.log(done)
+        showNoty('success', done)
+    })
 }
 
 /**
@@ -199,6 +227,8 @@ function logAppend (newLine) {
     $('#textareaLogOutput').val(function (i, text) {
         return text + newLine + '\n'
     })
+
+    logScrollToEnd() // scroll log textarea to the end
 }
 
 /**
@@ -212,7 +242,6 @@ function checkForDeps () {
     // youtube-dl
     //
     const youtubedl = require('youtube-dl')
-    doLogRenderer('info', 'checkForDeps ::: Searching youtube-dl ...')
     var youtubeDl = youtubedl.getYtdlBinary()
     if (youtubeDl === '') {
         countErrors = countErrors + 1
@@ -228,7 +257,6 @@ function checkForDeps () {
 
     // ffmpeg
     //
-    doLogRenderer('info', 'checkForDeps ::: Searching ffmpeg ...')
     var ffmpeg = require('ffmpeg-static-electron')
     if (ffmpeg === '') {
         countErrors = countErrors + 1
@@ -244,6 +272,34 @@ function checkForDeps () {
     doLogRenderer('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
 }
 
+function uiResetAskUser () {
+    // confirm
+    const Noty = require('noty')
+    var n = new Noty(
+        {
+            theme: 'bootstrap-v4',
+            layout: 'bottom',
+            type: 'info',
+            text: 'Do you really want to reset the UI?',
+            buttons: [
+                Noty.button('Yes', 'btn btn-success', function () {
+                    n.close()
+                    uiReset()
+                },
+                {
+                    id: 'button1', 'data-status': 'ok'
+                }),
+
+                Noty.button('No', 'btn btn-secondary', function () {
+                    n.close()
+                })
+            ]
+        })
+
+    // show the noty dialog
+    n.show()
+}
+
 /**
 * @name uiReset
 * @summary Resets the UI back to default
@@ -256,10 +312,10 @@ function uiReset () {
     $('#inputNewUrl').val('')
 
     // disable start button
-    startButtonsDisable()
+    uiStartButtonsDisable()
 
     // ensure some buttons are enabled
-    otherButtonsEnable()
+    uiOtherButtonsEnable()
 
     // empty todo-list textarea
     toDoListReset()
@@ -271,6 +327,94 @@ function uiReset () {
     loadingAnimationHide()
 
     doLogRenderer('info', 'uiReset ::: Finished resetting the UI')
+}
+
+/**
+* @name uiAllElementsDisable
+* @summary Disables most UI elements to prevent execution of other user-triggered functions while a function is running
+* @description Disables most UI elements to prevent execution of other user-triggered functions while a function is running
+*/
+function uiAllElementsDisable () {
+    $('#inputNewUrl').prop('disabled', true) // url input field
+    $('#buttonAddUrl').prop('disabled', true) // add url
+    $('#buttonShowSettings').prop('disabled', true) // settings
+    $('#buttonShowHelp').prop('disabled', true) // help / intro
+    $('#buttonShowExtractors').prop('disabled', true) // showExtractors
+    $('#buttonShowDownloadFolder').prop('disabled', true) // showDownloadFolder
+
+    doLogRenderer('info', 'uiAllElementsDisable ::: Disabled all UI elements of the main UI')
+}
+
+/**
+* @name uiAllElementsToDefault
+* @summary Re-enables most UI elements
+* @description Re-enables most UI elements
+*/
+function uiAllElementsToDefault () {
+    $('#inputNewUrl').prop('disabled', false) // url input field
+    $('#buttonAddUrl').prop('disabled', false) // add url
+    $('#buttonShowSettings').prop('disabled', false) // settings
+    $('#buttonShowHelp').prop('disabled', false) // help / intro
+    $('#buttonShowExtractors').prop('disabled', false) // showExtractors
+    $('#buttonShowDownloadFolder').prop('disabled', false) // showDownloadFolder
+
+    doLogRenderer('info', 'uiAllElementsToDefault ::: Set all UI elements of the main UI back to default')
+}
+
+/**
+* @name uiStartButtonsEnable
+* @summary Enabled the 2 start buttons
+* @description Is executed when the todo-list contains at least 1 item
+*/
+function uiStartButtonsEnable () {
+    // enable start buttons
+    $('#buttonStartVideo').prop('disabled', false)
+    $('#buttonStartAudio').prop('disabled', false)
+
+    doLogRenderer('info', 'uiStartButtonsEnable ::: Did enable both start buttons')
+}
+
+/**
+* @name uiStartButtonsDisable
+* @summary Disables the 2 start buttons
+* @description Is executed when a download task is started by the user
+*/
+function uiStartButtonsDisable () {
+    // disable start buttons
+    $('#buttonStartVideo').prop('disabled', true)
+    $('#buttonStartAudio').prop('disabled', true)
+
+    doLogRenderer('info', 'uiStartButtonsDisable ::: Did disable both start buttons')
+}
+
+/**
+* @name uiOtherButtonsEnable
+* @summary Enables some of the footer buttons when a download is finished
+* @description Is executed when a download task has ended by the user
+*/
+function uiOtherButtonsEnable () {
+    // enable some buttons
+    $('#inputNewUrl').prop('disabled', false) // url input field
+    $('#buttonAddUrl').prop('disabled', false) // add url
+    $('#buttonShowSettings').prop('disabled', false) // settings
+    $('#buttonShowHelp').prop('disabled', false) // help / intro
+    $('#buttonShowExtractors').prop('disabled', false) // showExtractors
+    doLogRenderer('info', 'uiOtherButtonsEnable ::: Did enable some other UI elements')
+}
+
+/**
+* @name uiOtherButtonsDisable
+* @summary Disables some of the footer buttons while a download is running
+* @description Is executed when a download task is started by the user
+*/
+function uiOtherButtonsDisable () {
+    // disable some buttons
+    $('#inputNewUrl').prop('disabled', true) // url input field
+    $('#buttonAddUrl').prop('disabled', true) // add url
+    $('#buttonShowSettings').prop('disabled', true) // settings
+    $('#buttonShowHelp').prop('disabled', true) // help / intro
+    $('#buttonShowExtractors').prop('disabled', true) // showExtractors
+    doLogRenderer('info', 'uiOtherButtonsDisable ::: Did disable some other UI elements')
 }
 
 /**
@@ -302,9 +446,7 @@ function settingsSelectCustomTargetDir () {
         if (res.filePaths.length === 0) {
             doLogRenderer('warn', 'settingsSelectCustomTargetDir ::: User aborted selecting a custom download directory path in settings')
             showNoty('warning', 'You aborted the definition of a custom download directory')
-        }
-        else
-        {
+        } else {
             var newValue = res.filePaths.toString()
             writeLocalUserSetting('CustomDownloadDir', newValue) // save the value to user-config
             $('#inputCustomTargetDir').val(newValue) // show it in the UI
@@ -501,23 +643,19 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
         if (key === 'AudioFormat') {
             // not configured
             if ((value === null) || (value === undefined)) {
-            // if(value === null) {
                 doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
-                settingAudioFormat = 'mp3' // default
+                settingAudioFormat = 'mp3' // update global var
+                writeLocalUserSetting('AudioFormat', 'mp3') // write the setting
             } else {
                 doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
-
-                // update global var
-                settingAudioFormat = value
+                settingAudioFormat = value // update global var
 
                 if (optionalUpdateSettingUI === true) {
-                    // Update select
-                    $('#inputGroupSelectAudio').val(value)
+                    $('#inputGroupSelectAudio').val(value) // Update UI select
                 }
             }
         }
         // end: AudioFormat
-
 
         // Setting: enableErrorReporting
         //
@@ -526,33 +664,30 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             if ((value === null) || (value === undefined)) {
                 doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingEnableErrorReporting = true // default
+                writeLocalUserSetting('enableErrorReporting', true) // write the setting
+                // errorReporting.enableSentry()
                 enableSentry()
             } else {
                 doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+                settingEnableErrorReporting = value // update global var
 
-                // update global var
-                settingEnableErrorReporting = value
-
-                if(settingEnableErrorReporting === true) {
+                if (settingEnableErrorReporting === true) {
                     enableSentry()
                 } else {
                     disableSentry()
                 }
 
-
                 if (optionalUpdateSettingUI === true) {
-                    // Update select
-                    if(settingEnableErrorReporting === true) {
+                    // Update UI select
+                    if (settingEnableErrorReporting === true) {
                         $('#checkboxEnableErrorReporting').prop('checked', true)
-                    }
-                    else {
+                    } else {
                         $('#checkboxEnableErrorReporting').prop('checked', false)
                     }
                 }
             }
         }
         // end: enableErrorReporting
-
     })
 }
 
@@ -573,14 +708,15 @@ function checkUrlInputField () {
         const { clipboard } = require('electron')
         var currentClipboardContent = clipboard.readText()
         currentClipboardContent = currentClipboardContent.trim() // remove leading and trailing blanks
-        doLogRenderer('info', 'checkUrlInputField ::: Clipboard currently contains: _' + currentClipboardContent + '_.')
 
         // check if it is a valid url - if so paste it
         var isUrlValid = validURL(currentClipboardContent)
         if (isUrlValid) {
             $('#inputNewUrl').val(currentClipboardContent) // paste it
             $('#inputNewUrl').select() // select it entirely
-            doLogRenderer('info', 'checkUrlInputField ::: Clipboard contains a valid URL - pasted it into the input field.')
+            doLogRenderer('info', 'checkUrlInputField ::: Clipboard contains a valid URL (' + currentClipboardContent + '). Pasted it into the input field.')
+        } else {
+            doLogRenderer('info', 'checkUrlInputField ::: Clipboard contains a non valid URL (' + currentClipboardContent + ').')
         }
     }
 }
@@ -605,7 +741,7 @@ function validURL (str) {
 /**
 * @name onEnter
 * @summary Executed on keypress inside url-input-field
-* @description Checks if the key-press was the ENTEr-key - if so simulates a press of the button ADD URL
+* @description Checks if the key-press was the ENTER-key - if so simulates a press of the button ADD URL
 */
 function onEnter (event) {
     var code = 0
@@ -621,55 +757,29 @@ function onEnter (event) {
 * @description Handles the url add click of the user
 */
 function addURL () {
-    // get content of input
-    var newUrl = $('#inputNewUrl').val()
-
-    // trim the url to remove blanks
-    newUrl = newUrl.trim()
+    var newUrl = $('#inputNewUrl').val() // get content of input
+    newUrl = newUrl.trim() // trim the url to remove blanks
 
     if (newUrl !== '') {
         var isUrlValid = validURL(newUrl)
         if (isUrlValid) {
-            // check if url is supported
-            //
-            // problem: this takes time
-            //
-            /*
-            const youtubedl = require('youtube-dl')
-            youtubedl.exec(newUrl, ['-j', ], {}, function(err, output) {
-                if (err)
-                {
-                    showNoty('error', 'The url ' + newUrl + ' is not supported.')
-                    doLogRenderer('error', 'addUrl ::: The url ' + newUrl + ' is not supported. Check extractor list for more details')
-                    throw err
-                }
-                else
-                {
-                    doLogRenderer('info', 'addURL ::: The url is supported by youtube-dl')
-
-                    // continue ...
-                }
-            })
-            */
-
             doLogRenderer('info', 'addURL ::: Adding new url: _' + newUrl + '_.')
-
-            // append to array
-            arrayUserUrls.push(newUrl)
-
-            // update todo list
-            toDoListUpdate()
-
+            arrayUserUrls.push(newUrl) // append to array
+            toDoListUpdate() // update todo list
             logAppend('Added ' + newUrl + ' to todo list')
-
-            // reset input
-            $('#inputNewUrl').val('')
+            $('#inputNewUrl').val('') // reset input
         } else {
+            // invalid url
             doLogRenderer('error', 'addURL ::: Detected invalid url: _' + newUrl + '_.')
             showNoty('error', 'Please insert a valid url (reason: was invalid)')
+            $('#inputNewUrl').focus() // focus to input field
+            $('#inputNewUrl').select() // select it entirely
         }
     } else {
+        // empty
+        doLogRenderer('error', 'addURL ::: Detected empty url.')
         showNoty('error', 'Please insert a valid url (reason: was empty)')
+        $('#inputNewUrl').focus() // focus to input field
     }
 }
 
@@ -679,8 +789,7 @@ function addURL () {
 * @description Updates the todo-list after a user added an url
 */
 function toDoListUpdate () {
-    // remove duplicate entries in array
-    arrayUserUrls = $.unique(arrayUserUrls)
+    arrayUserUrls = $.unique(arrayUserUrls) // remove duplicate entries in array
 
     // write array content to textarea
     var textarea = document.getElementById('textareaTodoList')
@@ -689,10 +798,10 @@ function toDoListUpdate () {
     // if array size > 0 -> enable start button
     var arrayLength = arrayUserUrls.length
     if (arrayLength > 0) {
-        startButtonsEnable()
+        uiStartButtonsEnable()
     }
 
-    doLogRenderer('info', 'toDoListUpdate ::: Added new url to todo-list')
+    doLogRenderer('info', 'toDoListUpdate ::: Updated the todo-list')
 }
 
 /**
@@ -702,64 +811,9 @@ function toDoListUpdate () {
 */
 function toDoListReset () {
     arrayUserUrls = [] // reset the array
+    arrayUrlsThrowingErrors = [] // reset the array
     document.getElementById('textareaTodoList').value = '' // reset todo-list in UI
     doLogRenderer('info', 'toDoListReset ::: Did reset the todolist-textarea')
-}
-
-/**
-* @name startButtonsEnable
-* @summary Enabled the 2 start buttons
-* @description Is executed when the todo-list contains at least 1 item
-*/
-function startButtonsEnable () {
-    // enable start buttons
-    $('#buttonStartVideo').prop('disabled', false)
-    $('#buttonStartAudio').prop('disabled', false)
-
-    doLogRenderer('info', 'startButtonsEnable ::: Did enable both start buttons')
-}
-
-/**
-* @name startButtonsDisable
-* @summary Disables the 2 start buttons
-* @description Is executed when a download task is started by the user
-*/
-function startButtonsDisable () {
-    // disable start buttons
-    $('#buttonStartVideo').prop('disabled', true)
-    $('#buttonStartAudio').prop('disabled', true)
-
-    doLogRenderer('info', 'startButtonsDisable ::: Did disable both start buttons')
-}
-
-/**
-* @name otherButtonsEnable
-* @summary Enables some of the footer buttons when a download is finished
-* @description Is executed when a download task has ended by the user
-*/
-function otherButtonsEnable () {
-    // enable some buttons
-    $('#inputNewUrl').prop('disabled', false) // url input field
-    $('#buttonAddUrl').prop('disabled', false) // add url
-    $('#buttonShowSettings').prop('disabled', false) // settings
-    $('#buttonShowHelp').prop('disabled', false) // help / intro
-    $('#buttonShowExtractors').prop('disabled', false) // showExtractors
-    doLogRenderer('info', 'otherButtonsEnable ::: Did enable some other UI elements')
-}
-
-/**
-* @name otherButtonsDisable
-* @summary Disables some of the footer buttons while a download is running
-* @description Is executed when a download task is started by the user
-*/
-function otherButtonsDisable () {
-    // disable some buttons
-    $('#inputNewUrl').prop('disabled', true) // url input field
-    $('#buttonAddUrl').prop('disabled', true) // add url
-    $('#buttonShowSettings').prop('disabled', true) // settings
-    $('#buttonShowHelp').prop('disabled', true) // help / intro
-    $('#buttonShowExtractors').prop('disabled', true) // showExtractors
-    doLogRenderer('info', 'otherButtonsDisable ::: Did disable some other UI elements')
 }
 
 /**
@@ -813,10 +867,8 @@ function downloadContent (mode) {
     // if we got a valid download dir
     if (detectedDownloadDir[0]) {
         // Prepare UI
-        //
-        //logReset() // resets the log
-        startButtonsDisable() // disable the start buttons
-        otherButtonsDisable() // disables some other buttons
+        uiStartButtonsDisable() // disable the start buttons
+        uiOtherButtonsDisable() // disables some other buttons
         loadingAnimationShow() // start download animation / spinner
 
         // require some stuff
@@ -840,12 +892,13 @@ function downloadContent (mode) {
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'bestaudio',
-                '--extract-audio',
-                '--audio-format', settingAudioFormat,
-                '--audio-quality', '0',
-                '--ignore-errors',
-                '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'),
-                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path
+                // '--newline', // Output progress bar as new lines
+                '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
+                '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
+                '--audio-quality', '0', // Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
+                '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
+                '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'), // output path
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
             ]
 
             // prepend/add some case-specific parameter / flag
@@ -858,7 +911,8 @@ function downloadContent (mode) {
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'best',
-                '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'),
+                // '--newline', // Output progress bar as new lines
+                '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
                 '--add-metadata',
                 '--ignore-errors'
             ]
@@ -872,23 +926,20 @@ function downloadContent (mode) {
 
         // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
         if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
-            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent. Please report this')
+            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent(). Please report this')
             return
         }
 
         doLogRenderer('info', 'downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
 
-        // TODO
-        // prepare array for urls throwing errors
-        var arrayUrlsThrowingErrors = []
+        // prepare array for urls which are throwing errors
+        arrayUrlsThrowingErrors = []
 
-        // assuming we got an array
-        // for each item of the array
-        // try to start a download-process
+        // assuming we got an array with urls to process
+        // for each item of the array ... try to start a download-process
         var arrayLength = arrayUserUrls.length
         for (var i = 0; i < arrayLength; i++) {
-            // get url
-            var url = arrayUserUrls[i]
+            var url = arrayUserUrls[i] // get url
 
             // decode url - see #25
             //
@@ -898,27 +949,7 @@ function downloadContent (mode) {
             doLogRenderer('info', 'downloadContent ::: Processing URL: _' + url + '_.')
             doLogRenderer('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
 
-            logAppend('Processing: ' + url)
-
-            // GetInfo
-            //
-            /*
-            const options = []
-            const info = youtubedl.getInfo(url, options, function(err, info) {
-                if (err) {
-                    throw err
-                }
-
-                //
-                doLogRenderer('error', 'id:', info.id)
-                doLogRenderer('error', 'title:', info.title)
-                doLogRenderer('error', 'url:', info.url)
-                doLogRenderer('error', 'thumbnail:', info.thumbnail)
-                doLogRenderer('error', 'description:', info.description)
-                doLogRenderer('error', 'filename:', info._filename)
-                doLogRenderer('error', 'format id:', info.format_id)
-            })
-            */
+            logAppend('Processing: ' + url) // append url to log
 
             // Download
             //
@@ -927,18 +958,13 @@ function downloadContent (mode) {
                     // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err, 0)
                     showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
                     doLogRenderer('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
-
-                    // remember troublesome url
-                    arrayUrlsThrowingErrors.push(url)
-
+                    arrayUrlsThrowingErrors.push(url) // remember troublesome url
                     throw err
                 }
 
                 // show progress
                 doLogRenderer('info', output.join('\n'))
                 logAppend(output.join('\n'))
-
-                logScrollToEnd() // scroll log textarea to the end
 
                 // finish
                 doLogRenderer('info', 'downloadContent ::: Finished downloading _' + url + '_.')
@@ -948,11 +974,11 @@ function downloadContent (mode) {
                 // Final notification
                 if (i === arrayLength) {
                     showNotifcation('media-dupes', 'Finished downloading ' + i + ' url(s).')
+                    logAppend('Finished downloading ' + i + ' url(s).')
                     toDoListReset() // empty the todo list
                     uiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
                     loadingAnimationHide() // stop download animation / spinner
-                    otherButtonsEnable() // enable some of the buttons again
-                    logScrollToEnd() // scroll log textarea to the end
+                    uiOtherButtonsEnable() // enable some of the buttons again
                 }
             })
         }
@@ -964,14 +990,177 @@ function downloadContent (mode) {
 }
 
 /**
+* @name downloadVideo
+* @summary Does the actual video download
+* @description Does the actual video download
+*/
+function downloadVideo () {
+    // IMPORTANT / FIXME / TODO
+    // - this function is not yet in use - its the playground right now to test if download video without using .exec makes more sense for this project
+    // - not really able to handle multiple files / urls properly at the moment
+
+    // http://www.youtube.com/watch?v=90AiXO1pAiA
+    // https://www.youtube.com/watch?v=sJgDYdA8dio
+    // https://vimeo.com/315670384
+
+    // What is the target dir
+    var detectedDownloadDir = getDownloadDirectory()
+    doLogRenderer('info', 'downloadVideo ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    doLogRenderer('info', 'downloadVideo ::: Got a valid download target: _' + detectedDownloadDir[0] + '_.')
+
+    // if we got a valid download dir
+    if (detectedDownloadDir[0]) {
+        // Prepare UI
+        uiStartButtonsDisable() // disable the start buttons
+        uiOtherButtonsDisable() // disables some other buttons
+        loadingAnimationShow() // start download animation / spinner
+
+        // require some stuff
+        const youtubedl = require('youtube-dl')
+        const { remote } = require('electron')
+        const path = require('path')
+        const fs = require('fs')
+
+        var targetPath = detectedDownloadDir[1]
+        doLogRenderer('info', 'downloadVideo ::: Download target is set to: _' + targetPath + '_.')
+
+        var youtubeDlParameter = ''
+        youtubeDlParameter = [
+            '--format', 'best',
+            '--add-metadata',
+            '--ignore-errors'
+            // '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
+        ]
+
+        // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
+        if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
+            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadVideo(). Please report this')
+            return
+        }
+
+        doLogRenderer('info', 'downloadVideo ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+
+        // prepare array for urls which are throwing errors
+        arrayUrlsThrowingErrors = []
+
+        // assuming we got an array with urls to process
+        // for each item of the array ... try to start a download-process
+        var arrayLength = arrayUserUrls.length
+        for (var i = 0; i < arrayLength; i++) {
+            var url = arrayUserUrls[i] // get url
+
+            // decode url - see #25
+            //
+            // url = decodeURI(url);
+            url = fullyDecodeURI(url)
+
+            doLogRenderer('info', 'downloadVideo ::: Processing URL: _' + url + '_.')
+            doLogRenderer('info', 'downloadVideo ::: Using the following parameters: _' + youtubeDlParameter + '_.')
+
+            const video = youtubedl(url, youtubeDlParameter)
+
+            // generate a temporary filename
+            var timestamp = String(Number(new Date()))
+            var curTempVideoTargetPath = path.join(targetPath, 'Video', timestamp)
+
+            var finalVideoTargetPath
+
+            let size = 0
+            let pos = 0
+            let progress = 0
+
+            // Will be called when the download starts.
+            video.on('info', function (info) {
+                finalVideoTargetPath = path.join(targetPath, 'Video', info._filename)
+                size = info.size
+                console.log(finalVideoTargetPath)
+
+                console.log('filename: ' + info._filename)
+                logAppend('Filename: ' + info._filename)
+
+                console.log('size: ' + info.size)
+                // logAppend('Size: ' + info.size)
+                logAppend('Size: ' + formatBytes(info.size))
+                // http://www.youtube.com/watch?v=90AiXO1pAiA
+
+                console.log('Download started')
+                logAppend('Starting download ...')
+            })
+
+            // updating
+            video.on('data', (chunk) => {
+                // console.log('Getting another chunk: _' + chunk.length + '_.')
+                pos += chunk.length
+                if (size) {
+                    progress = (pos / size * 100).toFixed(2)
+                    console.log('Download-progress is: _' + progress + '_.')
+                    logAppend('Download progress: ' + progress + '%')
+                }
+            })
+
+            // Will be called if download was already completed and there is nothing more to download.
+            video.on('complete', function complete (info) {
+                'use strict'
+                console.warn('filename: ' + info._filename + ' already downloaded.')
+            })
+
+            video.on('end', function () {
+                console.log('finished downloading!')
+                logAppend('Finished downloading: ' + url)
+
+                // renaming?
+                fs.rename(curTempVideoTargetPath, finalVideoTargetPath, function (err) {
+                    if (err) {
+                        throw err
+                    }
+
+                    fs.stat(finalVideoTargetPath, function (err, stats) {
+                        if (err) {
+                            throw err
+                        }
+                        console.log('stats: ' + JSON.stringify(stats))
+                    })
+                })
+
+                loadingAnimationHide()
+            })
+
+            // start the download
+            video.pipe(fs.createWriteStream(curTempVideoTargetPath))
+        }
+    }
+}
+
+/**
+* @name formatBytes
+* @summary Calculate bytes to...
+* @description Calculate bytes to...
+* @param bytes - Incoming bytes value
+* @param decimals (optimal, defaults to 2)
+* @return Human readable value
+*/
+function formatBytes (bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+}
+
+/**
 * @name showSupportedExtractors
 * @summary Shows a list of all currently supported extractors of youtube-dl
 * @description Shows a list of all currently supported extractors of youtube-dl
 */
 function showSupportedExtractors () {
     doLogRenderer('info', 'showSupportedExtractors ::: Loading list of all supported extractors...')
-    loadingAnimationShow()
     logReset() // reset the log
+    uiAllElementsDisable() // disable all UI elements while function is running
+    loadingAnimationShow() // show loading animation
 
     const youtubedl = require('youtube-dl')
     youtubedl.getExtractors(true, function (err, list) {
@@ -983,17 +1172,18 @@ function showSupportedExtractors () {
 
         doLogRenderer('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors')
 
+        // show all extractors in console
         for (let i = 0; i < list.length; i++) {
-            doLogRenderer('info', 'showSupportedExtractors ::: ' + list[i])
+            // doLogRenderer('info', 'showSupportedExtractors ::: ' + list[i])
         }
 
-        // textareaLogOutput.value = list.join('\n')
+        // show all extractors in Ui log
         document.getElementById('textareaLogOutput').value = list.join('\n')
 
         doLogRenderer('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
         logAppend('\n\nFound ' + list.length + ' supported extractors')
-        logScrollToEnd() // scroll log textarea to the end
         loadingAnimationHide() // stop loading animation
+        uiAllElementsToDefault() // set UI back to default
     })
 
     doLogRenderer('info', 'showSupportedExtractors ::: Finished.')
@@ -1007,6 +1197,7 @@ function showSupportedExtractors () {
 */
 function searchUpdate (silent = true) {
     loadingAnimationShow()
+    uiAllElementsDisable()
 
     // when executed manually via menu -> user should see that update-check is running
     if (silent === false) {
@@ -1033,7 +1224,7 @@ function searchUpdate (silent = true) {
         // get remote version
         //
         remoteAppVersionLatest = versions[0].name
-        //remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
+        // remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
 
         // get local version
         //
@@ -1053,7 +1244,7 @@ function searchUpdate (silent = true) {
                 {
                     theme: 'bootstrap-v4',
                     layout: 'bottom',
-                    type: 'information',
+                    type: 'info',
                     text: 'An update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?',
                     buttons: [
                         Noty.button('Yes', 'btn btn-success', function () {
@@ -1095,6 +1286,7 @@ function searchUpdate (silent = true) {
         .always(function () {
             doLogRenderer('info', 'searchUpdate ::: Finished checking ' + urlGitHubRepoTags + ' for available releases')
             loadingAnimationHide()
+            uiAllElementsToDefault()
         })
 }
 
@@ -1243,7 +1435,7 @@ function isDirectoryAvailable (dirPath) {
             doLogRenderer('info', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
             return true
         } else {
-            doLogRenderer('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exists')
+            doLogRenderer('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exist')
             return false
         }
     } else {
@@ -1316,22 +1508,19 @@ function settingsShowFfmpegInfo () {
 * @summary Enables or disabled the error reporting function
 * @description Enables or disabled the error reporting function
 */
-function settingsToggleErrorReporting() {
-    if ($("#checkboxEnableErrorReporting").is(":checked")) {
+function settingsToggleErrorReporting () {
+    if ($('#checkboxEnableErrorReporting').is(':checked')) {
         doLogRenderer('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
         writeLocalUserSetting('enableErrorReporting', true)
         enableSentry()
-        //myUndefinedFunctionFromRendererAfterEnable()
-
-    }
-    else {
+        // myUndefinedFunctionFromRendererAfterEnable()
+    } else {
         doLogRenderer('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
         writeLocalUserSetting('enableErrorReporting', false)
         disableSentry()
-        //myUndefinedFunctionFromRendererAfterDisable()
+        // myUndefinedFunctionFromRendererAfterDisable()
     }
 }
-
 
 // Call from main.js ::: startSearchUpdates - verbose
 //
