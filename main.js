@@ -10,7 +10,6 @@ require('jquery')
 require('@fortawesome/fontawesome-free')
 require('popper.js')
 // CAUTION: jquery, fontawesome and popper might cost startup time
-//
 // require('bootstrap'); // this breaks everything, whyever
 
 // ----------------------------------------------------------------------------
@@ -30,8 +29,11 @@ let mainWindow
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
-// project-urls
-const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js')
+const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
+
+// minimal window size
+const minimalWindowHeight = 730
+const minimalWindowWidth = 600
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS
@@ -100,8 +102,8 @@ function createWindow () {
         doLog('warn', 'createWindow ::: No last window position and size information found in _' + customUserDataPath + '_. Using fallback values')
 
         // set some default values for window size
-        windowWidth = 800
-        windowHeight = 790
+        windowWidth = minimalWindowWidth
+        windowHeight = minimalWindowHeight
     }
 
     // Create the browser window.
@@ -112,9 +114,9 @@ function createWindow () {
         show: false, // hide until: ready-to-show
         center: true, // Show window in the center of the screen. (since 0.3.0)
         width: windowWidth,
-        minWidth: 600,
+        minWidth: minimalWindowWidth,
         height: windowHeight,
-        minHeight: 790,
+        minHeight: minimalWindowHeight,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,

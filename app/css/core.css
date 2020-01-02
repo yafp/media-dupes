@@ -39,9 +39,11 @@ h4{
 
 h5{
     color: gray;
+    fnt-size: 18px;
 }
 
 h6{
+    font-size: 14px;
     color: gray;
 }
 
@@ -53,16 +55,30 @@ textarea {
     font-weight: bold;
     font-family: Verdana, Arial, Helvetica, sans-serif;
 
-    /* - see #23
-    background-image: linear-gradient(#F1F1F1 50%, #F9F9F9 50%);
-    background-size: 100% 36px;
-    border: 1px solid #CCC;
-    width: 100%;
-    height: 400px;
-    line-height: 12px;
-    margin: 0 auto;
-    padding: 2px 20px;
-    */
+    background-color: #ecf0f1 !important;
+
+
+    background-repeat: no-repeat;
+    /* background-attachment: fixed; */
+    background-position: center;
+    width: 32px;
+    height:32px;
+}
+
+#textareaTodoList {
+    background-image: url("../img/background/icon_textarea_todo_64x64.png");
+}
+
+#textareaLogOutput {
+    background-image: url("../img/background/icon_textarea_log_64x64.png");
+}
+
+
+/* ########################################################################## */
+/* ROW EMPTY */
+/* ########################################################################## */
+.row-empty{
+    height: 20px !important;
 }
 
 
@@ -71,7 +87,7 @@ textarea {
 /* ########################################################################## */
 .btnDefaultSize
 {
-    min-width: 80px;
+    min-width: 100px;
 }
 
 
@@ -112,10 +128,24 @@ cssbody {
     animation: fadein 0.5s;
 }
 
-/* ########################################################################## */
-/* ?? */
-/* ########################################################################## */
-.pt-4
-{
-    font-size: 8pt;
+
+
+
+
+
+
+
+
+
+
+.container-fluid{
+    /*
+    background-color: green;
+    */
+    height: 100%;
+}
+
+#foo{
+    background-color: yellow;
+
 }

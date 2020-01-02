@@ -42,110 +42,101 @@
     <div class="container-fluid mediaDupes_nonSelectableText">
 
         <!-- empty line -->
-        <div class="row-fluid">&nbsp;</div>
+        <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- Heading: -->
         <div class="row-fluid" data-step="1" data-intro="<h5>Intro</h5>Welcome to <b>media-dupes</b>, a minimal media duplicator for common media services like youtube.<br><br>The following intro explains how to use this application.">
-            <div class="col-12">
 
-                <!-- spinner -->
-                <div id="md_spinner" name="md_spinner" class="spinner-grow text-success float-left" role="status" hidden>
-                    <span class="sr-only">Loading...</span>
-                </div>
-
-                <!-- app name -->
-                <h2><img src="img/128x128.png" height="32">media-dupes</h2>
-
-                <!-- app description -->
-                <h3>a minimal media duplicator for common media services like youtube</h3>
+            <!-- spinner -->
+            <div id="md_spinner" name="md_spinner" class="spinner-grow text-success float-left" role="status" hidden>
+                <span class="sr-only">Loading...</span>
             </div>
+
+            <!-- app name -->
+            <h2><img src="img/128x128.png" height="32">media-dupes</h2>
+
+            <!-- app description -->
+            <h3>a minimal media duplicator for common media services like youtube</h3>
         </div>
 
          <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid row-empty">
             &nbsp;
         </div>
 
         <!-- add URL -->
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
+            <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
                 <button class="btn btn-secondary btn-sm btnDefaultSize" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
             </div>
         </div>
 
         <!-- show todo-list -->
-        <div class="row">
-            <div class="col-12">
+        <div class="row-fluid">
             <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" placeholder="todo-list" readonly rows="6" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
             </textarea>
         </div>
-        </div>
 
         <!-- empty line -->
-        <div class="row">&nbsp;</div>
+        <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- start buttons-->
-        <div class="row">
-            <div class="col-12" data-step="5" data-intro="Start the download by pressing either <b>Grab video</b> or <b>Grab audio</b>.">
-                <button
-                    id="buttonStartVideo"
-                    name="buttonStartVideo"
-                    type="button"
-                    class="btn btn-success"
-                    title="Start downloading all content from todo-list and store them as video files"
-                    onclick="downloadContent('video');"
-                    disabled
-                    data-step="6"
-                    data-intro="The <b>grab video</b> button tries to download each video featured on your <b>todo-list</b>."
-                    >
-                    <i class="fas fa-video"></i> Grab video</button> &nbsp;
-
-                <button
-                    id="buttonStartAudio"
-                    name="buttonStartAudio"
-                    type="button"
-                    class="btn btn-success float-right"
-                    title="Start downloading all content from todo-list and store them as audio files"
-                    onclick="downloadContent('audio');"
-                    disabled
-                    data-step="7"
-                    data-intro="The <b>grab audio</b> button tries to download each audio featured on your <b>todo-list</b>."
-                    >
-                    <i class="fas fa-music"></i> Grab audio</button>
-            </div>
+        <!-- 
+            onclick="downloadVideo();"
+            onclick="downloadContent('video');"
+        -->
+        <div class="row-fluid" data-step="5" data-intro="Start the download by pressing either <b>Grab video</b> or <b>Grab audio</b>.">
+            <button
+                id="buttonStartVideo"
+                name="buttonStartVideo"
+                type="button"
+                class="btn btn-success"
+                title="Start downloading all content from todo-list and store them as video files"
+                onclick="downloadContent('video');"
+                disabled
+                data-step="6"
+                data-intro="The <b>grab video</b> button tries to download each video featured on your <b>todo-list</b>.">
+                <i class="fas fa-video"></i> Grab video</button> &nbsp;
+            <button
+                id="buttonStartAudio"
+                name="buttonStartAudio"
+                type="button"
+                class="btn btn-success float-right"
+                title="Start downloading all content from todo-list and store them as audio files"
+                onclick="downloadContent('audio');"
+                disabled
+                data-step="7"
+                data-intro="The <b>grab audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
+                <i class="fas fa-music"></i> Grab audio</button>
         </div>
 
         <!-- empty line -->
-        <div class="row">&nbsp;</div>
+        <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- show log -->
-        <div class="row">
-            <div class="col-12">
-            <textarea class="form-control" id="textareaLogOutput" name="textareaLogOutput" title="application log" placeholder="output" readonly rows="12" style="min-width: 100%" data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
+        <div class="row-fluid" id="foo" name='foo'>
+                <textarea class="form-control h-100" id="textareaLogOutput" name="textareaLogOutput" title="application log" placeholder="output" readonly rows="12" style="min-width: 100%" data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
             </textarea>
         </div>
-        </div>
 
         <!-- empty line -->
-        <div class="row">&nbsp;</div>
+        <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- extra buttons-->
-        <div class="row">
-            <div class="col-12">
-                <button id="buttonShowSettings" name="buttonShowSettings" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Shows settings" onclick="settingsUiLoad();"><i class="fas fa-cog"></i> Settings</button>
-                <button id="buttonShowHelp" name="buttonShowHelp" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Shows a small media-dupes intro to explain how it works" onclick="startIntro();"><i class="fas fa-info"></i> Intro</button>
-                <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize"  title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
-                <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
-                <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right btnDefaultSize" title="Reset the user-interface (UI)" onclick="uiReset();"><i class="fas fa-redo-alt"></i> Reset</button>
-            </div>
+        <div class="row-fluid">
+            <button id="buttonShowSettings" name="buttonShowSettings" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Shows settings" onclick="settingsUiLoad();"><i class="fas fa-cog"></i> Settings</button>
+            <button id="buttonShowHelp" name="buttonShowHelp" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Shows a small media-dupes intro to explain how it works" onclick="startIntro();"><i class="fas fa-info"></i> Intro</button>
+            <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize"  title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
+            <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
+            <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right btnDefaultSize" title="Reset the user-interface (UI)" onclick="uiResetAskUser();"><i class="fas fa-redo-alt"></i> Reset</button>
         </div>
 
         <!-- empty line -->
-        <div class="row">&nbsp;</div>
+        <div class="row row-empty">&nbsp;</div>
 
         <!-- footer -->
-        <div class="row">
+        <div class="row-fluid">
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-secondary">
                 <p class="h6"><a class="text-green ml-2 text-secondary" href="#" title="github.com/yafp/media-dupes" onclick="openURL('https://github.com/yafp/media-dupes')"><i class="fab fa-github"></i></a></p>
             </div>

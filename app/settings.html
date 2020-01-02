@@ -29,23 +29,21 @@
 <body>
     <div class="container-fluid mediaDupes_nonSelectableText">
          <!-- empty line -->
-        <div class="row">
+        <div class="row-fluid row-empty">
             &nbsp;
         </div>
 
         <!-- Heading: -->
-        <div class="row">
-            <div class="col-12">
+        <div class="row-fluid">
                 <!-- app name -->
                 <h2><img src="img/128x128.png" height="32">media-dupes</h2>
 
                 <!-- app description -->
                 <h3>a minimal media duplicator for common media services like youtube</h3>
-            </div>
         </div>
 
         <!-- empty line -->
-        <div class="row-fluid">
+        <div class="row-fluid row-empty">
             &nbsp;
         </div>
 
@@ -67,7 +65,7 @@
         <!-- custom output path -->
         <div class="row-fluid">
             <div class="input-group mb-3">
-                <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control" placeholder="Not set, using default download directory" readonly>
+                <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
                 <div class="input-group-append">
                     <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm btnDefaultSize" onclick="settingsSelectCustomTargetDir()"><i class="far fa-folder-open"></i> Choose</button>
                     <button id="buttonSettingsResetCustomTargetDir" name="buttonSettingsResetCustomTargetDir" class="btn btn-danger btn-sm btnDefaultSize" onclick="settingsResetCustomTargetDir()"><i class="fas fa-eraser"></i> Reset</button>
@@ -83,24 +81,19 @@
         <!-- audio settings -->
         <div class="row-fluid">
            <div class="input-group">
-                <select class="custom-select" id="inputGroupSelectAudio">
+                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio">
                     <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
                     <option value="m4a" title="MPEG 4 Audio">.m4a </option>
                     <option value="wav" title="Waveform Audio File Format">.wav </option>
                 </select>
                 <div class="input-group-append">
-                    <button class="btn btn-success btnDefaultSize" type="button" onclick="settingAudioFormatSave();">Set</button>
+                    <button class="btn btn-success btn-sm btnDefaultSize" type="button" onclick="settingAudioFormatSave();">Set</button>
                 </div>
             </div>
         </div>
 
         <!-- empty line -->
-        <div class="row-fluid">
-            &nbsp;
-        </div>
-
-         <!-- empty line -->
-        <div class="row-fluid">
+        <div class="row-fluid row-empty">
             &nbsp;
         </div>
 
@@ -116,9 +109,10 @@
 
         <div class="row-fluid">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
+                <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-success btnDefaultSize" type="button" onclick="openURL('https://ytdl-org.github.io/youtube-dl/index.html')">Visit</button>
+                    <button class="btn btn-secondary btn-sm btnDefaultSize" type="button" onclick="checkForYTDLUpdates()">Update</button>
+                    <button class="btn btn-success btn-sm btnDefaultSize" type="button" onclick="openURL('https://ytdl-org.github.io/youtube-dl/index.html')">Visit</button>
                 </div>
             </div>
         </div>
@@ -130,15 +124,15 @@
 
         <div class="row-fluid">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" laceholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
+                <input type="text" class="form-control form-control-sm" laceholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-success btnDefaultSize" type="button" onclick="openURL('https://www.ffmpeg.org/')">Visit</button>
+                    <button class="btn btn-success btn-sm btnDefaultSize" type="button" onclick="openURL('https://www.ffmpeg.org/')">Visit</button>
                 </div>
             </div>
         </div>
 
         <!-- empty line -->
-        <div class="row-fluid">
+        <div class="row-fluid row-empty">
             &nbsp;
         </div>
 
@@ -154,11 +148,11 @@
                     <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" aria-label="Checkbox for following text input" onclick="settingsToggleErrorReporting();">
                 </div>
             </div>
-            <input type="text" class="form-control" value="Enable error reporting to improve the project code." aria-label="Text input with checkbox" disabled>
+            <input type="text" class="form-control form-control-sm" value="Enable error reporting to improve the project code." aria-label="Text input with checkbox" disabled>
         </div>
 
         <!-- empty line -->
-        <div class="row-fluid">
+        <div class="row-fluid row-empty">
             &nbsp;
         </div>
 
