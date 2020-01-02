@@ -1,4 +1,4 @@
-console.warn('preload.js ::: Starting')
+console.info('preload.js ::: Starting')
 
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
@@ -13,4 +13,4 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 })
 
-console.warn('preload.js ::: Finished')
+console.info('preload.js ::: Finished')

@@ -13,12 +13,10 @@
 * ffmpeg: make pull request to https://github.com/pietrop/ffmpeg-static-electron to update from ffmpeg 3.x to 4.x
   * 20191210 - Created pull request for ffmpeg 4.2.1
 * youtube-dl
-  * Offers selfupdate using -U. Is that an option for node-youtube-dl as well? I assume not
   * Parameters/Flags
-    * --write-all-thumbnails ?
     * --geo-bypass to Bypass geographic restriction via faking X-Forwarded-For HTTP header. No idea if that might be helpful to add or not
-* ffmpeg-static-electron: currently my Windows build contains the bin files for linux and mac as well. Why? Assuming cause: electron-packager doesnt know it better.
-* control icon sizes
+* Progress for stream (non exec use): https://www.npmjs.com/package/progress-stream
+* Bootstrap: make log textarea row flexible - to use the available space in height
 
 ### urls
 * youtube-dl repository: https://github.com/ytdl-org/youtube-dl

@@ -52,6 +52,7 @@ Please see the [LICENSE](LICENSE) for more details.
 
 ## privacy
 * media-dupes is using sentry to collect error reports. This helps heavily finding bugs which might occur only in some specific use-cases. Please see the sentry privacy policy for more details.
+* error reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
 
 You are always welcome to check and even improve the code.

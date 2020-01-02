@@ -26,22 +26,28 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.x.y (2019xxyy)
+### media-dupes 0.4.0 (2019xxyy)
 #### ```Added```
 * Error reporting using sentry is now optional via application settings. See [#31](https://github.com/yafp/media-dupes/issues/31)
+* Added background images to textareas (todo-list and log). See [#35](https://github.com/yafp/media-dupes/issues/35)
+* Added confirm dialog to UI reset function. See [#37](https://github.com/yafp/media-dupes/issues/37)
 
 #### ```Changed```
 * Dependencies
   * Updated electron from 7.1.6 to 7.1.7
   * Updated electron-log from 4.0.0 to 4.0.2
   * Updated eslint from 6.7.2 to 6.8.0
-* Sentry: Enabled debug mode
-
+* Sentry: Enabled debug mode. See [#36](https://github.com/yafp/media-dupes/issues/36)
+* UI/Settings: reduced ui-element size on settings page from default to small. See [#38](https://github.com/yafp/media-dupes/issues/38)
+* UI/General: Reduced minimal window height about 60px. See [#38](https://github.com/yafp/media-dupes/issues/38)
+* Disabling most UI buttons while execution of some functions (searching for updates, loading extractors) to prevent race-conditions. See [#33](https://github.com/yafp/media-dupes/issues/33)
+* Improved handling if user tries to add unuseable urls (focus to input field & selecting the content if possible).
 
 #### ```Removed```
-* Removed any sentry usage which was not error-focused. See [#31](https://github.com/yafp/media-dupes/issues/31)
+* Removed any sentry usage which was not error-focused (no user tracking). See [#31](https://github.com/yafp/media-dupes/issues/31)
 
-
+#### ```Fixed```
+* Fixed error with non-defined array. See [#30](https://github.com/yafp/media-dupes/issues/30)
 
 ***
 
