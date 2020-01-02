@@ -26,11 +26,13 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.4.0 (2019xxyy)
+### media-dupes 0.4.0 (202001xxyy)
 #### ```Added```
 * Error reporting using sentry is now optional via application settings. See [#31](https://github.com/yafp/media-dupes/issues/31)
 * Added background images to textareas (todo-list and log). See [#35](https://github.com/yafp/media-dupes/issues/35)
 * Added confirm dialog to UI reset function. See [#37](https://github.com/yafp/media-dupes/issues/37)
+* Added update check for youtube-dl binary. See [#40](https://github.com/yafp/media-dupes/issues/40)
+* Added update function for youtube-dl binary. See [#34](https://github.com/yafp/media-dupes/issues/34)
 
 #### ```Changed```
 * Dependencies

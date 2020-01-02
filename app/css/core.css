@@ -90,6 +90,11 @@ textarea {
     min-width: 100px;
 }
 
+.btnMajorActionWidth
+{
+    min-width: 200px;
+}
+
 
 /* ########################################################################## */
 /* Use the “system font/San Francisco” */

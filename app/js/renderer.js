@@ -21,6 +21,8 @@ var settingAudioFormat = 'mp3' // default is set to mp3
 var settingCustomDownloadDir = '' // default
 var settingEnableErrorReporting = true
 
+var ytdlBinaryVersion = '0.1.0'
+
 /**
 * @name initTitlebar
 * @summary Init the titlebar for the frameless mainWindow
@@ -59,7 +61,7 @@ function initTitlebar () {
     doLogRenderer('info', 'initTitlebar ::: Initialized custom titlebar')
 }
 
-function checkForYTDLUpdates () {
+function doUpdateYoutubeDLBinary () {
     // get path of youtube-dl binary
     const youtubedl = require('youtube-dl')
     const downloader = require('youtube-dl/lib/downloader')
@@ -68,18 +70,19 @@ function checkForYTDLUpdates () {
     const path = require('path')
     const userDataPath = path.join(app.getPath('userData'), 'youtube-dl')
 
-    doLogRenderer('info', 'checkForYTDLUpdates ::: Searching youtube-dl binary')
+    doLogRenderer('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
     var youtubeDlBinaryPath = youtubedl.getYtdlBinary()
-    doLogRenderer('info', 'checkForYTDLUpdates ::: Found binary in: _' + youtubeDlBinaryPath + '_.')
+    doLogRenderer('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
 
     // start downloading latest youtube-dl binary to custom path
     downloader(userDataPath, function error (err, done) {
         'use strict'
         if (err) {
-            doLogRenderer('error', 'checkForYTDLUpdates ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
+            doLogRenderer('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
+            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + err)
             throw err
         }
-        doLogRenderer('info', 'checkForYTDLUpdates ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
+        doLogRenderer('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
 
         console.log(done)
         showNoty('success', done)
@@ -1238,7 +1241,7 @@ function searchUpdate (silent = true) {
         if (localAppVersion < remoteAppVersionLatest) {
             doLogRenderer('info', 'searchUpdate ::: Found update, notify user')
 
-            // using a confirm dialog - since #150
+            // using a confirm dialog
             const Noty = require('noty')
             var n = new Noty(
                 {
@@ -1483,6 +1486,7 @@ function settingsShowYoutubeDLInfo () {
     } else {
         doLogRenderer('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
         $('#userSettingsYouTubeDLPathInfo').val(youtubeDl) // show in UI
+        //$('#headerYoutubeDL').html('youtube-dl <small>Version: ' + ytdlBinaryVersion + '</small>')
     }
 }
 
@@ -1520,6 +1524,124 @@ function settingsToggleErrorReporting () {
         disableSentry()
         // myUndefinedFunctionFromRendererAfterDisable()
     }
+}
+
+/**
+* @name searchYoutubeDLUpdate
+* @summary Checks if there is a new release available
+* @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
+* @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
+*/
+function searchYoutubeDLUpdate (silent = true) {
+    var remoteAppVersionLatest = '0.0.0'
+    var localAppVersion = '0.0.0'
+    var versions
+
+    // set API url
+    const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags'
+
+    doLogRenderer('info', 'searchUpdate ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
+
+    var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data) {
+        3000 // in milliseconds
+
+        // success
+        versions = data.sort(function (v1, v2) {
+            // return semver.compare(v2.name, v1.name);
+        })
+
+        // get remote version
+        //
+        remoteAppVersionLatest = versions[0].name
+        // remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
+
+        // get local version
+        //
+        settingsGetYoutubeDLBinaryVersion(function () {
+            // used to wait for the response
+
+            localAppVersion = ytdlBinaryVersion
+            // localAppVersion = '0.0.1'; //  overwrite variable to simulate
+
+            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Local version: ' + localAppVersion)
+            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Latest public version: ' + remoteAppVersionLatest)
+
+            // Update available
+            if (localAppVersion < remoteAppVersionLatest) {
+                doLogRenderer('info', 'searchYoutubeDLUpdate ::: Found update, notify user')
+
+                // using a confirm dialog
+                const Noty = require('noty')
+                var n = new Noty(
+                    {
+                        theme: 'bootstrap-v4',
+                        layout: 'bottom',
+                        type: 'info',
+                        text: 'An update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to update your youtube-dl binary?',
+                        buttons: [
+                            Noty.button('Yes', 'btn btn-success', function () {
+                                n.close()
+                                doUpdateYoutubeDLBinary()
+                            },
+                            {
+                                id: 'button1', 'data-status': 'ok'
+                            }),
+
+                            Noty.button('No', 'btn btn-secondary', function () {
+                                n.close()
+                            })
+                        ]
+                    })
+
+                // show the noty dialog
+                n.show()
+            } else {
+                doLogRenderer('info', 'searchYoutubeDLUpdate ::: No newer version found.')
+
+                if (silent === false) {
+                    showNoty('success', 'No binary updates for youtube-dl available')
+                }
+            }
+        })
+
+        doLogRenderer('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
+    })
+        .done(function () {
+        // doLogRenderer('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        })
+
+        .fail(function () {
+            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
+            showNoty('error', 'Checking <b>' + urlYTDLGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.')
+        })
+
+        .always(function () {
+            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
+            loadingAnimationHide()
+            uiAllElementsToDefault()
+        })
+}
+
+/**
+* @name settingsGetYoutubeDLBinaryVersion
+* @summary Gets the youtube-dl binary version and displays it in settings ui
+* @description Reads the youtube-dl binary version from node_modules/youtube-dl/bin/details
+* @return ytdlBinaryVersion - The youtube-dl binary version string
+*/
+function settingsGetYoutubeDLBinaryVersion (_callback) {
+    const fs = require('fs')
+
+    fs.readFile('./node_modules/youtube-dl/bin/details', 'utf8', function (err, contents) {
+        if (err) {
+            doLogRenderer('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
+            throw err
+        } else {
+            const data = JSON.parse(contents)
+            ytdlBinaryVersion = data.version
+            doLogRenderer('info', 'settingsGetYoutubeDLBinaryVersion ::: youtube-dl binary is version: _' + ytdlBinaryVersion + '_.')
+            _callback()
+        }
+    })
 }
 
 // Call from main.js ::: startSearchUpdates - verbose

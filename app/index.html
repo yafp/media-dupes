@@ -82,7 +82,7 @@
         <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- start buttons-->
-        <!-- 
+        <!--
             onclick="downloadVideo();"
             onclick="downloadContent('video');"
         -->
@@ -91,7 +91,7 @@
                 id="buttonStartVideo"
                 name="buttonStartVideo"
                 type="button"
-                class="btn btn-success"
+                class="btn btn-success btn-sm btnMajorActionWidth"
                 title="Start downloading all content from todo-list and store them as video files"
                 onclick="downloadContent('video');"
                 disabled
@@ -102,7 +102,7 @@
                 id="buttonStartAudio"
                 name="buttonStartAudio"
                 type="button"
-                class="btn btn-success float-right"
+                class="btn btn-success btn-sm btnMajorActionWidth float-right"
                 title="Start downloading all content from todo-list and store them as audio files"
                 onclick="downloadContent('audio');"
                 disabled
@@ -173,6 +173,9 @@ $( document ).ready(function()
 
     // init the UI
     uiReset();
+
+    // search for youtube-dl binary updates
+    searchYoutubeDLUpdate(true)
 });
 </script>
 
