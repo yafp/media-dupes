@@ -1,215 +1,215 @@
 {
-    "name": "media-dupes",
+  "name": "media-dupes",
+  "productName": "media-dupes",
+  "desktopName": "media-dupes.desktop",
+  "version": "0.3.20200102",
+  "description": "a minimal media duplicator for common media services like youtube",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "start-debug": "electron . --enable-logging",
+    "clean": "rm -rf node_modules",
+    "reinstall": "npm run clean && npm install",
+    "generate-docs": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
+    "standardx": "npx standardx",
+    "standardx-fix": "npx standardx --fix",
+    "test": "mocha",
+    "lint": "node_modules/eslint/bin/eslint.js app/js --ignore-path=.eslintignore",
+    "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icon.icns --prune=true --out=dist",
+    "pack-win": "npm run pack-win-32 && npm run pack-win-64",
+    "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
+    "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
+    "pack-linux": "npm run pack-linux-64",
+    "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
+    "build-mac": "electron-builder --mac",
+    "build-win": "electron-builder --win --ia32 --x64",
+    "build-linux": "electron-builder --linux"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yafp/media-dupes"
+  },
+  "bugs": {
+    "url": "https://github.com/yafp/media-dupes/issues"
+  },
+  "contributors": [
+    "Florian Poeck <fidel@yafp.de> (https://yafp.de)"
+  ],
+  "homepage": "https://github.com/yafp/media-dupes",
+  "keywords": [
+    "youtube",
+    "download",
+    "media",
+    "dupes",
+    "duplicator",
+    "extractor",
+    "mirror"
+  ],
+  "author": "yafp <fidel@yafp.de>",
+  "license": "GPL-3.0",
+  "build": {
     "productName": "media-dupes",
-    "desktopName": "media-dupes.desktop",
-    "version": "0.3.20191228",
-    "description": "a minimal media duplicator for common media services like youtube",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron .",
-        "start-debug": "electron . --enable-logging",
-        "clean": "rm -rf node_modules",
-        "reinstall": "npm run clean && npm install",
-        "generate-docs": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
-        "standardx": "npx standardx",
-        "standardx-fix": "npx standardx --fix",
-        "test": "mocha",
-        "lint": "node_modules/eslint/bin/eslint.js app/js --ignore-path=.eslintignore",
-        "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icon.icns --prune=true --out=dist",
-        "pack-win": "npm run pack-win-32 && npm run pack-win-64",
-        "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
-        "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
-        "pack-linux": "npm run pack-linux-64",
-        "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
-        "build-mac": "electron-builder --mac",
-        "build-win": "electron-builder --win --ia32 --x64",
-        "build-linux": "electron-builder --linux"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/yafp/media-dupes"
-    },
-    "bugs": {
-        "url": "https://github.com/yafp/media-dupes/issues"
-    },
-    "contributors": [
-        "Florian Poeck <fidel@yafp.de> (https://yafp.de)"
+    "appId": "de.yafp.media-dupes",
+    "extraFiles": [
+      "LICENSE",
+      "docs/CHANGELOG.md",
+      "README.md"
     ],
-    "homepage": "https://github.com/yafp/media-dupes",
-    "keywords": [
-        "youtube",
-        "download",
-        "media",
-        "dupes",
-        "duplicator",
-        "extractor",
-        "mirror"
-    ],
-    "author": "yafp <fidel@yafp.de>",
-    "license": "GPL-3.0",
-    "build": {
-        "productName": "media-dupes",
-        "appId": "de.yafp.media-dupes",
-        "extraFiles": [
-            "LICENSE",
-            "docs/CHANGELOG.md",
-            "README.md"
-        ],
-        "asar": false,
-        "mac": {
-            "category": "public.app-category.productivity",
-            "files": [
-                "!node_modules/ffmpeg-static-electron/bin/linux/*",
-                "!node_modules/ffmpeg-static-electron/bin/win/*"
-            ],
-            "artifactName": "${productName}-${version}-mac.${ext}",
-            "target": [
-                "dmg"
-            ]
-        },
-        "dmg": {
-            "title": "media-dupes",
-            "background": "resources/installer/dmg_background.png",
-            "iconSize": 128,
-            "contents": [
-                {
-                    "x": 355,
-                    "y": 125,
-                    "type": "link",
-                    "path": "/Applications"
-                },
-                {
-                    "x": 155,
-                    "y": 125,
-                    "type": "file"
-                }
-            ]
-        },
-        "win": {
-            "icon": "resources/installer/icon.ico",
-            "publisherName": "yafp",
-            "files": [
-                "!node_modules/ffmpeg-static-electron/bin/linux/*",
-                "!node_modules/ffmpeg-static-electron/bin/mac/*"
-            ],
-            "artifactName": "${productName}-${version}-win-${arch}.${ext}",
-            "target": [
-                "zip",
-                "nsis",
-                "portable"
-            ]
-        },
-        "portable": {
-            "unicode": false,
-            "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}"
-        },
-        "nsis": {
-            "unicode": false,
-            "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}"
-        },
-        "linux": {
-            "executableName": "media-dupes",
-            "files": [
-                "!node_modules/ffmpeg-static-electron/bin/win/*",
-                "!node_modules/ffmpeg-static-electron/bin/mac/*"
-            ],
-            "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
-            "description": "a minimal media duplicator for common media services like youtube",
-            "category": "Network",
-            "desktop": {
-                "Terminal": "false",
-                "Type": "Application",
-                "Categories": "GTK;GNOME;Network;Utility;AudioVideo;"
-            },
-            "target": [
-                {
-                    "target": "zip",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "AppImage",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "deb",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "snap",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "pacman",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "freebsd",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "rpm",
-                    "arch": [
-                        "x64"
-                    ]
-                }
-            ]
-        },
-        "directories": {
-            "buildResources": "resources/installer/",
-            "output": "dist/"
-        },
-        "publish": [
-            {
-                "provider": "github",
-                "owner": "yafp",
-                "repo": "media-dupes",
-                "vPrefixedTagName": false
-            }
-        ]
+    "asar": false,
+    "mac": {
+      "category": "public.app-category.productivity",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/linux/*",
+        "!node_modules/ffmpeg-static-electron/bin/win/*"
+      ],
+      "artifactName": "${productName}-${version}-mac.${ext}",
+      "target": [
+        "dmg"
+      ]
     },
-    "devDependencies": {
-        "chai": "^4.2.0",
-        "chai-as-promised": "^7.1.1",
-        "electron": "^7.1.7",
-        "electron-builder": "^21.2.0",
-        "electron-packager": "^14.1.1",
-        "eslint": "^6.8.0",
-        "jsdoc": "^3.6.3",
-        "mocha": "^6.2.2",
-        "spectron": "^9.0.0",
-        "standardx": "^5.0.0"
+    "dmg": {
+      "title": "media-dupes",
+      "background": "resources/installer/dmg_background.png",
+      "iconSize": 128,
+      "contents": [
+        {
+          "x": 355,
+          "y": 125,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 155,
+          "y": 125,
+          "type": "file"
+        }
+      ]
     },
-    "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.12.0",
-        "@sentry/electron": "^1.1.0",
-        "about-window": "^1.13.2",
-        "bootstrap": "^4.4.1",
-        "electron-json-storage": "^4.1.8",
-        "electron-log": "^4.0.2",
-        "ffmpeg-static-electron": "^2.0.1",
-        "intro.js": "^2.9.3",
-        "jquery": "^3.4.1",
-        "noty": "^3.2.0-beta",
-        "pj-custom-electron-titlebar": "^3.1.6",
-        "popper.js": "^1.16.0",
-        "youtube-dl": "^2.3.0"
+    "win": {
+      "icon": "resources/installer/icon.ico",
+      "publisherName": "yafp",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/linux/*",
+        "!node_modules/ffmpeg-static-electron/bin/mac/*"
+      ],
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}",
+      "target": [
+        "zip",
+        "nsis",
+        "portable"
+      ]
     },
-    "standardx": {
-        "ignore": [
-            "/docs/jsdocs/*",
-            "/test/*"
-        ]
-    }
+    "portable": {
+      "unicode": false,
+      "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}"
+    },
+    "nsis": {
+      "unicode": false,
+      "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}"
+    },
+    "linux": {
+      "executableName": "media-dupes",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/win/*",
+        "!node_modules/ffmpeg-static-electron/bin/mac/*"
+      ],
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
+      "description": "a minimal media duplicator for common media services like youtube",
+      "category": "Network",
+      "desktop": {
+        "Terminal": "false",
+        "Type": "Application",
+        "Categories": "GTK;GNOME;Network;Utility;AudioVideo;"
+      },
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "snap",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "pacman",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "freebsd",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "directories": {
+      "buildResources": "resources/installer/",
+      "output": "dist/"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "yafp",
+        "repo": "media-dupes",
+        "vPrefixedTagName": false
+      }
+    ]
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "electron": "^7.1.7",
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.1.1",
+    "eslint": "^6.8.0",
+    "jsdoc": "^3.6.3",
+    "mocha": "^6.2.2",
+    "spectron": "^9.0.0",
+    "standardx": "^5.0.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.0",
+    "@sentry/electron": "^1.1.0",
+    "about-window": "^1.13.2",
+    "bootstrap": "^4.4.1",
+    "electron-json-storage": "^4.1.8",
+    "electron-log": "^4.0.2",
+    "ffmpeg-static-electron": "^2.0.1",
+    "intro.js": "^2.9.3",
+    "jquery": "^3.4.1",
+    "noty": "^3.2.0-beta",
+    "pj-custom-electron-titlebar": "^3.1.6",
+    "popper.js": "^1.16.0",
+    "youtube-dl": "^2.3.0"
+  },
+  "standardx": {
+    "ignore": [
+      "/docs/jsdocs/*",
+      "/test/*"
+    ]
+  }
 }
