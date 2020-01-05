@@ -33,12 +33,14 @@ The following categories are used:
 * Added confirm dialog to UI reset function. See [#37](https://github.com/yafp/media-dupes/issues/37)
 * Added update check for youtube-dl binary. See [#40](https://github.com/yafp/media-dupes/issues/40)
 * Added update function for youtube-dl binary. See [#34](https://github.com/yafp/media-dupes/issues/34)
+* Added update check for youtube-dl binary on app startup. See [#40](https://github.com/yafp/media-dupes/issues/40)
 
 #### ```Changed```
 * Dependencies
   * Updated electron from 7.1.6 to 7.1.7
   * Updated electron-log from 4.0.0 to 4.0.2
   * Updated eslint from 6.7.2 to 6.8.0
+  * Updated mocha from 6.2.2 to 7.0.0
 * Sentry: Enabled debug mode. See [#36](https://github.com/yafp/media-dupes/issues/36)
 * UI/Settings: reduced ui-element size on settings page from default to small. See [#38](https://github.com/yafp/media-dupes/issues/38)
 * UI/General: Reduced minimal window height about 60px. See [#38](https://github.com/yafp/media-dupes/issues/38)

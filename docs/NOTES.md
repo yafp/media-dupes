@@ -17,6 +17,7 @@
     * --geo-bypass to Bypass geographic restriction via faking X-Forwarded-For HTTP header. No idea if that might be helpful to add or not
 * Progress for stream (non exec use): https://www.npmjs.com/package/progress-stream
 * Bootstrap: make log textarea row flexible - to use the available space in height
+* Reset UI button: noty confirm dialog. Add checkbox - remember this setting. Store into user-settings.
 
 ### urls
 * youtube-dl repository: https://github.com/ytdl-org/youtube-dl

@@ -44,5 +44,13 @@
 ### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/windows_32x32.png) windows
 
 #### installer
-* Download the latest *win-installer.exe
-* Execute the *win-installer.exe
+* Download the latest ```win-installer.exe```
+* Execute the ```win-installer.exe```
+
+## installation instructions from source
+### get the files
+* Clone the repository:  ```git clone https://github.com/yafp/media-dupes ```
+
+### install
+* Go into the repository: ```cd media-dupes```
+* Install dependencies: ```npm install```
