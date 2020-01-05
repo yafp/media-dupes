@@ -74,7 +74,7 @@
 
         <!-- show todo-list -->
         <div class="row-fluid">
-            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="url todo-list" placeholder="todo-list" readonly rows="6" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
+            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="todo-list" placeholder="todo-list" readonly rows="6" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
             </textarea>
         </div>
 
@@ -116,7 +116,7 @@
 
         <!-- show log -->
         <div class="row-fluid" id="foo" name='foo'>
-                <textarea class="form-control h-100" id="textareaLogOutput" name="textareaLogOutput" title="application log" placeholder="output" readonly rows="12" style="min-width: 100%" data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
+                <textarea class="form-control h-100" id="textareaLogOutput" name="textareaLogOutput" title="application log" placeholder="application log" readonly rows="12" style="min-width: 100%" data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
             </textarea>
         </div>
 
@@ -160,7 +160,7 @@ $( document ).ready(function()
     console.log( 'index.html ready' )
 
     // init titleBar
-    initTitlebar()
+    titlebarInit()
 
     // check if requirements are installed
     checkForDeps()

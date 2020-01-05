@@ -24,11 +24,11 @@ var settingEnableErrorReporting = true
 var ytdlBinaryVersion = '0.1.0'
 
 /**
-* @name initTitlebar
+* @name titlebarInit
 * @summary Init the titlebar for the frameless mainWindow
 * @description Creates a custom titlebar for the mainWindow using custom-electron-titlebar (https://github.com/AlexTorresSk/custom-electron-titlebar).
 */
-function initTitlebar () {
+function titlebarInit () {
     // NOTE:
     // - 'custom-electron-titlebar' is now an archived repo
     // - switched to fork of it 'pj-custom-electron-titlebar'
@@ -58,7 +58,7 @@ function initTitlebar () {
     //
     // myTitlebar.updateTitle('media-dupes');
 
-    doLogRenderer('info', 'initTitlebar ::: Initialized custom titlebar')
+    doLogToConsole('info', 'titlebarInit ::: Initialized custom titlebar')
 }
 
 function doUpdateYoutubeDLBinary () {
@@ -70,19 +70,19 @@ function doUpdateYoutubeDLBinary () {
     const path = require('path')
     const userDataPath = path.join(app.getPath('userData'), 'youtube-dl')
 
-    doLogRenderer('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
+    doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
     var youtubeDlBinaryPath = youtubedl.getYtdlBinary()
-    doLogRenderer('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
+    doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
 
     // start downloading latest youtube-dl binary to custom path
     downloader(userDataPath, function error (err, done) {
         'use strict'
         if (err) {
-            doLogRenderer('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
+            doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
             showNoty('error', 'Unable to update youtube-dl binary. Error: ' + err)
             throw err
         }
-        doLogRenderer('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
+        doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
 
         console.log(done)
         showNoty('success', done)
@@ -90,13 +90,13 @@ function doUpdateYoutubeDLBinary () {
 }
 
 /**
-* @name doLogRenderer
+* @name doLogToConsole
 * @summary Writes console output for the renderer process
 * @description Writes console output for the renderer process
 * @param type - String which defines the log type
 * @param message - String which defines the log message
 */
-function doLogRenderer (type, message) {
+function doLogToConsole (type, message) {
     const prefix = '[ Renderer ] '
     const log = require('electron-log')
     // electron-log can: error, warn, info, verbose, debug, silly
@@ -151,7 +151,7 @@ function showNotifcation (title = 'media-dupes', message) {
     })
 
     myNotification.onclick = () => {
-        doLogRenderer('info', 'showNotification ::: Notification clicked')
+        doLogToConsole('info', 'showNotification ::: Notification clicked')
     }
 }
 
@@ -178,27 +178,27 @@ function showDialog (dialogType, dialogTitle, dialogMessage, dialogDetail) {
     }
 
     dialog.showMessageBox(null, options, (response, checkboxChecked) => {
-        // doLogRenderer('info', response);
+        // doLogToConsole('info', response);
     })
 }
 
 /**
-* @name loadingAnimationShow
+* @name uiLoadingAnimationShow
 * @summary Shows the loading animation / download spinner
 * @description Shows the loading animation / download spinner
 */
-function loadingAnimationShow () {
-    doLogRenderer('info', 'loadingAnimationShow ::: Showing spinner')
+function uiLoadingAnimationShow () {
+    doLogToConsole('info', 'uiLoadingAnimationShow ::: Showing spinner')
     $('#md_spinner').attr('hidden', false)
 }
 
 /**
-* @name loadingAnimationHide
+* @name uiLoadingAnimationHide
 * @summary Hides the loading animation / download spinner
 * @description Hides the loading animation / download spinner
 */
-function loadingAnimationHide () {
-    doLogRenderer('info', 'loadingAnimationHide ::: Hiding spinner')
+function uiLoadingAnimationHide () {
+    doLogToConsole('info', 'uiLoadingAnimationHide ::: Hiding spinner')
     $('#md_spinner').attr('hidden', true)
 }
 
@@ -218,7 +218,7 @@ function logScrollToEnd () {
 */
 function logReset () {
     document.getElementById('textareaLogOutput').value = ''
-    doLogRenderer('info', 'logReset ::: Did reset the log-textarea')
+    doLogToConsole('info', 'logReset ::: Did reset the log-textarea')
 }
 
 /**
@@ -248,14 +248,14 @@ function checkForDeps () {
     var youtubeDl = youtubedl.getYtdlBinary()
     if (youtubeDl === '') {
         countErrors = countErrors + 1
-        doLogRenderer('error', 'checkForDeps ::: Unable to find youtube-dl')
+        doLogToConsole('error', 'checkForDeps ::: Unable to find youtube-dl')
         showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. All download function are now disabled, sorry', 0)
 
         // hide both buttons (video and audio)
         $('#buttonStartVideo').hide()
         $('#buttonStartAudio').hide()
     } else {
-        doLogRenderer('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
+        doLogToConsole('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
     }
 
     // ffmpeg
@@ -263,18 +263,24 @@ function checkForDeps () {
     var ffmpeg = require('ffmpeg-static-electron')
     if (ffmpeg === '') {
         countErrors = countErrors + 1
-        doLogRenderer('error', 'checkForDeps ::: Unable to find ffmpeg')
+        doLogToConsole('error', 'checkForDeps ::: Unable to find ffmpeg')
         showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Extracting audio is now disabled, sorry', 0)
 
         // hide audio button
         $('#buttonStartAudio').hide()
     } else {
-        doLogRenderer('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+        doLogToConsole('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
     }
 
-    doLogRenderer('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
+    doLogToConsole('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
 }
 
+
+/**
+* @name uiResetAskUser
+* @summary Ask the user if he wants to execute the UI reset function
+* @description Ask the user if he wants to execute the UI reset function
+*/
 function uiResetAskUser () {
     // confirm
     const Noty = require('noty')
@@ -309,7 +315,7 @@ function uiResetAskUser () {
 * @description Resets the UI back to default
 */
 function uiReset () {
-    doLogRenderer('info', 'uiReset ::: Starting to reset the UI')
+    doLogToConsole('info', 'uiReset ::: Starting to reset the UI')
 
     // empty input file
     $('#inputNewUrl').val('')
@@ -327,9 +333,9 @@ function uiReset () {
     logReset()
 
     // animation / spinner hide
-    loadingAnimationHide()
+    uiLoadingAnimationHide()
 
-    doLogRenderer('info', 'uiReset ::: Finished resetting the UI')
+    doLogToConsole('info', 'uiReset ::: Finished resetting the UI')
 }
 
 /**
@@ -345,7 +351,7 @@ function uiAllElementsDisable () {
     $('#buttonShowExtractors').prop('disabled', true) // showExtractors
     $('#buttonShowDownloadFolder').prop('disabled', true) // showDownloadFolder
 
-    doLogRenderer('info', 'uiAllElementsDisable ::: Disabled all UI elements of the main UI')
+    doLogToConsole('info', 'uiAllElementsDisable ::: Disabled all UI elements of the main UI')
 }
 
 /**
@@ -361,7 +367,7 @@ function uiAllElementsToDefault () {
     $('#buttonShowExtractors').prop('disabled', false) // showExtractors
     $('#buttonShowDownloadFolder').prop('disabled', false) // showDownloadFolder
 
-    doLogRenderer('info', 'uiAllElementsToDefault ::: Set all UI elements of the main UI back to default')
+    doLogToConsole('info', 'uiAllElementsToDefault ::: Set all UI elements of the main UI back to default')
 }
 
 /**
@@ -374,7 +380,7 @@ function uiStartButtonsEnable () {
     $('#buttonStartVideo').prop('disabled', false)
     $('#buttonStartAudio').prop('disabled', false)
 
-    doLogRenderer('info', 'uiStartButtonsEnable ::: Did enable both start buttons')
+    doLogToConsole('info', 'uiStartButtonsEnable ::: Did enable both start buttons')
 }
 
 /**
@@ -387,7 +393,7 @@ function uiStartButtonsDisable () {
     $('#buttonStartVideo').prop('disabled', true)
     $('#buttonStartAudio').prop('disabled', true)
 
-    doLogRenderer('info', 'uiStartButtonsDisable ::: Did disable both start buttons')
+    doLogToConsole('info', 'uiStartButtonsDisable ::: Did disable both start buttons')
 }
 
 /**
@@ -402,7 +408,7 @@ function uiOtherButtonsEnable () {
     $('#buttonShowSettings').prop('disabled', false) // settings
     $('#buttonShowHelp').prop('disabled', false) // help / intro
     $('#buttonShowExtractors').prop('disabled', false) // showExtractors
-    doLogRenderer('info', 'uiOtherButtonsEnable ::: Did enable some other UI elements')
+    doLogToConsole('info', 'uiOtherButtonsEnable ::: Did enable some other UI elements')
 }
 
 /**
@@ -417,7 +423,7 @@ function uiOtherButtonsDisable () {
     $('#buttonShowSettings').prop('disabled', true) // settings
     $('#buttonShowHelp').prop('disabled', true) // help / intro
     $('#buttonShowExtractors').prop('disabled', true) // showExtractors
-    doLogRenderer('info', 'uiOtherButtonsDisable ::: Did disable some other UI elements')
+    doLogToConsole('info', 'uiOtherButtonsDisable ::: Did disable some other UI elements')
 }
 
 /**
@@ -437,23 +443,23 @@ function uiMakeUrgent () {
 * @description Is triggered via button on settings.html.
 */
 function settingsSelectCustomTargetDir () {
-    doLogRenderer('info', 'settingsSelectCustomTargetDir ::: User wants to set a custom download directory')
-    doLogRenderer('info', 'settingsSelectCustomTargetDir ::: Now opening dialog to select a new download target')
+    doLogToConsole('info', 'settingsSelectCustomTargetDir ::: User wants to set a custom download directory')
+    doLogToConsole('info', 'settingsSelectCustomTargetDir ::: Now opening dialog to select a new download target')
 
     const options = { properties: ['openDirectory'] }
 
     const { dialog } = require('electron').remote
     dialog.showOpenDialog(options).then(res => {
-        doLogRenderer('warn', '_' + res.filePaths + '_')
+        doLogToConsole('warn', '_' + res.filePaths + '_')
 
         if (res.filePaths.length === 0) {
-            doLogRenderer('warn', 'settingsSelectCustomTargetDir ::: User aborted selecting a custom download directory path in settings')
+            doLogToConsole('warn', 'settingsSelectCustomTargetDir ::: User aborted selecting a custom download directory path in settings')
             showNoty('warning', 'You aborted the definition of a custom download directory')
         } else {
             var newValue = res.filePaths.toString()
             writeLocalUserSetting('CustomDownloadDir', newValue) // save the value to user-config
             $('#inputCustomTargetDir').val(newValue) // show it in the UI
-            doLogRenderer('info', 'settingsSelectCustomTargetDir ::: User selected the following directory: _' + newValue + '_.')
+            doLogToConsole('info', 'settingsSelectCustomTargetDir ::: User selected the following directory: _' + newValue + '_.')
         }
     })
 }
@@ -464,7 +470,7 @@ function settingsSelectCustomTargetDir () {
 * @description Is triggered via button on settings.html.
 */
 function settingsResetCustomTargetDir () {
-    doLogRenderer('info', 'settingsResetCustomTargetDir ::: Resetting the custom download target.')
+    doLogToConsole('info', 'settingsResetCustomTargetDir ::: Resetting the custom download target.')
 
     var newValue = ''
     writeLocalUserSetting('CustomDownloadDir', newValue) // save the value
@@ -501,7 +507,7 @@ function settingsUiLoad () {
 */
 function settingAudioFormatSave () {
     var userSelectedAudioFormat = $('#inputGroupSelectAudio').val() // get value from UI select inputGroupSelectAudio
-    doLogRenderer('info', 'settingAudioFormatSave ::: User selected the audio format: _' + userSelectedAudioFormat + '_.')
+    doLogToConsole('info', 'settingAudioFormatSave ::: User selected the audio format: _' + userSelectedAudioFormat + '_.')
     writeLocalUserSetting('AudioFormat', userSelectedAudioFormat) // store this value in a json file
 }
 
@@ -533,7 +539,7 @@ function settingsLoadAllOnSettingsUiLoad () {
 * @description Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
 */
 function settingsFolderOpen () {
-    doLogRenderer('info', 'settingsFolderOpen ::: User wants to open its config folder.')
+    doLogToConsole('info', 'settingsFolderOpen ::: User wants to open its config folder.')
     const { ipcRenderer } = require('electron')
     ipcRenderer.send('settingsFolderOpen')
 }
@@ -560,7 +566,7 @@ function writeLocalUserSetting (key, value) {
         if (error) {
             throw error
         }
-        doLogRenderer('info', 'writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
+        doLogToConsole('info', 'writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
 
         showNoty('success', 'Set <b>' + key + '</b> to <b>' + value + '</b>.')
     })
@@ -579,7 +585,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
     const app = remote.app
     const path = require('path')
 
-    doLogRenderer('info', 'readLocalUserSetting ::: Trying to read value of key: _' + key + '_.')
+    doLogToConsole('info', 'readLocalUserSetting ::: Trying to read value of key: _' + key + '_.')
 
     // change path for userSettings
     const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
@@ -591,7 +597,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             throw error
         }
         var value = data.setting
-        doLogRenderer('info', 'readLocalUserSetting ::: key: _' + key + '_ - got value: _' + value + '_.')
+        doLogToConsole('info', 'readLocalUserSetting ::: key: _' + key + '_ - got value: _' + value + '_.')
 
         // Setting: CustomDownloadDir
         //
@@ -599,10 +605,10 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             // not configured
             if ((value === null) || (value === undefined)) {
             // if(value === null) {
-                doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
+                doLogToConsole('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingCustomDownloadDir = '' // default
             } else {
-                doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+                doLogToConsole('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
 
                 // check if directory exists
                 if (isDirectoryAvailable(value)) {
@@ -613,7 +619,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
                         // update global var
                         settingCustomDownloadDir = value
                     } else {
-                        doLogRenderer('error', 'readLocalUserSetting ::: Configured custom download dir _' + value + '_ exists BUT is not writeable. Gonna reset the user-setting.')
+                        doLogToConsole('error', 'readLocalUserSetting ::: Configured custom download dir _' + value + '_ exists BUT is not writeable. Gonna reset the user-setting.')
                         value = ''
                         settingCustomDownloadDir = value // update the global dir
 
@@ -623,7 +629,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
                         })
                     }
                 } else {
-                    doLogRenderer('error', 'readLocalUserSetting ::: Configured custom download dir _' + value + '_ does not exists. Gonna reset the user-setting.')
+                    doLogToConsole('error', 'readLocalUserSetting ::: Configured custom download dir _' + value + '_ does not exists. Gonna reset the user-setting.')
                     value = ''
                     settingCustomDownloadDir = value // update the global dir
 
@@ -646,11 +652,11 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
         if (key === 'AudioFormat') {
             // not configured
             if ((value === null) || (value === undefined)) {
-                doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
+                doLogToConsole('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingAudioFormat = 'mp3' // update global var
                 writeLocalUserSetting('AudioFormat', 'mp3') // write the setting
             } else {
-                doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+                doLogToConsole('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
                 settingAudioFormat = value // update global var
 
                 if (optionalUpdateSettingUI === true) {
@@ -665,13 +671,13 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
         if (key === 'enableErrorReporting') {
             // not configured
             if ((value === null) || (value === undefined)) {
-                doLogRenderer('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
+                doLogToConsole('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_.')
                 settingEnableErrorReporting = true // default
                 writeLocalUserSetting('enableErrorReporting', true) // write the setting
                 // errorReporting.enableSentry()
                 enableSentry()
             } else {
-                doLogRenderer('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+                doLogToConsole('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
                 settingEnableErrorReporting = value // update global var
 
                 if (settingEnableErrorReporting === true) {
@@ -700,7 +706,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 * @description Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
 */
 function checkUrlInputField () {
-    doLogRenderer('info', 'checkUrlInputField ::: Triggered on focus')
+    doLogToConsole('info', 'checkUrlInputField ::: Triggered on focus')
 
     // get current content of field
     var currentContentOfUrlInputField = $('#inputNewUrl').val()
@@ -717,9 +723,9 @@ function checkUrlInputField () {
         if (isUrlValid) {
             $('#inputNewUrl').val(currentClipboardContent) // paste it
             $('#inputNewUrl').select() // select it entirely
-            doLogRenderer('info', 'checkUrlInputField ::: Clipboard contains a valid URL (' + currentClipboardContent + '). Pasted it into the input field.')
+            doLogToConsole('info', 'checkUrlInputField ::: Clipboard contains a valid URL (' + currentClipboardContent + '). Pasted it into the input field.')
         } else {
-            doLogRenderer('info', 'checkUrlInputField ::: Clipboard contains a non valid URL (' + currentClipboardContent + ').')
+            doLogToConsole('info', 'checkUrlInputField ::: Clipboard contains a non valid URL (' + currentClipboardContent + ').')
         }
     }
 }
@@ -766,21 +772,21 @@ function addURL () {
     if (newUrl !== '') {
         var isUrlValid = validURL(newUrl)
         if (isUrlValid) {
-            doLogRenderer('info', 'addURL ::: Adding new url: _' + newUrl + '_.')
+            doLogToConsole('info', 'addURL ::: Adding new url: _' + newUrl + '_.')
             arrayUserUrls.push(newUrl) // append to array
             toDoListUpdate() // update todo list
             logAppend('Added ' + newUrl + ' to todo list')
             $('#inputNewUrl').val('') // reset input
         } else {
             // invalid url
-            doLogRenderer('error', 'addURL ::: Detected invalid url: _' + newUrl + '_.')
+            doLogToConsole('error', 'addURL ::: Detected invalid url: _' + newUrl + '_.')
             showNoty('error', 'Please insert a valid url (reason: was invalid)')
             $('#inputNewUrl').focus() // focus to input field
             $('#inputNewUrl').select() // select it entirely
         }
     } else {
         // empty
-        doLogRenderer('error', 'addURL ::: Detected empty url.')
+        doLogToConsole('error', 'addURL ::: Detected empty url.')
         showNoty('error', 'Please insert a valid url (reason: was empty)')
         $('#inputNewUrl').focus() // focus to input field
     }
@@ -804,7 +810,7 @@ function toDoListUpdate () {
         uiStartButtonsEnable()
     }
 
-    doLogRenderer('info', 'toDoListUpdate ::: Updated the todo-list')
+    doLogToConsole('info', 'toDoListUpdate ::: Updated the todo-list')
 }
 
 /**
@@ -816,7 +822,7 @@ function toDoListReset () {
     arrayUserUrls = [] // reset the array
     arrayUrlsThrowingErrors = [] // reset the array
     document.getElementById('textareaTodoList').value = '' // reset todo-list in UI
-    doLogRenderer('info', 'toDoListReset ::: Did reset the todolist-textarea')
+    doLogToConsole('info', 'toDoListReset ::: Did reset the todolist-textarea')
 }
 
 /**
@@ -841,7 +847,7 @@ function isEncoded (uri) {
 function fullyDecodeURI (uri) {
     while (isEncoded(uri)) {
         uri = decodeURIComponent(uri)
-        doLogRenderer('info', 'fullyDecodeURI ::: URL: _' + uri + '_ is now fully decoded.')
+        doLogToConsole('info', 'fullyDecodeURI ::: URL: _' + uri + '_ is now fully decoded.')
     }
     return uri
 }
@@ -852,7 +858,7 @@ function fullyDecodeURI (uri) {
 * @description Does the actual download
 */
 function downloadContent (mode) {
-    doLogRenderer('info', 'downloadContent ::: Start with mode set to: _' + mode + '_.')
+    doLogToConsole('info', 'downloadContent ::: Start with mode set to: _' + mode + '_.')
 
     // example urls
     //
@@ -864,15 +870,15 @@ function downloadContent (mode) {
     // What is the target dir
     //
     var detectedDownloadDir = getDownloadDirectory()
-    doLogRenderer('info', 'downloadContent ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
-    doLogRenderer('info', 'downloadContent ::: Got a valid download target: _' + detectedDownloadDir[0] + '_.')
+    doLogToConsole('info', 'downloadContent ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    doLogToConsole('info', 'downloadContent ::: Got a valid download target: _' + detectedDownloadDir[0] + '_.')
 
     // if we got a valid download dir
     if (detectedDownloadDir[0]) {
         // Prepare UI
         uiStartButtonsDisable() // disable the start buttons
         uiOtherButtonsDisable() // disables some other buttons
-        loadingAnimationShow() // start download animation / spinner
+        uiLoadingAnimationShow() // start download animation / spinner
 
         // require some stuff
         const youtubedl = require('youtube-dl')
@@ -880,7 +886,7 @@ function downloadContent (mode) {
         const path = require('path')
 
         var targetPath = detectedDownloadDir[1]
-        doLogRenderer('info', 'downloadContent ::: Download target is set to: _' + targetPath + '_.')
+        doLogToConsole('info', 'downloadContent ::: Download target is set to: _' + targetPath + '_.')
 
         var youtubeDlParameter = ''
 
@@ -888,8 +894,8 @@ function downloadContent (mode) {
         switch (mode) {
         case 'audio':
             var ffmpeg = require('ffmpeg-static-electron')
-            doLogRenderer('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
-            doLogRenderer('info', 'downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
+            doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+            doLogToConsole('info', 'downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
 
             // generic parameter / flags
             youtubeDlParameter = [
@@ -922,7 +928,7 @@ function downloadContent (mode) {
             break
 
         default:
-            doLogRenderer('error', 'downloadContent ::: Unspecified mode. This should never happen.')
+            doLogToConsole('error', 'downloadContent ::: Unspecified mode. This should never happen.')
             showNoty('error', 'Unexpected download mode. Please report this issue')
             return
         }
@@ -933,7 +939,7 @@ function downloadContent (mode) {
             return
         }
 
-        doLogRenderer('info', 'downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+        doLogToConsole('info', 'downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
 
         // prepare array for urls which are throwing errors
         arrayUrlsThrowingErrors = []
@@ -949,8 +955,8 @@ function downloadContent (mode) {
             // url = decodeURI(url);
             url = fullyDecodeURI(url)
 
-            doLogRenderer('info', 'downloadContent ::: Processing URL: _' + url + '_.')
-            doLogRenderer('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
+            doLogToConsole('info', 'downloadContent ::: Processing URL: _' + url + '_.')
+            doLogToConsole('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
 
             logAppend('Processing: ' + url) // append url to log
 
@@ -960,17 +966,17 @@ function downloadContent (mode) {
                 if (err) {
                     // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err, 0)
                     showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
-                    doLogRenderer('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
+                    doLogToConsole('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
                     arrayUrlsThrowingErrors.push(url) // remember troublesome url
                     throw err
                 }
 
                 // show progress
-                doLogRenderer('info', output.join('\n'))
+                doLogToConsole('info', output.join('\n'))
                 logAppend(output.join('\n'))
 
                 // finish
-                doLogRenderer('info', 'downloadContent ::: Finished downloading _' + url + '_.')
+                doLogToConsole('info', 'downloadContent ::: Finished downloading _' + url + '_.')
                 logAppend('Finished downloading: ' + url)
                 showNoty('success', 'Finished downloading <b>' + url + '</b>.')
 
@@ -980,14 +986,14 @@ function downloadContent (mode) {
                     logAppend('Finished downloading ' + i + ' url(s).')
                     toDoListReset() // empty the todo list
                     uiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
-                    loadingAnimationHide() // stop download animation / spinner
+                    uiLoadingAnimationHide() // stop download animation / spinner
                     uiOtherButtonsEnable() // enable some of the buttons again
                 }
             })
         }
-        doLogRenderer('info', 'downloadContent ::: All download processes are now started')
+        doLogToConsole('info', 'downloadContent ::: All download processes are now started')
     } else {
-        doLogRenderer('error', 'downloadContent ::: Unable to start a download, because no useable target dir was detectable')
+        doLogToConsole('error', 'downloadContent ::: Unable to start a download, because no useable target dir was detectable')
         showNoty('error', 'Aborted download, because no useable downloads directory was found', 0)
     }
 }
@@ -1008,15 +1014,15 @@ function downloadVideo () {
 
     // What is the target dir
     var detectedDownloadDir = getDownloadDirectory()
-    doLogRenderer('info', 'downloadVideo ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
-    doLogRenderer('info', 'downloadVideo ::: Got a valid download target: _' + detectedDownloadDir[0] + '_.')
+    doLogToConsole('info', 'downloadVideo ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    doLogToConsole('info', 'downloadVideo ::: Got a valid download target: _' + detectedDownloadDir[0] + '_.')
 
     // if we got a valid download dir
     if (detectedDownloadDir[0]) {
         // Prepare UI
         uiStartButtonsDisable() // disable the start buttons
         uiOtherButtonsDisable() // disables some other buttons
-        loadingAnimationShow() // start download animation / spinner
+        uiLoadingAnimationShow() // start download animation / spinner
 
         // require some stuff
         const youtubedl = require('youtube-dl')
@@ -1025,7 +1031,7 @@ function downloadVideo () {
         const fs = require('fs')
 
         var targetPath = detectedDownloadDir[1]
-        doLogRenderer('info', 'downloadVideo ::: Download target is set to: _' + targetPath + '_.')
+        doLogToConsole('info', 'downloadVideo ::: Download target is set to: _' + targetPath + '_.')
 
         var youtubeDlParameter = ''
         youtubeDlParameter = [
@@ -1041,7 +1047,7 @@ function downloadVideo () {
             return
         }
 
-        doLogRenderer('info', 'downloadVideo ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+        doLogToConsole('info', 'downloadVideo ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
 
         // prepare array for urls which are throwing errors
         arrayUrlsThrowingErrors = []
@@ -1057,8 +1063,8 @@ function downloadVideo () {
             // url = decodeURI(url);
             url = fullyDecodeURI(url)
 
-            doLogRenderer('info', 'downloadVideo ::: Processing URL: _' + url + '_.')
-            doLogRenderer('info', 'downloadVideo ::: Using the following parameters: _' + youtubeDlParameter + '_.')
+            doLogToConsole('info', 'downloadVideo ::: Processing URL: _' + url + '_.')
+            doLogToConsole('info', 'downloadVideo ::: Using the following parameters: _' + youtubeDlParameter + '_.')
 
             const video = youtubedl(url, youtubeDlParameter)
 
@@ -1125,7 +1131,7 @@ function downloadVideo () {
                     })
                 })
 
-                loadingAnimationHide()
+                uiLoadingAnimationHide()
             })
 
             // start the download
@@ -1160,36 +1166,36 @@ function formatBytes (bytes, decimals = 2) {
 * @description Shows a list of all currently supported extractors of youtube-dl
 */
 function showSupportedExtractors () {
-    doLogRenderer('info', 'showSupportedExtractors ::: Loading list of all supported extractors...')
+    doLogToConsole('info', 'showSupportedExtractors ::: Loading list of all supported extractors...')
     logReset() // reset the log
     uiAllElementsDisable() // disable all UI elements while function is running
-    loadingAnimationShow() // show loading animation
+    uiLoadingAnimationShow() // show loading animation
 
     const youtubedl = require('youtube-dl')
     youtubedl.getExtractors(true, function (err, list) {
         if (err) {
             showNoty('error', 'Unable to get youtube-dl extractor list.', 0)
-            doLogRenderer('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + err + '_.')
+            doLogToConsole('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + err + '_.')
             throw err
         }
 
-        doLogRenderer('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors')
+        doLogToConsole('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors')
 
         // show all extractors in console
         for (let i = 0; i < list.length; i++) {
-            // doLogRenderer('info', 'showSupportedExtractors ::: ' + list[i])
+            // doLogToConsole('info', 'showSupportedExtractors ::: ' + list[i])
         }
 
         // show all extractors in Ui log
         document.getElementById('textareaLogOutput').value = list.join('\n')
 
-        doLogRenderer('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
+        doLogToConsole('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
         logAppend('\n\nFound ' + list.length + ' supported extractors')
-        loadingAnimationHide() // stop loading animation
+        uiLoadingAnimationHide() // stop loading animation
         uiAllElementsToDefault() // set UI back to default
     })
 
-    doLogRenderer('info', 'showSupportedExtractors ::: Finished.')
+    doLogToConsole('info', 'showSupportedExtractors ::: Finished.')
 }
 
 /**
@@ -1199,7 +1205,7 @@ function showSupportedExtractors () {
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
-    loadingAnimationShow()
+    uiLoadingAnimationShow()
     uiAllElementsDisable()
 
     // when executed manually via menu -> user should see that update-check is running
@@ -1214,7 +1220,7 @@ function searchUpdate (silent = true) {
     // get API url
     const { urlGitHubRepoTags } = require('./js/modules/githubUrls.js')
 
-    doLogRenderer('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
+    doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
 
     var updateStatus = $.get(urlGitHubRepoTags, function (data) {
         3000 // in milliseconds
@@ -1234,12 +1240,12 @@ function searchUpdate (silent = true) {
         localAppVersion = require('electron').remote.app.getVersion()
         // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-        doLogRenderer('info', 'searchUpdate ::: Local version: ' + localAppVersion)
-        doLogRenderer('info', 'searchUpdate ::: Latest public version: ' + remoteAppVersionLatest)
+        doLogToConsole('info', 'searchUpdate ::: Local version: ' + localAppVersion)
+        doLogToConsole('info', 'searchUpdate ::: Latest public version: ' + remoteAppVersionLatest)
 
         // Update available
         if (localAppVersion < remoteAppVersionLatest) {
-            doLogRenderer('info', 'searchUpdate ::: Found update, notify user')
+            doLogToConsole('info', 'searchUpdate ::: Found update, notify user')
 
             // using a confirm dialog
             const Noty = require('noty')
@@ -1267,7 +1273,7 @@ function searchUpdate (silent = true) {
             // show the noty dialog
             n.show()
         } else {
-            doLogRenderer('info', 'searchUpdate ::: No newer version found.')
+            doLogToConsole('info', 'searchUpdate ::: No newer version found.')
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
@@ -1275,20 +1281,20 @@ function searchUpdate (silent = true) {
             }
         }
 
-        doLogRenderer('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases')
+        doLogToConsole('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases')
     })
         .done(function () {
-        // doLogRenderer('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        // doLogToConsole('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
         })
 
         .fail(function () {
-            doLogRenderer('info', 'searchUpdate ::: Checking ' + urlGitHubRepoTags + ' for available releases failed.')
+            doLogToConsole('info', 'searchUpdate ::: Checking ' + urlGitHubRepoTags + ' for available releases failed.')
             showNoty('error', 'Checking <b>' + urlGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.')
         })
 
         .always(function () {
-            doLogRenderer('info', 'searchUpdate ::: Finished checking ' + urlGitHubRepoTags + ' for available releases')
-            loadingAnimationHide()
+            doLogToConsole('info', 'searchUpdate ::: Finished checking ' + urlGitHubRepoTags + ' for available releases')
+            uiLoadingAnimationHide()
             uiAllElementsToDefault()
         })
 }
@@ -1300,7 +1306,7 @@ function searchUpdate (silent = true) {
 */
 function openReleasesOverview () {
     const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
-    doLogRenderer('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
+    doLogToConsole('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
     openURL(urlGitHubReleases)
 }
 
@@ -1312,7 +1318,7 @@ function openReleasesOverview () {
 */
 function openURL (url) {
     const { shell } = require('electron')
-    doLogRenderer('info', 'openURL ::: Trying to open the url: _' + url + '_.')
+    doLogToConsole('info', 'openURL ::: Trying to open the url: _' + url + '_.')
     shell.openExternal(url)
 }
 
@@ -1324,15 +1330,15 @@ function openURL (url) {
 function openUserDownloadFolder () {
     var detectedDownloadDir = getDownloadDirectory()
 
-    doLogRenderer('info', 'openUserDownloadFolder ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
-    doLogRenderer('info', 'openUserDownloadFolder ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
+    doLogToConsole('info', 'openUserDownloadFolder ::: Seems like we should use the following dir: _' + detectedDownloadDir[1] + '_.')
+    doLogToConsole('info', 'openUserDownloadFolder ::: Is the reply useable: _' + detectedDownloadDir[0] + '_.')
 
     // if we gont a download folder which can be used
     if (detectedDownloadDir[0]) {
         const { ipcRenderer } = require('electron')
         ipcRenderer.send('openUserDownloadFolder', detectedDownloadDir[1])
     } else {
-        doLogRenderer('error', 'openUserDownloadFolder ::: Unable to find a download dir.')
+        doLogToConsole('error', 'openUserDownloadFolder ::: Unable to find a download dir.')
         showNoty('error', 'Unable to find a working download dir.', 0)
     }
 }
@@ -1343,7 +1349,7 @@ function openUserDownloadFolder () {
 * @description Starts a short intro / tutorial which explains the user-interface. Using introJs
 */
 function startIntro () {
-    doLogRenderer('info', 'startIntro ::: User wants to see the intro. Here you go!')
+    doLogToConsole('info', 'startIntro ::: User wants to see the intro. Here you go!')
     const introJs = require('intro.js')
     introJs().start()
 }
@@ -1356,17 +1362,17 @@ function startIntro () {
 * @return String - The detected download dir
 */
 function getDownloadDirectory () {
-    doLogRenderer('info', 'getDownloadDirectory ::: Gonna check for the user download directory')
+    doLogToConsole('info', 'getDownloadDirectory ::: Gonna check for the user download directory')
 
     var targetPath = ''
 
     // Check if there is a user-configured target defined
     //
-    doLogRenderer('info', 'getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
+    doLogToConsole('info', 'getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
     targetPath = settingCustomDownloadDir.toString()
     if (targetPath !== '') {
         // User has configured a custom download dir
-        doLogRenderer('info', 'getDownloadDirectory ::: User configured custom download directory is configured to: _' + targetPath + '_.')
+        doLogToConsole('info', 'getDownloadDirectory ::: User configured custom download directory is configured to: _' + targetPath + '_.')
 
         // check if that directory still exists
         if (isDirectoryAvailable(targetPath)) {
@@ -1374,18 +1380,18 @@ function getDownloadDirectory () {
 
             // check if it is writeable
             if (isDirectoryWriteable(targetPath)) {
-                doLogRenderer('info', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ is writeable. We are all good and gonna use it now')
+                doLogToConsole('info', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ is writeable. We are all good and gonna use it now')
                 return [true, targetPath]
             } else {
                 // folder exists but is not writeable
-                doLogRenderer('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ exists but is not writeable. Gonna fallback to default')
+                doLogToConsole('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ exists but is not writeable. Gonna fallback to default')
                 showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default')
                 writeLocalUserSetting('CustomDownloadDir', '')
                 settingCustomDownloadDir = ''
             }
         } else {
             // the configured dir does not exists anymore
-            doLogRenderer('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ does not exists. Gonna fallback to default')
+            doLogToConsole('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ does not exists. Gonna fallback to default')
             showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> does not exists anymore. Gonna reset the custom setting now back to default')
             writeLocalUserSetting('CustomDownloadDir', '')
             settingCustomDownloadDir = ''
@@ -1395,7 +1401,7 @@ function getDownloadDirectory () {
 
     // check the default download dir
     //
-    doLogRenderer('info', 'getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
+    doLogToConsole('info', 'getDownloadDirectory ::: Gonna check for user configured custom download directory now ...')
     // use the default download target
     const { remote } = require('electron')
     targetPath = remote.getGlobal('sharedObj').prop1
@@ -1403,21 +1409,21 @@ function getDownloadDirectory () {
     // check if that directory still exists
     if (isDirectoryAvailable(targetPath)) {
         // the default download folder exists
-        doLogRenderer('info', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists')
+        doLogToConsole('info', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists')
 
         // check if it is writeable
         if (isDirectoryWriteable(targetPath)) {
-            doLogRenderer('info', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists and is writeable. We are all good and gonna use it now')
+            doLogToConsole('info', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists and is writeable. We are all good and gonna use it now')
             return [true, targetPath]
         } else {
             // folder exists but is not writeable
-            doLogRenderer('error', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists but is not writeable. This is a major problem')
+            doLogToConsole('error', 'getDownloadDirectory ::: The default download location _' + targetPath + '_ exists but is not writeable. This is a major problem')
             showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default', 0)
             return [false, '']
         }
     } else {
         // was unable to detect a download folder
-        doLogRenderer('error', 'getDownloadDirectory ::: Was unable to detect an existing default download location')
+        doLogToConsole('error', 'getDownloadDirectory ::: Was unable to detect an existing default download location')
         // should force the user to set a custom one
         showNoty('error', 'Unable to detect an existing default download location. Please configure a custom download directory in the application settings', 0)
         return [false, '']
@@ -1435,14 +1441,14 @@ function isDirectoryAvailable (dirPath) {
     if (dirPath !== '') {
         const fs = require('fs')
         if (fs.existsSync(dirPath)) {
-            doLogRenderer('info', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
+            doLogToConsole('info', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
             return true
         } else {
-            doLogRenderer('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exist')
+            doLogToConsole('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exist')
             return false
         }
     } else {
-        doLogRenderer('error', 'isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
+        doLogToConsole('error', 'isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
     }
 }
 
@@ -1460,14 +1466,14 @@ function isDirectoryWriteable (dirPath) {
         // sync: check if folder is writeable
         try {
             fs.accessSync(dirPath, fs.constants.W_OK)
-            doLogRenderer('info', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is writeable')
+            doLogToConsole('info', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is writeable')
             return true
         } catch (err) {
-            doLogRenderer('error', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is not writeable. Error: _' + err + '_.')
+            doLogToConsole('error', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is not writeable. Error: _' + err + '_.')
             return false
         }
     } else {
-        doLogRenderer('error', 'isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty.')
+        doLogToConsole('error', 'isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty.')
     }
 }
 
@@ -1478,13 +1484,13 @@ function isDirectoryWriteable (dirPath) {
 */
 function settingsShowYoutubeDLInfo () {
     const youtubedl = require('youtube-dl')
-    doLogRenderer('info', 'settingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
+    doLogToConsole('info', 'settingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
     var youtubeDl = youtubedl.getYtdlBinary()
     if (youtubeDl === '') {
-        doLogRenderer('error', 'settingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
+        doLogToConsole('error', 'settingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
         showNoty('error', 'Unable to find dependency <b>youtube-dl</b>.', 0)
     } else {
-        doLogRenderer('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
+        doLogToConsole('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
         $('#userSettingsYouTubeDLPathInfo').val(youtubeDl) // show in UI
         //$('#headerYoutubeDL').html('youtube-dl <small>Version: ' + ytdlBinaryVersion + '</small>')
     }
@@ -1497,12 +1503,12 @@ function settingsShowYoutubeDLInfo () {
 */
 function settingsShowFfmpegInfo () {
     var ffmpeg = require('ffmpeg-static-electron')
-    doLogRenderer('info', 'settingsShowFfmpegInfo ::: Searching ffmpeg ...')
+    doLogToConsole('info', 'settingsShowFfmpegInfo ::: Searching ffmpeg ...')
     if (ffmpeg === '') {
-        doLogRenderer('error', 'settingsShowFfmpegInfo ::: Unable to find ffmpeg')
+        doLogToConsole('error', 'settingsShowFfmpegInfo ::: Unable to find ffmpeg')
         showNoty('error', 'Unable to find dependency <b>ffmpeg</b>.', 0)
     } else {
-        doLogRenderer('info', 'settingsShowFfmpegInfo ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+        doLogToConsole('info', 'settingsShowFfmpegInfo ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
         $('#userSettingsFfmpegPathInfo').val(ffmpeg.path) // show in UI
     }
 }
@@ -1514,12 +1520,12 @@ function settingsShowFfmpegInfo () {
 */
 function settingsToggleErrorReporting () {
     if ($('#checkboxEnableErrorReporting').is(':checked')) {
-        doLogRenderer('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
+        doLogToConsole('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
         writeLocalUserSetting('enableErrorReporting', true)
         enableSentry()
         // myUndefinedFunctionFromRendererAfterEnable()
     } else {
-        doLogRenderer('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
+        doLogToConsole('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
         writeLocalUserSetting('enableErrorReporting', false)
         disableSentry()
         // myUndefinedFunctionFromRendererAfterDisable()
@@ -1540,7 +1546,7 @@ function searchYoutubeDLUpdate (silent = true) {
     // set API url
     const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags'
 
-    doLogRenderer('info', 'searchUpdate ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
+    doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
 
     var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data) {
         3000 // in milliseconds
@@ -1563,12 +1569,12 @@ function searchYoutubeDLUpdate (silent = true) {
             localAppVersion = ytdlBinaryVersion
             // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Local version: ' + localAppVersion)
-            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Latest public version: ' + remoteAppVersionLatest)
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Local version: ' + localAppVersion)
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Latest public version: ' + remoteAppVersionLatest)
 
             // Update available
             if (localAppVersion < remoteAppVersionLatest) {
-                doLogRenderer('info', 'searchYoutubeDLUpdate ::: Found update, notify user')
+                doLogToConsole('info', 'searchYoutubeDLUpdate ::: Found update, notify user')
 
                 // using a confirm dialog
                 const Noty = require('noty')
@@ -1596,7 +1602,7 @@ function searchYoutubeDLUpdate (silent = true) {
                 // show the noty dialog
                 n.show()
             } else {
-                doLogRenderer('info', 'searchYoutubeDLUpdate ::: No newer version found.')
+                doLogToConsole('info', 'searchYoutubeDLUpdate ::: No newer version found.')
 
                 if (silent === false) {
                     showNoty('success', 'No binary updates for youtube-dl available')
@@ -1604,20 +1610,20 @@ function searchYoutubeDLUpdate (silent = true) {
             }
         })
 
-        doLogRenderer('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
+        doLogToConsole('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
     })
         .done(function () {
-        // doLogRenderer('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        // doLogToConsole('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
         })
 
         .fail(function () {
-            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
             showNoty('error', 'Checking <b>' + urlYTDLGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.')
         })
 
         .always(function () {
-            doLogRenderer('info', 'searchYoutubeDLUpdate ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
-            loadingAnimationHide()
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
+            uiLoadingAnimationHide()
             uiAllElementsToDefault()
         })
 }
@@ -1633,12 +1639,13 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
 
     fs.readFile('./node_modules/youtube-dl/bin/details', 'utf8', function (err, contents) {
         if (err) {
-            doLogRenderer('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
+            doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
+            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + err) // see sentry issue: MEDIA-DUPES-5A
             throw err
         } else {
             const data = JSON.parse(contents)
             ytdlBinaryVersion = data.version
-            doLogRenderer('info', 'settingsGetYoutubeDLBinaryVersion ::: youtube-dl binary is version: _' + ytdlBinaryVersion + '_.')
+            doLogToConsole('info', 'settingsGetYoutubeDLBinaryVersion ::: youtube-dl binary is version: _' + ytdlBinaryVersion + '_.')
             _callback()
         }
     })
