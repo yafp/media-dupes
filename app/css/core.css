@@ -1,4 +1,11 @@
 /* ########################################################################## */
+/* BODY */
+/* ########################################################################## */
+body{
+    display: none;
+}
+
+/* ########################################################################## */
 /* UI TEXT - MAKE THEM NOT SELECTABLE */
 /* ########################################################################## */
 .mediaDupes_nonSelectableText {
@@ -6,17 +13,21 @@
     -moz-user-select: none;
 }
 
-
-body{
-    display: none;
-}
-
+/* ########################################################################## */
+/* WINDOW BORDER */
+/* ########################################################################## */
 .container-after-titlebar{
-    border-left: 1px solid #171717 !important;
-    border-right: 1px solid #171717 !important;
-    border-bottom: 1px solid #171717 !important;
+    border-left: 1px solid #171717;
+    border-right: 1px solid #171717;
+    border-bottom: 1px solid #171717;
 }
 
+/* ########################################################################## */
+/* CUSTOM-TITLEBAR */
+/* ########################################################################## */
+.window-title{
+    font-size: 13px !important;
+}
 
 /* ########################################################################## */
 /* HEADINGS */
@@ -39,7 +50,7 @@ h4{
 
 h5{
     color: gray;
-    fnt-size: 18px;
+    font-size: 18px;
 }
 
 h6{
@@ -48,18 +59,14 @@ h6{
 }
 
 /* ########################################################################## */
-/* TEXTAREA */
+/* TEXTAREAs */
 /* ########################################################################## */
 textarea {
     font-size: 12px !important;
     font-weight: bold;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-
-    background-color: #ecf0f1 !important;
-
-
+    background-color: #ecf0f1;
     background-repeat: no-repeat;
-    /* background-attachment: fixed; */
     background-position: center;
     width: 32px;
     height:32px;
@@ -67,34 +74,38 @@ textarea {
 
 #textareaTodoList {
     background-image: url("../img/background/icon_textarea_todo_64x64.png");
+    min-width: 100%;
+    width: 100%;
+    resize: none;
 }
 
 #textareaLogOutput {
     background-image: url("../img/background/icon_textarea_log_64x64.png");
+    min-width: 100%;
+    width: 100%;
+    min-height: 200px; 
+    resize: vertical; /* needed? */
 }
-
 
 /* ########################################################################## */
 /* ROW EMPTY */
 /* ########################################################################## */
 .row-empty{
-    height: 20px !important;
+    height: 20px;
 }
-
 
 /* ########################################################################## */
 /* BUTTONS */
 /* ########################################################################## */
-.btnDefaultSize
+.mediaDupes_btnDefaultWidth
 {
     min-width: 100px;
 }
 
-.btnMajorActionWidth
+.mediaDupes_btnDownloadActionWidth
 {
     min-width: 200px;
 }
-
 
 /* ########################################################################## */
 /* Use the “system font/San Francisco” */
@@ -102,7 +113,6 @@ textarea {
 cssbody {
     font: caption;
 }
-
 
 /* ########################################################################## */
 /* FADEIN THE WINDOW */
@@ -135,22 +145,11 @@ cssbody {
 
 
 
-
-
-
-
-
-
-
-
-.container-fluid{
+/* ########################################################################## */
+/* FLEX-PLAYGROUND */
+/* ########################################################################## */
+.bg_yellow{
     /*
-    background-color: green;
-    */
-    height: 100%;
-}
-
-#foo{
     background-color: yellow;
-
+    */
 }
