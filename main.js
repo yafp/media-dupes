@@ -29,7 +29,7 @@ let mainWindow
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
-const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
+const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/mdGithubUrls.js') // project-urls
 
 // minimal window size
 const minimalWindowHeight = 730
@@ -233,6 +233,8 @@ function createWindow () {
 * @description Creates the application menu
 */
 function createMenu () {
+    // doLog('createMenu', __dirname)
+
     // Create a custom menu
     var menu = Menu.buildFromTemplate([
 
@@ -243,6 +245,9 @@ function createMenu () {
                 // Settings
                 {
                     label: 'Settings',
+                    // icon: __dirname + '/app/img/icon/icon.png',
+                    // icon: __dirname + '/app/img/address-book.svg',
+                    // icon: __dirname + '/node_modules/@fortawesome/fontawesome-free/svgs/regular/address-book.svg',
                     click () {
                         mainWindow.webContents.send('openSettings')
                     },

@@ -49,7 +49,12 @@
 
         <!-- Settings header -->
         <div class="row-fluid">
-            <h4>Settings</h4>
+            <h4 class="border-bottom">Settings</h4>
+        </div>
+
+        <!-- empty line -->
+        <div class="row-fluid row-empty">
+            &nbsp;
         </div>
 
          <!-- Header: User-Settings -->
@@ -67,8 +72,8 @@
             <div class="input-group mb-3">
                 <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
                 <div class="input-group-append">
-                    <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm btnDefaultSize" onclick="settingsSelectCustomTargetDir()"><i class="far fa-folder-open"></i> Choose</button>
-                    <button id="buttonSettingsResetCustomTargetDir" name="buttonSettingsResetCustomTargetDir" class="btn btn-danger btn-sm btnDefaultSize" onclick="settingsResetCustomTargetDir()"><i class="fas fa-eraser"></i> Reset</button>
+                    <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="settingsSelectCustomTargetDir()"><i class="far fa-folder-open"></i> Choose</button>
+                    <button id="buttonSettingsResetCustomTargetDir" name="buttonSettingsResetCustomTargetDir" class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" onclick="settingsResetCustomTargetDir()"><i class="fas fa-eraser"></i> Reset</button>
                 </div>
             </div>
         </div>
@@ -87,7 +92,7 @@
                     <option value="wav" title="Waveform Audio File Format">.wav </option>
                 </select>
                 <div class="input-group-append">
-                    <button class="btn btn-success btn-sm btnDefaultSize" type="button" onclick="settingAudioFormatSave();">Set</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingAudioFormatSave();"><i class="fas fa-music"></i> Set</button>
                 </div>
             </div>
         </div>
@@ -104,15 +109,15 @@
 
         <!-- youtube-dl header -->
         <div class="row-fluid">
-            <h6 id="headerYoutubeDL">youtube-dl</h6>
+            <h6 id="headerYoutubeDL"><i class="fab fa-youtube"></i> youtube-dl</h6>
         </div>
 
         <div class="row-fluid">
             <div class="input-group mb-3">
                 <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-secondary btn-sm btnDefaultSize" type="button" onclick="searchYoutubeDLUpdate(false)">Update</button>
-                    <button class="btn btn-success btn-sm btnDefaultSize" type="button" onclick="openURL('https://ytdl-org.github.io/youtube-dl/index.html')">Visit</button>
+                    <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="searchYoutubeDLUpdate(false)"><i class="fab fa-youtube"></i> Update</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="openURL('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
                 </div>
             </div>
         </div>
@@ -126,7 +131,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control form-control-sm" laceholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-success btn-sm btnDefaultSize" type="button" onclick="openURL('https://www.ffmpeg.org/')">Visit</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="openURL('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
                 </div>
             </div>
         </div>
@@ -158,12 +163,11 @@
 
         <!-- back buttons-->
         <div class="row-fluid float-right">
-            <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom btnDefaultSize" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
+            <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom mediaDupes_btnDefaultWidth" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
         </div>
 
     </div>
     <!-- end container-fluid -->
-
 
     <!-- You can also require other files to run in this process -->
     <script src="js/renderer.js"></script>
@@ -176,19 +180,11 @@
 $( document ).ready(function()
 {
     console.log( 'settings.html ready' )
-
-    // init titleBar
-    titlebarInit()
-
-     // load all user settings
-    settingsLoadAllOnSettingsUiLoad()
-
-    // load dependency informations
-    settingsShowYoutubeDLInfo()
-    settingsShowFfmpegInfo()
-
-    // Fades in page on load
-    $('body').fadeIn(1000);
+    titlebarInit() // init titleBar
+    settingsLoadAllOnSettingsUiLoad() // load all user settings
+    settingsShowYoutubeDLInfo() // dependency: get youtube-dl informations
+    settingsShowFfmpegInfo() // dependency: get ffmpeg informations
+    $('body').fadeIn(1000); // Fades in page on load
 });
 </script>
 

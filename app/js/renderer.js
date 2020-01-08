@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------
 // IMPORT
 // ----------------------------------------------------------------------------
+const utils = require('./js/modules/mdUtils.js')
 
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
@@ -20,8 +21,7 @@ var arrayUrlsThrowingErrors = [] // coontains urls which throws errors while try
 var settingAudioFormat = 'mp3' // default is set to mp3
 var settingCustomDownloadDir = '' // default
 var settingEnableErrorReporting = true
-
-var ytdlBinaryVersion = '0.1.0'
+var ytdlBinaryVersion = '0.0.0'
 
 /**
 * @name titlebarInit
@@ -30,9 +30,12 @@ var ytdlBinaryVersion = '0.1.0'
 */
 function titlebarInit () {
     // NOTE:
-    // - 'custom-electron-titlebar' is now an archived repo
-    // - switched to fork of it 'pj-custom-electron-titlebar'
-    const customTitlebar = require('pj-custom-electron-titlebar')
+    // there exists:
+    // - 'custom-electron-titlebar'
+    // - 'pj-custom-electron-titlebar' (fork)
+    //
+    const customTitlebar = require('custom-electron-titlebar')
+    // const customTitlebar = require('pj-custom-electron-titlebar')
 
     const myTitlebar = new customTitlebar.Titlebar({
         titleHorizontalAlignment: 'center', // position of window title
@@ -45,18 +48,10 @@ function titlebarInit () {
         itemBackgroundColor: customTitlebar.Color.fromHex('#525252') // hover color
     })
 
-    // change font size of application name in titlebar
-    $('.window-title').css('font-size', '13px') // https://github.com/AlexTorresSk/custom-electron-titlebar/issues/24
+    // Be aware: the font-size of .window-title (aka application name) is set by app/css/core.css
 
-    // Try to change color of menu
-    //
-    // works - but results in follow error:         myTitlebar.updateBackground('#ff0000');
-    // followerror: titleBackground.isLigher is not a function
-    // myTitlebar.updateBackground('#ff00ff');
-
-    // Trying to update the title
-    //
-    // myTitlebar.updateTitle('media-dupes');
+    // Change color of menu
+    // myTitlebar.updateBackground(customTitlebar.Color.fromHex('#ff00ff'));
 
     doLogToConsole('info', 'titlebarInit ::: Initialized custom titlebar')
 }
@@ -230,7 +225,6 @@ function logAppend (newLine) {
     $('#textareaLogOutput').val(function (i, text) {
         return text + newLine + '\n'
     })
-
     logScrollToEnd() // scroll log textarea to the end
 }
 
@@ -249,11 +243,9 @@ function checkForDeps () {
     if (youtubeDl === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find youtube-dl')
+        $('#buttonStartVideo').hide() // hide video button
+        $('#buttonStartAudio').hide() // hide audio button
         showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. All download function are now disabled, sorry', 0)
-
-        // hide both buttons (video and audio)
-        $('#buttonStartVideo').hide()
-        $('#buttonStartAudio').hide()
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
     }
@@ -264,17 +256,14 @@ function checkForDeps () {
     if (ffmpeg === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find ffmpeg')
+        $('#buttonStartAudio').hide() // hide audio button
         showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Extracting audio is now disabled, sorry', 0)
-
-        // hide audio button
-        $('#buttonStartAudio').hide()
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
     }
 
     doLogToConsole('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
 }
-
 
 /**
 * @name uiResetAskUser
@@ -291,15 +280,14 @@ function uiResetAskUser () {
             type: 'info',
             text: 'Do you really want to reset the UI?',
             buttons: [
-                Noty.button('Yes', 'btn btn-success', function () {
+                Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
                     n.close()
                     uiReset()
                 },
                 {
                     id: 'button1', 'data-status': 'ok'
                 }),
-
-                Noty.button('No', 'btn btn-secondary', function () {
+                Noty.button('No', 'btn btn-secondary mediaDupes_btnDefaultWidth float-right', function () {
                     n.close()
                 })
             ]
@@ -316,25 +304,12 @@ function uiResetAskUser () {
 */
 function uiReset () {
     doLogToConsole('info', 'uiReset ::: Starting to reset the UI')
-
-    // empty input file
-    $('#inputNewUrl').val('')
-
-    // disable start button
-    uiStartButtonsDisable()
-
-    // ensure some buttons are enabled
-    uiOtherButtonsEnable()
-
-    // empty todo-list textarea
-    toDoListReset()
-
-    // empty log textarea
-    logReset()
-
-    // animation / spinner hide
-    uiLoadingAnimationHide()
-
+    $('#inputNewUrl').val('') // empty the URL input field
+    uiStartButtonsDisable() // disable start button
+    uiOtherButtonsEnable() // ensure some buttons are enabled
+    toDoListReset() // empty todo-list textarea
+    logReset() // empty log textarea
+    uiLoadingAnimationHide() // animation / spinner hide
     doLogToConsole('info', 'uiReset ::: Finished resetting the UI')
 }
 
@@ -443,12 +418,10 @@ function uiMakeUrgent () {
 * @description Is triggered via button on settings.html.
 */
 function settingsSelectCustomTargetDir () {
-    doLogToConsole('info', 'settingsSelectCustomTargetDir ::: User wants to set a custom download directory')
-    doLogToConsole('info', 'settingsSelectCustomTargetDir ::: Now opening dialog to select a new download target')
-
     const options = { properties: ['openDirectory'] }
-
     const { dialog } = require('electron').remote
+
+    doLogToConsole('info', 'settingsSelectCustomTargetDir ::: User wants to set a custom download directory. Now opening dialog to select a new download target')
     dialog.showOpenDialog(options).then(res => {
         doLogToConsole('warn', '_' + res.filePaths + '_')
 
@@ -470,12 +443,11 @@ function settingsSelectCustomTargetDir () {
 * @description Is triggered via button on settings.html.
 */
 function settingsResetCustomTargetDir () {
-    doLogToConsole('info', 'settingsResetCustomTargetDir ::: Resetting the custom download target.')
-
     var newValue = ''
     writeLocalUserSetting('CustomDownloadDir', newValue) // save the value
     $('#inputCustomTargetDir').val(newValue) // show it in the UI
     settingCustomDownloadDir = newValue // update global var
+    doLogToConsole('info', 'settingsResetCustomTargetDir ::: Resetted the custom download target.')
 }
 
 /**
@@ -719,7 +691,7 @@ function checkUrlInputField () {
         currentClipboardContent = currentClipboardContent.trim() // remove leading and trailing blanks
 
         // check if it is a valid url - if so paste it
-        var isUrlValid = validURL(currentClipboardContent)
+        var isUrlValid = utils.validURL(currentClipboardContent)
         if (isUrlValid) {
             $('#inputNewUrl').val(currentClipboardContent) // paste it
             $('#inputNewUrl').select() // select it entirely
@@ -728,23 +700,6 @@ function checkUrlInputField () {
             doLogToConsole('info', 'checkUrlInputField ::: Clipboard contains a non valid URL (' + currentClipboardContent + ').')
         }
     }
-}
-
-/**
-* @name validURL
-* @summary checks if a given string is a valid url
-* @description checks if a given string is a valid url
-* @param str - Given url
-* @return boolean
-*/
-function validURL (str) {
-    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-    '(\\#[-a-z\\d_]*)?$', 'i') // fragment locator
-    return !!pattern.test(str)
 }
 
 /**
@@ -770,7 +725,7 @@ function addURL () {
     newUrl = newUrl.trim() // trim the url to remove blanks
 
     if (newUrl !== '') {
-        var isUrlValid = validURL(newUrl)
+        var isUrlValid = utils.validURL(newUrl)
         if (isUrlValid) {
             doLogToConsole('info', 'addURL ::: Adding new url: _' + newUrl + '_.')
             arrayUserUrls.push(newUrl) // append to array
@@ -780,7 +735,7 @@ function addURL () {
         } else {
             // invalid url
             doLogToConsole('error', 'addURL ::: Detected invalid url: _' + newUrl + '_.')
-            showNoty('error', 'Please insert a valid url (reason: was invalid)')
+            showNoty('error', 'Please insert a valid url (reason: unable to dectect a valid url)')
             $('#inputNewUrl').focus() // focus to input field
             $('#inputNewUrl').select() // select it entirely
         }
@@ -823,33 +778,6 @@ function toDoListReset () {
     arrayUrlsThrowingErrors = [] // reset the array
     document.getElementById('textareaTodoList').value = '' // reset todo-list in UI
     doLogToConsole('info', 'toDoListReset ::: Did reset the todolist-textarea')
-}
-
-/**
-* @name isEncoded
-* @summary Helper method for fullyDecodeURI
-* @description Helper method for fullyDecodeURI
-* @param uri
-* @return uri
-*/
-function isEncoded (uri) {
-    uri = uri || ''
-    return uri !== decodeURIComponent(uri)
-}
-
-/**
-* @name fullyDecodeURI
-* @summary Used to decode URLs
-* @description
-* param uri - The incoming uri
-* @return uri - a decoded url
-*/
-function fullyDecodeURI (uri) {
-    while (isEncoded(uri)) {
-        uri = decodeURIComponent(uri)
-        doLogToConsole('info', 'fullyDecodeURI ::: URL: _' + uri + '_ is now fully decoded.')
-    }
-    return uri
 }
 
 /**
@@ -953,7 +881,7 @@ function downloadContent (mode) {
             // decode url - see #25
             //
             // url = decodeURI(url);
-            url = fullyDecodeURI(url)
+            url = utils.fullyDecodeURI(url)
 
             doLogToConsole('info', 'downloadContent ::: Processing URL: _' + url + '_.')
             doLogToConsole('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
@@ -1061,7 +989,7 @@ function downloadVideo () {
             // decode url - see #25
             //
             // url = decodeURI(url);
-            url = fullyDecodeURI(url)
+            url = utils.fullyDecodeURI(url)
 
             doLogToConsole('info', 'downloadVideo ::: Processing URL: _' + url + '_.')
             doLogToConsole('info', 'downloadVideo ::: Using the following parameters: _' + youtubeDlParameter + '_.')
@@ -1088,9 +1016,7 @@ function downloadVideo () {
                 logAppend('Filename: ' + info._filename)
 
                 console.log('size: ' + info.size)
-                // logAppend('Size: ' + info.size)
-                logAppend('Size: ' + formatBytes(info.size))
-                // http://www.youtube.com/watch?v=90AiXO1pAiA
+                logAppend('Size: ' + utils.formatBytes(info.size))
 
                 console.log('Download started')
                 logAppend('Starting download ...')
@@ -1141,26 +1067,6 @@ function downloadVideo () {
 }
 
 /**
-* @name formatBytes
-* @summary Calculate bytes to...
-* @description Calculate bytes to...
-* @param bytes - Incoming bytes value
-* @param decimals (optimal, defaults to 2)
-* @return Human readable value
-*/
-function formatBytes (bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes'
-
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-}
-
-/**
 * @name showSupportedExtractors
 * @summary Shows a list of all currently supported extractors of youtube-dl
 * @description Shows a list of all currently supported extractors of youtube-dl
@@ -1208,17 +1114,12 @@ function searchUpdate (silent = true) {
     uiLoadingAnimationShow()
     uiAllElementsDisable()
 
-    // when executed manually via menu -> user should see that update-check is running
-    if (silent === false) {
-        showNoty('info', 'Searching for updates')
-    }
-
     var remoteAppVersionLatest = '0.0.0'
     var localAppVersion = '0.0.0'
     var versions
 
     // get API url
-    const { urlGitHubRepoTags } = require('./js/modules/githubUrls.js')
+    const { urlGitHubRepoTags } = require('./js/modules/mdGithubUrls.js')
 
     doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
 
@@ -1240,23 +1141,23 @@ function searchUpdate (silent = true) {
         localAppVersion = require('electron').remote.app.getVersion()
         // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-        doLogToConsole('info', 'searchUpdate ::: Local version: ' + localAppVersion)
-        doLogToConsole('info', 'searchUpdate ::: Latest public version: ' + remoteAppVersionLatest)
+        doLogToConsole('info', 'searchUpdate ::: Local media-dupes version: ' + localAppVersion)
+        doLogToConsole('info', 'searchUpdate ::: Latest media-dupes version: ' + remoteAppVersionLatest)
 
         // Update available
         if (localAppVersion < remoteAppVersionLatest) {
             doLogToConsole('info', 'searchUpdate ::: Found update, notify user')
 
-            // using a confirm dialog
+            // ask user using a noty confirm dialog
             const Noty = require('noty')
             var n = new Noty(
                 {
                     theme: 'bootstrap-v4',
                     layout: 'bottom',
                     type: 'info',
-                    text: 'An update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?',
+                    text: 'A media-dupes update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?',
                     buttons: [
-                        Noty.button('Yes', 'btn btn-success', function () {
+                        Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
                             n.close()
                             openReleasesOverview()
                         },
@@ -1264,7 +1165,7 @@ function searchUpdate (silent = true) {
                             id: 'button1', 'data-status': 'ok'
                         }),
 
-                        Noty.button('No', 'btn btn-secondary', function () {
+                        Noty.button('No', 'btn btn-secondary mediaDupes_btnDefaultWidth float-right', function () {
                             n.close()
                         })
                     ]
@@ -1273,11 +1174,11 @@ function searchUpdate (silent = true) {
             // show the noty dialog
             n.show()
         } else {
-            doLogToConsole('info', 'searchUpdate ::: No newer version found.')
+            doLogToConsole('info', 'searchUpdate ::: No newer version of media-dupes found.')
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
-                showNoty('success', 'No updates available')
+                showNoty('success', 'No media-dupes updates available')
             }
         }
 
@@ -1289,7 +1190,7 @@ function searchUpdate (silent = true) {
 
         .fail(function () {
             doLogToConsole('info', 'searchUpdate ::: Checking ' + urlGitHubRepoTags + ' for available releases failed.')
-            showNoty('error', 'Checking <b>' + urlGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.')
+            showNoty('error', 'Checking <b>' + urlGitHubRepoTags + '</b> for available media-dupes releases failed. Please troubleshoot your network connection.')
         })
 
         .always(function () {
@@ -1307,19 +1208,7 @@ function searchUpdate (silent = true) {
 function openReleasesOverview () {
     const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
     doLogToConsole('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
-    openURL(urlGitHubReleases)
-}
-
-/**
-* @name openURL
-* @summary Opens an url in browser
-* @description Opens a given url in default browser. This is pretty slow, but got no better solution so far.
-* @param url - URL string which contains the target url
-*/
-function openURL (url) {
-    const { shell } = require('electron')
-    doLogToConsole('info', 'openURL ::: Trying to open the url: _' + url + '_.')
-    shell.openExternal(url)
+    utils.openURL(urlGitHubReleases)
 }
 
 /**
@@ -1484,16 +1373,19 @@ function isDirectoryWriteable (dirPath) {
 */
 function settingsShowYoutubeDLInfo () {
     const youtubedl = require('youtube-dl')
-    doLogToConsole('info', 'settingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
-    var youtubeDl = youtubedl.getYtdlBinary()
-    if (youtubeDl === '') {
-        doLogToConsole('error', 'settingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
-        showNoty('error', 'Unable to find dependency <b>youtube-dl</b>.', 0)
-    } else {
-        doLogToConsole('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
-        $('#userSettingsYouTubeDLPathInfo').val(youtubeDl) // show in UI
-        //$('#headerYoutubeDL').html('youtube-dl <small>Version: ' + ytdlBinaryVersion + '</small>')
-    }
+
+    settingsGetYoutubeDLBinaryVersion(function () {
+        doLogToConsole('info', 'settingsShowYoutubeDLInfo ::: Searching youtube-dl ...')
+        var youtubeDl = youtubedl.getYtdlBinary()
+        if (youtubeDl === '') {
+            doLogToConsole('error', 'settingsShowYoutubeDLInfo ::: Unable to find youtube-dl')
+            showNoty('error', 'Unable to find dependency <b>youtube-dl</b>.', 0)
+        } else {
+            doLogToConsole('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
+            $('#userSettingsYouTubeDLPathInfo').val(youtubeDl) // show in UI
+            $('#headerYoutubeDL').html('<i class="fab fa-youtube"></i> youtube-dl <small>Version: ' + ytdlBinaryVersion + '</small>')
+        }
+    })
 }
 
 /**
@@ -1525,10 +1417,38 @@ function settingsToggleErrorReporting () {
         enableSentry()
         // myUndefinedFunctionFromRendererAfterEnable()
     } else {
-        doLogToConsole('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
-        writeLocalUserSetting('enableErrorReporting', false)
-        disableSentry()
-        // myUndefinedFunctionFromRendererAfterDisable()
+        // ask if user really wants to disable error-reporting
+        // using a confirm dialog
+        const Noty = require('noty')
+        var n = new Noty(
+            {
+                theme: 'bootstrap-v4',
+                layout: 'bottom',
+                type: 'info',
+                text: 'Do you really want to disable error-reporting? It is not used to track users and is helpful for the developers of media-dupes to find bugs',
+                buttons: [
+                    Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
+                        n.close()
+                        doLogToConsole('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
+                        writeLocalUserSetting('enableErrorReporting', false)
+                        disableSentry()
+                        // myUndefinedFunctionFromRendererAfterDisable()
+                    },
+                    {
+                        id: 'button1', 'data-status': 'ok'
+                    }),
+
+                    Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
+                        n.close()
+                        $('#checkboxEnableErrorReporting').prop('checked', true) // revert state of checkbox
+                        showNoty('success', '<b>Thanks</b> for supporting media-dupes development with your error reports.')
+                        doLogToConsole('warn', 'settingsToggleErrorReporting ::: User cancelled disabling of error-reporting')
+                    })
+                ]
+            })
+
+        // show the noty dialog
+        n.show()
     }
 }
 
@@ -1543,10 +1463,10 @@ function searchYoutubeDLUpdate (silent = true) {
     var localAppVersion = '0.0.0'
     var versions
 
-    // set API url
+    // set youtube-dl API url
     const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags'
 
-    doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
+    doLogToConsole('info', 'searchYoutubeDLUpdate ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
 
     var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data) {
         3000 // in milliseconds
@@ -1569,8 +1489,8 @@ function searchYoutubeDLUpdate (silent = true) {
             localAppVersion = ytdlBinaryVersion
             // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Local version: ' + localAppVersion)
-            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Latest public version: ' + remoteAppVersionLatest)
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Local youtube-dl binary version: ' + localAppVersion)
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Latest youtube-dl binary version: ' + remoteAppVersionLatest)
 
             // Update available
             if (localAppVersion < remoteAppVersionLatest) {
@@ -1585,7 +1505,7 @@ function searchYoutubeDLUpdate (silent = true) {
                         type: 'info',
                         text: 'An update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to update your youtube-dl binary?',
                         buttons: [
-                            Noty.button('Yes', 'btn btn-success', function () {
+                            Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
                                 n.close()
                                 doUpdateYoutubeDLBinary()
                             },
@@ -1593,7 +1513,7 @@ function searchYoutubeDLUpdate (silent = true) {
                                 id: 'button1', 'data-status': 'ok'
                             }),
 
-                            Noty.button('No', 'btn btn-secondary', function () {
+                            Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
                                 n.close()
                             })
                         ]
@@ -1602,7 +1522,7 @@ function searchYoutubeDLUpdate (silent = true) {
                 // show the noty dialog
                 n.show()
             } else {
-                doLogToConsole('info', 'searchYoutubeDLUpdate ::: No newer version found.')
+                doLogToConsole('info', 'searchYoutubeDLUpdate ::: No newer version of the youtube-dl binary found.')
 
                 if (silent === false) {
                     showNoty('success', 'No binary updates for youtube-dl available')
@@ -1636,15 +1556,18 @@ function searchYoutubeDLUpdate (silent = true) {
 */
 function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
+    const path = require('path')
 
-    fs.readFile('./node_modules/youtube-dl/bin/details', 'utf8', function (err, contents) {
+    var youtubeDlBinaryDetailsPath = path.join('node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+
+    fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (err, contents) {
         if (err) {
             doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
             showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + err) // see sentry issue: MEDIA-DUPES-5A
             throw err
         } else {
             const data = JSON.parse(contents)
-            ytdlBinaryVersion = data.version
+            ytdlBinaryVersion = data.version // extract and store the version number
             doLogToConsole('info', 'settingsGetYoutubeDLBinaryVersion ::: youtube-dl binary is version: _' + ytdlBinaryVersion + '_.')
             _callback()
         }

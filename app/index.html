@@ -39,7 +39,7 @@
 </head>
 
 <body>
-    <div class="container-fluid mediaDupes_nonSelectableText">
+    <div class="container-fluid mediaDupes_nonSelectableText    h-100 d-flex flex-column">
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -68,13 +68,13 @@
         <div class="input-group mb-3">
             <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
-                <button class="btn btn-secondary btn-sm btnDefaultSize" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
+                <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
             </div>
         </div>
 
         <!-- show todo-list -->
         <div class="row-fluid">
-            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="todo-list" placeholder="todo-list" readonly rows="6" style="min-width: 100%" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
+            <textarea class="form-control" id="textareaTodoList" name="textareaTodoList" title="todo-list" placeholder="todo-list" readonly rows="6" data-step="4" data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
             </textarea>
         </div>
 
@@ -91,33 +91,45 @@
                 id="buttonStartVideo"
                 name="buttonStartVideo"
                 type="button"
-                class="btn btn-success btn-sm btnMajorActionWidth"
+                class="btn btn-success btn-sm mediaDupes_btnDownloadActionWidth"
                 title="Start downloading all content from todo-list and store them as video files"
                 onclick="downloadContent('video');"
                 disabled
                 data-step="6"
                 data-intro="The <b>grab video</b> button tries to download each video featured on your <b>todo-list</b>.">
-                <i class="fas fa-video"></i> Grab video</button> &nbsp;
+                <i class="fas fa-video"></i> Grab video
+            </button>
             <button
                 id="buttonStartAudio"
                 name="buttonStartAudio"
                 type="button"
-                class="btn btn-success btn-sm btnMajorActionWidth float-right"
+                class="btn btn-success btn-sm mediaDupes_btnDownloadActionWidth float-right"
                 title="Start downloading all content from todo-list and store them as audio files"
                 onclick="downloadContent('audio');"
                 disabled
                 data-step="7"
                 data-intro="The <b>grab audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
-                <i class="fas fa-music"></i> Grab audio</button>
+                <i class="fas fa-music"></i> Grab audio
+            </button>
         </div>
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- show log -->
-        <div class="row-fluid" id="foo" name='foo'>
-                <textarea class="form-control h-100" id="textareaLogOutput" name="textareaLogOutput" title="application log" placeholder="application log" readonly rows="12" style="min-width: 100%" data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
-            </textarea>
+        <div class="flex-column justify-content-center flex-grow-1 overflow-auto bg_yellow">
+            <div class="row-fluid" id="foo" name='foo'>
+                <textarea 
+                    class="form-control" 
+                    id="textareaLogOutput" 
+                    name="textareaLogOutput" 
+                    title="application log" 
+                    placeholder="application log" 
+                    readonly 
+                    rows="14" 
+                    data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
+                </textarea>
+            </div>
         </div>
 
         <!-- empty line -->
@@ -125,27 +137,64 @@
 
         <!-- extra buttons-->
         <div class="row-fluid">
-            <button id="buttonShowSettings" name="buttonShowSettings" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Shows settings" onclick="settingsUiLoad();"><i class="fas fa-cog"></i> Settings</button>
-            <button id="buttonShowHelp" name="buttonShowHelp" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Shows a small media-dupes intro to explain how it works" onclick="startIntro();"><i class="fas fa-info"></i> Intro</button>
-            <button id="buttonShowExtractors" name="buttonShowExtractors" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize"  title="Show supported media platforms" onclick="showSupportedExtractors();"><i class="fas fa-list"></i> Extractors</button>
-            <button id="buttonShowDownloadFolder" name="buttonShowDownloadFolder" type="button" class="btn btn-outline-secondary btn-sm btnDefaultSize" title="Opens the download folder" onclick="openUserDownloadFolder();"><i class="fas fa-file-download"></i> Downloads</button>
-            <button id="buttonResetUI" name="buttonReset" type="button" class="btn btn-outline-danger btn-sm float-right btnDefaultSize" title="Reset the user-interface (UI)" onclick="uiResetAskUser();"><i class="fas fa-redo-alt"></i> Reset</button>
+            <!-- Settings -->
+            <button 
+                id="buttonShowSettings" 
+                name="buttonShowSettings" 
+                type="button" 
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth" 
+                title="Shows settings" 
+                onclick="settingsUiLoad();">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+            <!-- Intro -->
+            <button 
+                id="buttonShowHelp" 
+                name="buttonShowHelp" 
+                type="button" 
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth" 
+                title="Shows a small media-dupes intro to explain how media-dupes works" 
+                onclick="startIntro();">
+                <i class="fas fa-info"></i> Intro
+            </button>
+            <!-- Extractors -->
+            <button 
+                id="buttonShowExtractors" 
+                name="buttonShowExtractors" 
+                type="button" 
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"  
+                title="Show list of supported media platforms" 
+                onclick="showSupportedExtractors();">
+                <i class="fas fa-list"></i> Extractors
+            </button>
+            <!-- Download folder -->
+            <button 
+                id="buttonShowDownloadFolder" 
+                name="buttonShowDownloadFolder" 
+                type="button" 
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth" 
+                title="Opens the download folder" 
+                onclick="openUserDownloadFolder();">
+                <i class="fas fa-file-download"></i> Downloads
+            </button>
+            <!-- UI Reset -->
+            <button 
+                id="buttonResetUI" 
+                name="buttonReset" 
+                type="button" 
+                class="btn btn-outline-danger btn-sm float-right mediaDupes_btnDefaultWidth" 
+                title="Reset the user-interface (UI)" 
+                onclick="uiResetAskUser();">
+                <i class="fas fa-redo-alt"></i> Reset
+            </button>
         </div>
+        <!-- /extra buttons -->
 
         <!-- empty line -->
-        <div class="row row-empty">&nbsp;</div>
-
-        <!-- footer -->
-        <div class="row-fluid">
-            <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-secondary">
-                <p class="h6"><a class="text-green ml-2 text-secondary" href="#" title="github.com/yafp/media-dupes" onclick="openURL('https://github.com/yafp/media-dupes')"><i class="fab fa-github"></i></a></p>
-            </div>
-        </div>
-        <!-- footer -->
+        <div class="row-fluid row-empty">&nbsp;</div>
 
     </div>
     <!-- container -->
-
 
     <!-- You can also require other files to run in this process -->
     <script src="js/renderer.js"></script>
