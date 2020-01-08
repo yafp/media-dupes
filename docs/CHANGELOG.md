@@ -36,22 +36,29 @@ The following categories are used:
 * Added update check for youtube-dl binary on app startup. See [#40](https://github.com/yafp/media-dupes/issues/40)
 
 #### ```Changed```
+* Sentry: Enabled debug mode. See [#36](https://github.com/yafp/media-dupes/issues/36)
+* UI
+  * General: Disabling most UI buttons while execution of some functions (searching for updates, loading extractors) to prevent race-conditions. See [#33](https://github.com/yafp/media-dupes/issues/33)
+  * General: Use entire window height on resized window (Part 1). See [#42](https://github.com/yafp/media-dupes/issues/42)
+  * General: Reduced minimal window height about 60px. See [#38](https://github.com/yafp/media-dupes/issues/38)
+  * Settings: reduced ui-element size on settings page from default to small. See [#38](https://github.com/yafp/media-dupes/issues/38)
+  * Settings: show youtube-dl binary version. See [#39](https://github.com/yafp/media-dupes/issues/39)
+* Improved handling if user tries to add un-useable urls (focus to input field & selecting the content if possible).
+* Moved some helper functions to ```app/js/modules/mdUtils.js```
 * Dependencies
   * Updated electron from 7.1.6 to 7.1.7
   * Updated electron-log from 4.0.0 to 4.0.2
   * Updated eslint from 6.7.2 to 6.8.0
   * Updated mocha from 6.2.2 to 7.0.0
-* Sentry: Enabled debug mode. See [#36](https://github.com/yafp/media-dupes/issues/36)
-* UI/Settings: reduced ui-element size on settings page from default to small. See [#38](https://github.com/yafp/media-dupes/issues/38)
-* UI/General: Reduced minimal window height about 60px. See [#38](https://github.com/yafp/media-dupes/issues/38)
-* Disabling most UI buttons while execution of some functions (searching for updates, loading extractors) to prevent race-conditions. See [#33](https://github.com/yafp/media-dupes/issues/33)
-* Improved handling if user tries to add unuseable urls (focus to input field & selecting the content if possible).
+  * Updating sentry from 1.1.0 to 1.2.0
+  * Switching back from pj-custom-electron-titlebar to custom-electron-titlebar (3.2.1)
 
 #### ```Removed```
 * Removed any sentry usage which was not error-focused (no user tracking). See [#31](https://github.com/yafp/media-dupes/issues/31)
 
 #### ```Fixed```
 * Fixed error with non-defined array. See [#30](https://github.com/yafp/media-dupes/issues/30)
+* Fixed error URIError: URI malformed. See [#25](https://github.com/yafp/media-dupes/issues/25)
 
 ***
 
