@@ -2,28 +2,28 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.3.20200108",
+  "version": "0.3.20200113",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "start-debug": "electron . --enable-logging",
-    "clean": "rm -rf node_modules",
-    "reinstall": "npm run clean && npm install",
-    "generate-docs": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
-    "standardx": "npx standardx",
-    "standardx-fix": "npx standardx --fix",
-    "test": "mocha",
-    "lint": "node_modules/eslint/bin/eslint.js app/js --ignore-path=.eslintignore",
-    "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icon.icns --prune=true --out=dist",
-    "pack-win": "npm run pack-win-32 && npm run pack-win-64",
-    "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
-    "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
-    "pack-linux": "npm run pack-linux-64",
-    "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
-    "build-mac": "electron-builder --mac",
-    "build-win": "electron-builder --win --ia32 --x64",
-    "build-linux": "electron-builder --linux"
+      "start": "electron .",
+      "start-debug": "electron . --enable-logging",
+      "clean": "rm -rf node_modules",
+      "reinstall": "npm run clean && npm install",
+      "generate-docs": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
+      "standardx": "npx standardx",
+      "standardx-fix": "npx standardx --fix",
+      "test": "mocha",
+      "lint": "node_modules/eslint/bin/eslint.js app/js --ignore-path=.eslintignore",
+      "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icon.icns --prune=true --out=dist",
+      "pack-win": "npm run pack-win-32 && npm run pack-win-64",
+      "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
+      "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
+      "pack-linux": "npm run pack-linux-64",
+      "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
+      "build-mac": "electron-builder --mac",
+      "build-win": "electron-builder --win --ia32 --x64",
+      "build-linux": "electron-builder --linux"
   },
   "repository": {
     "type": "git",
@@ -182,7 +182,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "electron": "^7.1.7",
+    "electron": "^7.1.8",
     "electron-builder": "^21.2.0",
     "electron-packager": "^14.1.1",
     "eslint": "^6.8.0",
@@ -198,7 +198,9 @@
     "bootstrap": "^4.4.1",
     "custom-electron-titlebar": "^3.2.1",
     "electron-json-storage": "^4.1.8",
-    "electron-log": "^4.0.2",
+    "electron-log": "^4.0.3",
+    "electron-unhandled": "^3.0.2",
+    "electron-util": "^0.13.1",
     "ffmpeg-static-electron": "^2.0.1",
     "intro.js": "^2.9.3",
     "jquery": "^3.4.1",
@@ -208,8 +210,9 @@
   },
   "standardx": {
     "ignore": [
-      "/docs/jsdocs/*",
-      "/test/*"
+      "/dist",
+      "/docs/jsdocs",
+      "/test/spec.js"
     ]
   }
 }
