@@ -29,6 +29,7 @@ body{
     font-size: 13px !important;
 }
 
+
 /* ########################################################################## */
 /* HEADINGS */
 /* ########################################################################## */
@@ -83,8 +84,7 @@ textarea {
     background-image: url("../img/background/icon_textarea_log_64x64.png");
     min-width: 100%;
     width: 100%;
-    min-height: 200px; 
-    resize: vertical; /* needed? */
+    min-height: 270px; 
 }
 
 /* ########################################################################## */
@@ -104,7 +104,7 @@ textarea {
 
 .mediaDupes_btnDownloadActionWidth
 {
-    min-width: 200px;
+    min-width: 160px;
 }
 
 /* ########################################################################## */

@@ -86,14 +86,16 @@
         <!-- audio settings -->
         <div class="row-fluid">
            <div class="input-group">
-                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio">
+                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="settingAudioFormatSave();">
                     <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
                     <option value="m4a" title="MPEG 4 Audio">.m4a </option>
                     <option value="wav" title="Waveform Audio File Format">.wav </option>
                 </select>
+                <!--
                 <div class="input-group-append">
                     <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingAudioFormatSave();"><i class="fas fa-music"></i> Set</button>
                 </div>
+                -->
             </div>
         </div>
 
@@ -150,10 +152,10 @@
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" aria-label="Checkbox for following text input" onclick="settingsToggleErrorReporting();">
+                    <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="settingsToggleErrorReporting();">
                 </div>
             </div>
-            <input type="text" class="form-control form-control-sm" value="Enable error reporting to improve the project code." aria-label="Text input with checkbox" disabled>
+            <input type="text" class="form-control form-control-sm" value="Error reporting to improve the project code." disabled>
         </div>
 
         <!-- empty line -->

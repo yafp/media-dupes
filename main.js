@@ -33,7 +33,7 @@ const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases
 
 // minimal window size
 const minimalWindowHeight = 730
-const minimalWindowWidth = 600
+const minimalWindowWidth = 620
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS

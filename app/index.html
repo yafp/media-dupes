@@ -39,7 +39,7 @@
 </head>
 
 <body>
-    <div class="container-fluid mediaDupes_nonSelectableText    h-100 d-flex flex-column">
+    <div class="container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -82,34 +82,44 @@
         <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- start buttons-->
-        <!--
-            onclick="downloadVideo();"
-            onclick="downloadContent('video');"
-        -->
-        <div class="row-fluid" data-step="5" data-intro="Start the download by pressing either <b>Grab video</b> or <b>Grab audio</b>.">
+        <div class="row-fluid" data-step="5" data-intro="Start the download by one of the action buttons.">
+            <!-- video using .exec -->
             <button
-                id="buttonStartVideo"
-                name="buttonStartVideo"
+                id="buttonStartVideoExec"
+                name="buttonStartVideoExec"
                 type="button"
                 class="btn btn-success btn-sm mediaDupes_btnDownloadActionWidth"
                 title="Start downloading all content from todo-list and store them as video files"
                 onclick="downloadContent('video');"
                 disabled
                 data-step="6"
-                data-intro="The <b>grab video</b> button tries to download each video featured on your <b>todo-list</b>.">
-                <i class="fas fa-video"></i> Grab video
+                data-intro="The <b>Video</b> button tries to download each video featured on your <b>todo-list</b>.">
+                <i class="fas fa-video"></i> Video
             </button>
+            <!-- video: not using .exec() -->
             <button
-                id="buttonStartAudio"
-                name="buttonStartAudio"
+                id="buttonStartVideo"
+                name="buttonStartVideo"
+                type="button"
+                class="btn btn-warning btn-sm mediaDupes_btnDownloadActionWidth"
+                title="Unstable: Currently works only for youtube.com urls"
+                onclick="downloadVideo();"
+                data-step="7"
+                data-intro="The <b>Youtube Video</b> button is experimental right now and works only for youtube.com urls.">
+                <i class="fas fa-video"></i> Youtube video
+            </button>
+            <!-- audio: using exec() -->
+            <button
+                id="buttonStartAudioExec"
+                name="buttonStartAudioExec"
                 type="button"
                 class="btn btn-success btn-sm mediaDupes_btnDownloadActionWidth float-right"
                 title="Start downloading all content from todo-list and store them as audio files"
                 onclick="downloadContent('audio');"
                 disabled
-                data-step="7"
-                data-intro="The <b>grab audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
-                <i class="fas fa-music"></i> Grab audio
+                data-step="8"
+                data-intro="The <b>Audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
+                <i class="fas fa-music"></i> Audio
             </button>
         </div>
 
@@ -117,8 +127,10 @@
         <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- show log -->
+        <!--
         <div class="flex-column justify-content-center flex-grow-1 overflow-auto bg_yellow">
-            <div class="row-fluid" id="foo" name='foo'>
+        -->
+            <div class="row-fluid">
                 <textarea 
                     class="form-control" 
                     id="textareaLogOutput" 
@@ -126,11 +138,14 @@
                     title="application log" 
                     placeholder="application log" 
                     readonly 
-                    rows="14" 
-                    data-step="8" data-intro="The <b>output</b> section shows some details about the download process">
+                    rows="12" 
+                    data-step="9" data-intro="The <b>application log</b> shows some details about the download process">
                 </textarea>
             </div>
+        <!--
         </div>
+        -->
+
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>

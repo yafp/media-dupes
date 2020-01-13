@@ -49,13 +49,14 @@ function titlebarInit () {
     })
 
     // Be aware: the font-size of .window-title (aka application name) is set by app/css/core.css
-
-    // Change color of menu
-    // myTitlebar.updateBackground(customTitlebar.Color.fromHex('#ff00ff'));
-
     doLogToConsole('info', 'titlebarInit ::: Initialized custom titlebar')
 }
 
+/**
+* @name doUpdateYoutubeDLBinary
+* @summary Update the youtube-dl binary to latest version
+* @description Updates the youtube-dl-binary in a custom set path to the latest version.
+*/
 function doUpdateYoutubeDLBinary () {
     // get path of youtube-dl binary
     const youtubedl = require('youtube-dl')
@@ -74,11 +75,10 @@ function doUpdateYoutubeDLBinary () {
         'use strict'
         if (err) {
             doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
-            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + err)
+            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + err, 0)
             throw err
         }
         doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
-
         console.log(done)
         showNoty('success', done)
     })
@@ -243,8 +243,9 @@ function checkForDeps () {
     if (youtubeDl === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find youtube-dl')
+        $('#buttonStartVideoExec').hide() // hide video button
         $('#buttonStartVideo').hide() // hide video button
-        $('#buttonStartAudio').hide() // hide audio button
+        $('#buttonStartAudioExec').hide() // hide audio button
         showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. All download function are now disabled, sorry', 0)
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
@@ -256,7 +257,7 @@ function checkForDeps () {
     if (ffmpeg === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find ffmpeg')
-        $('#buttonStartAudio').hide() // hide audio button
+        $('#buttonStartAudioExec').hide() // hide audio button
         showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Extracting audio is now disabled, sorry', 0)
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
@@ -278,6 +279,7 @@ function uiResetAskUser () {
             theme: 'bootstrap-v4',
             layout: 'bottom',
             type: 'info',
+            closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
             text: 'Do you really want to reset the UI?',
             buttons: [
                 Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
@@ -352,8 +354,9 @@ function uiAllElementsToDefault () {
 */
 function uiStartButtonsEnable () {
     // enable start buttons
+    $('#buttonStartVideoExec').prop('disabled', false)
     $('#buttonStartVideo').prop('disabled', false)
-    $('#buttonStartAudio').prop('disabled', false)
+    $('#buttonStartAudioExec').prop('disabled', false)
 
     doLogToConsole('info', 'uiStartButtonsEnable ::: Did enable both start buttons')
 }
@@ -365,8 +368,9 @@ function uiStartButtonsEnable () {
 */
 function uiStartButtonsDisable () {
     // disable start buttons
+    $('#buttonStartVideoExec').prop('disabled', true)
     $('#buttonStartVideo').prop('disabled', true)
-    $('#buttonStartAudio').prop('disabled', true)
+    $('#buttonStartAudioExec').prop('disabled', true)
 
     doLogToConsole('info', 'uiStartButtonsDisable ::: Did disable both start buttons')
 }
@@ -850,27 +854,28 @@ function downloadContent (mode) {
                 '--format', 'best',
                 // '--newline', // Output progress bar as new lines
                 '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
-                '--add-metadata',
-                '--ignore-errors'
+                '--add-metadata'
+                // '--ignore-errors'
             ]
             break
 
         default:
             doLogToConsole('error', 'downloadContent ::: Unspecified mode. This should never happen.')
-            showNoty('error', 'Unexpected download mode. Please report this issue')
+            showNoty('error', 'Unexpected download mode. Please report this issue', 0)
             return
         }
 
         // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
         if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
-            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent(). Please report this')
+            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent(). Please report this', 0)
             return
         }
 
         doLogToConsole('info', 'downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
 
-        // prepare array for urls which are throwing errors
-        arrayUrlsThrowingErrors = []
+        arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
+
+        logAppend('Set mode to: ' + mode) // Show mode in log
 
         // assuming we got an array with urls to process
         // for each item of the array ... try to start a download-process
@@ -878,30 +883,35 @@ function downloadContent (mode) {
         for (var i = 0; i < arrayLength; i++) {
             var url = arrayUserUrls[i] // get url
 
-            // decode url - see #25
-            //
-            // url = decodeURI(url);
-            url = utils.fullyDecodeURI(url)
+            url = utils.fullyDecodeURI(url) // decode url - see #25
 
-            doLogToConsole('info', 'downloadContent ::: Processing URL: _' + url + '_.')
-            doLogToConsole('info', 'downloadContent ::: Using the following parameters: _' + youtubeDlParameter + '_.')
-
+            doLogToConsole('info', 'downloadContent ::: Processing URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_.')
             logAppend('Processing: ' + url) // append url to log
 
             // Download
             //
-            const video = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
+            const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
                 if (err) {
+                    // FIXME
+                    // how to handle that situation
+                    // seems like it happens that we got an error - but the download still worked.
+
                     // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err, 0)
-                    showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
+                    // showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
                     doLogToConsole('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
                     arrayUrlsThrowingErrors.push(url) // remember troublesome url
                     throw err
                 }
 
-                // show progress
-                doLogToConsole('info', output.join('\n'))
-                logAppend(output.join('\n'))
+                // check if output is defined
+                // usually this isnt needed - but as we are currently not throwing the error - this additional check is needed
+                if (typeof output === 'undefined') {
+                    doLogToConsole('warn', 'downloadContent ::: Output is undefined .... FIXME please')
+                } else {
+                    // show progress
+                    doLogToConsole('info', output.join('\n'))
+                    logAppend(output.join('\n'))
+                }
 
                 // finish
                 doLogToConsole('info', 'downloadContent ::: Finished downloading _' + url + '_.')
@@ -929,16 +939,18 @@ function downloadContent (mode) {
 /**
 * @name downloadVideo
 * @summary Does the actual video download
-* @description Does the actual video download
+* @description Does the actual video download (without using youtube-dl.exec)
 */
 function downloadVideo () {
-    // IMPORTANT / FIXME / TODO
-    // - this function is not yet in use - its the playground right now to test if download video without using .exec makes more sense for this project
-    // - not really able to handle multiple files / urls properly at the moment
 
     // http://www.youtube.com/watch?v=90AiXO1pAiA
     // https://www.youtube.com/watch?v=sJgDYdA8dio
     // https://vimeo.com/315670384
+    // https://vimeo.com/274478457
+
+    // FIXME:
+    // This method now seems to work good for youtube urls 
+    // BUT not for non-youtube urls
 
     // What is the target dir
     var detectedDownloadDir = getDownloadDirectory()
@@ -965,13 +977,14 @@ function downloadVideo () {
         youtubeDlParameter = [
             '--format', 'best',
             '--add-metadata',
-            '--ignore-errors'
+            '--ignore-errors',
+            '--no-mtime' // added in 0.4.0
             // '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
         ]
 
         // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
         if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
-            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadVideo(). Please report this')
+            showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadVideo(). Please report this', 0)
             return
         }
 
@@ -980,9 +993,14 @@ function downloadVideo () {
         // prepare array for urls which are throwing errors
         arrayUrlsThrowingErrors = []
 
+        var finishedDownloads = 0 // to count the amount of finished downloads
+        var downloadUrlTargetName = []
+
         // assuming we got an array with urls to process
         // for each item of the array ... try to start a download-process
         var arrayLength = arrayUserUrls.length
+        logAppend('Queue contains ' + arrayLength + ' urls.')
+        logAppend('Starting to download items from queue ... ')
         for (var i = 0; i < arrayLength; i++) {
             var url = arrayUserUrls[i] // get url
 
@@ -991,26 +1009,26 @@ function downloadVideo () {
             // url = decodeURI(url);
             url = utils.fullyDecodeURI(url)
 
+            // show url
             doLogToConsole('info', 'downloadVideo ::: Processing URL: _' + url + '_.')
+            logAppend('Starting to process the url: ' + url + ' ...')
+
+            // show parameters
             doLogToConsole('info', 'downloadVideo ::: Using the following parameters: _' + youtubeDlParameter + '_.')
 
             const video = youtubedl(url, youtubeDlParameter)
 
-            // generate a temporary filename
-            var timestamp = String(Number(new Date()))
-            var curTempVideoTargetPath = path.join(targetPath, 'Video', timestamp)
-
-            var finalVideoTargetPath
-
+            // Variables for progress of each download
             let size = 0
             let pos = 0
             let progress = 0
 
-            // Will be called when the download starts.
+            // When the download fetches info - start writing to file
+            //
             video.on('info', function (info) {
-                finalVideoTargetPath = path.join(targetPath, 'Video', info._filename)
-                size = info.size
-                console.log(finalVideoTargetPath)
+                downloadUrlTargetName[i] = path.join(targetPath, 'Video', info._filename) // define the final name & path
+
+                size = info.size // needed to handle the progress later on('data'
 
                 console.log('filename: ' + info._filename)
                 logAppend('Filename: ' + info._filename)
@@ -1018,50 +1036,50 @@ function downloadVideo () {
                 console.log('size: ' + info.size)
                 logAppend('Size: ' + utils.formatBytes(info.size))
 
-                console.log('Download started')
-                logAppend('Starting download ...')
+                // start the actual download & write to file
+                var writeStream = fs.createWriteStream(downloadUrlTargetName[i])
+                video.pipe(writeStream)
             })
 
-            // updating
+            // updating progress
+            //
             video.on('data', (chunk) => {
                 // console.log('Getting another chunk: _' + chunk.length + '_.')
                 pos += chunk.length
                 if (size) {
-                    progress = (pos / size * 100).toFixed(2)
+                    progress = (pos / size * 100).toFixed(2) // calculate progress
                     console.log('Download-progress is: _' + progress + '_.')
                     logAppend('Download progress: ' + progress + '%')
                 }
             })
 
-            // Will be called if download was already completed and there is nothing more to download.
+            // If download was already completed and there is nothing more to download.
+            //
+            /*
             video.on('complete', function complete (info) {
-                'use strict'
                 console.warn('filename: ' + info._filename + ' already downloaded.')
+                logAppend('Filename: ' + info._filename + ' already downloaded.')
             })
+            */
 
+            // Download finished
+            //
             video.on('end', function () {
-                console.log('finished downloading!')
-                logAppend('Finished downloading: ' + url)
+                console.log('Finished downloading 1 url')
+                logAppend('Finished downloading url')
 
-                // renaming?
-                fs.rename(curTempVideoTargetPath, finalVideoTargetPath, function (err) {
-                    if (err) {
-                        throw err
-                    }
+                finishedDownloads = finishedDownloads + 1
 
-                    fs.stat(finalVideoTargetPath, function (err, stats) {
-                        if (err) {
-                            throw err
-                        }
-                        console.log('stats: ' + JSON.stringify(stats))
-                    })
-                })
-
-                uiLoadingAnimationHide()
+                // if all downloads finished
+                if (finishedDownloads === arrayLength) {
+                    showNotifcation('media-dupes', 'Finished downloading ' + finishedDownloads + ' url(s). Queue is now empty.')
+                    logAppend('Finished downloading ' + finishedDownloads + ' url(s). Queue is now empty.')
+                    toDoListReset() // empty the todo list
+                    uiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
+                    uiLoadingAnimationHide() // stop download animation / spinner
+                    uiOtherButtonsEnable() // enable some of the buttons again
+                }
             })
-
-            // start the download
-            video.pipe(fs.createWriteStream(curTempVideoTargetPath))
         }
     }
 }
@@ -1155,6 +1173,7 @@ function searchUpdate (silent = true) {
                     theme: 'bootstrap-v4',
                     layout: 'bottom',
                     type: 'info',
+                    closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
                     text: 'A media-dupes update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?',
                     buttons: [
                         Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
@@ -1190,7 +1209,7 @@ function searchUpdate (silent = true) {
 
         .fail(function () {
             doLogToConsole('info', 'searchUpdate ::: Checking ' + urlGitHubRepoTags + ' for available releases failed.')
-            showNoty('error', 'Checking <b>' + urlGitHubRepoTags + '</b> for available media-dupes releases failed. Please troubleshoot your network connection.')
+            showNoty('error', 'Checking <b>' + urlGitHubRepoTags + '</b> for available media-dupes releases failed. Please troubleshoot your network connection.', 0)
         })
 
         .always(function () {
@@ -1274,14 +1293,14 @@ function getDownloadDirectory () {
             } else {
                 // folder exists but is not writeable
                 doLogToConsole('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ exists but is not writeable. Gonna fallback to default')
-                showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default')
+                showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default', 0)
                 writeLocalUserSetting('CustomDownloadDir', '')
                 settingCustomDownloadDir = ''
             }
         } else {
             // the configured dir does not exists anymore
             doLogToConsole('error', 'getDownloadDirectory :::The custom download dir _' + targetPath + '_ does not exists. Gonna fallback to default')
-            showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> does not exists anymore. Gonna reset the custom setting now back to default')
+            showNoty('error', 'Your configured custom download directory <b>' + targetPath + '</b> does not exists anymore. Gonna reset the custom setting now back to default', 0)
             writeLocalUserSetting('CustomDownloadDir', '')
             settingCustomDownloadDir = ''
         }
@@ -1425,7 +1444,8 @@ function settingsToggleErrorReporting () {
                 theme: 'bootstrap-v4',
                 layout: 'bottom',
                 type: 'info',
-                text: 'Do you really want to disable error-reporting? It is not used to track users and is helpful for the developers of media-dupes to find bugs',
+                closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
+                text: '<b>Do you really want to disable error-reporting?</b><br><br>* We don\'t track users<br>* We don\'t store any IP addresses<br>* We only collect error reports<br><br>This helps us finding and fixing bugs in media-dupes',
                 buttons: [
                     Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
                         n.close()
@@ -1503,6 +1523,7 @@ function searchYoutubeDLUpdate (silent = true) {
                         theme: 'bootstrap-v4',
                         layout: 'bottom',
                         type: 'info',
+                        closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
                         text: 'An update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to update your youtube-dl binary?',
                         buttons: [
                             Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
@@ -1538,7 +1559,7 @@ function searchYoutubeDLUpdate (silent = true) {
 
         .fail(function () {
             doLogToConsole('info', 'searchYoutubeDLUpdate ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
-            showNoty('error', 'Checking <b>' + urlYTDLGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.')
+            showNoty('error', 'Checking <b>' + urlYTDLGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.', 0)
         })
 
         .always(function () {
@@ -1558,12 +1579,15 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
     const path = require('path')
 
-    var youtubeDlBinaryDetailsPath = path.join('node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+    // new
+    const remote = require('electron').remote
+    const app = remote.app
 
+    var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (err, contents) {
         if (err) {
             doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
-            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + err) // see sentry issue: MEDIA-DUPES-5A
+            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + err, 0) // see sentry issue: MEDIA-DUPES-5A
             throw err
         } else {
             const data = JSON.parse(contents)
