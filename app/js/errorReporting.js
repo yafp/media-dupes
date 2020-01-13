@@ -28,3 +28,20 @@ function disableSentry () {
 // export both functions
 // exports.enableSentry = enableSentry
 // exports.disableSentry = disableSentry
+
+// ----------------------------------------------------------------------------
+// Error Handling using unhandled
+// ----------------------------------------------------------------------------
+const unhandled = require('electron-unhandled')
+const { openNewGitHubIssue, debugInfo } = require('electron-util')
+
+unhandled({
+    showDialog: true,
+    reportButton: error => {
+        openNewGitHubIssue({
+            user: 'yafp',
+            repo: 'media-dupes',
+            body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
+        })
+    }
+})
