@@ -71,12 +71,12 @@ function doUpdateYoutubeDLBinary () {
     doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
 
     // start downloading latest youtube-dl binary to custom path
-    downloader(userDataPath, function error (err, done) {
+    downloader(userDataPath, function error (error, done) {
         'use strict'
-        if (err) {
-            doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
-            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + err, 0)
-            throw err
+        if (error) {
+            doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + error)
+            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
+            throw error
         }
         doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
         console.log(done)
@@ -540,6 +540,7 @@ function writeLocalUserSetting (key, value) {
     // write the user setting
     storage.set(key, { setting: value }, function (error) {
         if (error) {
+            doLogToConsole('error', 'writeLocalUserSetting ::: Unable to write setting with key: _' + key + '_ - and new value: _' + value + '_. Error: ' + error)
             throw error
         }
         doLogToConsole('info', 'writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
@@ -570,6 +571,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
     // read the json file
     storage.get(key, function (error, data) {
         if (error) {
+            doLogToConsole('error', 'readLocalUserSetting ::: Unable to read user setting. Error: ' + error)
             throw error
         }
         var value = data.setting
@@ -601,7 +603,10 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 
                         // delete the config
                         storage.remove('CustomDownloadDir', function (error) {
-                            if (error) throw error
+                            if (error) {
+                                doLogToConsole('error', 'readLocalUserSetting ::: Unable to delete config. Error: ' + error)
+                                throw error
+                            }
                         })
                     }
                 } else {
@@ -611,7 +616,11 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 
                     // delete the config
                     storage.remove('CustomDownloadDir', function (error) {
-                        if (error) throw error
+                        if (error) {
+                            doLogToConsole('error', 'readLocalUserSetting ::: Unable to delete config. Error: ' + error)
+                            throw error
+                        }
+
                     })
                 }
 
@@ -822,22 +831,24 @@ function downloadContent (mode) {
 
         var youtubeDlParameter = ''
 
+        var ffmpeg = require('ffmpeg-static-electron')
+        doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+
         // Define the youtube-dl parameters depending on the mode (audio vs video)
         switch (mode) {
         case 'audio':
-            var ffmpeg = require('ffmpeg-static-electron')
-            doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+            //var ffmpeg = require('ffmpeg-static-electron')
+            //doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
             doLogToConsole('info', 'downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
 
             // generic parameter / flags
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'bestaudio',
-                // '--newline', // Output progress bar as new lines
                 '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
                 '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
                 '--audio-quality', '0', // Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
-                '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
+                //'--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                 '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'), // output path
                 '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
             ]
@@ -852,10 +863,10 @@ function downloadContent (mode) {
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'best',
-                // '--newline', // Output progress bar as new lines
                 '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
-                '--add-metadata'
+                '--add-metadata',
                 // '--ignore-errors'
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
             ]
             break
 
@@ -890,17 +901,17 @@ function downloadContent (mode) {
 
             // Download
             //
-            const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
-                if (err) {
-                    // FIXME
+            const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
+                if (error) {
+                    // FIXME - see: https://github.com/przemyslawpluta/node-youtube-dl/issues/284
                     // how to handle that situation
-                    // seems like it happens that we got an error - but the download still worked.
+                    // seems like it can happen that we got an error - but the download still worked.
 
                     // showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + err, 0)
                     // showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
-                    doLogToConsole('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
+                    doLogToConsole('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                     arrayUrlsThrowingErrors.push(url) // remember troublesome url
-                    throw err
+                    throw error
                 }
 
                 // check if output is defined
@@ -942,14 +953,13 @@ function downloadContent (mode) {
 * @description Does the actual video download (without using youtube-dl.exec)
 */
 function downloadVideo () {
-
     // http://www.youtube.com/watch?v=90AiXO1pAiA
     // https://www.youtube.com/watch?v=sJgDYdA8dio
     // https://vimeo.com/315670384
     // https://vimeo.com/274478457
 
     // FIXME:
-    // This method now seems to work good for youtube urls 
+    // This method now seems to work good for youtube urls
     // BUT not for non-youtube urls
 
     // What is the target dir
@@ -1096,11 +1106,11 @@ function showSupportedExtractors () {
     uiLoadingAnimationShow() // show loading animation
 
     const youtubedl = require('youtube-dl')
-    youtubedl.getExtractors(true, function (err, list) {
-        if (err) {
+    youtubedl.getExtractors(true, function (error, list) {
+        if (error) {
             showNoty('error', 'Unable to get youtube-dl extractor list.', 0)
-            doLogToConsole('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + err + '_.')
-            throw err
+            doLogToConsole('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + error + '_.')
+            throw error
         }
 
         doLogToConsole('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors')
@@ -1546,7 +1556,7 @@ function searchYoutubeDLUpdate (silent = true) {
                 doLogToConsole('info', 'searchYoutubeDLUpdate ::: No newer version of the youtube-dl binary found.')
 
                 if (silent === false) {
-                    showNoty('success', 'No binary updates for youtube-dl available')
+                    showNoty('success', 'No youtube-dl binary updates available')
                 }
             }
         })
@@ -1584,11 +1594,11 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
     const app = remote.app
 
     var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
-    fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (err, contents) {
-        if (err) {
-            doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
-            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + err, 0) // see sentry issue: MEDIA-DUPES-5A
-            throw err
+    fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
+        if (error) {
+            doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')
+            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + error, 0) // see sentry issue: MEDIA-DUPES-5A
+            throw error
         } else {
             const data = JSON.parse(contents)
             ytdlBinaryVersion = data.version // extract and store the version number
@@ -1597,6 +1607,18 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
         }
     })
 }
+
+/**
+* @name settingOpenExternal
+* @summary Gets an url from the settings ui and forwards this to the openURL function
+* @description Gets an url from the settings ui and forwards this to the openURL function
+* @param url - url string
+*/
+function settingOpenExternal(url) {
+    utils.openURL(url)
+}
+
+
 
 // Call from main.js ::: startSearchUpdates - verbose
 //

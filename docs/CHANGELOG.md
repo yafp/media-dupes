@@ -26,7 +26,7 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.4.0 (202001yy)
+### media-dupes 0.4.0 (20200114)
 #### ```Added```
 * Error reporting using sentry is now optional via application settings. See [#31](https://github.com/yafp/media-dupes/issues/31)
 * Added background images to textareas (todo-list and log). See [#35](https://github.com/yafp/media-dupes/issues/35)
@@ -38,44 +38,47 @@ The following categories are used:
 #### ```Changed```
 * Improving error handling
   * By adding ```unhandled``` with dialogs & report issue to github function. See [#46](https://github.com/yafp/media-dupes/issues/46)
-  * Sentry: Enabled debug mode. See [#36](https://github.com/yafp/media-dupes/issues/36)
+  * Sentry: Enabled ```sentry``` debug mode. See [#36](https://github.com/yafp/media-dupes/issues/36)
 * UI
   * General: Disabling most UI buttons while execution of some functions (searching for updates, loading extractors) to prevent race-conditions. See [#33](https://github.com/yafp/media-dupes/issues/33)
   * General: Reduced minimal window height about 60px. See [#38](https://github.com/yafp/media-dupes/issues/38)
   * Settings: reduced ui-element size on settings page from default to small. See [#38](https://github.com/yafp/media-dupes/issues/38)
-  * Settings: show youtube-dl binary version. See [#39](https://github.com/yafp/media-dupes/issues/39)
+  * Settings: show ```youtube-dl``` binary version. See [#39](https://github.com/yafp/media-dupes/issues/39)
 * Improved handling if user tries to add un-useable urls (focus to input field & selecting the content if possible).
 * Moved some helper functions to ```app/js/modules/mdUtils.js```
 * Dependencies
-  * Updated electron from 7.1.6 to 7.1.8
-  * Updated electron-log from 4.0.0 to 4.0.3
-  * Updated eslint from 6.7.2 to 6.8.0
-  * Updated mocha from 6.2.2 to 7.0.0
-  * Updated sentry from 1.1.0 to 1.2.0
-  * Switching back from pj-custom-electron-titlebar to custom-electron-titlebar (3.2.1)
-* Added timeout = 0 to several noty error dialogs (ensure the error must be confirmed)
+  * Updated ```electron```from 7.1.6 to 7.1.9
+  * Updated ```electron-log``` from 4.0.0 to 4.0.3
+  * Updated ```electron-packager``` from 14.1.1 to 14.2.0
+  * Updated ```eslint``` from 6.7.2 to 6.8.0
+  * Updated ```mocha``` from 6.2.2 to 7.0.0
+  * Updated ```sentry``` from 1.1.0 to 1.2.0
+  * Updated ```youtube-dl``` from 2.3.0 to 3.0.0
+  * Switching back from ```pj-custom-electron-titlebar``` to ```custom-electron-titlebar``` (3.2.1)
+* Added missing timeout = 0 to several noty error dialogs (ensure the error must be confirmed)
 
 #### ```Removed```
-* Removed any sentry usage which was not error-focused (no user tracking). See [#31](https://github.com/yafp/media-dupes/issues/31)
+* Removed any ```sentry``` usage which was not error-focused (no user tracking). See [#31](https://github.com/yafp/media-dupes/issues/31)
 
 #### ```Fixed```
 * Fixed error with non-defined array. See [#30](https://github.com/yafp/media-dupes/issues/30)
 * Fixed error URIError: URI malformed. See [#25](https://github.com/yafp/media-dupes/issues/25)
-* Fixed error where detecting youtube-dl binary was not working on packaged-builds. See [#44](https://github.com/yafp/media-dupes/issues/44)
+* Fixed error where detecting ```youtube-dl``` binary was not working on packaged-builds. See [#44](https://github.com/yafp/media-dupes/issues/44)
+* Fixed a bug affecting all windows build containing the wrong yotube-dl binary. See [#47](https://github.com/yafp/media-dupes/issues/47)
 
 ***
 
 ### media-dupes 0.3.0 (20191219)
 #### ```Added```
 * Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues/25)
-* Settings: Added buttons to visit youtube-dl and ffmpeg project pages. See [#29](https://github.com/yafp/media-dupes/issues/29)
+* Settings: Added buttons to visit ```youtube-dl``` and ffmpeg project pages. See [#29](https://github.com/yafp/media-dupes/issues/29)
 
 #### ```Changed```
 * Reduced build size by only adding ffmpeg for the actual platform. See [#22](https://github.com/yafp/media-dupes/issues/22)
 * Improved url detection from clipboard (trim leading and trailing blanks). See [#28](https://github.com/yafp/media-dupes/issues/28)
 * Downloading: Added decode function for user urls to avoid the risk of malformed urls. See [#25](https://github.com/yafp/media-dupes/issues/25)
 * Added fade-in effect to load process of the .html files (index.html and settings.html).
-* Extractors: Show extraxtors list now shows an error notification if fetching them fails. See [#27](https://github.com/yafp/media-dupes/issues/27)
+* Extractors: Show extractors list now shows an error notification if fetching them fails. See [#27](https://github.com/yafp/media-dupes/issues/27)
 * Improved adding urls (trim leading and trailing blanks). See [#28](https://github.com/yafp/media-dupes/issues/28)
 * Using intro.js now via npm. See [#21](https://github.com/yafp/media-dupes/issues/21)
 * UI: Added a left/right/bottom border for the UI (css)
