@@ -66,6 +66,8 @@ function doUpdateYoutubeDLBinary () {
     const path = require('path')
     const userDataPath = path.join(app.getPath('userData'), 'youtube-dl')
 
+    showNoty('info', 'Trying to update the youtube-dl binary. This might take some time - wait for feedback ...')
+
     doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
     var youtubeDlBinaryPath = youtubedl.getYtdlBinary()
     doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
@@ -243,10 +245,7 @@ function checkForDeps () {
     if (youtubeDl === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find youtube-dl')
-        $('#buttonStartVideoExec').hide() // hide video button
-        $('#buttonStartVideo').hide() // hide video button
-        $('#buttonStartAudioExec').hide() // hide audio button
-        showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. All download function are now disabled, sorry', 0)
+        showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. Please report this.', 0)
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
     }
@@ -257,10 +256,16 @@ function checkForDeps () {
     if (ffmpeg === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find ffmpeg')
-        $('#buttonStartAudioExec').hide() // hide audio button
-        showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Extracting audio is now disabled, sorry', 0)
+        showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Please report this', 0)
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+    }
+
+    // if errors occured - disable / hide the action buttons
+    if (countErrors !== 0) {
+        $('#buttonStartVideoExec').hide() // hide video button
+        $('#buttonStartVideo').hide() // hide video button
+        $('#buttonStartAudioExec').hide() // hide audio button
     }
 
     doLogToConsole('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
@@ -620,7 +625,6 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
                             doLogToConsole('error', 'readLocalUserSetting ::: Unable to delete config. Error: ' + error)
                             throw error
                         }
-
                     })
                 }
 
@@ -837,8 +841,8 @@ function downloadContent (mode) {
         // Define the youtube-dl parameters depending on the mode (audio vs video)
         switch (mode) {
         case 'audio':
-            //var ffmpeg = require('ffmpeg-static-electron')
-            //doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+            // var ffmpeg = require('ffmpeg-static-electron')
+            // doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
             doLogToConsole('info', 'downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
 
             // generic parameter / flags
@@ -848,7 +852,7 @@ function downloadContent (mode) {
                 '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
                 '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
                 '--audio-quality', '0', // Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
-                //'--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
+                // '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                 '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'), // output path
                 '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
             ]
@@ -1477,9 +1481,21 @@ function settingsToggleErrorReporting () {
                 ]
             })
 
-        // show the noty dialog
-        n.show()
+        n.show() // show the noty dialog
     }
+}
+
+/**
+* @name canWriteFileOrFolder
+* @summary Checks if a file or folder is writeable
+* @description Checks if a file or folder is writeable
+* @param path - Path which should be checked
+*/
+function canWriteFileOrFolder (path, callback) {
+    const fs = require('fs')
+    fs.access(path, fs.W_OK, function (err) {
+        callback(null, !err)
+    })
 }
 
 /**
@@ -1524,34 +1540,61 @@ function searchYoutubeDLUpdate (silent = true) {
 
             // Update available
             if (localAppVersion < remoteAppVersionLatest) {
-                doLogToConsole('info', 'searchYoutubeDLUpdate ::: Found update, notify user')
+                doLogToConsole('info', 'searchYoutubeDLUpdate ::: Found update for youtube-dl binary')
 
-                // using a confirm dialog
-                const Noty = require('noty')
-                var n = new Noty(
-                    {
-                        theme: 'bootstrap-v4',
-                        layout: 'bottom',
-                        type: 'info',
-                        closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
-                        text: 'An update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to update your youtube-dl binary?',
-                        buttons: [
-                            Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
-                                n.close()
-                                doUpdateYoutubeDLBinary()
-                            },
+                // check if we can update or not - see #50
+                //
+                const path = require('path')
+                const remote = require('electron').remote
+                const app = remote.app
+
+                var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+
+                canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
+                    if (error) {
+                        doLogToConsole('error', 'searchYoutubeDLUpdate ::: Error while trying to check if the youtube-dl details file is writeable or not. Error: ' + error)
+                        throw error
+                    }
+
+                    if (isWritable === true) {
+                        doLogToConsole('info', 'searchYoutubeDLUpdate ::: :  Found a youtube-dl binary update and the details path is writable. Gonna ask the user now if he wants to update')
+                        // update is available and can be executed
+                        // ask the user if he wants to update using a confirm dialog
+                        const Noty = require('noty')
+                        var n = new Noty(
                             {
-                                id: 'button1', 'data-status': 'ok'
-                            }),
+                                theme: 'bootstrap-v4',
+                                layout: 'bottom',
+                                type: 'info',
+                                closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
+                                text: 'A youtube-dl binary update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to update your youtube-dl binary?',
+                                buttons: [
+                                    Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
+                                        n.close()
+                                        doUpdateYoutubeDLBinary()
+                                    },
+                                    {
+                                        id: 'button1', 'data-status': 'ok'
+                                    }),
 
-                            Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
-                                n.close()
+                                    Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
+                                        n.close()
+                                    })
+                                ]
                             })
-                        ]
-                    })
 
-                // show the noty dialog
-                n.show()
+                        n.show() // show the noty dialog
+                    } else {
+                        // update available - but cant be executed due to permission issues
+                        doLogToConsole('warn', 'searchYoutubeDLUpdate ::: Found update, but unable to execute update due to permissions')
+
+                        if (silent === false) {
+                            showNoty('warning', 'A youtube-dl binary update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available but can\'t be installed due to permission issues.', 0)
+                        }
+                    }
+                })
+
+                // baustelle
             } else {
                 doLogToConsole('info', 'searchYoutubeDLUpdate ::: No newer version of the youtube-dl binary found.')
 
@@ -1614,11 +1657,9 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
 * @description Gets an url from the settings ui and forwards this to the openURL function
 * @param url - url string
 */
-function settingOpenExternal(url) {
+function settingOpenExternal (url) {
     utils.openURL(url)
 }
-
-
 
 // Call from main.js ::: startSearchUpdates - verbose
 //
