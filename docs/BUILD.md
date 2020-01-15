@@ -3,8 +3,18 @@
 # media-dupes
 ## Build
 
+### Warning
+Be aware that you have you package and build on the platform you want to build for. 
+Bulding windows on linux works in theory, but this is causing trouble with the youtube-dl binary. 
+See #47 for more details
 
-### Generate jsdoc files
+### PRE
+
+#### Cleaning up node_modules
+* Navigate to repository
+* Execute: ```npm run reinstall```
+
+#### Generating jsdoc files
 * Navigate to repository
 * Execute: ```npm run generate-docs```
 
