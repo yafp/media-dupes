@@ -99,12 +99,12 @@ function doUpdateYoutubeDLBinary () {
     doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
 
     // start downloading latest youtube-dl binary to custom path
-    downloader(userDataPath, function error (err, done) {
+    downloader(userDataPath, function error (error, done) {
         'use strict'
-        if (err) {
-            doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + err)
-            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + err, 0)
-            throw err
+        if (error) {
+            doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + error)
+            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
+            throw error
         }
         doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
         console.log(done)
@@ -271,9 +271,7 @@ function checkForDeps () {
     if (youtubeDl === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find youtube-dl')
-        $('#buttonStartVideo').hide() // hide video button
-        $('#buttonStartAudio').hide() // hide audio button
-        showNoty('error', 'Unable to find dependency &lt;b>youtube-dl&lt;/b>. All download function are now disabled, sorry', 0)
+        showNoty('error', 'Unable to find dependency &lt;b>youtube-dl&lt;/b>. Please report this.', 0)
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
     }
@@ -284,10 +282,16 @@ function checkForDeps () {
     if (ffmpeg === '') {
         countErrors = countErrors + 1
         doLogToConsole('error', 'checkForDeps ::: Unable to find ffmpeg')
-        $('#buttonStartAudio').hide() // hide audio button
-        showNoty('error', 'Unable to find dependency &lt;b>ffmpeg&lt;/b>. Extracting audio is now disabled, sorry', 0)
+        showNoty('error', 'Unable to find dependency &lt;b>ffmpeg&lt;/b>. Please report this', 0)
     } else {
         doLogToConsole('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+    }
+
+    // if errors occured - disable / hide the action buttons
+    if (countErrors !== 0) {
+        $('#buttonStartVideoExec').hide() // hide video button
+        $('#buttonStartVideo').hide() // hide video button
+        $('#buttonStartAudioExec').hide() // hide audio button
     }
 
     doLogToConsole('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
@@ -381,8 +385,9 @@ function uiAllElementsToDefault () {
 */
 function uiStartButtonsEnable () {
     // enable start buttons
+    $('#buttonStartVideoExec').prop('disabled', false)
     $('#buttonStartVideo').prop('disabled', false)
-    $('#buttonStartAudio').prop('disabled', false)
+    $('#buttonStartAudioExec').prop('disabled', false)
 
     doLogToConsole('info', 'uiStartButtonsEnable ::: Did enable both start buttons')
 }
@@ -394,8 +399,9 @@ function uiStartButtonsEnable () {
 */
 function uiStartButtonsDisable () {
     // disable start buttons
+    $('#buttonStartVideoExec').prop('disabled', true)
     $('#buttonStartVideo').prop('disabled', true)
-    $('#buttonStartAudio').prop('disabled', true)
+    $('#buttonStartAudioExec').prop('disabled', true)
 
     doLogToConsole('info', 'uiStartButtonsDisable ::: Did disable both start buttons')
 }
@@ -565,6 +571,7 @@ function writeLocalUserSetting (key, value) {
     // write the user setting
     storage.set(key, { setting: value }, function (error) {
         if (error) {
+            doLogToConsole('error', 'writeLocalUserSetting ::: Unable to write setting with key: _' + key + '_ - and new value: _' + value + '_. Error: ' + error)
             throw error
         }
         doLogToConsole('info', 'writeLocalUserSetting ::: key: _' + key + '_ - new value: _' + value + '_')
@@ -595,6 +602,7 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
     // read the json file
     storage.get(key, function (error, data) {
         if (error) {
+            doLogToConsole('error', 'readLocalUserSetting ::: Unable to read user setting. Error: ' + error)
             throw error
         }
         var value = data.setting
@@ -626,7 +634,10 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 
                         // delete the config
                         storage.remove('CustomDownloadDir', function (error) {
-                            if (error) throw error
+                            if (error) {
+                                doLogToConsole('error', 'readLocalUserSetting ::: Unable to delete config. Error: ' + error)
+                                throw error
+                            }
                         })
                     }
                 } else {
@@ -636,7 +647,10 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
 
                     // delete the config
                     storage.remove('CustomDownloadDir', function (error) {
-                        if (error) throw error
+                        if (error) {
+                            doLogToConsole('error', 'readLocalUserSetting ::: Unable to delete config. Error: ' + error)
+                            throw error
+                        }
                     })
                 }
 
@@ -847,22 +861,24 @@ function downloadContent (mode) {
 
         var youtubeDlParameter = ''
 
+        var ffmpeg = require('ffmpeg-static-electron')
+        doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+
         // Define the youtube-dl parameters depending on the mode (audio vs video)
         switch (mode) {
         case 'audio':
-            var ffmpeg = require('ffmpeg-static-electron')
-            doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+            // var ffmpeg = require('ffmpeg-static-electron')
+            // doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
             doLogToConsole('info', 'downloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
 
             // generic parameter / flags
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'bestaudio',
-                // '--newline', // Output progress bar as new lines
                 '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
                 '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
                 '--audio-quality', '0', // Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
-                '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
+                // '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                 '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'), // output path
                 '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
             ]
@@ -877,10 +893,10 @@ function downloadContent (mode) {
             youtubeDlParameter = [
                 // '--verbose',
                 '--format', 'best',
-                // '--newline', // Output progress bar as new lines
                 '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
-                '--add-metadata'
+                '--add-metadata',
                 // '--ignore-errors'
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
             ]
             break
 
@@ -915,17 +931,17 @@ function downloadContent (mode) {
 
             // Download
             //
-            const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (err, output) {
-                if (err) {
-                    // FIXME
+            const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
+                if (error) {
+                    // FIXME - see: https://github.com/przemyslawpluta/node-youtube-dl/issues/284
                     // how to handle that situation
-                    // seems like it happens that we got an error - but the download still worked.
+                    // seems like it can happen that we got an error - but the download still worked.
 
                     // showNoty('error', 'Downloading &lt;b>' + url + '&lt;/b> failed with error: ' + err, 0)
                     // showDialog('error', 'Alert', 'Download failed', 'Failed to download the url:\n' + url + '\n\nError:\n' + err)
-                    doLogToConsole('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_.')
+                    doLogToConsole('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                     arrayUrlsThrowingErrors.push(url) // remember troublesome url
-                    throw err
+                    throw error
                 }
 
                 // check if output is defined
@@ -967,11 +983,14 @@ function downloadContent (mode) {
 * @description Does the actual video download (without using youtube-dl.exec)
 */
 function downloadVideo () {
-
     // http://www.youtube.com/watch?v=90AiXO1pAiA
     // https://www.youtube.com/watch?v=sJgDYdA8dio
     // https://vimeo.com/315670384
     // https://vimeo.com/274478457
+
+    // FIXME:
+    // This method now seems to work good for youtube urls
+    // BUT not for non-youtube urls
 
     // What is the target dir
     var detectedDownloadDir = getDownloadDirectory()
@@ -1093,8 +1112,8 @@ function downloadVideo () {
 
                 // if all downloads finished
                 if (finishedDownloads === arrayLength) {
-                    showNotifcation('media-dupes', 'Finished downloading ' + finishedDownloads + ' url(s).')
-                    logAppend('Finished downloading ' + finishedDownloads + ' url(s).')
+                    showNotifcation('media-dupes', 'Finished downloading ' + finishedDownloads + ' url(s). Queue is now empty.')
+                    logAppend('Finished downloading ' + finishedDownloads + ' url(s). Queue is now empty.')
                     toDoListReset() // empty the todo list
                     uiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
                     uiLoadingAnimationHide() // stop download animation / spinner
@@ -1117,11 +1136,11 @@ function showSupportedExtractors () {
     uiLoadingAnimationShow() // show loading animation
 
     const youtubedl = require('youtube-dl')
-    youtubedl.getExtractors(true, function (err, list) {
-        if (err) {
+    youtubedl.getExtractors(true, function (error, list) {
+        if (error) {
             showNoty('error', 'Unable to get youtube-dl extractor list.', 0)
-            doLogToConsole('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + err + '_.')
-            throw err
+            doLogToConsole('error', 'showSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + error + '_.')
+            throw error
         }
 
         doLogToConsole('info', 'showSupportedExtractors ::: Found ' + list.length + ' extractors')
@@ -1488,9 +1507,21 @@ function settingsToggleErrorReporting () {
                 ]
             })
 
-        // show the noty dialog
-        n.show()
+        n.show() // show the noty dialog
     }
+}
+
+/**
+* @name canWriteFileOrFolder
+* @summary Checks if a file or folder is writeable
+* @description Checks if a file or folder is writeable
+* @param path - Path which should be checked
+*/
+function canWriteFileOrFolder (path, callback) {
+    const fs = require('fs')
+    fs.access(path, fs.W_OK, function (err) {
+        callback(null, !err)
+    })
 }
 
 /**
@@ -1535,39 +1566,65 @@ function searchYoutubeDLUpdate (silent = true) {
 
             // Update available
             if (localAppVersion &lt; remoteAppVersionLatest) {
-                doLogToConsole('info', 'searchYoutubeDLUpdate ::: Found update, notify user')
+                doLogToConsole('info', 'searchYoutubeDLUpdate ::: Found update for youtube-dl binary')
 
-                // using a confirm dialog
-                const Noty = require('noty')
-                var n = new Noty(
-                    {
-                        theme: 'bootstrap-v4',
-                        layout: 'bottom',
-                        type: 'info',
-                        closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
-                        text: 'An update from &lt;b>' + localAppVersion + '&lt;/b> to version &lt;b>' + remoteAppVersionLatest + '&lt;/b> is available. Do you want to update your youtube-dl binary?',
-                        buttons: [
-                            Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
-                                n.close()
-                                doUpdateYoutubeDLBinary()
-                            },
+                // check if we can update or not - see #50
+                //
+                const path = require('path')
+                const remote = require('electron').remote
+                const app = remote.app
+
+                var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+
+                canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
+                    if (error) {
+                        doLogToConsole('error', 'searchYoutubeDLUpdate ::: Error while trying to check if the youtube-dl details file is writeable or not. Error: ' + error)
+                        throw error
+                    }
+
+                    if (isWritable === true) {
+                        // update is available and can be executed
+                        // ask the user if he wants to update using a confirm dialog
+                        const Noty = require('noty')
+                        var n = new Noty(
                             {
-                                id: 'button1', 'data-status': 'ok'
-                            }),
+                                theme: 'bootstrap-v4',
+                                layout: 'bottom',
+                                type: 'info',
+                                closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
+                                text: 'A youtube-dl binary update from &lt;b>' + localAppVersion + '&lt;/b> to version &lt;b>' + remoteAppVersionLatest + '&lt;/b> is available. Do you want to update your youtube-dl binary?',
+                                buttons: [
+                                    Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
+                                        n.close()
+                                        doUpdateYoutubeDLBinary()
+                                    },
+                                    {
+                                        id: 'button1', 'data-status': 'ok'
+                                    }),
 
-                            Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
-                                n.close()
+                                    Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
+                                        n.close()
+                                    })
+                                ]
                             })
-                        ]
-                    })
 
-                // show the noty dialog
-                n.show()
+                        n.show() // show the noty dialog
+                    } else {
+                        // update available - but cant be executed due to permission issues
+                        doLogToConsole('warn', 'searchYoutubeDLUpdate ::: Found update, but unable to execute update due to permissions')
+
+                        if (silent === false) {
+                            showNoty('warning', 'A youtube-dl binary update from &lt;b>' + localAppVersion + '&lt;/b> to version &lt;b>' + remoteAppVersionLatest + '&lt;/b> is available but can\'t be installed due to permission issues.', 0)
+                        }
+                    }
+                })
+
+                // baustelle
             } else {
                 doLogToConsole('info', 'searchYoutubeDLUpdate ::: No newer version of the youtube-dl binary found.')
 
                 if (silent === false) {
-                    showNoty('success', 'No binary updates for youtube-dl available')
+                    showNoty('success', 'No youtube-dl binary updates available')
                 }
             }
         })
@@ -1605,11 +1662,11 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
     const app = remote.app
 
     var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
-    fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (err, contents) {
-        if (err) {
-            doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + err + '.')
-            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + err, 0) // see sentry issue: MEDIA-DUPES-5A
-            throw err
+    fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
+        if (error) {
+            doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')
+            showNoty('error', 'Unable to detect local youtube-dl binary version number. Error: ' + error, 0) // see sentry issue: MEDIA-DUPES-5A
+            throw error
         } else {
             const data = JSON.parse(contents)
             ytdlBinaryVersion = data.version // extract and store the version number
@@ -1617,6 +1674,16 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
             _callback()
         }
     })
+}
+
+/**
+* @name settingOpenExternal
+* @summary Gets an url from the settings ui and forwards this to the openURL function
+* @description Gets an url from the settings ui and forwards this to the openURL function
+* @param url - url string
+*/
+function settingOpenExternal (url) {
+    utils.openURL(url)
 }
 
 // Call from main.js ::: startSearchUpdates - verbose
@@ -1646,13 +1713,13 @@ require('electron').ipcRenderer.on('openSettings', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogToConsole">doLogToConsole</a></li><li><a href="global.html#doUpdateYoutubeDLBinary">doUpdateYoutubeDLBinary</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#downloadVideo">downloadVideo</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#formatBytes">formatBytes</a></li><li><a href="global.html#fullyDecodeURI">fullyDecodeURI</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#searchYoutubeDLUpdate">searchYoutubeDLUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#titlebarInit">titlebarInit</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiAllElementsDisable">uiAllElementsDisable</a></li><li><a href="global.html#uiAllElementsToDefault">uiAllElementsToDefault</a></li><li><a href="global.html#uiLoadingAnimationHide">uiLoadingAnimationHide</a></li><li><a href="global.html#uiLoadingAnimationShow">uiLoadingAnimationShow</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiOtherButtonsDisable">uiOtherButtonsDisable</a></li><li><a href="global.html#uiOtherButtonsEnable">uiOtherButtonsEnable</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#uiResetAskUser">uiResetAskUser</a></li><li><a href="global.html#uiStartButtonsDisable">uiStartButtonsDisable</a></li><li><a href="global.html#uiStartButtonsEnable">uiStartButtonsEnable</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#canWriteFileOrFolder">canWriteFileOrFolder</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogToConsole">doLogToConsole</a></li><li><a href="global.html#doUpdateYoutubeDLBinary">doUpdateYoutubeDLBinary</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#downloadVideo">downloadVideo</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#formatBytes">formatBytes</a></li><li><a href="global.html#fullyDecodeURI">fullyDecodeURI</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#searchYoutubeDLUpdate">searchYoutubeDLUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingOpenExternal">settingOpenExternal</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#titlebarInit">titlebarInit</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiAllElementsDisable">uiAllElementsDisable</a></li><li><a href="global.html#uiAllElementsToDefault">uiAllElementsToDefault</a></li><li><a href="global.html#uiLoadingAnimationHide">uiLoadingAnimationHide</a></li><li><a href="global.html#uiLoadingAnimationShow">uiLoadingAnimationShow</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiOtherButtonsDisable">uiOtherButtonsDisable</a></li><li><a href="global.html#uiOtherButtonsEnable">uiOtherButtonsEnable</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#uiResetAskUser">uiResetAskUser</a></li><li><a href="global.html#uiStartButtonsDisable">uiStartButtonsDisable</a></li><li><a href="global.html#uiStartButtonsEnable">uiStartButtonsEnable</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon Jan 13 2020 11:34:13 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jan 15 2020 08:01:36 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
