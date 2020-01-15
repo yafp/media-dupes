@@ -26,6 +26,19 @@ The following categories are used:
 
 ***
 
+### media-dupes 0.4.1 (20200115)
+
+#### ```Changed```
+* Added ```rimraf``` to project for package.json scripts to improve clean scripts. See [#48](https://github.com/yafp/media-dupes/issues/48)
+* Simplified requirements check on startup. See [#49](https://github.com/yafp/media-dupes/issues/49)
+* Dependencies
+  * Updated ```electron-builder```  from 21.2.0 to 22.2.0
+
+#### ```Fixed```
+* Fixed a bug in youtube-dl binary update routine. See [#50](https://github.com/yafp/media-dupes/issues/50)
+
+***
+
 ### media-dupes 0.4.0 (20200114)
 #### ```Added```
 * Error reporting using sentry is now optional via application settings. See [#31](https://github.com/yafp/media-dupes/issues/31)
@@ -47,7 +60,7 @@ The following categories are used:
 * Improved handling if user tries to add un-useable urls (focus to input field & selecting the content if possible).
 * Moved some helper functions to ```app/js/modules/mdUtils.js```
 * Dependencies
-  * Updated ```electron```from 7.1.6 to 7.1.9
+  * Updated ```electron``` from 7.1.6 to 7.1.9
   * Updated ```electron-log``` from 4.0.0 to 4.0.3
   * Updated ```electron-packager``` from 14.1.1 to 14.2.0
   * Updated ```eslint``` from 6.7.2 to 6.8.0
@@ -83,8 +96,8 @@ The following categories are used:
 * Using intro.js now via npm. See [#21](https://github.com/yafp/media-dupes/issues/21)
 * UI: Added a left/right/bottom border for the UI (css)
 * Dependencies
-  * Updated electron from 7.1.4 to 7.1.6
-  * Updated youtube-dl from 2.2.0 to 2.3.0
+  * Updated ```electron``` from 7.1.4 to 7.1.6
+  * Updated ```youtube-dl``` from 2.2.0 to 2.3.0
 
 #### ```Fixed```
 * Fixed issue where the search for software updates was launched twice on application start. See [#26](https://github.com/yafp/media-dupes/issues/26)
@@ -113,10 +126,10 @@ The following categories are used:
   * Audio: media-dupes tries to create download specific directories inside Audio to improve handling of albums. If that fails the download lands in a subfolder called NA-NA
 * Dependencies check on application launch is now searching for youtube-dl as well.
 * Dependencies
-  * Updated electron from 7.1.3 to 7.1.4
-  * Updated youtube-dl from 2.1.0 to 2.2.0
-  * Updated fontawesome from 5.11.2 to 5.12.0
-  * Updated sentry from 1.1.0-beta to 1.1.0
+  * Updated ```electron``` from 7.1.3 to 7.1.4
+  * Updated ```youtube-dl``` from 2.1.0 to 2.2.0
+  * Updated ```fontawesome``` from 5.11.2 to 5.12.0
+  * Updated ```sentry``` from 1.1.0-beta to 1.1.0
 * Normalized code style using standardx
 * Improved youtube-dl flag usage
   * added: `--add-metadata` for video. See [#10](https://github.com/yafp/media-dupes/issues/10)
