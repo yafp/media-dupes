@@ -1,23 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Source: app/js/renderer.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>app/js/renderer.js - media-dupes jsdoc documentation</title>
+    
+    <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
+    
+        <meta name="keywords" content="media-dupes" />
+        <meta name="keyword" content="media-dupes" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: app/js/renderer.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/yafp/media-dupes" target="_blank" class="menu-item" id="website_link" >github.com/yafp/media-dupes</a></h2><h3>Modules</h3><ul><li><a href="module-mdGithubUrls.html">mdGithubUrls</a></li><li><a href="module-mdUtils.html">mdUtils</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:keyCode-Thekeypressevent">keyCode - The key press event</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#canWriteFileOrFolder">canWriteFileOrFolder</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogToConsole">doLogToConsole</a></li><li><a href="global.html#doUpdateYoutubeDLBinary">doUpdateYoutubeDLBinary</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#downloadVideo">downloadVideo</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#searchYoutubeDLUpdate">searchYoutubeDLUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingOpenExternal">settingOpenExternal</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#titlebarInit">titlebarInit</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiAllElementsDisable">uiAllElementsDisable</a></li><li><a href="global.html#uiAllElementsToDefault">uiAllElementsToDefault</a></li><li><a href="global.html#uiLoadingAnimationHide">uiLoadingAnimationHide</a></li><li><a href="global.html#uiLoadingAnimationShow">uiLoadingAnimationShow</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiOtherButtonsDisable">uiOtherButtonsDisable</a></li><li><a href="global.html#uiOtherButtonsEnable">uiOtherButtonsEnable</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#uiResetAskUser">uiResetAskUser</a></li><li><a href="global.html#uiStartButtonsDisable">uiStartButtonsDisable</a></li><li><a href="global.html#uiStartButtonsEnable">uiStartButtonsEnable</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">app/js/renderer.js</h1>
+    
 
     
 
@@ -26,7 +50,13 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Contains all renderer code
+ * @author yafp
+ */
+
+'use strict'
+
 
 // ----------------------------------------------------------------------------
 // IMPORT
@@ -93,6 +123,8 @@ function doUpdateYoutubeDLBinary () {
     const app = remote.app
     const path = require('path')
     const userDataPath = path.join(app.getPath('userData'), 'youtube-dl')
+
+    showNoty('info', 'Trying to update the youtube-dl binary. This might take some time - wait for feedback ...')
 
     doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
     var youtubeDlBinaryPath = youtubedl.getYtdlBinary()
@@ -749,6 +781,7 @@ function checkUrlInputField () {
 * @name onEnter
 * @summary Executed on keypress inside url-input-field
 * @description Checks if the key-press was the ENTER-key - if so simulates a press of the button ADD URL
+* @event keyCode - The key press event
 */
 function onEnter (event) {
     var code = 0
@@ -1164,9 +1197,9 @@ function showSupportedExtractors () {
 
 /**
 * @name searchUpdate
-* @summary Checks if there is a new release available
+* @summary Checks if there is a new media-dupes release available
 * @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
-* @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
+* @param {booean} [silent=true] - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
     uiLoadingAnimationShow()
@@ -1176,8 +1209,7 @@ function searchUpdate (silent = true) {
     var localAppVersion = '0.0.0'
     var versions
 
-    // get API url
-    const { urlGitHubRepoTags } = require('./js/modules/mdGithubUrls.js')
+    const { urlGitHubRepoTags } = require('./js/modules/mdGithubUrls.js') // get API url
 
     doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
 
@@ -1526,7 +1558,7 @@ function canWriteFileOrFolder (path, callback) {
 
 /**
 * @name searchYoutubeDLUpdate
-* @summary Checks if there is a new release available
+* @summary Checks if there is a new release  for the youtube-dl binary available
 * @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
@@ -1583,6 +1615,7 @@ function searchYoutubeDLUpdate (silent = true) {
                     }
 
                     if (isWritable === true) {
+                        doLogToConsole('info', 'searchYoutubeDLUpdate ::: :  Found a youtube-dl binary update and the details path is writable. Gonna ask the user now if he wants to update')
                         // update is available and can be executed
                         // ask the user if he wants to update using a confirm dialog
                         const Noty = require('noty')
@@ -1632,7 +1665,7 @@ function searchYoutubeDLUpdate (silent = true) {
         doLogToConsole('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
     })
         .done(function () {
-        // doLogToConsole('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        // doLogToConsole('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
         })
 
         .fail(function () {
@@ -1710,19 +1743,25 @@ require('electron').ipcRenderer.on('openSettings', function () {
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#canWriteFileOrFolder">canWriteFileOrFolder</a></li><li><a href="global.html#checkForDeps">checkForDeps</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogToConsole">doLogToConsole</a></li><li><a href="global.html#doUpdateYoutubeDLBinary">doUpdateYoutubeDLBinary</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#downloadVideo">downloadVideo</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#formatBytes">formatBytes</a></li><li><a href="global.html#fullyDecodeURI">fullyDecodeURI</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#isEncoded">isEncoded</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#onEnter">onEnter</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openURL">openURL</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#searchYoutubeDLUpdate">searchYoutubeDLUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingOpenExternal">settingOpenExternal</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#titlebarInit">titlebarInit</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiAllElementsDisable">uiAllElementsDisable</a></li><li><a href="global.html#uiAllElementsToDefault">uiAllElementsToDefault</a></li><li><a href="global.html#uiLoadingAnimationHide">uiLoadingAnimationHide</a></li><li><a href="global.html#uiLoadingAnimationShow">uiLoadingAnimationShow</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiOtherButtonsDisable">uiOtherButtonsDisable</a></li><li><a href="global.html#uiOtherButtonsEnable">uiOtherButtonsEnable</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#uiResetAskUser">uiResetAskUser</a></li><li><a href="global.html#uiStartButtonsDisable">uiStartButtonsDisable</a></li><li><a href="global.html#uiStartButtonsEnable">uiStartButtonsEnable</a></li><li><a href="global.html#validURL">validURL</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Jan 15 2020 08:01:36 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Jan 15 2020 13:56:46 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
 </body>
 </html>
