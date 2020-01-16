@@ -17,12 +17,46 @@
     },
     "templates": {
         "cleverLinks": false,
-        "monospaceLinks": false
+        "monospaceLinks": true
     },
     "opts": {
-        "template": "templates/default",
+        "template": "node_modules/docdash",
         "encoding": "utf8",
         "destination": "./docs/jsdocs",
-        "recurse": true
+        "recurse": true,
+        "verbose": true
+    },
+    "docdash": {
+        "static": [true],
+        "sort": [true],
+        "sectionOrder": [
+             "Classes",
+             "Modules",
+             "Externals",
+             "Events",
+             "Namespaces",
+             "Mixins",
+             "Tutorials",
+             "Interfaces"
+        ],
+        "meta": {
+            "title": "media-dupes jsdoc documentation",
+            "description": "a simple jsdoc based documentation for media-dupes",
+            "keyword": "media-dupes"
+        },
+        "search": [true], 
+        "collapse": [false],
+        "wrap": [true], 
+        "typedefs": [true],
+        "navLevel": [10],
+        "private": [true],
+        "menu": {
+            "github.com/yafp/media-dupes": {
+                "href":"https://github.com/yafp/media-dupes",
+                "target":"_blank",
+                "class":"menu-item",
+                "id":"website_link"
+            }
+        }
     }
 }
