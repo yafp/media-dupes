@@ -26,12 +26,12 @@ a minimal media duplicator for common media services like youtube
 
 
 ## about media-dupes
-media-dupes can:
+**media-dupes** can:
 
 * download video from common media services
 * download audio from common media services
 
-media-dupes is:
+**media-dupes** is:
 
 * available for ![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/linux_32x32.png) linux, ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/apple_32x32.png) macOS and ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/windows_32x32.png) windows.
 * free and open source
@@ -48,26 +48,29 @@ You'll find the latest releases [here](https://github.com/yafp/media-dupes/relea
 Please see the [installation instructions](docs/INSTALL.md) for more details.
 
 ## updates
-media-dupes checks on launch if there is an update available.
+**media-dupes** checks on application launch if there is an update available.
 Updates must be installed manually as automatic updating of electron applications requires that the builds are code-signed, which i can't provide so far.
 
 ## license
 Please see the [LICENSE](LICENSE) for more details.
 
 ## privacy
-* media-dupes is using sentry to collect error reports. This helps heavily finding bugs which might occur only in some specific use-cases. Please see the sentry privacy policy for more details.
+* **media-dupes** is using sentry to collect error reports. This helps heavily finding bugs which might occur only in some specific use-cases. Please see the sentry privacy policy for more details.
 * error reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
 * no ip addresses are stored
 
 You are always welcome to check and even improve the code.
 
+## support
+There is a public #media-dupes riot.im room available on matrix.org. Click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join.
+
 ## contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
 A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
 
 ## build
-Building media-dupes yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
+Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
 
 ## disclosure
-media-dupes is not affiliated with any of the supported apps/services.
+**media-dupes** is not affiliated with any of the supported apps/services.
