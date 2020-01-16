@@ -8,7 +8,9 @@
 // ----------------------------------------------------------------------------
 // IMPORT
 // ----------------------------------------------------------------------------
-const utils = require('./js/modules/mdUtils.js')
+const utils = require('./js/modules/utils.js')
+const youtube = require('./js/modules/youtubeDl.js')
+const ffmpeg = require('./js/modules/ffmpeg.js')
 
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
@@ -27,6 +29,10 @@ var settingAudioFormat = 'mp3' // default is set to mp3
 var settingCustomDownloadDir = '' // default
 var settingEnableErrorReporting = true
 var ytdlBinaryVersion = '0.0.0'
+
+var youtubeDlBinaryDetailsVersion
+var youtubeDlBinaryDetailsPath
+var youtubeDLBinaryDetailsExec
 
 /**
 * @name titlebarInit
@@ -57,81 +63,37 @@ function titlebarInit () {
     doLogToConsole('info', 'titlebarInit ::: Initialized custom titlebar')
 }
 
-function showDisclaimerOnce () {
-    // check if setting 'confirmedDisclaimer exists
-    // if so - abort this function
-    const storage = require('electron-json-storage')
-
-    const dataPath = storage.getDataPath()
-    console.error(dataPath)
-
-    storage.get('confirmedDisclaimer', function (error, data) {
-        if (error) {
-            throw error
-        }
-
-        // Baustelle
-
-        // check if object is empty = setting does not exists yet
-        // console.error(data.sizeOf(data))
-
-        if (data === true) {
-            console.error('confirmed')
-        } else {
-            console.error('not yet')
-
-            var dialog = require('dialog')
-
-            var disclaimerTitle = 'media-dupes disclaimer'
-            var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
-
-            // show dialog
-            dialog.warn(disclaimerText, disclaimerTitle, function (exitCode) {
-                if (exitCode == 1) {
-                    doLogToConsole('warn', 'showDisclaimerOnce ::: USer did not confirm the disclaimer. Gonna try that later again.')
-                    showNoty('warning', 'Disclaimer was not confirmed. See you next time ...')
-                } else {
-                    doLogToConsole('info', 'showDisclaimerOnce ::: User confirmed the disclaimer.')
-                    writeLocalUserSetting('confirmedDisclaimer', true)
-                }
-            })
-        }
-
-        // console.error(data);
-    })
+/**
+* @name disclaimerCheck
+* @summary Checks if the disclaimer should be shown or not
+* @description Is using readLocalUserSetting() to read the user setting confirmedDisclaimer.json. If it exists the user previously confirmed it.
+*/
+function disclaimerCheck () {
+    doLogToConsole('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
+    readLocalUserSetting('confirmedDisclaimer')
 }
 
 /**
-* @name doUpdateYoutubeDLBinary
-* @summary Update the youtube-dl binary to latest version
-* @description Updates the youtube-dl-binary in a custom set path to the latest version.
+* @name disclaimerShow
+* @summary Opens the disclaimer as dialog
+* @description Displays a disclaimer regarding app usage. User should confirm it once. Setting is saved in UserSettings
 */
-function doUpdateYoutubeDLBinary () {
-    // get path of youtube-dl binary
-    const youtubedl = require('youtube-dl')
-    const downloader = require('youtube-dl/lib/downloader')
-    const remote = require('electron').remote
-    const app = remote.app
-    const path = require('path')
-    const userDataPath = path.join(app.getPath('userData'), 'youtube-dl')
+function disclaimerShow () {
+    var dialog = require('dialog')
 
-    showNoty('info', 'Trying to update the youtube-dl binary. This might take some time - wait for feedback ...')
+    var disclaimerTitle = 'media-dupes disclaimer'
+    var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\nPlease confirm this by pressing the OK button.'
 
-    doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
-    var youtubeDlBinaryPath = youtubedl.getYtdlBinary()
-    doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
-
-    // start downloading latest youtube-dl binary to custom path
-    downloader(userDataPath, function error (error, done) {
-        'use strict'
-        if (error) {
-            doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + userDataPath + '_. Error: ' + error)
-            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
-            throw error
+    // show dialog
+    dialog.warn(disclaimerText, disclaimerTitle, function (exitCode) {
+        if (exitCode === 1) {
+            // doLogToConsole('warn', 'disclaimerShow ::: User did not confirm the disclaimer. Gonna try that later again.')
+            disclaimerCheck()
+            // showNoty('warning', 'Disclaimer was not confirmed. See you next time ...')
+        } else {
+            doLogToConsole('info', 'disclaimerShow ::: User confirmed the disclaimer.')
+            writeLocalUserSetting('confirmedDisclaimer', true)
         }
-        doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + userDataPath + '_.')
-        console.log(done)
-        showNoty('success', done)
     })
 }
 
@@ -280,44 +242,45 @@ function logAppend (newLine) {
 }
 
 /**
-* @name checkForDeps
+* @name checkApplicationDependencies
 * @summary Checks for missing dependencies
 * @description Checks on startup for missing dependencies (youtube-dl and ffmpeg). Both are bundles and should be find
 */
-function checkForDeps () {
+function checkApplicationDependencies () {
     var countErrors = 0
 
     // youtube-dl
     //
-    const youtubedl = require('youtube-dl')
-    var youtubeDl = youtubedl.getYtdlBinary()
-    if (youtubeDl === '') {
-        countErrors = countErrors + 1
-        doLogToConsole('error', 'checkForDeps ::: Unable to find youtube-dl')
-        showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. Please report this.', 0)
+    var youtubeDlBinaryPath = youtube.youtubeDlBinaryPathGet()
+    if (utils.pathExists(youtubeDlBinaryPath) === true) {
+        doLogToConsole('info', 'checkApplicationDependencies ::: Found youtube-dl in: _' + youtubeDlBinaryPath + '_.')
     } else {
-        doLogToConsole('info', 'checkForDeps ::: Found youtube-dl in: _' + youtubeDl + '_.')
+        countErrors = countErrors + 1
+        doLogToConsole('error', 'checkApplicationDependencies ::: Unable to find youtube-dl in: _' + youtubeDlBinaryPath + '_.')
+        showNoty('error', 'Unable to find dependency <b>youtube-dl</b>. Please report this.', 0)
     }
 
     // ffmpeg
     //
-    var ffmpeg = require('ffmpeg-static-electron')
-    if (ffmpeg === '') {
-        countErrors = countErrors + 1
-        doLogToConsole('error', 'checkForDeps ::: Unable to find ffmpeg')
-        showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Please report this', 0)
+    var ffmpegBinaryPath = ffmpeg.ffmpegGetBinaryPath()
+    if (utils.pathExists(ffmpegBinaryPath) === true) {
+        doLogToConsole('info', 'checkApplicationDependencies ::: Found ffmpeg in: _' + ffmpegBinaryPath + '_.')
     } else {
-        doLogToConsole('info', 'checkForDeps ::: Found ffmpeg in: _' + ffmpeg.path + '_.')
+        countErrors = countErrors + 1
+        doLogToConsole('error', 'checkApplicationDependencies ::: Unable to find ffmpeg in: _' + ffmpegBinaryPath + '_.')
+        showNoty('error', 'Unable to find dependency <b>ffmpeg</b>. Please report this', 0)
     }
 
     // if errors occured - disable / hide the action buttons
+    //
     if (countErrors !== 0) {
         $('#buttonStartVideoExec').hide() // hide video button
         $('#buttonStartVideo').hide() // hide video button
         $('#buttonStartAudioExec').hide() // hide audio button
+        showNoty('error', 'Download buttons are now hidden. Please contact the developers via github.', 0)
     }
 
-    doLogToConsole('info', 'checkForDeps ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
+    doLogToConsole('info', 'checkApplicationDependencies ::: Finished checking dependencies. Found overall _' + countErrors + '_ problems.')
 }
 
 /**
@@ -735,6 +698,19 @@ function readLocalUserSetting (key, optionalUpdateSettingUI = false) {
             }
         }
         // end: enableErrorReporting
+
+        // Setting: confirmedDisclaimer
+        //
+        if (key === 'confirmedDisclaimer') {
+            // not configured
+            if ((value === null) || (value === undefined)) {
+                doLogToConsole('warn', 'readLocalUserSetting ::: No user setting found for: _' + key + '_. Gonna show the disclaimer now')
+                disclaimerShow()
+            } else {
+                doLogToConsole('info', 'readLocalUserSetting ::: Found configured _' + key + '_ with value: _' + value + '_.')
+            }
+        }
+        // end: enableErrorReporting
     })
 }
 
@@ -884,13 +860,17 @@ function downloadContent (mode) {
         const { remote } = require('electron')
         const path = require('path')
 
+        // download directory
         var targetPath = detectedDownloadDir[1]
         doLogToConsole('info', 'downloadContent ::: Download target is set to: _' + targetPath + '_.')
 
+        // youtube-dl
         var youtubeDlParameter = ''
+        doLogToConsole('info', 'downloadContent ::: Using youtube.dl from: _' + youtube.youtubeDlBinaryPathGet() + '_.')
 
-        var ffmpeg = require('ffmpeg-static-electron')
-        doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpeg.path + '_.')
+        // ffmpeg
+        var ffmpegPath = ffmpeg.ffmpegGetBinaryPath()
+        doLogToConsole('info', 'downloadContent ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
 
         // Define the youtube-dl parameters depending on the mode (audio vs video)
         switch (mode) {
@@ -908,7 +888,7 @@ function downloadContent (mode) {
                 '--audio-quality', '0', // Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
                 // '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                 '--output', path.join(targetPath, 'Audio', '%(artist)s-%(album)s', '%(title)s-%(id)s.%(ext)s'), // output path
-                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath // ffmpeg location
             ]
 
             // prepend/add some case-specific parameter / flag
@@ -924,7 +904,7 @@ function downloadContent (mode) {
                 '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
                 '--add-metadata',
                 // '--ignore-errors'
-                '--prefer-ffmpeg', '--ffmpeg-location', ffmpeg.path // ffmpeg location
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath // ffmpeg location
             ]
             break
 
@@ -939,8 +919,6 @@ function downloadContent (mode) {
             showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent(). Please report this', 0)
             return
         }
-
-        doLogToConsole('info', 'downloadContent ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
 
         arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
 
@@ -1204,7 +1182,7 @@ function searchUpdate (silent = true) {
     var localAppVersion = '0.0.0'
     var versions
 
-    const { urlGitHubRepoTags } = require('./js/modules/mdGithubUrls.js') // get API url
+    const { urlGitHubRepoTags } = require('./js/modules/githubUrls.js') // get API url
 
     doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
 
@@ -1558,6 +1536,28 @@ function canWriteFileOrFolder (path, callback) {
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchYoutubeDLUpdate (silent = true) {
+    // check if we could update in general = is details file writeable?
+    // if not - we can cancel right away
+    var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet()
+    canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
+        if (error) {
+            doLogToConsole('error', 'searchYoutubeDLUpdate ::: Error while trying to read the youtube-dl details file. Error: ' + error)
+            throw error
+        }
+
+        if (isWritable === true) {
+            // technically we could execute an update if there is one.
+            // so lets search for updates
+            // check if there is an update
+            doLogToConsole('info', 'searchYoutubeDLUpdate ::: Updating youtube-dl binary is technically possible - so start searching for avaulable updates.')
+            var isYoutubeBinaryUpdateAvailable = youtube.youtubeDlBinaryUpdateSearch()
+        } else {
+            // details file cant be resetted due to permission issues
+            doLogToConsole('warn', 'searchYoutubeDLUpdate ::: Updating youtube-dl binary is not possible on this setup due to permission issues.')
+        }
+    })
+
+    /*
     var remoteAppVersionLatest = '0.0.0'
     var localAppVersion = '0.0.0'
     var versions
@@ -1596,12 +1596,13 @@ function searchYoutubeDLUpdate (silent = true) {
                 doLogToConsole('info', 'searchYoutubeDLUpdate ::: Found update for youtube-dl binary')
 
                 // check if we can update or not - see #50
-                //
-                const path = require('path')
-                const remote = require('electron').remote
-                const app = remote.app
 
-                var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+                // const path = require('path')
+                // const remote = require('electron').remote
+                // const app = remote.app
+                //
+                // var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+                var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl details file
 
                 canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
                     if (error) {
@@ -1624,7 +1625,8 @@ function searchYoutubeDLUpdate (silent = true) {
                                 buttons: [
                                     Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
                                         n.close()
-                                        doUpdateYoutubeDLBinary()
+                                        // doUpdateYoutubeDLBinary()
+                                        youtube.youtubeDlBinaryUpdate()
                                     },
                                     {
                                         id: 'button1', 'data-status': 'ok'
@@ -1673,6 +1675,8 @@ function searchYoutubeDLUpdate (silent = true) {
             uiLoadingAnimationHide()
             uiAllElementsToDefault()
         })
+
+        */
 }
 
 /**
@@ -1683,13 +1687,8 @@ function searchYoutubeDLUpdate (silent = true) {
 */
 function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
-    const path = require('path')
 
-    // new
-    const remote = require('electron').remote
-    const app = remote.app
-
-    var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+    var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
             doLogToConsole('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')
@@ -1730,4 +1729,63 @@ require('electron').ipcRenderer.on('startSearchUpdatesSilent', function () {
 //
 require('electron').ipcRenderer.on('openSettings', function () {
     settingsUiLoad()
+})
+
+// Call from main.js ::: youtubeDL reset binary path
+//
+require('electron').ipcRenderer.on('youtubeDlBinaryUpdate', function () {
+    youtube.youtubeDlBinaryUpdate()
+})
+
+// Call from main.js ::: youtubeDL reset binary path
+//
+require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
+    // const path = require('path')
+    // const remote = require('electron').remote
+    // const app = remote.app
+
+    // var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details') // set path to youtube-dl details
+    var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet()
+
+    canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
+        if (error) {
+            doLogToConsole('error', 'youtubeDlBinaryPathReset ::: Error while trying to check if the youtube-dl details file is writeable or not. Error: ' + error)
+            throw error
+        }
+
+        if (isWritable === true) {
+            doLogToConsole('info', 'youtubeDlBinaryPathReset ::: :  Found the youtube-dl details file and it is writeable. Gonna ask the user now if he wants to reset the path now')
+
+            // ask the user if he wants to update using a confirm dialog
+            const Noty = require('noty')
+            var n = new Noty(
+                {
+                    theme: 'bootstrap-v4',
+                    layout: 'bottom',
+                    type: 'info',
+                    closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
+                    text: 'Do you really want to reset the youtube-dl binary path back to its default value?',
+                    buttons: [
+                        Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
+                            n.close()
+                            youtube.youtubeDlBinaryPathReset(youtubeDlBinaryDetailsPath)
+                        },
+                        {
+                            id: 'button1', 'data-status': 'ok'
+                        }),
+
+                        Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
+                            n.close()
+                        })
+                    ]
+                })
+
+            n.show() // show the noty dialog
+        } else {
+            // details file cant be resetted due to permission issues
+            doLogToConsole('warn', 'searchYoutubeDLUpdate ::: Found update, but unable to execute update due to permissions')
+        }
+    })
+
+    console.error('trying to reset binary path')
 })
