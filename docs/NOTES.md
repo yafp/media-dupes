@@ -18,6 +18,8 @@
   * https://github.com/javierjulio/textarea-autosize
   * https://www.jacklmoore.com/autosize/
 * Check: https://www.npmjs.com/package/debug
+* electron-builder
+  * nsis: check if we should teak the installer a bit: https://www.electron.build/configuration/nsis
 
 ### urls
 * youtube-dl repository: https://github.com/ytdl-org/youtube-dl

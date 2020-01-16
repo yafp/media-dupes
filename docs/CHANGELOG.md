@@ -24,6 +24,20 @@ The following categories are used:
 * ```Security```: in case of vulnerabilities.
 
 
+
+***
+
+### media-dupes 0.5.0 (2020xxyy)
+#### ```Added```
+* Added a disclaimer which must be confirmed once per user. See [#52](https://github.com/yafp/media-dupes/issues/52)
+* Added new modules
+  * ffmpeg
+  * youtubeDl
+
+#### ```Changed```
+* Improved validation of youtube-dl setup. See [#56](https://github.com/yafp/media-dupes/issues/56)
+
+
 ***
 
 ### media-dupes 0.4.2 (20200116)
