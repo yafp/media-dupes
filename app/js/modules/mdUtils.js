@@ -1,3 +1,9 @@
+/**
+ * @file Contains all helper and utility functions
+ * @author yafp
+ * @module mdUtils
+ */
+
 'use strict'
 
 /**
@@ -64,7 +70,7 @@ function isEncoded (uri) {
 /**
 * @name fullyDecodeURI
 * @summary Used to decode URLs
-* @description
+* @description Used to decode URLs
 * param uri - The incoming uri
 * @return uri - a decoded url
 */

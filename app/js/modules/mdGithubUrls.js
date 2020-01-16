@@ -1,3 +1,11 @@
+/**
+ * @file Contains all github urls
+ * @author yafp
+ * @module mdGithubUrls
+ */
+
+'use strict'
+
 // Define github url constants
 //
 const urlGitHubGeneral = 'https://github.com/yafp/media-dupes' // the general repo url
