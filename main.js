@@ -34,7 +34,7 @@ let mainWindow
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
-const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/mdGithubUrls.js') // project-urls
+const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
 
 // minimal window size
 const minimalWindowHeight = 730
@@ -460,6 +460,33 @@ function createMenu () {
                     },
                     enabled: true,
                     accelerator: 'F12'
+                },
+                {
+                    type: 'separator'
+                },
+                // SubMenu youtube-dl maintenance of help
+                {
+                    label: 'Youtube-DL',
+                    submenu: [
+                        // Clear cache in userData
+                        {
+                            id: 'youtubeDlBinaryPathReset',
+                            label: 'Reset youtube-dl binary path',
+                            click (item, mainWindow) {
+                                mainWindow.webContents.send('youtubeDlBinaryPathReset')
+                            },
+                            enabled: true
+                        },
+                        // Force update (ignoring if there is an update available or not)
+                        {
+                            id: 'youtubeDlBinaryUpdateForce',
+                            label: 'Force updating youtube-dl binary',
+                            click (item, mainWindow) {
+                                mainWindow.webContents.send('youtubeDlBinaryUpdate')
+                            },
+                            enabled: true
+                        }
+                    ]
                 }
             ]
         }
