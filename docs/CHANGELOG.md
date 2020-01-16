@@ -26,6 +26,15 @@ The following categories are used:
 
 ***
 
+### media-dupes 0.4.2 (20200116)
+
+#### ```Fixed```
+* Fixed the broken .icns app icon. See [#54](https://github.com/yafp/media-dupes/issues/54)
+* Fixed wrong path information in youtube-dl's detail file. See [#55](https://github.com/yafp/media-dupes/issues/55)
+
+
+***
+
 ### media-dupes 0.4.1 (20200115)
 
 #### ```Changed```

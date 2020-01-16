@@ -1,3 +1,8 @@
+/**
+ * @file Contains all renderer code
+ * @author yafp
+ */
+
 'use strict'
 
 // ----------------------------------------------------------------------------
@@ -50,6 +55,50 @@ function titlebarInit () {
 
     // Be aware: the font-size of .window-title (aka application name) is set by app/css/core.css
     doLogToConsole('info', 'titlebarInit ::: Initialized custom titlebar')
+}
+
+function showDisclaimerOnce () {
+    // check if setting 'confirmedDisclaimer exists
+    // if so - abort this function
+    const storage = require('electron-json-storage')
+
+    const dataPath = storage.getDataPath()
+    console.error(dataPath)
+
+    storage.get('confirmedDisclaimer', function (error, data) {
+        if (error) {
+            throw error
+        }
+
+        // Baustelle
+
+        // check if object is empty = setting does not exists yet
+        // console.error(data.sizeOf(data))
+
+        if (data === true) {
+            console.error('confirmed')
+        } else {
+            console.error('not yet')
+
+            var dialog = require('dialog')
+
+            var disclaimerTitle = 'media-dupes disclaimer'
+            var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
+
+            // show dialog
+            dialog.warn(disclaimerText, disclaimerTitle, function (exitCode) {
+                if (exitCode == 1) {
+                    doLogToConsole('warn', 'showDisclaimerOnce ::: USer did not confirm the disclaimer. Gonna try that later again.')
+                    showNoty('warning', 'Disclaimer was not confirmed. See you next time ...')
+                } else {
+                    doLogToConsole('info', 'showDisclaimerOnce ::: User confirmed the disclaimer.')
+                    writeLocalUserSetting('confirmedDisclaimer', true)
+                }
+            })
+        }
+
+        // console.error(data);
+    })
 }
 
 /**
@@ -723,6 +772,7 @@ function checkUrlInputField () {
 * @name onEnter
 * @summary Executed on keypress inside url-input-field
 * @description Checks if the key-press was the ENTER-key - if so simulates a press of the button ADD URL
+* @event keyCode - The key press event
 */
 function onEnter (event) {
     var code = 0
@@ -805,10 +855,14 @@ function toDoListReset () {
 function downloadContent (mode) {
     doLogToConsole('info', 'downloadContent ::: Start with mode set to: _' + mode + '_.')
 
-    // example urls
+    // some example urls for tests
     //
-    // YOUTUBE:         http://www.youtube.com/watch?v=90AiXO1pAiA
-    // VIMEO:           https://vimeo.com/315670384
+    // VIDEO:
+    // YOUTUBE:         http://www.youtube.com/watch?v=90AiXO1pAiA                      // 11 sec
+    // VIMEO:           https://vimeo.com/315670384                                     // 48 sec
+    //                  https://vimeo.com/274478457                                     // 6 sec
+    //
+    // AUDIO:
     // SOUNDCLOUD:      https://soundcloud.com/jperiod/rise-up-feat-black-thought-2
     // BANDCAMP:        https://nosferal.bandcamp.com/album/nosferal-ep-mini-album
 
@@ -1138,9 +1192,9 @@ function showSupportedExtractors () {
 
 /**
 * @name searchUpdate
-* @summary Checks if there is a new release available
+* @summary Checks if there is a new media-dupes release available
 * @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
-* @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
+* @param {booean} [silent=true] - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
     uiLoadingAnimationShow()
@@ -1150,8 +1204,7 @@ function searchUpdate (silent = true) {
     var localAppVersion = '0.0.0'
     var versions
 
-    // get API url
-    const { urlGitHubRepoTags } = require('./js/modules/mdGithubUrls.js')
+    const { urlGitHubRepoTags } = require('./js/modules/mdGithubUrls.js') // get API url
 
     doLogToConsole('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
 
@@ -1500,7 +1553,7 @@ function canWriteFileOrFolder (path, callback) {
 
 /**
 * @name searchYoutubeDLUpdate
-* @summary Checks if there is a new release available
+* @summary Checks if there is a new release  for the youtube-dl binary available
 * @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
@@ -1607,7 +1660,7 @@ function searchYoutubeDLUpdate (silent = true) {
         doLogToConsole('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
     })
         .done(function () {
-        // doLogToConsole('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        // doLogToConsole('info', 'searchYoutubeDLUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
         })
 
         .fail(function () {

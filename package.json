@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -186,6 +186,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "docdash": "^1.1.1",
     "electron": "^7.1.9",
     "electron-builder": "^22.2.0",
     "electron-packager": "^14.2.0",
@@ -203,6 +204,7 @@
     "about-window": "^1.13.2",
     "bootstrap": "^4.4.1",
     "custom-electron-titlebar": "^3.2.1",
+    "dialog": "^0.3.1",
     "electron-json-storage": "^4.1.8",
     "electron-log": "^4.0.3",
     "electron-unhandled": "^3.0.2",
