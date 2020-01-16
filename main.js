@@ -1,3 +1,8 @@
+/**
+ * @file Contains the main.js code
+ * @author yafp
+ */
+
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, electron, ipcMain, Menu } = require('electron')
 const shell = require('electron').shell
@@ -43,8 +48,8 @@ const minimalWindowWidth = 620
 * @name doLog
 * @summary Writes console output for the main process
 * @description Writes console output for the main process
-* @param type - String which defines the log type
-* @param message - String which defines the log message
+* @param {string} type - The log type
+* @param {string} message - The log message
 */
 function doLog (type, message) {
     const prefix = '[   Main   ] '
@@ -190,6 +195,10 @@ function createWindow () {
 
         // check for media-dupes updates
         mainWindow.webContents.send('startSearchUpdatesSilent')
+
+        // TODO:
+        // - calling checkForDeps
+        // - check for youtube-dl updates ???
     })
 
     // Emitted before the window is closed.
