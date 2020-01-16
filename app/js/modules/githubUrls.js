@@ -1,7 +1,7 @@
 /**
  * @file Contains all github urls
  * @author yafp
- * @module mdGithubUrls
+ * @module githubUrls
  */
 
 'use strict'

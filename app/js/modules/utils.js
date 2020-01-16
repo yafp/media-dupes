@@ -1,7 +1,7 @@
 /**
  * @file Contains all helper and utility functions
  * @author yafp
- * @module mdUtils
+ * @module utils
  */
 
 'use strict'
@@ -81,8 +81,25 @@ function fullyDecodeURI (uri) {
     return uri
 }
 
+/**
+* @name pathExists
+* @summary Checks if a given filepath exists
+* @description Checks if a given filepath exists using fs. Returns a boolean
+* param path - The path which should be checked for existance
+* @return boolean -If path exists or not
+*/
+function pathExists (path) {
+    const fs = require('fs')
+    if (fs.existsSync(path)) {
+        return true // path exists
+    } else {
+        return false // path does not exists
+    }
+}
+
 module.exports.openURL = openURL
 module.exports.validURL = validURL
 module.exports.formatBytes = formatBytes
 module.exports.isEncoded = isEncoded
 module.exports.fullyDecodeURI = fullyDecodeURI
+module.exports.pathExists = pathExists
