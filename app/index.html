@@ -233,12 +233,14 @@
 $( document ).ready(function()
 {
     console.log( 'index.html ready' )
+    //showDisclaimerOnce()
     titlebarInit() // init titleBar
     checkForDeps() // check if requirements are installed
     settingsLoadAllOnAppStart() // load user settings
     $('body').fadeIn(1000) // Fades in page on load
     uiReset(); // init the UI
     searchYoutubeDLUpdate(true) // search for youtube-dl binary updates
+
 });
 </script>
 
