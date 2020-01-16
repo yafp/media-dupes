@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>app/js/modules/youtubeDl.js - media-dupes jsdoc documentation</title>
+    
+    <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
+    
+        <meta name="keywords" content="media-dupes" />
+        <meta name="keyword" content="media-dupes" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/yafp/media-dupes" target="_blank" class="menu-item" id="website_link" >github.com/yafp/media-dupes</a></h2><h3>Modules</h3><ul><li><a href="module-ffmpeg.html">ffmpeg</a></li><li><a href="module-githubUrls.html">githubUrls</a></li><li><a href="module-utils.html">utils</a></li><li><a href="module-youtubeDl.html">youtubeDl</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:keyCode-Thekeypressevent">keyCode - The key press event</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addURL">addURL</a></li><li><a href="global.html#canWriteFileOrFolder">canWriteFileOrFolder</a></li><li><a href="global.html#checkApplicationDependencies">checkApplicationDependencies</a></li><li><a href="global.html#checkUrlInputField">checkUrlInputField</a></li><li><a href="global.html#createMenu">createMenu</a></li><li><a href="global.html#createWindow">createWindow</a></li><li><a href="global.html#disclaimerCheck">disclaimerCheck</a></li><li><a href="global.html#disclaimerShow">disclaimerShow</a></li><li><a href="global.html#doLog">doLog</a></li><li><a href="global.html#doLogToConsole">doLogToConsole</a></li><li><a href="global.html#downloadContent">downloadContent</a></li><li><a href="global.html#downloadVideo">downloadVideo</a></li><li><a href="global.html#forceSingleAppInstance">forceSingleAppInstance</a></li><li><a href="global.html#getDownloadDirectory">getDownloadDirectory</a></li><li><a href="global.html#isDirectoryAvailable">isDirectoryAvailable</a></li><li><a href="global.html#isDirectoryWriteable">isDirectoryWriteable</a></li><li><a href="global.html#logAppend">logAppend</a></li><li><a href="global.html#logReset">logReset</a></li><li><a href="global.html#logScrollToEnd">logScrollToEnd</a></li><li><a href="global.html#openReleasesOverview">openReleasesOverview</a></li><li><a href="global.html#openUserDownloadFolder">openUserDownloadFolder</a></li><li><a href="global.html#readLocalUserSetting">readLocalUserSetting</a></li><li><a href="global.html#searchUpdate">searchUpdate</a></li><li><a href="global.html#searchYoutubeDLUpdate">searchYoutubeDLUpdate</a></li><li><a href="global.html#settingAudioFormatSave">settingAudioFormatSave</a></li><li><a href="global.html#settingOpenExternal">settingOpenExternal</a></li><li><a href="global.html#settingsBackToMain">settingsBackToMain</a></li><li><a href="global.html#settingsFolderOpen">settingsFolderOpen</a></li><li><a href="global.html#settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li><a href="global.html#settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li><a href="global.html#settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li><a href="global.html#settingsResetCustomTargetDir">settingsResetCustomTargetDir</a></li><li><a href="global.html#settingsSelectCustomTargetDir">settingsSelectCustomTargetDir</a></li><li><a href="global.html#settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li><a href="global.html#settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li><a href="global.html#settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li><a href="global.html#settingsUiLoad">settingsUiLoad</a></li><li><a href="global.html#showDialog">showDialog</a></li><li><a href="global.html#showNotifcation">showNotifcation</a></li><li><a href="global.html#showNoty">showNoty</a></li><li><a href="global.html#showSupportedExtractors">showSupportedExtractors</a></li><li><a href="global.html#startIntro">startIntro</a></li><li><a href="global.html#titlebarInit">titlebarInit</a></li><li><a href="global.html#toDoListReset">toDoListReset</a></li><li><a href="global.html#toDoListUpdate">toDoListUpdate</a></li><li><a href="global.html#uiAllElementsDisable">uiAllElementsDisable</a></li><li><a href="global.html#uiAllElementsToDefault">uiAllElementsToDefault</a></li><li><a href="global.html#uiLoadingAnimationHide">uiLoadingAnimationHide</a></li><li><a href="global.html#uiLoadingAnimationShow">uiLoadingAnimationShow</a></li><li><a href="global.html#uiMakeUrgent">uiMakeUrgent</a></li><li><a href="global.html#uiOtherButtonsDisable">uiOtherButtonsDisable</a></li><li><a href="global.html#uiOtherButtonsEnable">uiOtherButtonsEnable</a></li><li><a href="global.html#uiReset">uiReset</a></li><li><a href="global.html#uiResetAskUser">uiResetAskUser</a></li><li><a href="global.html#uiStartButtonsDisable">uiStartButtonsDisable</a></li><li><a href="global.html#uiStartButtonsEnable">uiStartButtonsEnable</a></li><li><a href="global.html#writeLocalUserSetting">writeLocalUserSetting</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">app/js/modules/youtubeDl.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Contains all youtubeDl functions
+ * @author yafp
+ * @module youtubeDl
+ */
+
+'use strict'
+
+const utils = require('utils.js')
+
+/**
+* @name youtubeDlBinaryPathGet
+* @summary Gets the path to the youtube-dl binary file
+* @description Gets the path to the youtube-dl binary file using getYtdlBinary()
+* @return youtubeDlBinaryPath
+*/
+function youtubeDlBinaryPathGet () {
+    const youtubedl = require('youtube-dl')
+    var youtubeDlBinaryPath
+    youtubeDlBinaryPath = youtubedl.getYtdlBinary() // get the path of the binary
+    return (youtubeDlBinaryPath)
+}
+
+/**
+* @name youtubeDlBinaryPathGet
+* @summary Resets the youtube-dl binary path in details
+* @description Resets the youtube-dl binary path in details
+*/
+function youtubeDlBinaryPathReset (path) {
+    const fs = require('fs')
+
+    fs.readFile(path, 'utf8', function (error, contents) {
+        if (error) {
+            throw error
+        } else {
+            const data = JSON.parse(contents)
+            var youtubeDlBinaryPath = data.path
+
+            // now update it
+            if (youtubeDlBinaryPath !== null) {
+                utils.doLogToConsole('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_.')
+                // update it back to default
+                data.path = null
+                fs.writeFileSync(path, JSON.stringify(data))
+            } else {
+                utils.doLogToConsole('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_. This is the default')
+            }
+        }
+    })
+}
+
+/**
+* @name youtubeDlBinaryUpdate
+* @summary Updates the youtube-dl binary
+* @description Updates the youtube-dl binary
+*/
+function youtubeDlBinaryUpdate () {
+    const youtubedl = require('youtube-dl')
+    const downloader = require('youtube-dl/lib/downloader')
+
+    const remote = require('electron').remote
+    const app = remote.app
+    const path = require('path')
+    const targetPath = path.join(app.getPath('userData'), 'youtube-dl') // set targetPath
+
+    showNoty('info', 'Trying to update the youtube-dl binary. This might take some time - wait for feedback ...')
+
+    utils.doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
+    var youtubeDlBinaryPath = youtubeDlBinaryPathGet()
+    utils.doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
+
+    // start downloading latest youtube-dl binary to custom path
+    downloader(targetPath, function error (error, done) {
+        'use strict'
+        if (error) {
+            utils.doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + targetPath + '_. Error: ' + error)
+            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
+            throw error
+        }
+        utils.doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + targetPath + '_.')
+        console.log(done)
+        showNoty('success', done)
+    })
+}
+
+/**
+* @name youtubeDlBinaryUpdateSearch
+* @summary Searches for youtube-dl binary updates
+* @description Searches for youtube-dl binary updates
+*/
+function youtubeDlBinaryUpdateSearch (silent = true) {
+    var remoteAppVersionLatest = '0.0.0'
+    var localAppVersion = '0.0.0'
+    var versions
+
+    // set youtube-dl API url
+    const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags'
+
+    utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
+
+    var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data) {
+        3000 // in milliseconds
+
+        // success
+        versions = data.sort(function (v1, v2) {
+            // return semver.compare(v2.name, v1.name);
+        })
+
+        // get remote version
+        //
+        remoteAppVersionLatest = versions[0].name
+        utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Latest Remote version is: ' + remoteAppVersionLatest)
+        // remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
+
+        // get local version
+        // localAppVersion = youtubeDlBinaryDetailsValueGet('version')
+        youtubeDlBinaryDetailsValueGet(function () {
+            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Fetched all values from details file')
+
+            // console.warn(youtubeDlBinaryDetailsVersion)
+            // console.warn(youtubeDlBinaryDetailsPath)
+            // console.warn(youtubeDLBinaryDetailsExec)
+
+            localAppVersion = youtubeDlBinaryDetailsVersion
+
+            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Local youtube-dl binary version: ' + localAppVersion)
+            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Latest youtube-dl binary version: ' + remoteAppVersionLatest)
+
+            if (localAppVersion &lt; remoteAppVersionLatest) {
+                utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Found update for youtube-dl binary. Gonna start the update routine now ...')
+                youtubeDlBinaryUpdate()
+                if (silent === false) {
+                    showNoty('info', 'youtube.js: update found')
+                }
+            } else {
+                if (silent === false) {
+                    showNoty('info', 'youtube.js: no update found')
+                }
+            }
+        })
+
+        utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
+    })
+        .done(function () {
+        // utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        })
+
+        .fail(function () {
+            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
+            showNoty('error', 'Checking &lt;b>' + urlYTDLGitHubRepoTags + '&lt;/b> for available releases failed. Please troubleshoot your network connection.', 0)
+        })
+
+        .always(function () {
+            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
+            uiLoadingAnimationHide()
+            uiAllElementsToDefault()
+        })
+}
+
+/**
+* @name youtubeDlBinaryDetailsPathGet
+* @summary Gets the path to the youtube-dl binary details file
+* @description Gets the path to the youtube-dl binary details file
+* @return youtubeDlBinaryDetailsPath
+*/
+function youtubeDlBinaryDetailsPathGet () {
+    const path = require('path')
+    const remote = require('electron').remote
+    const app = remote.app
+
+    var youtubeDlBinaryDetailsPath = path.join(app.getAppPath(), 'node_modules', 'youtube-dl', 'bin', 'details')
+    return (youtubeDlBinaryDetailsPath)
+}
+
+/**
+* @name youtubeDlBinaryDetailsValueGet
+* @summary Gets all values from the youtube-dl binary details file
+* @description Gets all values from the youtube-dl binary details file
+*/
+function youtubeDlBinaryDetailsValueGet (_callback) {
+    const fs = require('fs')
+
+    var youtubeDlBinaryDetailsPath = youtubeDlBinaryDetailsPathGet() // get the path to the details file
+
+    fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
+        if (error) {
+            utils.doLogToConsole('error', 'youtubeDlBinaryDetailsValueGet ::: Unable to read youtube-dl binary details values. Error: ' + error + '.')
+            throw error
+        } else {
+            const data = JSON.parse(contents)
+
+            /*
+            console.error(data)
+
+            console.warn(data.version)
+            console.warn(data.path)
+            console.warn(data.exec)
+            */
+
+            youtubeDlBinaryDetailsVersion = data.version
+            youtubeDlBinaryDetailsPath = data.path
+            youtubeDLBinaryDetailsExec = data.exec
+
+            // console.info(data[value])
+            // var currentDetailsValue = data[value]
+
+            // utils.doLogToConsole('warn', 'youtubeDlBinaryDetailsValueGet ::: youtube-dl binary details value is version: _' + currentDetailsValue + '_.')
+            _callback()
+        }
+    })
+}
+
+// Exporting the module functions
+//
+module.exports.youtubeDlBinaryPathGet = youtubeDlBinaryPathGet
+module.exports.youtubeDlBinaryPathReset = youtubeDlBinaryPathReset
+module.exports.youtubeDlBinaryUpdate = youtubeDlBinaryUpdate
+module.exports.youtubeDlBinaryUpdateSearch = youtubeDlBinaryUpdateSearch
+module.exports.youtubeDlBinaryDetailsPathGet = youtubeDlBinaryDetailsPathGet
+module.exports.youtubeDlBinaryDetailsValueGet = youtubeDlBinaryDetailsValueGet
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Jan 16 2020 20:07:03 GMT+0100 (Mitteleuropäische Normalzeit) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
