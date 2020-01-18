@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.4.20200116",
+  "version": "0.4.20200118",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -12,7 +12,9 @@
     "clean-dist": "rimraf dist/*",
     "clean-modules": "rimraf  'node_modules/!(rimraf|.bin)'",
     "reinstall": "npm run clean && npm install",
-    "generate-docs": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
+    "jsdocs-delete": "rimraf docs/jsdocs/*",
+    "jsdocs-create": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
+    "jsdocs-update": "npm run jsdocs-delete && npm run jsdocs-create",
     "standardx": "npx standardx",
     "standardx-fix": "npx standardx --fix",
     "test": "mocha",
@@ -214,7 +216,7 @@
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.0",
-    "youtube-dl": "^3.0.0"
+    "youtube-dl": "^3.0.1"
   },
   "standardx": {
     "ignore": [
