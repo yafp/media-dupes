@@ -6,7 +6,7 @@
 
 'use strict'
 
-const utils = require('utils.js')
+const utils = require('./utils.js')
 
 /**
 * @name ffmpegGetBinaryPath
@@ -16,7 +16,7 @@ const utils = require('utils.js')
 */
 function ffmpegGetBinaryPath () {
     var ffmpeg = require('ffmpeg-static-electron')
-    utils.doLogToConsole('info', 'ffmpegGetBinaryPath ::: ffmpeg binary path is: _' + ffmpeg.path + '_.')
+    utils.writeConsoleMsg('info', 'ffmpegGetBinaryPath ::: ffmpeg binary path is: _' + ffmpeg.path + '_.')
     return (ffmpeg.path)
 }
 
