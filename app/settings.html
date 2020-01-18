@@ -23,24 +23,11 @@
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css" >
 
-    <title>media-dupes</title>
+    <title>media-dupes - settings</title>
 </head>
 
 <body>
     <div class="container-fluid mediaDupes_nonSelectableText">
-         <!-- empty line -->
-        <div class="row-fluid row-empty">
-            &nbsp;
-        </div>
-
-        <!-- Heading: -->
-        <div class="row-fluid">
-                <!-- app name -->
-                <h2><img src="img/128x128.png" height="32">media-dupes</h2>
-
-                <!-- app description -->
-                <h3>a minimal media duplicator for common media services like youtube</h3>
-        </div>
 
         <!-- empty line -->
         <div class="row-fluid row-empty">
@@ -64,7 +51,7 @@
 
          <!-- Custom Download directory -->
         <div class="row-fluid">
-            <h6>Custom download directory</h6>
+            <h6>Download directory</h6>
         </div>
 
         <!-- custom output path -->
@@ -73,7 +60,9 @@
                 <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
                 <div class="input-group-append">
                     <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="settingsSelectCustomTargetDir()"><i class="far fa-folder-open"></i> Choose</button>
+                    <!--
                     <button id="buttonSettingsResetCustomTargetDir" name="buttonSettingsResetCustomTargetDir" class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" onclick="settingsResetCustomTargetDir()"><i class="fas fa-eraser"></i> Reset</button>
+                    -->
                 </div>
             </div>
         </div>
@@ -91,11 +80,6 @@
                     <option value="m4a" title="MPEG 4 Audio">.m4a </option>
                     <option value="wav" title="Waveform Audio File Format">.wav </option>
                 </select>
-                <!--
-                <div class="input-group-append">
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingAudioFormatSave();"><i class="fas fa-music"></i> Set</button>
-                </div>
-                -->
             </div>
         </div>
 
@@ -163,11 +147,6 @@
             &nbsp;
         </div>
 
-        <!-- back buttons-->
-        <div class="row-fluid float-right">
-            <button id="buttonSettingsBackToMain" name="buttonSettingsBackToMain" type="button" class="btn btn-outline-secondary btn-sm float-right float-bottom mediaDupes_btnDefaultWidth" title="Back to main user-interface (UI)" onclick="settingsBackToMain();"><i class="fas fa-chevron-circle-left"></i> Back</button>
-        </div>
-
     </div>
     <!-- end container-fluid -->
 
@@ -182,7 +161,6 @@
 $( document ).ready(function()
 {
     console.log( 'settings.html ready' )
-    titlebarInit() // init titleBar
     settingsLoadAllOnSettingsUiLoad() // load all user settings
     settingsShowYoutubeDLInfo() // dependency: get youtube-dl informations
     settingsShowFfmpegInfo() // dependency: get ffmpeg informations
