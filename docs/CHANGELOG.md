@@ -35,7 +35,15 @@ The following categories are used:
   * youtubeDl
 
 #### ```Changed```
+* Setting UI is now a parent window of the main UI. See [#58](https://github.com/yafp/media-dupes/issues/58)
 * Improved validation of youtube-dl setup. See [#56](https://github.com/yafp/media-dupes/issues/56)
+* Show extractors function not longer resets the log. It appends now the new data.
+* Improved filename pattern for audio downloads. See [#61](https://github.com/yafp/media-dupes/issues/61)
+* Dependencies
+  * Updated ```youtube-dl```  from 3.0.0 to 3.0.1
+
+#### ```Fixed```
+* Fixed several errors in application log showing wrong urls and progress-state informations. See [#60](https://github.com/yafp/media-dupes/issues/60)
 
 
 ***
