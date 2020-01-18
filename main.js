@@ -30,6 +30,7 @@ require('./app/js/errorReporting.js')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let settingsWindow
 
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
@@ -37,7 +38,7 @@ const defaultUserDataPath = app.getPath('userData') // for: storing window posit
 const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
 
 // minimal window size
-const minimalWindowHeight = 730
+const minimalWindowHeight = 760
 const minimalWindowWidth = 620
 
 // ----------------------------------------------------------------------------
@@ -72,6 +73,52 @@ function doLog (type, message) {
         log.silly(prefix + message)
             // code block
     }
+}
+
+function createSettingsWindow () {
+    doLog('info', 'createSettingsWindow ::: Creating the settings window')
+
+    // Create the browser window.
+    settingsWindow = new BrowserWindow({
+        parent: mainWindow,
+        frame: true, // false results in a borderless window. Needed for custom titlebar
+        // titleBarStyle: 'hidden', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
+        backgroundColor: '#ffffff', // since 0.3.0
+        show: true, // hide until: ready-to-show
+        center: true, // Show window in the center of the screen. (since 0.3.0)
+        width: 800,
+        minWidth: 800,
+        height: 600,
+        minHeight: 600,
+        icon: path.join(__dirname, 'app/img/icon/icon.png'),
+        webPreferences: {
+            nodeIntegration: true,
+            webSecurity: true, // introduced in 0.3.0
+            preload: path.join(__dirname, 'preload.js')
+        }
+    })
+
+    // and load the index.html of the app.
+    settingsWindow.loadFile('app/settings.html')
+
+    // window needs no menu
+    settingsWindow.removeMenu()
+
+    // Emitted before the window is closed.
+    //
+    settingsWindow.on('close', function () {
+        doLog('info', 'createSettingsWindow ::: settingsWindow will close (event: close)')
+    })
+
+    // Emitted when the window is closed.
+    //
+    settingsWindow.on('closed', function (event) {
+        doLog('info', 'createSettingsWindow ::: settingsWindow is closed (event: closed)')
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        settingsWindow = null
+    })
 }
 
 /**
@@ -175,11 +222,16 @@ function createWindow () {
 
     // Call from renderer: Option: load settings UI
     ipcMain.on('settingsUiLoad', function () {
-        mainWindow.loadFile('app/settings.html')
+        createSettingsWindow()
     })
 
-    var downloadTarget = app.getPath('downloads')
-    global.sharedObj = { prop1: downloadTarget }
+    var downloadTarget = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
+    var audioFormat = 'mp3' // mp3 is the default
+    global.sharedObj = {
+        downloadFolder: downloadTarget,
+        audioFormat: audioFormat
+
+    }
 
     // and load the index.html of the app.
     mainWindow.loadFile('app/index.html')
@@ -193,12 +245,11 @@ function createWindow () {
         mainWindow.focus()
         doLog('info', 'createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
 
-        // check for media-dupes updates
-        mainWindow.webContents.send('startSearchUpdatesSilent')
-
-        // TODO:
-        // - calling checkForDeps
-        // - check for youtube-dl updates ???
+        // do some checks & routines once at start of the application
+        mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
+        mainWindow.webContents.send('startDisclaimerCheck') // check if disclaimer must be shown
+        mainWindow.webContents.send('startSearchUpdatesSilent') // search silently for media-dupes updates
+        mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // seach silently for youtube-dl binary updates
     })
 
     // Emitted before the window is closed.
@@ -440,7 +491,7 @@ function createMenu () {
                 },
                 // Update
                 {
-                    label: 'Search updates',
+                    label: 'Search media-dupes updates',
                     click (item, mainWindow) {
                         mainWindow.webContents.send('startSearchUpdatesVerbose')
                     },
