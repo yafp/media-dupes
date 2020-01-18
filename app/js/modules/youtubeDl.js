@@ -6,7 +6,7 @@
 
 'use strict'
 
-const utils = require('utils.js')
+const utils = require('./utils.js')
 
 /**
 * @name youtubeDlBinaryPathGet
@@ -18,6 +18,7 @@ function youtubeDlBinaryPathGet () {
     const youtubedl = require('youtube-dl')
     var youtubeDlBinaryPath
     youtubeDlBinaryPath = youtubedl.getYtdlBinary() // get the path of the binary
+    utils.writeConsoleMsg('info', 'youtubeDlBinaryPathGet ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_.')
     return (youtubeDlBinaryPath)
 }
 
@@ -31,19 +32,22 @@ function youtubeDlBinaryPathReset (path) {
 
     fs.readFile(path, 'utf8', function (error, contents) {
         if (error) {
+            utils.writeConsoleMsg('error', 'youtubeDlBinaryPathReset ::: Error while trying to read the youtube-dl path. Error: ' + error)
             throw error
         } else {
             const data = JSON.parse(contents)
             var youtubeDlBinaryPath = data.path
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path was: _' + youtubeDlBinaryPath + '_ before reset.')
 
             // now update it
             if (youtubeDlBinaryPath !== null) {
-                utils.doLogToConsole('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_.')
                 // update it back to default
                 data.path = null
                 fs.writeFileSync(path, JSON.stringify(data))
+                utils.writeConsoleMsg('info', 'youtubeDlBinaryPathReset ::: Did reset the youtube-dl binary path back to default.')
             } else {
-                utils.doLogToConsole('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_. This is the default')
+                // nothing to do
+                utils.writeConsoleMsg('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_. This is the default')
             }
         }
     })
@@ -63,23 +67,23 @@ function youtubeDlBinaryUpdate () {
     const path = require('path')
     const targetPath = path.join(app.getPath('userData'), 'youtube-dl') // set targetPath
 
-    showNoty('info', 'Trying to update the youtube-dl binary. This might take some time - wait for feedback ...')
+    utils.showNoty('info', 'Trying to update the youtube-dl binary. This might take some time - wait for feedback ...')
 
-    utils.doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Searching youtube-dl binary')
     var youtubeDlBinaryPath = youtubeDlBinaryPathGet()
-    utils.doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
+    utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdate ::: Searching youtube-dl binary')
+    utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdate ::: Found youtube-dl binary in: _' + youtubeDlBinaryPath + '_.')
 
     // start downloading latest youtube-dl binary to custom path
     downloader(targetPath, function error (error, done) {
         'use strict'
         if (error) {
-            utils.doLogToConsole('error', 'doUpdateYoutubeDLBinary ::: Error while trying to update the youtube-dl binary at: _' + targetPath + '_. Error: ' + error)
-            showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
+            utils.writeConsoleMsg('error', 'youtubeDlBinaryUpdate ::: Error while trying to update the youtube-dl binary at: _' + targetPath + '_. Error: ' + error)
+            utils.showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
             throw error
         }
-        utils.doLogToConsole('info', 'doUpdateYoutubeDLBinary ::: Updated youtube-dl binary at: _' + targetPath + '_.')
+        utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdate ::: Updated youtube-dl binary at: _' + targetPath + '_.')
         console.log(done)
-        showNoty('success', done)
+        utils.showNoty('success', done)
     })
 }
 
@@ -96,7 +100,7 @@ function youtubeDlBinaryUpdateSearch (silent = true) {
     // set youtube-dl API url
     const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags'
 
-    utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
+    utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available releases')
 
     var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data) {
         3000 // in milliseconds
@@ -109,13 +113,12 @@ function youtubeDlBinaryUpdateSearch (silent = true) {
         // get remote version
         //
         remoteAppVersionLatest = versions[0].name
-        utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Latest Remote version is: ' + remoteAppVersionLatest)
+        utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Latest Remote version is: ' + remoteAppVersionLatest)
         // remoteAppVersionLatest = '66.6.6'; // overwrite variable to simulate available updates
 
         // get local version
-        // localAppVersion = youtubeDlBinaryDetailsValueGet('version')
         youtubeDlBinaryDetailsValueGet(function () {
-            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Fetched all values from details file')
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Fetched all values from details file')
 
             // console.warn(youtubeDlBinaryDetailsVersion)
             // console.warn(youtubeDlBinaryDetailsPath)
@@ -123,37 +126,38 @@ function youtubeDlBinaryUpdateSearch (silent = true) {
 
             localAppVersion = youtubeDlBinaryDetailsVersion
 
-            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Local youtube-dl binary version: ' + localAppVersion)
-            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Latest youtube-dl binary version: ' + remoteAppVersionLatest)
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Local youtube-dl binary version: ' + localAppVersion)
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Latest youtube-dl binary version: ' + remoteAppVersionLatest)
 
             if (localAppVersion < remoteAppVersionLatest) {
-                utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Found update for youtube-dl binary. Gonna start the update routine now ...')
+                utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Found update for youtube-dl binary. Gonna start the update routine now ...')
                 youtubeDlBinaryUpdate()
                 if (silent === false) {
-                    showNoty('info', 'youtube.js: update found')
+                    utils.showNoty('info', '<b>youtube-dl binary update available</b><br>You are currently using ' + localAppVersion + ' and the latest available version of the youtube-dl binary is ' + remoteAppVersionLatest + '.')
                 }
             } else {
                 if (silent === false) {
-                    showNoty('info', 'youtube.js: no update found')
+                    utils.showNoty('info', '<b>No youtube-dl binary update available</b><br>You are already using the latest binary version of youtube-dl')
                 }
             }
         })
 
-        utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
+        utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Successfully checked ' + urlYTDLGitHubRepoTags + ' for available releases')
     })
         .done(function () {
-        // utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        // utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
         })
 
         .fail(function () {
-            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
-            showNoty('error', 'Checking <b>' + urlYTDLGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.', 0)
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Checking ' + urlYTDLGitHubRepoTags + ' for available releases failed.')
+            utils.showNoty('error', 'Checking <b>' + urlYTDLGitHubRepoTags + '</b> for available releases failed. Please troubleshoot your network connection.', 0)
         })
 
         .always(function () {
-            utils.doLogToConsole('info', 'youtubeDlBinaryUpdateSearch ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
             uiLoadingAnimationHide()
-            uiAllElementsToDefault()
+            uiOtherButtonsEnable()
+            applicationStateSet('')
         })
 }
 
@@ -184,7 +188,7 @@ function youtubeDlBinaryDetailsValueGet (_callback) {
 
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
-            utils.doLogToConsole('error', 'youtubeDlBinaryDetailsValueGet ::: Unable to read youtube-dl binary details values. Error: ' + error + '.')
+            utils.writeConsoleMsg('error', 'youtubeDlBinaryDetailsValueGet ::: Unable to read youtube-dl binary details values. Error: ' + error + '.')
             throw error
         } else {
             const data = JSON.parse(contents)
@@ -201,10 +205,14 @@ function youtubeDlBinaryDetailsValueGet (_callback) {
             youtubeDlBinaryDetailsPath = data.path
             youtubeDLBinaryDetailsExec = data.exec
 
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryDetailsValueGet ::: Version: ' + youtubeDlBinaryDetailsVersion + '.')
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryDetailsValueGet ::: Path: ' + youtubeDlBinaryDetailsPath + '.')
+            utils.writeConsoleMsg('info', 'youtubeDlBinaryDetailsValueGet ::: Exec: ' + youtubeDLBinaryDetailsExec + '.')
+
             // console.info(data[value])
             // var currentDetailsValue = data[value]
 
-            // utils.doLogToConsole('warn', 'youtubeDlBinaryDetailsValueGet ::: youtube-dl binary details value is version: _' + currentDetailsValue + '_.')
+            // utils.writeConsoleMsg('warn', 'youtubeDlBinaryDetailsValueGet ::: youtube-dl binary details value is version: _' + currentDetailsValue + '_.')
             _callback()
         }
     })
