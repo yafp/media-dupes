@@ -74,15 +74,15 @@
 
         <!-- show todo-list -->
         <div class="row-fluid">
-            <textarea 
-                class="form-control" 
-                id="textareaTodoList" 
-                name="textareaTodoList" 
-                title="todo-list" 
-                placeholder="todo-list" 
-                readonly 
-                rows="6" 
-                data-step="4" 
+            <textarea
+                class="form-control"
+                id="textareaTodoList"
+                name="textareaTodoList"
+                title="todo-list"
+                placeholder="todo-list"
+                readonly
+                rows="6"
+                data-step="4"
                 data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
             </textarea>
         </div>
@@ -142,14 +142,14 @@
         <div class="flex-column justify-content-center flex-grow-1 overflow-auto bg_yellow">
         -->
             <div class="row-fluid">
-                <textarea 
-                    class="form-control" 
-                    id="textareaLogOutput" 
-                    name="textareaLogOutput" 
-                    title="application log" 
-                    placeholder="application log" 
-                    readonly 
-                    rows="12" 
+                <textarea
+                    class="form-control"
+                    id="textareaLogOutput"
+                    name="textareaLogOutput"
+                    title="application log"
+                    placeholder="application log"
+                    readonly
+                    rows="12"
                     data-step="8" data-intro="The <b>application log</b> shows some details about the download process">
                 </textarea>
             </div>
@@ -164,57 +164,63 @@
         <!-- extra buttons-->
         <div class="row-fluid">
             <!-- Settings -->
-            <button 
-                id="buttonShowSettings" 
-                name="buttonShowSettings" 
-                type="button" 
-                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth" 
-                title="Shows settings" 
+            <button
+                id="buttonShowSettings"
+                name="buttonShowSettings"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Shows settings"
                 onclick="settingsUiLoad();">
                 <i class="fas fa-cog"></i> Settings
             </button>
             <!-- Intro -->
-            <button 
-                id="buttonShowHelp" 
-                name="buttonShowHelp" 
-                type="button" 
-                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth" 
-                title="Shows a small media-dupes intro to explain how media-dupes works" 
+            <button
+                id="buttonShowHelp"
+                name="buttonShowHelp"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Shows a small media-dupes intro to explain how media-dupes works"
                 onclick="startIntro();">
                 <i class="fas fa-info"></i> Intro
             </button>
             <!-- Extractors -->
-            <button 
-                id="buttonShowExtractors" 
-                name="buttonShowExtractors" 
-                type="button" 
-                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"  
-                title="Show list of supported media platforms" 
+            <button
+                id="buttonShowExtractors"
+                name="buttonShowExtractors"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Show list of supported media platforms"
                 onclick="showSupportedExtractors();">
                 <i class="fas fa-list"></i> Extractors
             </button>
             <!-- Download folder -->
-            <button 
-                id="buttonShowDownloadFolder" 
-                name="buttonShowDownloadFolder" 
-                type="button" 
-                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth" 
-                title="Opens the download folder" 
+            <button
+                id="buttonShowDownloadFolder"
+                name="buttonShowDownloadFolder"
+                type="button"
+                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
+                title="Opens the download folder"
                 onclick="openUserDownloadFolder();">
                 <i class="fas fa-file-download"></i> Downloads
             </button>
             <!-- UI Reset -->
-            <button 
-                id="buttonResetUI" 
-                name="buttonReset" 
-                type="button" 
-                class="btn btn-outline-danger btn-sm float-right mediaDupes_btnDefaultWidth" 
-                title="Reset the user-interface (UI)" 
+            <button
+                id="buttonResetUI"
+                name="buttonReset"
+                type="button"
+                class="btn btn-outline-danger btn-sm float-right mediaDupes_btnDefaultWidth"
+                title="Reset the user-interface (UI)"
                 onclick="uiResetAskUser();">
                 <i class="fas fa-redo-alt"></i> Reset
             </button>
         </div>
         <!-- /extra buttons -->
+
+        <!-- empty line -->
+        <div class="row-fluid row-empty">&nbsp;</div>
+
+        <!-- state -->
+        <div id="applicationState" class="row-empty">&nbsp;</div>
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -233,14 +239,10 @@
 $( document ).ready(function()
 {
     console.log( 'index.html ready' )
-    disclaimerCheck()
     titlebarInit() // init titleBar
-    checkApplicationDependencies() // check if requirements are installed
     settingsLoadAllOnAppStart() // load user settings
-    $('body').fadeIn(1000) // Fades in page on load
     uiReset(); // init the UI
-    searchYoutubeDLUpdate(true) // search for youtube-dl binary updates
-
+    $('body').fadeIn(1000) // Fades in page on load
 });
 </script>
 

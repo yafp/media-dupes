@@ -107,6 +107,20 @@ textarea {
     min-width: 160px;
 }
 
+
+/* ########################################################################## */
+/* APPLICATION STATE */
+/* ########################################################################## */
+#applicationState {
+    color: gray;
+    margin: 0 auto;
+    width: 400px;
+    min-width: 400px;
+    text-align: center;
+    font-size: 12px;
+}
+
+
 /* ########################################################################## */
 /* Use the “system font/San Francisco” */
 /* ########################################################################## */
@@ -149,7 +163,20 @@ cssbody {
 /* FLEX-PLAYGROUND */
 /* ########################################################################## */
 .bg_yellow{
-    /*
     background-color: yellow;
-    */
 }
+
+.bg_red{
+    background-color: red;
+}
+
+.bg_blue{
+    background-color: blue;
+}
+
+.bg_green{
+    background-color: green;
+}
+
+
+
