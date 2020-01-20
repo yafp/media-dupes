@@ -8,4 +8,5 @@ exclude_paths:
   - '.github/**/*'
   - 'test/*'
   - 'LICENSE'
+  - 'CODE_OF_CONDUCT.md'
   - 'README.md'
