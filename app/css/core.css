@@ -84,7 +84,7 @@ textarea {
     background-image: url("../img/background/icon_textarea_log_64x64.png");
     min-width: 100%;
     width: 100%;
-    min-height: 270px; 
+    min-height: 270px;
 }
 
 /* ########################################################################## */
@@ -177,6 +177,3 @@ cssbody {
 .bg_green{
     background-color: green;
 }
-
-
-

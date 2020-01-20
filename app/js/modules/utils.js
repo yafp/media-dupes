@@ -39,9 +39,9 @@ function writeConsoleMsg (type, message) {
 * @name showNoty
 * @summary Shows a noty notification
 * @description Creates an in-app notification using the noty framework
-* @param type - Options: alert, success, warning, error, info/information
-* @param message - notification text
-* @param timeout - Timevalue, defines how long the message should be displayed. Use 0 for no-timeout
+* @param {string} type - Options: alert, success, warning, error, info/information
+* @param {string} message - notification text
+* @param {number} timeout - Timevalue, defines how long the message should be displayed. Use 0 for no-timeout
 */
 function showNoty (type, message, timeout = 3000) {
     const Noty = require('noty')
@@ -76,7 +76,7 @@ function showNotification (title = 'media-dupes', message) {
 * @name openURL
 * @summary Opens an url in browser
 * @description Opens a given url in default browser. This is pretty slow, but got no better solution so far.
-* @param url - URL string which contains the target url
+* @param {string} url - URL string which contains the target url
 */
 function openURL (url) {
     const { shell } = require('electron')
@@ -88,8 +88,8 @@ function openURL (url) {
 * @name validURL
 * @summary checks if a given string is a valid url
 * @description checks if a given string is a valid url
-* @param str - Given url
-* @return boolean
+* @param {string} -str - Given url
+* @return {boolean}
 */
 function validURL (str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol

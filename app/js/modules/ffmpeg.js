@@ -12,7 +12,7 @@ const utils = require('./utils.js')
 * @name ffmpegGetBinaryPath
 * @summary Get the binary path of the ffmpeg binary
 * @description Get the binary path of the ffmpeg binary
-* @return ffmpeg.path - The path to the ffmpeg binary
+* @return {string} ffmpeg.path - The path to the ffmpeg binary
 */
 function ffmpegGetBinaryPath () {
     var ffmpeg = require('ffmpeg-static-electron')
