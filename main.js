@@ -75,12 +75,18 @@ function doLog (type, message) {
     }
 }
 
-function createSettingsWindow () {
-    doLog('info', 'createSettingsWindow ::: Creating the settings window')
+/**
+* @name createWindowSettings
+* @summary Manages the BrowserWindow for the Settings UI
+* @description Manages the BrowserWindow for the Settings UI
+*/
+function createWindowSettings () {
+    doLog('info', 'createWindowSettings ::: Creating the settings window')
 
     // Create the browser window.
     settingsWindow = new BrowserWindow({
         parent: mainWindow,
+        modal: true,
         frame: true, // false results in a borderless window. Needed for custom titlebar
         // titleBarStyle: 'hidden', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
         backgroundColor: '#ffffff', // since 0.3.0
@@ -88,6 +94,7 @@ function createSettingsWindow () {
         center: true, // Show window in the center of the screen. (since 0.3.0)
         width: 800,
         minWidth: 800,
+        // resizable: false, // this conflickts with opening dev tools
         height: 600,
         minHeight: 600,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
@@ -104,30 +111,36 @@ function createSettingsWindow () {
     // window needs no menu
     settingsWindow.removeMenu()
 
+    // Call from renderer: Settings UI - toggle dev tools
+    ipcMain.on('settingsToggleDevTools', function () {
+        settingsWindow.webContents.toggleDevTools()
+    })
+
     // Emitted before the window is closed.
-    //
     settingsWindow.on('close', function () {
-        doLog('info', 'createSettingsWindow ::: settingsWindow will close (event: close)')
+        doLog('info', 'createWindowSettings ::: settingsWindow will close (event: close)')
     })
 
     // Emitted when the window is closed.
-    //
     settingsWindow.on('closed', function (event) {
-        doLog('info', 'createSettingsWindow ::: settingsWindow is closed (event: closed)')
+        doLog('info', 'createWindowSettings ::: settingsWindow is closed (event: closed)')
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         settingsWindow = null
+
+        // unblur main UI
+        mainWindow.webContents.send('unblurMainUI')
     })
 }
 
 /**
-* @name createWindow
+* @name createWindowMain
 * @summary Creates the mainWindow
 * @description Creates the mainWindow (restores window position and size of possible)
 */
-function createWindow () {
-    doLog('info', 'createWindow ::: Starting to create the application windows')
+function createWindowMain () {
+    doLog('info', 'createWindowMain ::: Starting to create the application windows')
 
     // Check last window position and size from user data
     var windowWidth
@@ -149,9 +162,9 @@ function createWindow () {
         windowPositionX = data.bounds.x
         windowPositionY = data.bounds.y
 
-        doLog('info', 'createWindow ::: Got last window position and size information from _' + customUserDataPath + '_.')
+        doLog('info', 'createWindowMain ::: Got last window position and size information from _' + customUserDataPath + '_.')
     } catch (e) {
-        doLog('warn', 'createWindow ::: No last window position and size information found in _' + customUserDataPath + '_. Using fallback values')
+        doLog('warn', 'createWindowMain ::: No last window position and size information found in _' + customUserDataPath + '_. Using fallback values')
 
         // set some default values for window size
         windowWidth = minimalWindowWidth
@@ -186,27 +199,25 @@ function createWindow () {
 
     // Call from renderer: Open download folder
     ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
-        doLog('info', 'createWindow ::: Trying to open the download directory _' + userSettingValue + '_.')
+        doLog('info', 'createWindowMain ::: Trying to open the download directory _' + userSettingValue + '_.')
 
         // try to open it
         if (shell.openItem(userSettingValue) === true) {
-            doLog('info', 'createWindow :::  Opened the media-dupes download folder (ipcMain)')
+            doLog('info', 'createWindowMain :::  Opened the media-dupes download folder (ipcMain)')
         } else {
-            doLog('error', 'createWindow ::: Failed to open the user download folder (ipcMain)')
+            doLog('error', 'createWindowMain ::: Failed to open the user download folder (ipcMain)')
         }
     })
 
-    // Call from renderer: Open download folder
+    // Call from renderer: Open settings folder
     ipcMain.on('settingsFolderOpen', (event) => {
-        doLog('info', 'createWindow ::: Opened the users settings folder (ipcMain)')
-
-        // change path for userSettings
-        const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
+        doLog('info', 'createWindowMain ::: Opened the users settings folder (ipcMain)')
+        const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings') // change path for userSettings
 
         if (shell.openItem(userSettingsPath) === true) {
-            doLog('info', 'createWindow ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
+            doLog('info', 'createWindowMain ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
         } else {
-            doLog('error', 'createWindow ::: Failed to open the user download folder (ipcMain)')
+            doLog('error', 'createWindowMain ::: Failed to open the user download folder (ipcMain)')
         }
     })
 
@@ -216,21 +227,25 @@ function createWindow () {
     })
 
     // Call from renderer: Option: load main UI
+    /*
     ipcMain.on('mainUiLoad', function () {
         mainWindow.loadFile('app/index.html')
     })
+    */
 
     // Call from renderer: Option: load settings UI
     ipcMain.on('settingsUiLoad', function () {
-        createSettingsWindow()
+        createWindowSettings()
     })
 
+    // Global object
     var downloadTarget = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
     var audioFormat = 'mp3' // mp3 is the default
+    var applicationState = ''
     global.sharedObj = {
         downloadFolder: downloadTarget,
-        audioFormat: audioFormat
-
+        audioFormat: audioFormat,
+        applicationState: applicationState
     }
 
     // and load the index.html of the app.
@@ -239,11 +254,16 @@ function createWindow () {
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 
-    // show the formerly hidden main window as it is fully ready now
+    // Emitted when the web page becomes unresponsive.
+    mainWindow.on('unresponsive', function () {
+        doLog('warn', 'createWindowMain ::: mainWindow is now unresponsive (event: unresponsive)')
+    })
+
+    // Emitted when the web page has been rendered (while not being shown) and window can be displayed without a visual flash.
     mainWindow.on('ready-to-show', function () {
         mainWindow.show()
         mainWindow.focus()
-        doLog('info', 'createWindow ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
+        doLog('info', 'createWindowMain ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
 
         // do some checks & routines once at start of the application
         mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
@@ -253,9 +273,26 @@ function createWindow () {
     })
 
     // Emitted before the window is closed.
-    //
-    mainWindow.on('close', function () {
-        doLog('info', 'createWindow ::: mainWindow will close (event: close)')
+    mainWindow.on('close', function (event) {
+        doLog('info', 'createWindowMain ::: mainWindow will close (event: close)')
+
+        var curState = global.sharedObj.applicationState // get applicationState
+        doLog('info', 'createWindowMain ::: Current application state is: _' + curState + '_.')
+
+        if (curState === 'Download in progress') {
+            // since electron7 showMessageBox no longer blocks the close. Therefor we are using showMessageBoxSync
+            var choice = require('electron').dialog.showMessageBoxSync(this,
+                {
+                    type: 'question',
+                    buttons: ['Yes', 'No'],
+                    title: 'Downloads in progress',
+                    message: 'media-dupes is currently downloading. Are you sure you want to quit?'
+                })
+            if (choice === 1) {
+                event.preventDefault() // user pressed No
+                return
+            }
+        }
 
         // get window position and size
         var data = {
@@ -266,20 +303,19 @@ function createWindow () {
         var customUserDataPath = path.join(defaultUserDataPath, 'MediaDupesWindowPosSize.json')
 
         // try to write
-        fs.writeFile(customUserDataPath, JSON.stringify(data), function (err) {
-            if (err) {
-                doLog('error', 'createWindow ::: storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + err + '_ (event: close)')
-                return console.log(err)
+        fs.writeFile(customUserDataPath, JSON.stringify(data), function (error) {
+            if (error) {
+                doLog('error', 'createWindowMain ::: storing window-position and -size of mainWindow in  _' + customUserDataPath + '_ failed with error: _' + error + '_ (event: close)')
+                throw error
             }
 
-            doLog('info', 'createWindow ::: mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
+            doLog('info', 'createWindowMain ::: mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
         })
     })
 
     // Emitted when the window is closed.
-    //
     mainWindow.on('closed', function (event) {
-        doLog('info', 'createWindow ::: mainWindow is closed (event: closed)')
+        doLog('info', 'createWindowMain ::: mainWindow is closed (event: closed)')
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
@@ -288,11 +324,11 @@ function createWindow () {
 }
 
 /**
-* @name createMenu
+* @name createMenuMain
 * @summary Creates the application menu
 * @description Creates the application menu
 */
-function createMenu () {
+function createMenuMain () {
     // doLog('createMenu', __dirname)
 
     // Create a custom menu
@@ -306,8 +342,6 @@ function createMenu () {
                 {
                     label: 'Settings',
                     // icon: __dirname + '/app/img/icon/icon.png',
-                    // icon: __dirname + '/app/img/address-book.svg',
-                    // icon: __dirname + '/node_modules/@fortawesome/fontawesome-free/svgs/regular/address-book.svg',
                     click () {
                         mainWindow.webContents.send('openSettings')
                     },
@@ -582,8 +616,8 @@ function forceSingleAppInstance () {
 // app.on('ready', createWindow)
 app.on('ready', function () {
     forceSingleAppInstance() // check for single instance
-    createWindow() // create the application UI
-    createMenu() // create the application menu
+    createWindowMain() // create the application UI
+    createMenuMain() // create the application menu
 })
 
 // Quit when all windows are closed.
@@ -596,5 +630,5 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) createWindow()
+    if (mainWindow === null) createWindowMain()
 })

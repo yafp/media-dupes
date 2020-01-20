@@ -12,7 +12,7 @@ const utils = require('./utils.js')
 * @name youtubeDlBinaryPathGet
 * @summary Gets the path to the youtube-dl binary file
 * @description Gets the path to the youtube-dl binary file using getYtdlBinary()
-* @return youtubeDlBinaryPath
+* @return {string} youtubeDlBinaryPath - The actual path to the youtube-dl binary
 */
 function youtubeDlBinaryPathGet () {
     const youtubedl = require('youtube-dl')
@@ -23,9 +23,10 @@ function youtubeDlBinaryPathGet () {
 }
 
 /**
-* @name youtubeDlBinaryPathGet
+* @name youtubeDlBinaryPathReset
 * @summary Resets the youtube-dl binary path in details
 * @description Resets the youtube-dl binary path in details
+* @param {string} path - The path to the youtube-dl details file
 */
 function youtubeDlBinaryPathReset (path) {
     const fs = require('fs')
@@ -33,6 +34,7 @@ function youtubeDlBinaryPathReset (path) {
     fs.readFile(path, 'utf8', function (error, contents) {
         if (error) {
             utils.writeConsoleMsg('error', 'youtubeDlBinaryPathReset ::: Error while trying to read the youtube-dl path. Error: ' + error)
+            utils.showNoty('error', 'Unable to read the youtube-dl binary details file. Error: ' + error)
             throw error
         } else {
             const data = JSON.parse(contents)
@@ -45,9 +47,11 @@ function youtubeDlBinaryPathReset (path) {
                 data.path = null
                 fs.writeFileSync(path, JSON.stringify(data))
                 utils.writeConsoleMsg('info', 'youtubeDlBinaryPathReset ::: Did reset the youtube-dl binary path back to default.')
+                utils.showNoty('success', 'Did reset the youtube-dl binary path back to default')
             } else {
                 // nothing to do
                 utils.writeConsoleMsg('info', 'youtubeDlBinaryPathReset ::: youtube-dl binary path is: _' + youtubeDlBinaryPath + '_. This is the default')
+                utils.showNoty('info', 'The youtube-dl binary path was already on its default value. Did no changes.')
             }
         }
     })
@@ -91,6 +95,7 @@ function youtubeDlBinaryUpdate () {
 * @name youtubeDlBinaryUpdateSearch
 * @summary Searches for youtube-dl binary updates
 * @description Searches for youtube-dl binary updates
+* @param {boolean} silent - Defaults to true. If true, the progress is silent, if false there is info-feedback even if there is no update available
 */
 function youtubeDlBinaryUpdateSearch (silent = true) {
     var remoteAppVersionLatest = '0.0.0'
@@ -165,7 +170,7 @@ function youtubeDlBinaryUpdateSearch (silent = true) {
 * @name youtubeDlBinaryDetailsPathGet
 * @summary Gets the path to the youtube-dl binary details file
 * @description Gets the path to the youtube-dl binary details file
-* @return youtubeDlBinaryDetailsPath
+* @return {string} youtubeDlBinaryDetailsPath - The actual path to the youtube-dl details file
 */
 function youtubeDlBinaryDetailsPathGet () {
     const path = require('path')
