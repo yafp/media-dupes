@@ -32,14 +32,17 @@
     <link rel="stylesheet" href="../node_modules/intro.js/themes/introjs-modern.css">
     <script type="text/javascript" src="../node_modules/intro.js/minified/intro.min.js" defer></script>
 
+    <!-- animate.css -->
+    <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
+
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css">
 
     <title>media-dupes</title>
 </head>
 
-<body>
-    <div class="container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
+<body class="">
+    <div id="mainContainer" class="container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -53,10 +56,11 @@
             </div>
 
             <!-- app name -->
+            <!-- bounceInLeft -->
             <h2><img src="img/128x128.png" height="32">media-dupes</h2>
 
             <!-- app description -->
-            <h3>a minimal media duplicator for common media services like youtube</h3>
+            <h3 class="animated bounceInLeft">a minimal media duplicator for common media services like youtube</h3>
         </div>
 
          <!-- empty line -->
@@ -103,7 +107,7 @@
                 disabled
                 data-step="6"
                 data-intro="The <b>Video</b> button tries to download each video featured on your <b>todo-list</b>.">
-                <i class="fas fa-video"></i> Video
+                <i class="fas fa-video"></i> Video <i class="fas fa-download"></i>
             </button>
             <!-- video: not using .exec() -->
             <!--
@@ -130,7 +134,7 @@
                 disabled
                 data-step="7"
                 data-intro="The <b>Audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
-                <i class="fas fa-music"></i> Audio
+                <i class="fas fa-music"></i> Audio <i class="fas fa-download"></i>
             </button>
         </div>
 
@@ -180,7 +184,7 @@
                 type="button"
                 class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
                 title="Shows a small media-dupes intro to explain how media-dupes works"
-                onclick="startIntro();">
+                onclick="introShow();">
                 <i class="fas fa-info"></i> Intro
             </button>
             <!-- Extractors -->
@@ -220,7 +224,7 @@
         <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- state -->
-        <div id="applicationState" class="row-empty">&nbsp;</div>
+        <div id="applicationState" class="row-empty animated pulse infinite">&nbsp;</div>
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -241,8 +245,8 @@ $( document ).ready(function()
     console.log( 'index.html ready' )
     titlebarInit() // init titleBar
     settingsLoadAllOnAppStart() // load user settings
-    uiReset(); // init the UI
-    $('body').fadeIn(1000) // Fades in page on load
+    uiReset() // init the UI
+    $('body').fadeIn(500) // Fades in page on load
 });
 </script>
 

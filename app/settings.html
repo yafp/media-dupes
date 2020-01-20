@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="../node_modules/noty/lib/themes/bootstrap-v4.css">
     <script type="text/javascript" src="../node_modules/noty/lib/noty.min.js" defer></script>
 
+    <!-- animate.css -->
+    <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
+
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css" >
 
@@ -36,7 +39,7 @@
 
         <!-- Settings header -->
         <div class="row-fluid">
-            <h4 class="border-bottom">Settings</h4>
+            <h4 class="border-bottom animated bounceInRight">Settings</h4>
         </div>
 
         <!-- empty line -->
@@ -60,9 +63,6 @@
                 <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
                 <div class="input-group-append">
                     <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="settingsSelectCustomTargetDir()"><i class="far fa-folder-open"></i> Choose</button>
-                    <!--
-                    <button id="buttonSettingsResetCustomTargetDir" name="buttonSettingsResetCustomTargetDir" class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" onclick="settingsResetCustomTargetDir()"><i class="fas fa-eraser"></i> Reset</button>
-                    -->
                 </div>
             </div>
         </div>
@@ -75,10 +75,14 @@
         <!-- audio settings -->
         <div class="row-fluid">
            <div class="input-group">
-                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="settingAudioFormatSave();">
+                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="settingsAudioFormatSave();">
+                    <option value="aac" title="Advanced Audio Coding">.aac </option>
+                    <option value="flac" title="Free Loseless Audio Codec">.flac </option>
                     <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
                     <option value="m4a" title="MPEG 4 Audio">.m4a </option>
                     <option value="wav" title="Waveform Audio File Format">.wav </option>
+                    <option value="vorbis" title="Ogg Vorbis">.ogg </option>
+                    <option value="opus" title="Opus">.opus </option>
                 </select>
             </div>
         </div>
@@ -103,7 +107,7 @@
                 <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
                 <div class="input-group-append">
                     <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="searchYoutubeDLUpdate(false)"><i class="fab fa-youtube"></i> Update</button>
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingOpenExternal('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingsOpenExternal('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
                 </div>
             </div>
         </div>
@@ -117,7 +121,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control form-control-sm" laceholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingOpenExternal('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingsOpenExternal('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
                 </div>
             </div>
         </div>
@@ -129,7 +133,7 @@
 
         <!-- Header: Error reportng using sentry -->
         <div class="row-fluid">
-            <h5><i class="fas fa-bug"></i> Error Reporting</h5>
+            <h5><i class="fas fa-bug" onclick="settingsOpenDevTools();"></i> Error Reporting</h5>
         </div>
 
         <!-- Option to enable or disable error reporting -->
@@ -139,7 +143,7 @@
                     <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="settingsToggleErrorReporting();">
                 </div>
             </div>
-            <input type="text" class="form-control form-control-sm" value="Error reporting to improve the project code." disabled>
+            <input type="text" class="form-control form-control-sm" value="Error reporting to improve the media-dupes code." disabled>
         </div>
 
         <!-- empty line -->
@@ -164,7 +168,7 @@ $( document ).ready(function()
     settingsLoadAllOnSettingsUiLoad() // load all user settings
     settingsShowYoutubeDLInfo() // dependency: get youtube-dl informations
     settingsShowFfmpegInfo() // dependency: get ffmpeg informations
-    $('body').fadeIn(1000); // Fades in page on load
+    $('body').fadeIn(500) // Fades in page on load
 });
 </script>
 

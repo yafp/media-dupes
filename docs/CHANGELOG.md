@@ -30,15 +30,35 @@ The following categories are used:
 ### media-dupes 0.5.0 (2020xxyy)
 #### ```Added```
 * Added a disclaimer which must be confirmed once per user. See [#52](https://github.com/yafp/media-dupes/issues/52)
-* Added new modules
-  * ffmpeg
-  * youtubeDl
+* Added support for applicationState. Ask user if he really wants to quit when downloads are in progress. See [#59](https://github.com/yafp/media-dupes/issues/59)
+* Added some youtube-dl maintenance function to the menu. See [#57](https://github.com/yafp/media-dupes/issues/57)
+  * Reset youtube-dl binary path (to revert back to bundled youtube-dl binary)
+  * Force updating youtube-dl binary (to redownload the latest stable binary)
+* Added general support for UI animations/effects using animate.js.
+* Adding support for new audio formats. See [#65](https://github.com/yafp/media-dupes/issues/65)
+  * Added support for .aac
+  * Added support for .flac
+  * Added support for .opus
+  * Added support for .ogg/vorbis
+
 
 #### ```Changed```
-* Setting UI is now a parent window of the main UI. See [#58](https://github.com/yafp/media-dupes/issues/58)
+* Setting UI: 
+  * is now a child window of the main UI. See [#58](https://github.com/yafp/media-dupes/issues/58)
+  * is now a modal window. See [#63](https://github.com/yafp/media-dupes/issues/63)
+  * while open the main UI is blur'ed. See [#64](https://github.com/yafp/media-dupes/issues/64)
 * Improved validation of youtube-dl setup. See [#56](https://github.com/yafp/media-dupes/issues/56)
 * Show extractors function not longer resets the log. It appends now the new data.
-* Improved filename pattern for audio downloads. See [#61](https://github.com/yafp/media-dupes/issues/61)
+* Downloading audio:
+  * Improved filename pattern for audio downloads. See [#61](https://github.com/yafp/media-dupes/issues/61) 
+  * Added ```--add-metadata``` flag.
+  * Added ```--ignore-errors``` flag.
+* Download video: 
+  * Added ```--ignore-errors``` flag.
+
+* Moved functions from renderer to new modules
+  * ffmpeg
+  * youtubeDl
 * Dependencies
   * Updated ```youtube-dl```  from 3.0.0 to 3.0.1
 
