@@ -8,12 +8,13 @@
 //
 const Sentry = require('@sentry/electron')
 Sentry.init({
+    release: 'media-dupes@' + process.env.npm_package_version,
     dsn: 'https://4bd3f512a1e34e24ab9838b00f57d131@sentry.io/1847606',
     debug: true
 })
 //
 // simple way to force a crash:
-// myUndefinedFunction();
+//myUndefinedFunction();
 
 function enableSentry () {
     Sentry.getCurrentHub().getClient().getOptions().enabled = true
