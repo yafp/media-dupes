@@ -63,7 +63,7 @@ Please see the [LICENSE](LICENSE) for more details.
 You are always welcome to check and even improve the code.
 
 ## support
-There is a public #media-dupes riot.im room available on matrix.org. Click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join.
+There is a public **#media-dupes** riot.im room available on **matrix.org**. Click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join.
 
 ## contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.

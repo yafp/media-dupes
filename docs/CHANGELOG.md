@@ -40,6 +40,7 @@ The following categories are used:
   * Added support for .flac
   * Added support for .opus
   * Added support for .ogg/vorbis
+* Added basic support for powerMonitoring (suspend and resume). See [#67](https://github.com/yafp/media-dupes/issues/67)
 
 
 #### ```Changed```
@@ -55,12 +56,13 @@ The following categories are used:
   * Added ```--ignore-errors``` flag.
 * Download video: 
   * Added ```--ignore-errors``` flag.
-
 * Moved functions from renderer to new modules
   * ffmpeg
   * youtubeDl
 * Dependencies
   * Updated ```youtube-dl```  from 3.0.0 to 3.0.1
+* Documentation: Improved jsdoc documentation. Adding namespaces and some other changes
+* Builds: Improved the dmg style. New background and icon positions
 
 #### ```Fixed```
 * Fixed several errors in application log showing wrong urls and progress-state informations. See [#60](https://github.com/yafp/media-dupes/issues/60)
