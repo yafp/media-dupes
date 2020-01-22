@@ -1,7 +1,8 @@
 /**
- * @file Contains the main.js code
- * @author yafp
- */
+* @file Contains the main.js code
+* @author yafp
+* @namespace main
+*/
 
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, electron, ipcMain, Menu } = require('electron')
@@ -10,17 +11,19 @@ const path = require('path')
 const fs = require('fs')
 const openAboutWindow = require('about-window').default // for: about-window
 
+const utils = require('./app/js/modules/utils.js')
+
+
+
 // The following requires are not really needed - but it mutes 'npm-check' regarding NOTUSED
 require('jquery')
 require('@fortawesome/fontawesome-free')
 require('popper.js')
 // CAUTION: jquery, fontawesome and popper might cost startup time
-// require('bootstrap'); // this breaks everything, whyever
 
 // ----------------------------------------------------------------------------
 // ERROR-HANDLING
 // ----------------------------------------------------------------------------
-//
 require('./app/js/errorReporting.js')
 // myUndefinedFunctionFromMain();
 
@@ -31,6 +34,7 @@ require('./app/js/errorReporting.js')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let settingsWindow
+let distractionWindow
 
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
@@ -49,6 +53,7 @@ const minimalWindowWidth = 620
 * @name doLog
 * @summary Writes console output for the main process
 * @description Writes console output for the main process
+* @memberof main
 * @param {string} type - The log type
 * @param {string} message - The log message
 */
@@ -79,16 +84,17 @@ function doLog (type, message) {
 * @name createWindowSettings
 * @summary Manages the BrowserWindow for the Settings UI
 * @description Manages the BrowserWindow for the Settings UI
+* @memberof main
 */
 function createWindowSettings () {
     doLog('info', 'createWindowSettings ::: Creating the settings window')
 
     // Create the browser window.
     settingsWindow = new BrowserWindow({
-        parent: mainWindow,
+        // parent: mainWindow,
         modal: true,
         frame: true, // false results in a borderless window. Needed for custom titlebar
-        // titleBarStyle: 'hidden', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
+        titleBarStyle: 'default', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
         backgroundColor: '#ffffff', // since 0.3.0
         show: true, // hide until: ready-to-show
         center: true, // Show window in the center of the screen. (since 0.3.0)
@@ -100,12 +106,11 @@ function createWindowSettings () {
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,
-            webSecurity: true, // introduced in 0.3.0
-            preload: path.join(__dirname, 'preload.js')
+            webSecurity: true // introduced in 0.3.0
         }
     })
 
-    // and load the index.html of the app.
+    // and load the setting.html of the app.
     settingsWindow.loadFile('app/settings.html')
 
     // window needs no menu
@@ -135,9 +140,56 @@ function createWindowSettings () {
 }
 
 /**
+* @name createWindowDistraction
+* @summary creates the window for distraction mode
+* @description creates the window for distraction mode
+* @memberof main
+*/
+function createWindowDistraction () {
+    doLog('info', 'createWindowDistraction ::: Creating the distraction window')
+
+    // Create the browser window.
+    distractionWindow = new BrowserWindow({
+        frame: true, // false results in a borderless window. Needed for custom titlebar
+        backgroundColor: '#ffffff', // since 0.3.0
+        center: true,
+        width: 550,
+        minWidth: 550,
+        resizable: false,
+        height: 700,
+        minHeight: 700,
+        icon: path.join(__dirname, 'app/img/icon/icon.png'),
+        webPreferences: {
+            webSecurity: true
+        }
+    })
+
+    // and load the setting.html of the app.
+    distractionWindow.loadFile('app/distraction.html')
+
+    // window needs no menu
+    distractionWindow.removeMenu()
+
+    // Emitted before the window is closed.
+    distractionWindow.on('close', function () {
+        doLog('info', 'createWindowDistraction ::: distractionWindow will close (event: close)')
+    })
+
+    // Emitted when the window is closed.
+    distractionWindow.on('closed', function (event) {
+        doLog('info', 'createWindowDistraction ::: distractionWindow is closed (event: closed)')
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        distractionWindow = null
+    })
+}
+
+/**
 * @name createWindowMain
 * @summary Creates the mainWindow
 * @description Creates the mainWindow (restores window position and size of possible)
+* @memberof main
 */
 function createWindowMain () {
     doLog('info', 'createWindowMain ::: Starting to create the application windows')
@@ -238,6 +290,11 @@ function createWindowMain () {
         createWindowSettings()
     })
 
+    // Call from renderer: Option: load distraction UI
+    ipcMain.on('startDistraction', function () {
+        createWindowDistraction()
+    })
+
     // Global object
     var downloadTarget = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
     var audioFormat = 'mp3' // mp3 is the default
@@ -279,6 +336,8 @@ function createWindowMain () {
         var curState = global.sharedObj.applicationState // get applicationState
         doLog('info', 'createWindowMain ::: Current application state is: _' + curState + '_.')
 
+        // applicationState = Download in progress
+        //
         if (curState === 'Download in progress') {
             // since electron7 showMessageBox no longer blocks the close. Therefor we are using showMessageBoxSync
             var choice = require('electron').dialog.showMessageBoxSync(this,
@@ -293,6 +352,15 @@ function createWindowMain () {
                 return
             }
         }
+
+        // TODO:
+        // - check if todo-list is empty or not
+        // - if it is not empty - offer saving it to resume the todo list on next launch
+        //
+        // BONUS:
+        // - adopt RETURN handling & preventDefault as both conditions are relevant
+        // -- downloadInProgress
+        // -- save todolist
 
         // get window position and size
         var data = {
@@ -327,6 +395,7 @@ function createWindowMain () {
 * @name createMenuMain
 * @summary Creates the application menu
 * @description Creates the application menu
+* @memberof main
 */
 function createMenuMain () {
     // doLog('createMenu', __dirname)
@@ -585,6 +654,7 @@ function createMenuMain () {
 * @name forceSingleAppInstance
 * @summary Takes care that there is only 1 instance of this app running
 * @description Takes care that there is only 1 instance of this app running
+* @memberof main
 */
 function forceSingleAppInstance () {
     if (!gotTheLock) {
@@ -609,6 +679,48 @@ function forceSingleAppInstance () {
     }
 }
 
+/**
+* @name powerMonitorInit
+* @summary Initialized a powermonitor after the app is ready
+* @description Initialized a powermonitor after the app is ready. See: https://electronjs.org/docs/api/power-monitor
+* @memberof main
+*/
+function powerMonitorInit() {
+    const { powerMonitor } = require('electron') // This module cannot be used until the ready event of the app module is emitted.
+    
+    // suspend
+    powerMonitor.on('suspend', () => {
+        doLog('warn', 'powerMonitorInit ::: The system is going to sleep (event: suspend)')
+        powerMonitorNotify('warning', 'The system is going to sleep (event: suspend)', 0)
+    })
+
+    // resume
+    powerMonitor.on('resume', () => {
+        doLog('info', 'powerMonitorInit ::: The system is resuming (event: resume)')
+        powerMonitorNotify('info', 'The system resumed (event: resume)', 0)
+    })
+
+    // OTHER EVENTS:
+    //
+    // on-ac (Windows)
+    // on-battery (Windows)
+    // shutdown (Linuxm macOS)
+    // lock-screen (macOs, Windows)
+    // unlock-screen (macOs, Windows)
+}
+
+/**
+* @name powerMonitorNotify
+* @summary Used to tell the renderer to display a notification
+* @description Used to tell the renderer to display a notification
+* @memberof main
+*/
+function powerMonitorNotify(messageType, messageText, messageDuration)
+{
+    doLog('warn', 'powerMonitorNotify ::: Going to tell the renderer to show a powerMonitor notification')
+    mainWindow.webContents.send('powerMonitorNotification', messageType, messageText, messageDuration)
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -618,6 +730,7 @@ app.on('ready', function () {
     forceSingleAppInstance() // check for single instance
     createWindowMain() // create the application UI
     createMenuMain() // create the application menu
+    powerMonitorInit() //
 })
 
 // Quit when all windows are closed.

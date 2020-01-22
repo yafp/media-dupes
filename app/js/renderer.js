@@ -1,7 +1,8 @@
 /**
- * @file Contains all renderer code
- * @author yafp
- */
+* @file Contains all renderer code
+* @author yafp
+* @namespace renderer
+*/
 
 'use strict'
 
@@ -38,15 +39,10 @@ var youtubeDLBinaryDetailsExec
 * @name titlebarInit
 * @summary Init the titlebar for the frameless mainWindow
 * @description Creates a custom titlebar for the mainWindow using custom-electron-titlebar (https://github.com/AlexTorresSk/custom-electron-titlebar).
+* @memberof renderer
 */
 function titlebarInit () {
-    // NOTE:
-    // there exists:
-    // - 'custom-electron-titlebar'
-    // - 'pj-custom-electron-titlebar' (fork)
-    //
     const customTitlebar = require('custom-electron-titlebar')
-    // const customTitlebar = require('pj-custom-electron-titlebar')
 
     const myTitlebar = new customTitlebar.Titlebar({
         titleHorizontalAlignment: 'center', // position of window title
@@ -64,9 +60,22 @@ function titlebarInit () {
 }
 
 /**
+* @name distract
+* @summary Starts the distraction mode
+* @description Starts the distraction mode
+* @memberof renderer
+*/
+function distract () {
+    const { ipcRenderer } = require('electron')
+    utils.writeConsoleMsg('info', 'distract ::: Init some distraction')
+    ipcRenderer.send('startDistraction') // tell main.js to load distraction UI
+}
+
+/**
 * @name setBlurFactor
 * @summary Can set a blur level for entire main ui
 * @description Can set a blur level for entire main ui. Is used on the mainUI when the settingsUI is open
+* @memberof renderer
 * @param boolean - To enable or disable blur
 */
 function setBlurFactor (enable) {
@@ -85,6 +94,7 @@ function setBlurFactor (enable) {
 * @name disclaimerCheck
 * @summary Checks if the disclaimer should be shown or not
 * @description Is using userSettingRead() to read the user setting confirmedDisclaimer.json. If it exists the user previously confirmed it.
+* @memberof renderer
 */
 function disclaimerCheck () {
     utils.writeConsoleMsg('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
@@ -95,6 +105,7 @@ function disclaimerCheck () {
 * @name disclaimerShow
 * @summary Opens the disclaimer as dialog
 * @description Displays a disclaimer regarding app usage. User should confirm it once. Setting is saved in UserSettings
+* @memberof renderer
 */
 function disclaimerShow () {
     const dialog = require('electron').remote.dialog
@@ -119,6 +130,7 @@ function disclaimerShow () {
 * @name applicationStateSet
 * @summary Writes console output for the renderer process
 * @description Writes console output for the renderer process
+* @memberof renderer
 * @param type - String which defines the log type
 */
 function applicationStateSet (newState) {
@@ -139,6 +151,7 @@ function applicationStateSet (newState) {
 * @name uiLoadingAnimationShow
 * @summary Shows the loading animation / download spinner
 * @description Shows the loading animation / download spinner. applicationStateSet() is using this function
+* @memberof renderer
 */
 function uiLoadingAnimationShow () {
     utils.writeConsoleMsg('info', 'uiLoadingAnimationShow ::: Showing spinner')
@@ -149,6 +162,7 @@ function uiLoadingAnimationShow () {
 * @name uiLoadingAnimationHide
 * @summary Hides the loading animation / download spinner
 * @description Hides the loading animation / download spinner. applicationStateSet() is using this function
+* @memberof renderer
 */
 function uiLoadingAnimationHide () {
     utils.writeConsoleMsg('info', 'uiLoadingAnimationHide ::: Hiding spinner')
@@ -159,6 +173,7 @@ function uiLoadingAnimationHide () {
 * @name logScrollToEnd
 * @summary Scrolls the UI log to the end
 * @description Scrolls the UI log to the end / latest entry
+* @memberof renderer
 */
 function logScrollToEnd () {
     $('#textareaLogOutput').scrollTop($('#textareaLogOutput')[0].scrollHeight) // scroll log textarea to the end
@@ -168,6 +183,7 @@ function logScrollToEnd () {
 * @name logReset
 * @summary Resets the ui log
 * @description Resets the content of the ui log
+* @memberof renderer
 */
 function logReset () {
     document.getElementById('textareaLogOutput').value = ''
@@ -178,6 +194,7 @@ function logReset () {
 * @name logAppend
 * @summary Appends text to the log textarea
 * @description Appends text to the log textarea
+* @memberof renderer
 */
 function logAppend (newLine) {
     $('#textareaLogOutput').val(function (i, text) {
@@ -190,6 +207,7 @@ function logAppend (newLine) {
 * @name checkApplicationDependencies
 * @summary Checks for missing dependencies
 * @description Checks on startup for missing dependencies (youtube-dl and ffmpeg). Both are bundles and should be find
+* @memberof renderer
 */
 function checkApplicationDependencies () {
     var countErrors = 0
@@ -232,6 +250,7 @@ function checkApplicationDependencies () {
 * @name uiResetAskUser
 * @summary Ask the user if he wants to execute the UI reset function if there are currently downloads in progress
 * @description Ask the user if he wants to execute the UI reset function if there are currently downloads in progress
+* @memberof renderer
 */
 function uiResetAskUser () {
     const { remote } = require('electron')
@@ -271,6 +290,7 @@ function uiResetAskUser () {
 * @name uiReset
 * @summary Resets the UI back to default
 * @description Resets the UI back to default
+* @memberof renderer
 */
 function uiReset () {
     utils.writeConsoleMsg('info', 'uiReset ::: Starting to reset the UI')
@@ -287,6 +307,7 @@ function uiReset () {
 * @name uiStartButtonsEnable
 * @summary Enabled the 2 start buttons
 * @description Is executed when the todo-list contains at least 1 item
+* @memberof renderer
 */
 function uiStartButtonsEnable () {
     // enable start buttons
@@ -300,6 +321,7 @@ function uiStartButtonsEnable () {
 * @name uiStartButtonsDisable
 * @summary Disables the 2 start buttons
 * @description Is executed when a download task is started by the user
+* @memberof renderer
 */
 function uiStartButtonsDisable () {
     // disable start buttons
@@ -313,6 +335,7 @@ function uiStartButtonsDisable () {
 * @name uiOtherButtonsEnable
 * @summary Enables some of the footer buttons when a download is finished
 * @description Is executed when a download task has ended by the user
+* @memberof renderer
 */
 function uiOtherButtonsEnable () {
     // enable some buttons
@@ -327,6 +350,7 @@ function uiOtherButtonsEnable () {
 * @name uiOtherButtonsDisable
 * @summary Disables some of the footer buttons while a download is running
 * @description Is executed when a download task is started by the user
+* @memberof renderer
 */
 function uiOtherButtonsDisable () {
     // disable some buttons
@@ -341,6 +365,7 @@ function uiOtherButtonsDisable () {
 * @name uiMakeUrgent
 * @summary Tells the main process to mark the application as urgent (blinking in task manager)
 * @description Is used to inform the user about an important state-change (all downloads finished). Triggers code in main.js which does the actual work
+* @memberof renderer
 */
 function uiMakeUrgent () {
     // make window urgent after having finished downloading. See #7
@@ -352,6 +377,7 @@ function uiMakeUrgent () {
 * @name settingsOpenDevTools
 * @summary Tells the main process to open devTools for settings UI
 * @description Tells the main process to open devTools for settings UI
+* @memberof renderer
 */
 function settingsOpenDevTools () {
     const { ipcRenderer } = require('electron')
@@ -362,6 +388,7 @@ function settingsOpenDevTools () {
 * @name settingsSelectCustomTargetDir
 * @summary Let the user choose a custom download target directory
 * @description Is triggered via button on settings.html.
+* @memberof renderer
 */
 function settingsSelectCustomTargetDir () {
     const options = { properties: ['openDirectory'] }
@@ -373,7 +400,7 @@ function settingsSelectCustomTargetDir () {
 
         if (res.filePaths.length === 0) {
             utils.writeConsoleMsg('warn', 'settingsSelectCustomTargetDir ::: User aborted selecting a custom download directory path in settings')
-            utils.showNoty('warning', 'You aborted the definition of a custom download directory')
+            utils.showNoty('warning', 'You aborted.')
         } else {
             var newDownloadDirectory = res.filePaths.toString()
             userSettingWrite('CustomDownloadDir', newDownloadDirectory) // save the value to user-config
@@ -391,6 +418,7 @@ function settingsSelectCustomTargetDir () {
 * @name settingsUiLoad
 * @summary Navigate to setting.html
 * @description Is triggered via button on index.html. Calls method on main.js which loads setting.html to the application window
+* @memberof renderer
 */
 function settingsUiLoad () {
     const { ipcRenderer } = require('electron')
@@ -402,6 +430,7 @@ function settingsUiLoad () {
 * @name settingsAudioFormatSave
 * @summary Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
 * @description Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
+* @memberof renderer
 */
 function settingsAudioFormatSave () {
     var userSelectedAudioFormat = $('#inputGroupSelectAudio').val() // get value from UI select inputGroupSelectAudio
@@ -416,6 +445,7 @@ function settingsAudioFormatSave () {
 * @name settingsLoadAllOnAppStart
 * @summary Reads all user-setting-files and fills some global variables
 * @description Reads all user-setting-files and fills some global variables
+* @memberof renderer
 */
 function settingsLoadAllOnAppStart () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now ...')
@@ -428,6 +458,7 @@ function settingsLoadAllOnAppStart () {
 * @name settingsLoadAllOnSettingsUiLoad
 * @summary Reads all user-setting-files and fills some global variables and adjusts the settings UI
 * @description Reads all user-setting-files and fills some global variables and adjusts the settings UI
+* @memberof renderer
 */
 function settingsLoadAllOnSettingsUiLoad () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now and adjust the settings UI')
@@ -440,6 +471,7 @@ function settingsLoadAllOnSettingsUiLoad () {
 * @name settingsFolderOpen
 * @summary Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
 * @description Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
+* @memberof renderer
 */
 function settingsFolderOpen () {
     utils.writeConsoleMsg('info', 'settingsFolderOpen ::: User wants to open the folder with user config files.')
@@ -451,6 +483,7 @@ function settingsFolderOpen () {
 * @name userSettingWrite
 * @summary Write a user setting to file
 * @description Writes a value for a given key to electron-json-storage
+* @memberof renderer
 * @param key - Name of storage key
 * @param value - New value
 * @throws Exception when writing a file failed
@@ -480,6 +513,7 @@ function userSettingWrite (key, value) {
 * @name defaultDownloadFolderGet
 * @summary Validates if the default download directory of the user is useable.
 * @description Validates if the default download directory of the user is useable.
+* @memberof renderer
 * @retun boolean - Is the folder useable
 * @return defaultTargetPath - The path to the folder
 */
@@ -517,6 +551,7 @@ function defaultDownloadFolderGet () {
 * @name userSettingRead
 * @summary Read a user setting from file
 * @description Reads a value stored in local storage (for a given key)
+* @memberof renderer
 * @param key - Name of local storage key
 * @param optional Boolean used for an ugly hack
 */
@@ -677,6 +712,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
 * @name checkUrlInputField
 * @summary Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
 * @description Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
+* @memberof renderer
 */
 function checkUrlInputField () {
     utils.writeConsoleMsg('info', 'checkUrlInputField ::: Triggered on focus')
@@ -704,6 +740,7 @@ function checkUrlInputField () {
 * @name onEnter
 * @summary Executed on keypress inside url-input-field
 * @description Checks if the key-press was the ENTER-key - if so simulates a press of the button ADD URL
+* @memberof renderer
 * @event keyCode - The key press event
 */
 function onEnter (event) {
@@ -718,6 +755,7 @@ function onEnter (event) {
 * @name addURL
 * @summary Handles the url add click of the user
 * @description Handles the url add click of the user
+* @memberof renderer
 */
 function addURL () {
     var newUrl = $('#inputNewUrl').val() // get content of input
@@ -749,6 +787,7 @@ function addURL () {
 * @name toDoListUpdate
 * @summary Updates the todo-list after a user added an url
 * @description Updates the todo-list after a user added an url
+* @memberof renderer
 */
 function toDoListUpdate () {
     arrayUserUrls = $.unique(arrayUserUrls) // remove duplicate entries in array
@@ -769,6 +808,7 @@ function toDoListUpdate () {
 * @name toDoListReset
 * @summary Resets the todo-list textarea
 * @description Resets the todo-list textarea
+* @memberof renderer
 */
 function toDoListReset () {
     arrayUserUrls = [] // reset the array
@@ -781,6 +821,7 @@ function toDoListReset () {
 * @name downloadContent
 * @summary Does the actual download
 * @description Does the actual download
+* @memberof renderer
 */
 function downloadContent (mode) {
     const { remote } = require('electron') // needed to access the global object
@@ -898,7 +939,7 @@ function downloadContent (mode) {
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
                         utils.showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + error, 0)
-                        utils.writeConsoleMsg('error', 'downloadContent ::: Problems downloading url _' + url + ' with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
+                        utils.writeConsoleMsg('error', 'downloadContent ::: Problems downloading url _' + url + '_ with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url
                         throw error
                     }
@@ -934,6 +975,7 @@ function downloadContent (mode) {
 * @name downloadVideo
 * @summary Does the actual video download
 * @description Does the actual video download (without using youtube-dl.exec)
+* @memberof renderer
 */
 function downloadVideo () {
     // http://www.youtube.com/watch?v=90AiXO1pAiA
@@ -1088,6 +1130,7 @@ function downloadVideo () {
 * @name showSupportedExtractors
 * @summary Shows a list of all currently supported extractors of youtube-dl
 * @description Shows a list of all currently supported extractors of youtube-dl
+* @memberof renderer
 */
 function showSupportedExtractors () {
     applicationStateSet('Loading extractors list')
@@ -1129,6 +1172,7 @@ function showSupportedExtractors () {
 * @name searchUpdate
 * @summary Checks if there is a new media-dupes release available
 * @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available. Is executed on app launch NOT on reload.
+* @memberof renderer
 * @param {booean} [silent=true] - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
@@ -1224,6 +1268,7 @@ function searchUpdate (silent = true) {
 * @name openReleasesOverview
 * @summary Opens the media-dupes release page
 * @description Opens the url https://github.com/yafp/media-dupes/releases in the default browser. Used in searchUpdate().
+* @memberof renderer
 */
 function openReleasesOverview () {
     const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
@@ -1235,6 +1280,7 @@ function openReleasesOverview () {
 * @name openUserDownloadFolder
 * @summary Triggers code in main.js to open the download folder of the user
 * @description Triggers code in main.js to open the download folder of the user
+* @memberof renderer
 */
 function openUserDownloadFolder () {
     const { remote } = require('electron')
@@ -1249,6 +1295,7 @@ function openUserDownloadFolder () {
 * @name introShow
 * @summary start an intro / user tutorial
 * @description Starts a short intro / tutorial which explains the user-interface. Using introJs
+* @memberof renderer
 */
 function introShow () {
     utils.writeConsoleMsg('info', 'startIntro ::: User wants to see the intro. Here you go!')
@@ -1260,6 +1307,7 @@ function introShow () {
 * @name isDirectoryAvailable
 * @summary Checks if a given directory exists
 * @description Checks if a given directory exists
+* @memberof renderer
 * @param dirPath The directory path which should be checked
 * @return boolean
 */
@@ -1282,6 +1330,7 @@ function isDirectoryAvailable (dirPath) {
 * @name isDirectoryWriteable
 * @summary Checks if a given directory is writeable
 * @description Checks if a given directory is writeable
+* @memberof renderer
 * @param dirPath The directory path which should be checked
 * @return boolean
 */
@@ -1307,6 +1356,7 @@ function isDirectoryWriteable (dirPath) {
 * @name settingsShowYoutubeDLInfo
 * @summary Searches the youtube-binary and shows it in the settings dialog
 * @description Searches the youtube-binary and shows it in the settings dialog
+* @memberof renderer
 */
 function settingsShowYoutubeDLInfo () {
     const youtubedl = require('youtube-dl')
@@ -1329,6 +1379,7 @@ function settingsShowYoutubeDLInfo () {
 * @name settingsShowFfmpegInfo
 * @summary Searches the ffmpeg-binary and shows it in the settings dialog
 * @description Searches the ffmpeg-binary and shows it in the settings dialog
+* @memberof renderer
 */
 function settingsShowFfmpegInfo () {
     var ffmpeg = require('ffmpeg-static-electron')
@@ -1346,6 +1397,7 @@ function settingsShowFfmpegInfo () {
 * @name settingsToggleErrorReporting
 * @summary Enables or disabled the error reporting function
 * @description Enables or disabled the error reporting function
+* @memberof renderer
 */
 function settingsToggleErrorReporting () {
     if ($('#checkboxEnableErrorReporting').is(':checked')) {
@@ -1393,6 +1445,7 @@ function settingsToggleErrorReporting () {
 * @name canWriteFileOrFolder
 * @summary Checks if a file or folder is writeable
 * @description Checks if a file or folder is writeable
+* @memberof renderer
 * @param path - Path which should be checked
 */
 function canWriteFileOrFolder (path, callback) {
@@ -1406,6 +1459,7 @@ function canWriteFileOrFolder (path, callback) {
 * @name searchYoutubeDLUpdate
 * @summary Checks if there is a new release  for the youtube-dl binary available
 * @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
+* @memberof renderer
 * @param silent - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchYoutubeDLUpdate (silent = true) {
@@ -1438,6 +1492,7 @@ function searchYoutubeDLUpdate (silent = true) {
 * @name settingsGetYoutubeDLBinaryVersion
 * @summary Gets the youtube-dl binary version and displays it in settings ui
 * @description Reads the youtube-dl binary version from node_modules/youtube-dl/bin/details
+* @memberof renderer
 * @return ytdlBinaryVersion - The youtube-dl binary version string
 */
 function settingsGetYoutubeDLBinaryVersion (_callback) {
@@ -1462,6 +1517,7 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
 * @name settingsOpenExternal
 * @summary Gets an url from the settings ui and forwards this to the openURL function
 * @description Gets an url from the settings ui and forwards this to the openURL function
+* @memberof renderer
 * @param url - url string
 */
 function settingsOpenExternal (url) {
@@ -1554,6 +1610,14 @@ require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
     })
 
     utils.writeConsoleMsg('info', 'youtubeDlBinaryPathReset ::: Finished re-setting the binary path for youtube-dl')
+})
+
+// Power Monitor
+//
+// Call from main.js ::: show a powerMonitor notification
+require('electron').ipcRenderer.on('powerMonitorNotification', function (event, messageType, messageText, messageDuration) {
+    utils.writeConsoleMsg('warn', 'powerMonitorNotification ::: Main wants to show a notification of the type: _' + messageType + '_ and the message: _' + messageText + '_ with the duration: _' + messageDuration + '_.')
+    utils.showNoty(messageType, messageText, messageDuration)
 })
 
 // Others
