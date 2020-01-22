@@ -8,7 +8,7 @@ os:
 
 environment:
   GH_TOKEN:
-    secure: cd77f170b91f768a4824cc3dedb37d4be89b7e3f
+    secure: zdmqj3G0vY5FgdqkER3/v/Cgv9m8XORyyH7xnRRtc9+SAX2mj0XnmjewLh7U2rL2
 
 cache:
   - node_modules
