@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.4.20200120",
+  "version": "0.4.20200122",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -37,19 +37,30 @@
     "url": "https://github.com/yafp/media-dupes/issues"
   },
   "contributors": [
-    "Florian Poeck <fidel@yafp.de> (https://yafp.de)"
+    {
+      "name": "Florian Pöck",
+      "email": "fidel@yafp.de",
+      "url": "https://yafp.de"
+    }
   ],
   "homepage": "https://github.com/yafp/media-dupes",
   "keywords": [
-    "youtube",
-    "youtube-dl",
+    "audio",
     "download",
-    "media",
+    "downloader",
     "dupes",
-    "ffmpeg",
     "duplicator",
     "extractor",
-    "mirror"
+    "ffmpeg",
+    "media",
+    "media-dupes",
+    "mediathek",
+    "mp3",
+    "mirror",
+    "stream",
+    "video",
+    "youtube",
+    "youtube-dl"
   ],
   "author": "yafp <fidel@yafp.de>",
   "license": "GPL-3.0",
@@ -58,8 +69,8 @@
     "appId": "de.yafp.media-dupes",
     "extraFiles": [
       "LICENSE",
-      "docs/CHANGELOG.md",
-      "README.md"
+      "README.md",
+      "docs/CHANGELOG.md"
     ],
     "asar": false,
     "mac": {
@@ -76,17 +87,18 @@
     "dmg": {
       "title": "media-dupes",
       "background": "resources/installer/dmg_background.png",
-      "iconSize": 128,
+      "iconSize": 80,
+      "iconTextSize": 12,
       "contents": [
         {
-          "x": 355,
-          "y": 125,
+          "x": 300,
+          "y": 250,
           "type": "link",
           "path": "/Applications"
         },
         {
-          "x": 155,
-          "y": 125,
+          "x": 300,
+          "y": 25,
           "type": "file"
         }
       ]
@@ -195,6 +207,7 @@
     "eslint": "^6.8.0",
     "jsdoc": "^3.6.3",
     "mocha": "^7.0.0",
+    "npx": "^10.2.1",
     "ntl": "^5.0.0",
     "rimraf": "^3.0.0",
     "spectron": "^9.0.0",
@@ -206,6 +219,7 @@
     "about-window": "^1.13.2",
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
+    "classic-tetris-js": "^1.0.2",
     "custom-electron-titlebar": "^3.2.1",
     "electron-json-storage": "^4.1.8",
     "electron-log": "^4.0.3",
