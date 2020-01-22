@@ -20,6 +20,9 @@
 * Check: https://www.npmjs.com/package/debug
 * electron-builder
   * nsis: check if we should teak the installer a bit: https://www.electron.build/configuration/nsis
+* on idle: https://www.npmjs.com/package/desktop-idle
+  * show something funky
+
 
 ### urls
 * youtube-dl repository: https://github.com/ytdl-org/youtube-dl
