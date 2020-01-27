@@ -1,3 +1,11 @@
+/**
+ * @file Contains all sentry functions
+ * @author yafp
+ * @module sentry
+ */
+
+const utils = require('./utils.js')
+
 // ----------------------------------------------------------------------------
 // Error Handling using: sentry
 // ----------------------------------------------------------------------------
@@ -6,7 +14,6 @@
 // https://docs.sentry.io/platforms/javascript/electron/
 // https://docs.sentry.io/error-reporting/configuration/?platform=electron
 //
-
 const Sentry = require('@sentry/electron')
 Sentry.init({
     release: 'media-dupes@' + process.env.npm_package_version,
@@ -17,35 +24,26 @@ Sentry.init({
 // simple way to force a crash:
 // myUndefinedFunction();
 
-/*
+/**
+* @function enableSentry
+* @summary Enables sentry
+* @description Enabled sentry to log errors
+*/
 function enableSentry () {
     Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    console.log('Sentry is now enabled')
+    utils.writeConsoleMsg('info', 'enableSentry ::: Enabled sentry')
 }
 
+/**
+* @function disableSentry
+* @summary Disables sentry
+* @description Disables sentry to log errors
+*/
 function disableSentry () {
     Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    console.warn('Sentry is now disabled')
+    utils.writeConsoleMsg('warn', 'disableSentry ::: Disabled sentry')
 }
 
 // export both functions
-// exports.enableSentry = enableSentry
-// exports.disableSentry = disableSentry
-*/
-
-// ----------------------------------------------------------------------------
-// Error Handling using unhandled
-// ----------------------------------------------------------------------------
-const unhandled = require('electron-unhandled')
-const { openNewGitHubIssue, debugInfo } = require('electron-util')
-
-unhandled({
-    showDialog: true,
-    reportButton: error => {
-        openNewGitHubIssue({
-            user: 'yafp',
-            repo: 'media-dupes',
-            body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
-        })
-    }
-})
+module.exports.enableSentry = enableSentry
+module.exports.disableSentry = disableSentry

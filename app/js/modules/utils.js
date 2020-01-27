@@ -7,11 +7,11 @@
 'use strict'
 
 /**
-* @name writeConsoleMsg
+* @function writeConsoleMsg
 * @summary Writes console output for the renderer process
 * @description Writes console output for the renderer process
-* @param type - String which defines the log type
-* @param message - String which defines the log message
+* @param {string} type - String which defines the log type
+* @param {string} message - String which defines the log message
 */
 function writeConsoleMsg (type, message) {
     const prefix = '[ Renderer ] '
@@ -36,12 +36,12 @@ function writeConsoleMsg (type, message) {
 }
 
 /**
-* @name showNoty
+* @function showNoty
 * @summary Shows a noty notification
 * @description Creates an in-app notification using the noty framework
 * @param {string} type - Options: alert, success, warning, error, info/information
 * @param {string} message - notification text
-* @param {number} timeout - Timevalue, defines how long the message should be displayed. Use 0 for no-timeout
+* @param {number} [timeout] - Timevalue, defines how long the message should be displayed. Use 0 for no-timeout
 */
 function showNoty (type, message, timeout = 3000) {
     const Noty = require('noty')
@@ -55,11 +55,11 @@ function showNoty (type, message, timeout = 3000) {
 }
 
 /**
-* @name showNotification
+* @function showNotification
 * @summary Shows a desktop notification
 * @description Shows a desktop notification
-* @param title - The title of the desktop notification
-* @param message - The notification message text
+* @param {string} [title] - The title of the desktop notification
+* @param {string} message - The notification message text
 */
 function showNotification (title = 'media-dupes', message) {
     const myNotification = new Notification(title, {
@@ -73,7 +73,7 @@ function showNotification (title = 'media-dupes', message) {
 }
 
 /**
-* @name openURL
+* @function openURL
 * @summary Opens an url in browser
 * @description Opens a given url in default browser. This is pretty slow, but got no better solution so far.
 * @param {string} url - URL string which contains the target url
@@ -85,7 +85,7 @@ function openURL (url) {
 }
 
 /**
-* @name validURL
+* @function validURL
 * @summary checks if a given string is a valid url
 * @description checks if a given string is a valid url
 * @param {string} -str - Given url
@@ -102,7 +102,7 @@ function validURL (str) {
 }
 
 /**
-* @name formatBytes
+* @function formatBytes
 * @summary Calculate bytes to...
 * @description Calculate bytes to...
 * @param bytes - Incoming bytes value
@@ -122,11 +122,11 @@ function formatBytes (bytes, decimals = 2) {
 }
 
 /**
-* @name isEncoded
+* @function isEncoded
 * @summary Helper method for fullyDecodeURI
 * @description Helper method for fullyDecodeURI
-* @param uri
-* @return uri
+* @param {string} uri - the uri to check
+* @return {string} uri - the decoded uri
 */
 function isEncoded (uri) {
     uri = uri || ''
@@ -134,11 +134,11 @@ function isEncoded (uri) {
 }
 
 /**
-* @name fullyDecodeURI
+* @function fullyDecodeURI
 * @summary Used to decode URLs
 * @description Used to decode URLs
-* param uri - The incoming uri
-* @return uri - a decoded url
+* param {string} uri - The incoming uri
+* @return {string} uri - a decoded url
 */
 function fullyDecodeURI (uri) {
     while (isEncoded(uri)) {
@@ -148,11 +148,11 @@ function fullyDecodeURI (uri) {
 }
 
 /**
-* @name pathExists
+* @function pathExists
 * @summary Checks if a given filepath exists
 * @description Checks if a given filepath exists using fs. Returns a boolean
-* param path - The path which should be checked for existance
-* @return boolean -If path exists or not
+* param {string} path - The path which should be checked for existance
+* @return {boolean} -If path exists or not
 */
 function pathExists (path) {
     const fs = require('fs')
@@ -163,6 +163,81 @@ function pathExists (path) {
     }
 }
 
+/**
+* @function globalObjectGet
+* @summary Gets a value of a single property from the global object in main.js
+* @description Gets a value of a single property from the global object in main.js
+* @param {String} property - Name of the property
+* @return {string} value - Value of the property
+*/
+function globalObjectGet (property) {
+    const { remote } = require('electron')
+    var value = remote.getGlobal('sharedObj')[property]
+    writeConsoleMsg('info', 'globalObjectGet ::: Property: _' + property + '_ has the value: _' + value + '_.')
+    return value
+}
+
+/**
+* @function globalObjectSet
+* @summary Updates the value of a single property from the global object in main.js
+* @description Updates the value of a single property from the global object in main.js
+* @param {String} property - Name of the property
+* @param {String} value - The new value of the property
+*/
+function globalObjectSet (property, value) {
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('globalObjectSet', property, value)
+}
+
+/**
+* @function isDirectoryAvailable
+* @summary Checks if a given directory exists
+* @description Checks if a given directory exists and returns a boolean
+* @param {string} dirPath - The directory path which should be checked
+* @return {boolean}
+*/
+function isDirectoryAvailable (dirPath) {
+    if (dirPath !== '') {
+        const fs = require('fs')
+        if (fs.existsSync(dirPath)) {
+            writeConsoleMsg('info', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
+            return true
+        } else {
+            writeConsoleMsg('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exist')
+            return false
+        }
+    } else {
+        writeConsoleMsg('error', 'isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
+    }
+}
+
+/**
+* @function isDirectoryWriteable
+* @summary Checks if a given directory is writeable
+* @description Checks if a given directory is writeable and returns a boolean
+* @param {string} dirPath  - The directory path which should be checked
+* @return {boolean}
+*/
+function isDirectoryWriteable (dirPath) {
+    if (dirPath !== '') {
+        const fs = require('fs')
+
+        // sync: check if folder is writeable
+        try {
+            fs.accessSync(dirPath, fs.constants.W_OK)
+            writeConsoleMsg('info', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is writeable')
+            return true
+        } catch (err) {
+            writeConsoleMsg('error', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is not writeable. Error: _' + err + '_.')
+            return false
+        }
+    } else {
+        writeConsoleMsg('error', 'isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty.')
+    }
+}
+
+// Export
+//
 module.exports.writeConsoleMsg = writeConsoleMsg
 module.exports.showNoty = showNoty
 module.exports.showNotification = showNotification
@@ -172,3 +247,7 @@ module.exports.formatBytes = formatBytes
 module.exports.isEncoded = isEncoded
 module.exports.fullyDecodeURI = fullyDecodeURI
 module.exports.pathExists = pathExists
+module.exports.globalObjectGet = globalObjectGet
+module.exports.globalObjectSet = globalObjectSet
+module.exports.isDirectoryAvailable = isDirectoryAvailable
+module.exports.isDirectoryWriteable = isDirectoryWriteable

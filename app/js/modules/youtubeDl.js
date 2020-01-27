@@ -6,10 +6,11 @@
 
 'use strict'
 
+const ui = require('./ui.js')
 const utils = require('./utils.js')
 
 /**
-* @name youtubeDlBinaryPathGet
+* @function youtubeDlBinaryPathGet
 * @summary Gets the path to the youtube-dl binary file
 * @description Gets the path to the youtube-dl binary file using getYtdlBinary()
 * @return {string} youtubeDlBinaryPath - The actual path to the youtube-dl binary
@@ -23,7 +24,7 @@ function youtubeDlBinaryPathGet () {
 }
 
 /**
-* @name youtubeDlBinaryPathReset
+* @function youtubeDlBinaryPathReset
 * @summary Resets the youtube-dl binary path in details
 * @description Resets the youtube-dl binary path in details
 * @param {string} path - The path to the youtube-dl details file
@@ -58,7 +59,7 @@ function youtubeDlBinaryPathReset (path) {
 }
 
 /**
-* @name youtubeDlBinaryUpdate
+* @function youtubeDlBinaryUpdate
 * @summary Updates the youtube-dl binary
 * @description Updates the youtube-dl binary
 */
@@ -92,7 +93,7 @@ function youtubeDlBinaryUpdate () {
 }
 
 /**
-* @name youtubeDlBinaryUpdateSearch
+* @function youtubeDlBinaryUpdateSearch
 * @summary Searches for youtube-dl binary updates
 * @description Searches for youtube-dl binary updates
 * @param {boolean} silent - Defaults to true. If true, the progress is silent, if false there is info-feedback even if there is no update available
@@ -160,14 +161,14 @@ function youtubeDlBinaryUpdateSearch (silent = true) {
 
         .always(function () {
             utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Finished checking ' + urlYTDLGitHubRepoTags + ' for available releases')
-            uiLoadingAnimationHide()
-            uiOtherButtonsEnable()
-            applicationStateSet('')
+            ui.windowMainLoadingAnimationHide()
+            ui.windowMainButtonsOthersEnable()
+            ui.windowMainApplicationStateSet()
         })
 }
 
 /**
-* @name youtubeDlBinaryDetailsPathGet
+* @function youtubeDlBinaryDetailsPathGet
 * @summary Gets the path to the youtube-dl binary details file
 * @description Gets the path to the youtube-dl binary details file
 * @return {string} youtubeDlBinaryDetailsPath - The actual path to the youtube-dl details file
@@ -182,7 +183,7 @@ function youtubeDlBinaryDetailsPathGet () {
 }
 
 /**
-* @name youtubeDlBinaryDetailsValueGet
+* @function youtubeDlBinaryDetailsValueGet
 * @summary Gets all values from the youtube-dl binary details file
 * @description Gets all values from the youtube-dl binary details file
 */
