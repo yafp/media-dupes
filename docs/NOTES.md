@@ -17,11 +17,7 @@
   * https://stackoverflow.com/questions/18458399/make-a-textarea-fill-remaining-height !!!!
   * https://github.com/javierjulio/textarea-autosize
   * https://www.jacklmoore.com/autosize/
-* Check: https://www.npmjs.com/package/debug
-* electron-builder
-  * nsis: check if we should teak the installer a bit: https://www.electron.build/configuration/nsis
-* on idle: https://www.npmjs.com/package/desktop-idle
-  * show something funky
+* electron-builder: nsis: check if we should teak the installer a bit: https://www.electron.build/configuration/nsis
 
 
 ### urls

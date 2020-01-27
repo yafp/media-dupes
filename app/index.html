@@ -57,7 +57,7 @@
 
             <!-- app name -->
             <!-- bounceInLeft -->
-            <h2><img src="img/128x128.png" height="32" onclick="distract();">media-dupes</h2>
+            <h2><img src="img/128x128.png" height="32" onclick="windowMainClickDistract();">media-dupes</h2>
 
             <!-- app description -->
             <h3 class="animated bounceInLeft">a minimal media duplicator for common media services like youtube</h3>
@@ -72,7 +72,7 @@
         <div class="input-group mb-3">
             <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
-                <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="addURL();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
+                <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="windowMainClickButtonAddUrl();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
             </div>
         </div>
 
@@ -82,7 +82,6 @@
                 class="form-control"
                 id="textareaTodoList"
                 name="textareaTodoList"
-                title="todo-list"
                 placeholder="todo-list"
                 readonly
                 rows="6"
@@ -103,7 +102,7 @@
                 type="button"
                 class="btn btn-success btn-sm mediaDupes_btnDownloadActionWidth"
                 title="Start downloading all content from todo-list and store them as video files"
-                onclick="downloadContent('video');"
+                onclick="windowMainClickButtonVideo();"
                 disabled
                 data-step="6"
                 data-intro="The <b>Video</b> button tries to download each video featured on your <b>todo-list</b>.">
@@ -130,7 +129,7 @@
                 type="button"
                 class="btn btn-success btn-sm mediaDupes_btnDownloadActionWidth float-right"
                 title="Start downloading all content from todo-list and store them as audio files"
-                onclick="downloadContent('audio');"
+                onclick="windowMainClickButtonAudio();"
                 disabled
                 data-step="7"
                 data-intro="The <b>Audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
@@ -150,7 +149,6 @@
                     class="form-control"
                     id="textareaLogOutput"
                     name="textareaLogOutput"
-                    title="application log"
                     placeholder="application log"
                     readonly
                     rows="12"
@@ -174,7 +172,7 @@
                 type="button"
                 class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
                 title="Shows settings"
-                onclick="settingsUiLoad();">
+                onclick="windowMainClickButtonSettings();">
                 <i class="fas fa-cog"></i> Settings
             </button>
             <!-- Intro -->
@@ -183,8 +181,8 @@
                 name="buttonShowHelp"
                 type="button"
                 class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
-                title="Shows a small media-dupes intro to explain how media-dupes works"
-                onclick="introShow();">
+                title="Shows a short intro to explain how media-dupes works"
+                onclick="windowMainClickButtonIntro();">
                 <i class="fas fa-info"></i> Intro
             </button>
             <!-- Extractors -->
@@ -194,7 +192,7 @@
                 type="button"
                 class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
                 title="Show list of supported media platforms"
-                onclick="showSupportedExtractors();">
+                onclick="windowMainClickButtonExtrators();">
                 <i class="fas fa-list"></i> Extractors
             </button>
             <!-- Download folder -->
@@ -204,19 +202,28 @@
                 type="button"
                 class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
                 title="Opens the download folder"
-                onclick="openUserDownloadFolder();">
-                <i class="fas fa-file-download"></i> Downloads
+                onclick="windowMainClickButtonDownloads();">
+                <i class="far fa-folder-open"></i> Downloads
             </button>
-            <!-- UI Reset -->
+            <!-- Reset buttons -->
             <button
                 id="buttonResetUI"
-                name="buttonReset"
+                name="buttonResetUI"
                 type="button"
-                class="btn btn-outline-danger btn-sm float-right mediaDupes_btnDefaultWidth"
-                title="Reset the user-interface (UI)"
-                onclick="uiResetAskUser();">
-                <i class="fas fa-redo-alt"></i> Reset
+                class="btn btn-outline-danger btn-sm float-right dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fas fa-redo-alt"></i>
             </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" onclick="windowMainClickButtonLogReset();">Reset the log</a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reset the User Interface (UI)</a>
+            </div>
+
+
+
         </div>
         <!-- /extra buttons -->
 
@@ -245,7 +252,7 @@ $( document ).ready(function()
     console.log( 'index.html ready' )
     titlebarInit() // init titleBar
     settingsLoadAllOnAppStart() // load user settings
-    uiReset() // init the UI
+    windowMainClickButtonUIReset() // FIXME: still needed?
     $('body').fadeIn(500) // Fades in page on load
 });
 </script>

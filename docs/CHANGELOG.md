@@ -30,24 +30,26 @@ The following categories are used:
 ### media-dupes 0.5.0 (2020xxyy)
 #### ```Added```
 * Added a disclaimer which must be confirmed once per user. See [#52](https://github.com/yafp/media-dupes/issues/52)
+* Added support for saving and restoring urls. See [#66](https://github.com/yafp/media-dupes/issues/66)
 * Added support for applicationState. Ask user if he really wants to quit when downloads are in progress. See [#59](https://github.com/yafp/media-dupes/issues/59)
 * Added some youtube-dl maintenance function to the menu. See [#57](https://github.com/yafp/media-dupes/issues/57)
   * Reset youtube-dl binary path (to revert back to bundled youtube-dl binary)
   * Force updating youtube-dl binary (to redownload the latest stable binary)
-* Added general support for UI animations/effects using animate.js.
+* Added general support for UI animations/effects using animate.js. See [#69](https://github.com/yafp/media-dupes/issues/69)
 * Adding support for new audio formats. See [#65](https://github.com/yafp/media-dupes/issues/65)
-  * Added support for .aac
-  * Added support for .flac
-  * Added support for .opus
-  * Added support for .ogg/vorbis
+  * Added support for ```.aac```
+  * Added support for ```.flac```
+  * Added support for ```.opus```
+  * Added support for ```.ogg/vorbis```
+  * Added support for the option ```best```
 * Added basic support for powerMonitoring (suspend and resume). See [#67](https://github.com/yafp/media-dupes/issues/67)
-
+* Added new user setting ```verbose mode```. See [#70](https://github.com/yafp/media-dupes/issues/70)
 
 #### ```Changed```
 * Setting UI: 
   * is now a child window of the main UI. See [#58](https://github.com/yafp/media-dupes/issues/58)
   * is now a modal window. See [#63](https://github.com/yafp/media-dupes/issues/63)
-  * while open the main UI is blur'ed. See [#64](https://github.com/yafp/media-dupes/issues/64)
+  * while setting UI is open the main UI gets blur'ed. See [#64](https://github.com/yafp/media-dupes/issues/64)
 * Improved validation of youtube-dl setup. See [#56](https://github.com/yafp/media-dupes/issues/56)
 * Show extractors function not longer resets the log. It appends now the new data.
 * Downloading audio:
@@ -56,16 +58,25 @@ The following categories are used:
   * Added ```--ignore-errors``` flag.
 * Download video: 
   * Added ```--ignore-errors``` flag.
+  * Improved audio quality setting by using ```--audio-quality 0``` (was set to 5 before).
 * Moved functions from renderer to new modules
   * ffmpeg
   * youtubeDl
 * Dependencies
   * Updated ```youtube-dl```  from 3.0.0 to 3.0.1
+  * Updated ```popper.js``` from 1.16.0 to 1.16.1
+  * Updated ```electron``` from 7.1.9 to 7.1.10
+  * Updated ```electron-log``` from 4.0.3 to 4.0.4
+  * Updated ```spectron``` from 9.0.0 to 10.0.0
+  * Updated ```mocha``` from 7.0.0 to 7.0.1
+  * Updated ```docdash``` from 1.1.0 to 1.2.0
+  * Updated ```electron-builder``` from 22.2.0 to 22.3.2
 * Documentation: Improved jsdoc documentation. Adding namespaces and some other changes
 * Builds: Improved the dmg style. New background and icon positions
 
 #### ```Fixed```
 * Fixed several errors in application log showing wrong urls and progress-state informations. See [#60](https://github.com/yafp/media-dupes/issues/60)
+* Fixed error handling when downloading a single url failed. See [#71](https://github.com/yafp/media-dupes/issues/71)
 
 
 ***
