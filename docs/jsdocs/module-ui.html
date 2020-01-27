@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>utils - media-dupes jsdoc documentation</title>
+    <title>ui - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
     
@@ -40,7 +40,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">utils</h1>
+    <h1 class="page-title">ui</h1>
     
 
     
@@ -63,7 +63,7 @@
         <div class="container-overview">
         
             
-                <div class="description usertext"><p>Contains all helper and utility functions</p></div>
+                <div class="description usertext"><p>Contains all ui functions</p></div>
             
 
             
@@ -77,7 +77,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line1">line 1</a>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -177,10 +177,10 @@
 
     
 
-    <h4 class="name" id="~formatBytes"><span class="type-signature">(inner) </span>formatBytes<span class="signature">(bytes, decimals)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~windowMainAddUrl"><span class="type-signature">(inner) </span>windowMainAddUrl<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
-    <p class="summary usertext"><p>Calculate bytes to...</p></p>
+    <p class="summary usertext"><p>Handles the add-url-click of the user</p></p>
     
 
 
@@ -191,7 +191,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line104">line 104</a>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line447">line 447</a>
     </li></ul></dd>
     
 
@@ -231,7 +231,7 @@
 
 
 <div class="description usertext">
-    <p>Calculate bytes to...</p>
+    <p>Fetches the user provided url, trims it and adds it to an array. Is then calling todoListUpdate()</p>
 </div>
 
 
@@ -244,66 +244,6 @@
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>bytes</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Incoming bytes value</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>decimals</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>(optimal, defaults to 2)</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -318,18 +258,6 @@
 
 
 
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Human readable value</p>
-</div>
-
-
-
-    
 
 
 
@@ -338,10 +266,10 @@
 
     
 
-    <h4 class="name" id="~fullyDecodeURI"><span class="type-signature">(inner) </span>fullyDecodeURI<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~windowMainApplicationStateSet"><span class="type-signature">(inner) </span>windowMainApplicationStateSet<span class="signature">(newState<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
-    <p class="summary usertext"><p>Used to decode URLs</p></p>
+    <p class="summary usertext"><p>Updates the application state information</p></p>
     
 
 
@@ -352,7 +280,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line136">line 136</a>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -392,1162 +320,7 @@
 
 
 <div class="description usertext">
-    <p>Used to decode URLs
-param {string} uri - The incoming uri</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>uri - a decoded url</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~globalObjectGet"><span class="type-signature">(inner) </span>globalObjectGet<span class="signature">(property)</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-    <p class="summary usertext"><p>Gets a value of a single property from the global object in main.js</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line166">line 166</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Gets a value of a single property from the global object in main.js</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>property</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Name of the property</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>value - Value of the property</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~globalObjectSet"><span class="type-signature">(inner) </span>globalObjectSet<span class="signature">(property, value)</span><span class="type-signature"></span></h4>
-
-    
-    <p class="summary usertext"><p>Updates the value of a single property from the global object in main.js</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line180">line 180</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Updates the value of a single property from the global object in main.js</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>property</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Name of the property</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The new value of the property</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~isDirectoryAvailable"><span class="type-signature">(inner) </span>isDirectoryAvailable<span class="signature">(dirPath)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-    <p class="summary usertext"><p>Checks if a given directory exists</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line192">line 192</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Checks if a given directory exists and returns a boolean</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>dirPath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The directory path which should be checked</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~isDirectoryWriteable"><span class="type-signature">(inner) </span>isDirectoryWriteable<span class="signature">(dirPath)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-    <p class="summary usertext"><p>Checks if a given directory is writeable</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line214">line 214</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Checks if a given directory is writeable and returns a boolean</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>dirPath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The directory path which should be checked</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~isEncoded"><span class="type-signature">(inner) </span>isEncoded<span class="signature">(uri)</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-    <p class="summary usertext"><p>Helper method for fullyDecodeURI</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line124">line 124</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Helper method for fullyDecodeURI</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>uri</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the uri to check</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>uri - the decoded uri</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~openURL"><span class="type-signature">(inner) </span>openURL<span class="signature">(url)</span><span class="type-signature"></span></h4>
-
-    
-    <p class="summary usertext"><p>Opens an url in browser</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line75">line 75</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Opens a given url in default browser. This is pretty slow, but got no better solution so far.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>URL string which contains the target url</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~pathExists"><span class="type-signature">(inner) </span>pathExists<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-    <p class="summary usertext"><p>Checks if a given filepath exists</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line150">line 150</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Checks if a given filepath exists using fs. Returns a boolean
-param {string} path - The path which should be checked for existance</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>-If path exists or not</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~showNotification"><span class="type-signature">(inner) </span>showNotification<span class="signature">(title<span class="signature-attributes">opt</span>, message)</span><span class="type-signature"></span></h4>
-
-    
-    <p class="summary usertext"><p>Shows a desktop notification</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line57">line 57</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>Shows a desktop notification</p>
+    <p>Updates the applicationState in globalObject. Updates the application state displayed in the UI. Starts or stops the spinner depending on the state</p>
 </div>
 
 
@@ -1587,7 +360,7 @@ param {string} path - The path which should be checked for existance</p>
 
         <tr>
             
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>newState</code></td>
             
 
             <td class="type">
@@ -1613,38 +386,7 @@ param {string} path - The path which should be checked for existance</p>
 
             
 
-            <td class="description last"><p>The title of the desktop notification</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The notification message text</p></td>
+            <td class="description last"><p>String which defines the new state of the application</p></td>
         </tr>
 
     
@@ -1674,10 +416,10 @@ param {string} path - The path which should be checked for existance</p>
 
     
 
-    <h4 class="name" id="~showNoty"><span class="type-signature">(inner) </span>showNoty<span class="signature">(type, message, timeout<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~windowMainBlurSet"><span class="type-signature">(inner) </span>windowMainBlurSet<span class="signature">(enable-)</span><span class="type-signature"></span></h4>
 
     
-    <p class="summary usertext"><p>Shows a noty notification</p></p>
+    <p class="summary usertext"><p>Can set a blur level for entire main ui</p></p>
     
 
 
@@ -1688,7 +430,7 @@ param {string} path - The path which should be checked for existance</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line38">line 38</a>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -1728,219 +470,7 @@ param {string} path - The path which should be checked for existance</p>
 
 
 <div class="description usertext">
-    <p>Creates an in-app notification using the noty framework</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Options: alert, success, warning, error, info/information</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>notification text</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>timeout</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Timevalue, defines how long the message should be displayed. Use 0 for no-timeout</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~validURL"><span class="type-signature">(inner) </span>validURL<span class="signature">(-str)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-    <p class="summary usertext"><p>checks if a given string is a valid url</p></p>
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line87">line 87</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description usertext">
-    <p>checks if a given string is a valid url</p>
+    <p>Can set a blur level for entire main ui. Is used on the mainUI when the settingsUI is open</p>
 </div>
 
 
@@ -1978,62 +508,44 @@ param {string} path - The path which should be checked for existance</p>
 
         <tr>
             
-                <td class="name"><code>-str</code></td>
+                <td class="name"><code>enable-</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Given url</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
 <span class="param-type">boolean</span>
 
 
-    </dd>
-</dl>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>To enable or disable blur</p></td>
+        </tr>
 
     
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2042,10 +554,10 @@ param {string} path - The path which should be checked for existance</p>
 
     
 
-    <h4 class="name" id="~writeConsoleMsg"><span class="type-signature">(inner) </span>writeConsoleMsg<span class="signature">(type, message)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~windowMainButtonsOthersDisable"><span class="type-signature">(inner) </span>windowMainButtonsOthersDisable<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
-    <p class="summary usertext"><p>Writes console output for the renderer process</p></p>
+    <p class="summary usertext"><p>Disables some of the footer buttons while a download is running</p></p>
     
 
 
@@ -2056,7 +568,7 @@ param {string} path - The path which should be checked for existance</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="app_js_modules_utils.js.html">app/js/modules/utils.js</a>, <a href="app_js_modules_utils.js.html#line9">line 9</a>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -2096,7 +608,452 @@ param {string} path - The path which should be checked for existance</p>
 
 
 <div class="description usertext">
-    <p>Writes console output for the renderer process</p>
+    <p>Is executed when a download task is started by the user</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainButtonsOthersEnable"><span class="type-signature">(inner) </span>windowMainButtonsOthersEnable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Enables some of the footer buttons when a download is finished</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Is executed when a download task has ended by the user</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainButtonsStartDisable"><span class="type-signature">(inner) </span>windowMainButtonsStartDisable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Disables the 2 start buttons</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line94">line 94</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Is executed when a download task is started by the user</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainButtonsStartEnable"><span class="type-signature">(inner) </span>windowMainButtonsStartEnable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Enabled the 2 start buttons</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Is executed when the todo-list contains at least 1 item</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainDistract"><span class="type-signature">(inner) </span>windowMainDistract<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Starts the distraction mode</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line478">line 478</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Sends a request to main.js to start the &quot;hidden&quot; distraction mode (easteregg)</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainDownloadContent"><span class="type-signature">(inner) </span>windowMainDownloadContent<span class="signature">(mode)</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Handles the download of audio and video</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line270">line 270</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Checks some requirements, then sets the youtube-dl parameter depending on the mode. Finally launched youtube-dl via exec</p>
 </div>
 
 
@@ -2134,13 +1091,13 @@ param {string} path - The path which should be checked for existance</p>
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>mode</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -2150,35 +1107,1497 @@ param {string} path - The path which should be checked for existance</p>
 
             
 
-            <td class="description last"><p>String which defines the log type</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>String which defines the log message</p></td>
+            <td class="description last"><p>The download mode. Can be 'video' or 'audio'</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc usertext">
+    
+        <p>Exit code from youtube-dl exec task</p>
+    
+    </div>
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainDownloadQueueFinished"><span class="type-signature">(inner) </span>windowMainDownloadQueueFinished<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Re-setups the main UI post downloads</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line494">line 494</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Gets triggered after the download function finished</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainIntroShow"><span class="type-signature">(inner) </span>windowMainIntroShow<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>start an intro / user tutorial</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line125">line 125</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Starts a short intro / tutorial which explains the user-interface. Using introJs</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainLoadingAnimationHide"><span class="type-signature">(inner) </span>windowMainLoadingAnimationHide<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Hides the loading animation / download spinner</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Hides the loading animation / download spinner. applicationStateSet() is using this function</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainLoadingAnimationShow"><span class="type-signature">(inner) </span>windowMainLoadingAnimationShow<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Shows the loading animation / download spinner</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Shows the loading animation / download spinner. applicationStateSet() is using this function</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainLogAppend"><span class="type-signature">(inner) </span>windowMainLogAppend<span class="signature">(newLine)</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Appends text to the log textarea</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line136">line 136</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Appends text to the log textarea</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newLine</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The content for the line which should be appended to the UI Log</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainLogReset"><span class="type-signature">(inner) </span>windowMainLogReset<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Resets the ui log</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line149">line 149</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Resets the content of the ui log</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainLogScrollToEnd"><span class="type-signature">(inner) </span>windowMainLogScrollToEnd<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Scrolls the UI log to the end</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Scrolls the UI log to the end / latest entry</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainOpenDownloadFolder"><span class="type-signature">(inner) </span>windowMainOpenDownloadFolder<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Triggers code in main.js to open the download folder of the user</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line206">line 206</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Triggers code in main.js to open the download folder of the user</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainResetAskUser"><span class="type-signature">(inner) </span>windowMainResetAskUser<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Ask the user if he wants to execute the UI reset function if there are currently downloads in progress</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line168">line 168</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Ask the user if he wants to execute the UI reset function if there are currently downloads in progress</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainSettingsUiLoad"><span class="type-signature">(inner) </span>windowMainSettingsUiLoad<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Navigate to setting.html</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line259">line 259</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Is triggered via button on index.html. Calls method on main.js which loads setting.html to the application window</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainShowSupportedExtractors"><span class="type-signature">(inner) </span>windowMainShowSupportedExtractors<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Shows a list of all currently supported extractors of youtube-dl</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line219">line 219</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Shows a list of all currently supported extractors of youtube-dl</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainToDoListReset"><span class="type-signature">(inner) </span>windowMainToDoListReset<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Resets the todo-list textarea</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line525">line 525</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Resets the todo-list textarea</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainToDoListRestore"><span class="type-signature">(inner) </span>windowMainToDoListRestore<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Restores urls from json files back to the todoList</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line561">line 561</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Reads all existing json files and restores those contains preiosly stored urls.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainToDoListSave"><span class="type-signature">(inner) </span>windowMainToDoListSave<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Saves the current content of the todoList to files</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line615">line 615</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Creates a json file for each url of the todoList. Those files can be restored on next application launch</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainToDoListUpdate"><span class="type-signature">(inner) </span>windowMainToDoListUpdate<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Updates the todo-list after a user added an url</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line537">line 537</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Is called by addUrl(). Makes the url array unique to remove duplicated entries. Updates the UI todo item. Calls windowMainButtonsStartEnable() if array is &gt; 0</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~windowMainUiReset"><span class="type-signature">(inner) </span>windowMainUiReset<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+    <p class="summary usertext"><p>Resets the UI back to default</p></p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_ui.js.html">app/js/modules/ui.js</a>, <a href="app_js_modules_ui.js.html#line509">line 509</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Resets the UI back to default</p>
+</div>
+
+
+
+
+
+
+
+
+
 
 
 
