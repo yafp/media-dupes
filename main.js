@@ -1,25 +1,19 @@
 /**
-* @file Contains the main.js code
+* @file Contains the main.js code of media-dupes
 * @author yafp
 * @namespace main
 */
 
-// Modules to control application life and create native browser window
 const { app, BrowserWindow, electron, ipcMain, Menu } = require('electron')
 const shell = require('electron').shell
 const path = require('path')
 const fs = require('fs')
 const openAboutWindow = require('about-window').default // for: about-window
 
+// media-dupes module
 const utils = require('./app/js/modules/utils.js')
 
-
-
-// The following requires are not really needed - but it mutes 'npm-check' regarding NOTUSED
-require('jquery')
-require('@fortawesome/fontawesome-free')
-require('popper.js')
-// CAUTION: jquery, fontawesome and popper might cost startup time
+// npm-check -s // to ignore all non-referenced node_modules
 
 // ----------------------------------------------------------------------------
 // ERROR-HANDLING
@@ -50,7 +44,7 @@ const minimalWindowWidth = 620
 // ----------------------------------------------------------------------------
 
 /**
-* @name doLog
+* @function doLog
 * @summary Writes console output for the main process
 * @description Writes console output for the main process
 * @memberof main
@@ -81,7 +75,7 @@ function doLog (type, message) {
 }
 
 /**
-* @name createWindowSettings
+* @function createWindowSettings
 * @summary Manages the BrowserWindow for the Settings UI
 * @description Manages the BrowserWindow for the Settings UI
 * @memberof main
@@ -101,7 +95,7 @@ function createWindowSettings () {
         width: 800,
         minWidth: 800,
         // resizable: false, // this conflickts with opening dev tools
-        height: 600,
+        height: 620,
         minHeight: 600,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
@@ -140,7 +134,7 @@ function createWindowSettings () {
 }
 
 /**
-* @name createWindowDistraction
+* @function createWindowDistraction
 * @summary creates the window for distraction mode
 * @description creates the window for distraction mode
 * @memberof main
@@ -186,7 +180,7 @@ function createWindowDistraction () {
 }
 
 /**
-* @name createWindowMain
+* @function createWindowMain
 * @summary Creates the mainWindow
 * @description Creates the mainWindow (restores window position and size of possible)
 * @memberof main
@@ -295,14 +289,36 @@ function createWindowMain () {
         createWindowDistraction()
     })
 
+    // Call from renderer: Update property from globalObj
+    ipcMain.on('globalObjectSet', function (event, property, value) {
+        doLog('info', 'Set property _' + property + '_ to new value: _' + value + '_')
+        global.sharedObj[property] = value
+        console.warn(global.sharedObj)
+    })
+
     // Global object
-    var downloadTarget = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
+    //
+    // Settings UI
+    var enableVerboseMode = false
+    var enableErrorReporting = true
+    var downloadDir = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
     var audioFormat = 'mp3' // mp3 is the default
-    var applicationState = ''
+    var confirmedDisclaimer = false
+    // Main UI
+    var applicationState = 'idle' // default is idle
+    var todoListStateEmpty = true // is empty by default
+
     global.sharedObj = {
-        downloadFolder: downloadTarget,
+        // settings UI
+        enableErrorReporting: enableErrorReporting,
+        enableVerboseMode: enableVerboseMode,
+        downloadDir: downloadDir,
         audioFormat: audioFormat,
-        applicationState: applicationState
+        confirmedDisclaimer: confirmedDisclaimer,
+
+        // main UI
+        applicationState: applicationState,
+        todoListStateEmpty: todoListStateEmpty
     }
 
     // and load the index.html of the app.
@@ -326,7 +342,8 @@ function createWindowMain () {
         mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
         mainWindow.webContents.send('startDisclaimerCheck') // check if disclaimer must be shown
         mainWindow.webContents.send('startSearchUpdatesSilent') // search silently for media-dupes updates
-        mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // seach silently for youtube-dl binary updates
+        mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // search silently for youtube-dl binary updates
+        mainWindow.webContents.send('todoListCheck') // search if there are urls to restore
     })
 
     // Emitted before the window is closed.
@@ -336,31 +353,43 @@ function createWindowMain () {
         var curState = global.sharedObj.applicationState // get applicationState
         doLog('info', 'createWindowMain ::: Current application state is: _' + curState + '_.')
 
-        // applicationState = Download in progress
-        //
         if (curState === 'Download in progress') {
             // since electron7 showMessageBox no longer blocks the close. Therefor we are using showMessageBoxSync
-            var choice = require('electron').dialog.showMessageBoxSync(this,
+            var choiceA = require('electron').dialog.showMessageBoxSync(this,
                 {
+                    icon: path.join(__dirname, 'app/img/icon/icon.png'),
                     type: 'question',
                     buttons: ['Yes', 'No'],
                     title: 'Downloads in progress',
-                    message: 'media-dupes is currently downloading. Are you sure you want to quit?'
+                    message: 'media-dupes is currently downloading.\n\nDo you really want to quit?'
                 })
-            if (choice === 1) {
+            if (choiceA === 1) {
                 event.preventDefault() // user pressed No
                 return
             }
         }
 
-        // TODO:
-        // - check if todo-list is empty or not
-        // - if it is not empty - offer saving it to resume the todo list on next launch
+        // todoList handling - see #66
         //
-        // BONUS:
-        // - adopt RETURN handling & preventDefault as both conditions are relevant
-        // -- downloadInProgress
-        // -- save todolist
+        var curTodoListStateEmpty = global.sharedObj.todoListStateEmpty
+        doLog('info', 'createWindowMain ::: Current todo list empty state is: _' + curTodoListStateEmpty + '_.')
+        if (curTodoListStateEmpty === false) {
+            // todo List contains data which should be handled
+            var choiceB = require('electron').dialog.showMessageBoxSync(this,
+                {
+                    icon: path.join(__dirname, 'app/img/icon/icon.png'),
+                    type: 'question',
+                    buttons: ['Yes', 'No'],
+                    title: 'Save todo list',
+                    message: 'Your todo list contains URLs.\n\nDo you want to restore them on next launch?'
+                })
+            if (choiceB === 0) {
+                doLog('info', 'createWindowMain ::: User wants to save his todo list')
+                mainWindow.webContents.send('todoListTryToSave')
+            } else {
+                doLog('info', 'createWindowMain ::: User DOES NOT want to save his todo list')
+            }
+        }
 
         // get window position and size
         var data = {
@@ -392,7 +421,7 @@ function createWindowMain () {
 }
 
 /**
-* @name createMenuMain
+* @function createMenuMain
 * @summary Creates the application menu
 * @description Creates the application menu
 * @memberof main
@@ -651,7 +680,7 @@ function createMenuMain () {
 }
 
 /**
-* @name forceSingleAppInstance
+* @function forceSingleAppInstance
 * @summary Takes care that there is only 1 instance of this app running
 * @description Takes care that there is only 1 instance of this app running
 * @memberof main
@@ -680,14 +709,14 @@ function forceSingleAppInstance () {
 }
 
 /**
-* @name powerMonitorInit
+* @function powerMonitorInit
 * @summary Initialized a powermonitor after the app is ready
 * @description Initialized a powermonitor after the app is ready. See: https://electronjs.org/docs/api/power-monitor
 * @memberof main
 */
-function powerMonitorInit() {
+function powerMonitorInit () {
     const { powerMonitor } = require('electron') // This module cannot be used until the ready event of the app module is emitted.
-    
+
     // suspend
     powerMonitor.on('suspend', () => {
         doLog('warn', 'powerMonitorInit ::: The system is going to sleep (event: suspend)')
@@ -700,23 +729,26 @@ function powerMonitorInit() {
         powerMonitorNotify('info', 'The system resumed (event: resume)', 0)
     })
 
-    // OTHER EVENTS:
+    // shutdown (Linux, macOS)
+    powerMonitor.on('shutdown', () => {
+        doLog('info', 'powerMonitorInit ::: The system is going to shutdown (event: shutdown)')
+    })
+
+    // OTHER SUPPORTED EVENTS:
     //
     // on-ac (Windows)
     // on-battery (Windows)
-    // shutdown (Linuxm macOS)
     // lock-screen (macOs, Windows)
     // unlock-screen (macOs, Windows)
 }
 
 /**
-* @name powerMonitorNotify
+* @function powerMonitorNotify
 * @summary Used to tell the renderer to display a notification
 * @description Used to tell the renderer to display a notification
 * @memberof main
 */
-function powerMonitorNotify(messageType, messageText, messageDuration)
-{
+function powerMonitorNotify (messageType, messageText, messageDuration) {
     doLog('warn', 'powerMonitorNotify ::: Going to tell the renderer to show a powerMonitor notification')
     mainWindow.webContents.send('powerMonitorNotification', messageType, messageText, messageDuration)
 }
