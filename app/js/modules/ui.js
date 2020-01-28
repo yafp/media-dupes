@@ -511,8 +511,8 @@ function windowMainDownloadVideo () {
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             var arrayLength = arrayUserUrls.length
-            ui.windowMainLogAppend('Queue contains ' + arrayLength + ' urls.')
-            ui.windowMainLogAppend('Starting to download items from queue ... ')
+            windowMainLogAppend('Queue contains ' + arrayLength + ' urls.')
+            windowMainLogAppend('Starting to download items from queue ... ')
             for (var i = 0; i < arrayLength; i++) {
                 var url = arrayUserUrls[i] // get url
 
@@ -567,7 +567,7 @@ function windowMainDownloadVideo () {
                 /*
                 video.on('complete', function complete (info) {
                     console.warn('filename: ' + info._filename + ' already downloaded.')
-                    ui.windowMainLogAppend('Filename: ' + info._filename + ' already downloaded.')
+                    windowMainLogAppend('Filename: ' + info._filename + ' already downloaded.')
                 })
                 */
 
