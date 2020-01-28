@@ -36,7 +36,7 @@ var youtubeDlBinaryDetailsPath
 var youtubeDLBinaryDetailsExec
 
 // distract
-//var distractEnabler = 0
+// var distractEnabler = 0
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS - MAIN WINDOW CLICKS
@@ -275,6 +275,7 @@ function settingsAudioFormatSave () {
 function settingsLoadAllOnAppStart () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now ...')
     userSettingRead('enableVerboseMode') // verbose mode
+    userSettingRead('enablePrereleases') // pre-releases
     userSettingRead('enableErrorReporting') // get setting for error-reporting
     userSettingRead('downloadDir') // download dir
     userSettingRead('audioFormat') // get setting for configured audio format
@@ -289,6 +290,7 @@ function settingsLoadAllOnAppStart () {
 function settingsLoadAllOnSettingsUiLoad () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now and adjust the settings UI')
     userSettingRead('enableVerboseMode', true) // verbose mode
+    userSettingRead('enablePrereleases', true) // pre-releases
     userSettingRead('enableErrorReporting', true)
     userSettingRead('downloadDir', true) // download dir
     userSettingRead('audioFormat', true) // load configured audio format and update the settings UI
@@ -431,6 +433,35 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             }
         }
         // end: enableVerboseMode
+
+        // Setting: enablePrereleases
+        //
+        if (key === 'enablePrereleases') {
+            var settingPrereleases
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingPrereleases = false // set the default
+                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingPrereleases + '_.')
+                userSettingWrite('enablePrereleases', settingPrereleases) // write the setting
+            } else {
+                settingPrereleases = value // update global var
+                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingPrereleases + '_.')
+            }
+
+            // update the global object
+            utils.globalObjectSet('enablePrereleases', settingPrereleases)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingPrereleases === true) {
+                    $('#checkboxEnablePreReleases').prop('checked', true)
+                } else {
+                    $('#checkboxEnablePreReleases').prop('checked', false)
+                }
+            }
+        }
+        // end: enablePrereleases
 
         // Setting: enableErrorReporting
         //
@@ -625,36 +656,58 @@ function onEnter (event) {
 function searchUpdate (silent = true) {
     ui.windowMainApplicationStateSet('Searching media-dupes updates')
 
+    // check if pre-releases should be included or not
+    var curEnablePrereleasesSetting = utils.globalObjectGet('enablePrereleases')
+
+    // get url for github releases / api
+    const { urlGithubApiReleases } = require('./js/modules/githubUrls.js') // get API url
+
     var remoteAppVersionLatest = '0.0.0'
+    var remoteAppVersionLatestPrerelease = false
     var localAppVersion = '0.0.0'
     var versions
 
-    const { urlGitHubRepoTags } = require('./js/modules/githubUrls.js') // get API url
+    // get local version
+    //
+    localAppVersion = require('electron').remote.app.getVersion()
+    // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-    utils.writeConsoleMsg('info', 'searchUpdate ::: Start checking _' + urlGitHubRepoTags + '_ for available releases')
-
-    var updateStatus = $.get(urlGitHubRepoTags, function (data) {
+    var updateStatus = $.get(urlGithubApiReleases, function (data) {
         3000 // in milliseconds
 
         // success
         versions = data.sort(function (v1, v2) {
-            // return semver.compare(v2.name, v1.name);
+            // return semver.compare(v2.tag_name, v1.tag_name);
+            // console.error(v1.tag_name)
+            // console.error(v2.tag_name)
         })
 
-        // get remote version
-        //
-        remoteAppVersionLatest = versions[0].name
-        // remoteAppVersionLatest = '66.6.6' // overwrite variable to simulate available updates
+        if (curEnablePrereleasesSetting === true) {
+            // user wants the latest release - ignoring if it is a prerelease or an official one
+            utils.writeConsoleMsg('info', 'searchUpdate ::: Including pre-releases in update search')
+            remoteAppVersionLatest = versions[0].tag_name // Example: 0.4.2
+            remoteAppVersionLatestPrerelease = versions[0].prerelease // boolean
+        } else {
+            // user wants official releases only
+            utils.writeConsoleMsg('info', 'searchUpdate ::: Ignoring pre-releases in update search')
+            // find the latest non pre-release build
+            // loop over the versions array to find the latest non-pre-release
+            var latestOfficialRelease
+            for (var i = 0; i < versions.length; i++) {
+                if (versions[i].prerelease === false) {
+                    latestOfficialRelease = i
+                    break
+                }
+            }
 
-        // get local version
-        //
-        localAppVersion = require('electron').remote.app.getVersion()
-        // localAppVersion = '0.0.1'; //  overwrite variable to simulate
+            remoteAppVersionLatest = versions[i].tag_name // Example: 0.4.2
+            remoteAppVersionLatestPrerelease = versions[i].prerelease // boolean
+        }
 
         utils.writeConsoleMsg('info', 'searchUpdate ::: Local media-dupes version: ' + localAppVersion)
         utils.writeConsoleMsg('info', 'searchUpdate ::: Latest media-dupes version: ' + remoteAppVersionLatest)
 
-        // Update available
+        // If a stable (not a prelease) update is available - see #73
         if (localAppVersion < remoteAppVersionLatest) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Found update, notify user')
 
@@ -689,23 +742,23 @@ function searchUpdate (silent = true) {
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
-                utils.showNoty('success', 'No media-dupes updates available')
+                utils.showNoty('success', 'No <b>media-dupes</b> updates available')
             }
         }
 
-        utils.writeConsoleMsg('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases')
+        utils.writeConsoleMsg('info', 'searchUpdate ::: Successfully checked ' + urlGithubApiReleases + ' for available releases')
     })
         .done(function () {
-        // utils.writeConsoleMsg('info', 'searchUpdate ::: Successfully checked ' + urlGitHubRepoTags + ' for available releases');
+        // utils.writeConsoleMsg('info', 'searchUpdate ::: Successfully checked ' + urlGithubApiReleases + ' for available releases');
         })
 
         .fail(function () {
-            utils.writeConsoleMsg('info', 'searchUpdate ::: Checking ' + urlGitHubRepoTags + ' for available releases failed.')
-            utils.showNoty('error', 'Checking <b>' + urlGitHubRepoTags + '</b> for available media-dupes releases failed. Please troubleshoot your network connection.', 0)
+            utils.writeConsoleMsg('info', 'searchUpdate ::: Checking ' + urlGithubApiReleases + ' for available releases failed.')
+            utils.showNoty('error', 'Checking <b>' + urlGithubApiReleases + '</b> for available media-dupes releases failed. Please troubleshoot your network connection.', 0)
         })
 
         .always(function () {
-            utils.writeConsoleMsg('info', 'searchUpdate ::: Finished checking ' + urlGitHubRepoTags + ' for available releases')
+            utils.writeConsoleMsg('info', 'searchUpdate ::: Finished checking ' + urlGithubApiReleases + ' for available releases')
             ui.windowMainButtonsOthersEnable()
             ui.windowMainApplicationStateSet()
         })
@@ -777,6 +830,22 @@ function settingsToggleVerboseMode () {
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now disabled')
         userSettingWrite('enableVerboseMode', false)
+    }
+}
+
+/**
+* @function settingsTogglePrereleases
+* @summary Enables or disables the support for pre-releases
+* @description ...
+* @memberof renderer
+*/
+function settingsTogglePrereleases () {
+    if ($('#checkboxEnablePreReleases').is(':checked')) {
+        utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will now include pre-releases')
+        userSettingWrite('enablePrereleases', true)
+    } else {
+        utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will ignore pre-releases')
+        userSettingWrite('enablePrereleases', false)
     }
 }
 

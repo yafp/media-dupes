@@ -49,7 +49,6 @@
 
         <!-- USER SETTINGS -->
 
-
          <!-- Header: User-Settings -->
         <div class="row-fluid">
             <h5><i class="fas fa-cog" onclick="settingsFolderOpen();"></i> User-Settings</h5>
@@ -82,6 +81,21 @@
                 <input type="text" class="form-control form-control-sm" value="Verbose mode" disabled>
             </div>
         </div>
+
+        <!-- Header: Update policy-->
+        <div class="row-fluid">
+            <h6><i class="fas fa-cloud-download-alt"></i> Update policy</h6>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="checkbox" id="checkboxEnablePreReleases" name="checkboxEnablePreReleases" onclick="settingsTogglePrereleases();">
+                </div>
+            </div>
+            <input type="text" class="form-control form-control-sm" value="Include media-dupes pre-releases into update search" disabled>
+        </div>
+
+
 
         <!-- Header: Error reportng using sentry -->
         <div class="row-fluid">
