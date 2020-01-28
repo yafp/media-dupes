@@ -9,6 +9,10 @@
 const ui = require('./ui.js')
 const utils = require('./utils.js')
 
+var youtubeDlBinaryDetailsVersion
+var youtubeDlBinaryDetailsPath
+var youtubeDLBinaryDetailsExec
+
 /**
 * @function youtubeDlBinaryPathGet
 * @summary Gets the path to the youtube-dl binary file
@@ -125,11 +129,6 @@ function youtubeDlBinaryUpdateSearch (silent = true) {
         // get local version
         youtubeDlBinaryDetailsValueGet(function () {
             utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Fetched all values from details file')
-
-            // console.warn(youtubeDlBinaryDetailsVersion)
-            // console.warn(youtubeDlBinaryDetailsPath)
-            // console.warn(youtubeDLBinaryDetailsExec)
-
             localAppVersion = youtubeDlBinaryDetailsVersion
 
             utils.writeConsoleMsg('info', 'youtubeDlBinaryUpdateSearch ::: Local youtube-dl binary version: ' + localAppVersion)
@@ -189,8 +188,7 @@ function youtubeDlBinaryDetailsPathGet () {
 */
 function youtubeDlBinaryDetailsValueGet (_callback) {
     const fs = require('fs')
-
-    var youtubeDlBinaryDetailsPath = youtubeDlBinaryDetailsPathGet() // get the path to the details file
+    youtubeDlBinaryDetailsPath = youtubeDlBinaryDetailsPathGet() // get the path to the details file
 
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
@@ -198,14 +196,6 @@ function youtubeDlBinaryDetailsValueGet (_callback) {
             throw error
         } else {
             const data = JSON.parse(contents)
-
-            /*
-            console.error(data)
-
-            console.warn(data.version)
-            console.warn(data.path)
-            console.warn(data.exec)
-            */
 
             youtubeDlBinaryDetailsVersion = data.version
             youtubeDlBinaryDetailsPath = data.path
