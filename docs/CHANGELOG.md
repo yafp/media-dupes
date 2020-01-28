@@ -46,22 +46,24 @@ The following categories are used:
 * Added new user setting ```verbose mode```. See [#70](https://github.com/yafp/media-dupes/issues/70)
 
 #### ```Changed```
-* Setting UI: 
+* Setting UI:
   * is now a child window of the main UI. See [#58](https://github.com/yafp/media-dupes/issues/58)
   * is now a modal window. See [#63](https://github.com/yafp/media-dupes/issues/63)
   * while setting UI is open the main UI gets blur'ed. See [#64](https://github.com/yafp/media-dupes/issues/64)
 * Improved validation of youtube-dl setup. See [#56](https://github.com/yafp/media-dupes/issues/56)
 * Show extractors function not longer resets the log. It appends now the new data.
 * Downloading audio:
-  * Improved filename pattern for audio downloads. See [#61](https://github.com/yafp/media-dupes/issues/61) 
+  * Improved filename pattern for audio downloads. See [#61](https://github.com/yafp/media-dupes/issues/61)
   * Added ```--add-metadata``` flag.
   * Added ```--ignore-errors``` flag.
-* Download video: 
+* Download video:
   * Added ```--ignore-errors``` flag.
   * Improved audio quality setting by using ```--audio-quality 0``` (was set to 5 before).
 * Moved functions from renderer to new modules
   * ffmpeg
   * youtubeDl
+  * ui
+  * sentry
 * Dependencies
   * Updated ```youtube-dl```  from 3.0.0 to 3.0.1
   * Updated ```popper.js``` from 1.16.0 to 1.16.1
@@ -71,12 +73,14 @@ The following categories are used:
   * Updated ```mocha``` from 7.0.0 to 7.0.1
   * Updated ```docdash``` from 1.1.0 to 1.2.0
   * Updated ```electron-builder``` from 22.2.0 to 22.3.2
+  * Updated ```rimraf``` from 3.0.0 to 3.0.1
 * Documentation: Improved jsdoc documentation. Adding namespaces and some other changes
-* Builds: Improved the dmg style. New background and icon positions
+* Builds: Improved the macOS .dmg style. New background and icon positions
 
 #### ```Fixed```
 * Fixed several errors in application log showing wrong urls and progress-state informations. See [#60](https://github.com/yafp/media-dupes/issues/60)
 * Fixed error handling when downloading a single url failed. See [#71](https://github.com/yafp/media-dupes/issues/71)
+* Fixed a vertical scrollbar bug
 
 
 ***
