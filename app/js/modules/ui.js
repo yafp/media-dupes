@@ -171,10 +171,8 @@ function windowMainLogScrollToEnd () {
 * @description Ask the user if he wants to execute the UI reset function if there are currently downloads in progress
 */
 function windowMainResetAskUser () {
-    var curState = utils.globalObjectGet('applicationState')
-
+    var curState = utils.globalObjectGet('applicationState') // get application state
     if (curState === 'Download in progress') {
-        // confirm
         const Noty = require('noty')
         var n = new Noty(
             {
@@ -316,8 +314,8 @@ function windowMainDownloadContent (mode) {
             var ffmpegPath = ffmpeg.ffmpegGetBinaryPath()
             utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
 
-            var finishedDownloads = 0 // used to count finished downloads
-            arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
+            var arrayUrlsProcessedSuccessfully = [] // prepare array for urls which got successfully downloaded
+            var arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
             if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
@@ -385,7 +383,7 @@ function windowMainDownloadContent (mode) {
                 windowMainLogAppend('Audio-Format:\t\t' + settingAudioFormat) // Show mode in log
             }
 
-            // if verboseMode is enabled - append the setting to the parameter array
+            // if verboseMode is enabled - append the related youtube-dl flags to the parameter array
             var settingVerboseMode = utils.globalObjectGet('enableVerboseMode')
             if (settingVerboseMode === true) {
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Verbose Mode is enabled')
@@ -394,7 +392,7 @@ function windowMainDownloadContent (mode) {
             } else {
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Verbose Mode is disabled')
             }
-            windowMainLogAppend('Verbose mode:\t\t' + settingVerboseMode) // Show verbose mode in log
+            windowMainLogAppend('Verbose mode:\t' + settingVerboseMode) // Show verbose mode in log
 
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
@@ -404,39 +402,191 @@ function windowMainDownloadContent (mode) {
                 url = utils.fullyDecodeURI(url) // decode url - see #25
 
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
-                windowMainLogAppend('Added: ' + url + ' to queue') // append url to log
+                windowMainLogAppend('Added: \t\t\t' + url + ' to queue') // append url to log
 
                 // Download
                 //
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
-                        utils.showNoty('error', 'Downloading <b>' + url + '</b> failed with error: ' + error, 0)
+                        utils.showNoty('error', '<b>Download failed</b><br><br>Downloading <b>' + url + '</b> failed with the output:<br><br>' + error, 0)
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading url _' + url + '_ with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         windowMainLogAppend('\nFailed downloading the url: ' + url)
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url
 
-                        // handle progress - see #71
-                        if (arrayUserUrls.length === arrayUrlsThrowingErrors.length + finishedDownloads) {
-                            utils.showNotification('media-dupes', 'Finished download queue (' + arrayUserUrls.length + ') with ' + finishedDownloads + ' success and ' + arrayUrlsThrowingErrors.length + ' errors')
-                            windowMainLogAppend('\nFinished all ' + arrayUserUrls.length + ' URLs. ' + finishedDownloads + ' URLs worked as expected - ' + arrayUrlsThrowingErrors.length + ' URLs failed with errors.')
+                        // if this was the last url to process - handle overall application progress - see #71
+                        if (arrayUserUrls.length === arrayUrlsThrowingErrors.length + arrayUrlsProcessedSuccessfully.length) {
+                            var statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
+                            utils.showNotification('media-dupes', statusReport)
+                            utils.showNoty('info', statusReport, 0)
+                            windowMainLogAppend('\n' + statusReport)
                             windowMainDownloadQueueFinished()
                         }
                         throw error
                     }
 
-                    // finish
+                    // no error occured for this url - assuming the download finished
                     //
-                    finishedDownloads = finishedDownloads + 1
+                    arrayUrlsProcessedSuccessfully.push(url)
                     // Show processing output for this download task
                     utils.writeConsoleMsg('info', output.join('\n'))
                     windowMainLogAppend(output.join('\n'))
                     utils.showNoty('success', 'Finished 1 download') // inform user
 
-                    // Final notification - see #71
-                    if (arrayUrlsThrowingErrors.length + finishedDownloads === arrayUserUrls.length) {
-                        utils.showNotification('media-dupes', 'Finished download queue (' + arrayUserUrls.length + ') with ' + finishedDownloads + ' success and ' + arrayUrlsThrowingErrors.length + ' errors')
-                        windowMainLogAppend('\nFinished all ' + arrayUserUrls.length + ' URLs. ' + finishedDownloads + ' URLs worked as expected - ' + arrayUrlsThrowingErrors.length + ' URLs failed with errors.')
+                    // If this was the last url to process - Show final notification - see #71
+                    if (arrayUrlsThrowingErrors.length + arrayUrlsProcessedSuccessfully.length === arrayUserUrls.length) {
+                        var statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
+                        utils.showNotification('media-dupes', statusReport)
+                        utils.showNoty('info', statusReport, 0)
+                        windowMainLogAppend('\n' + statusReport)
                         windowMainDownloadQueueFinished()
+                    }
+                })
+            }
+        }
+    }
+}
+
+/**
+* @function windowMainDownloadVideo
+* @summary Does the actual video download
+* @description Does the actual video download (without using youtube-dl.exec)
+* @memberof renderer
+*/
+function windowMainDownloadVideo () {
+    // http://www.youtube.com/watch?v=90AiXO1pAiA
+    // https://www.youtube.com/watch?v=sJgDYdA8dio
+    // https://vimeo.com/315670384
+    // https://vimeo.com/274478457
+
+    // FIXME:
+    // This method now seems to work good for youtube urls
+    // BUT not for non-youtube urls
+    // media-dupes is currently not using this function
+
+    var configuredDownloadFolder = utils.globalObjectGet('downloadDir') // What is the target dir
+    utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Download target directory is set to: _' + configuredDownloadFolder + '_.')
+
+    if (utils.isDirectoryAvailable(configuredDownloadFolder)) {
+        // the default download folder exists
+
+        if (utils.isDirectoryWriteable(configuredDownloadFolder)) {
+            // check if it is writeable
+
+            // Prepare UI
+            windowMainButtonsStartDisable() // disable the start buttons
+            windowMainButtonsOthersDisable() // disables some other buttons
+            windowMainLoadingAnimationShow() // start download animation / spinner
+
+            // require some stuff
+            const youtubedl = require('youtube-dl')
+            const path = require('path')
+            const fs = require('fs')
+
+            // ffmpeg
+            var ffmpegPath = ffmpeg.ffmpegGetBinaryPath()
+            utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
+
+            var youtubeDlParameter = ''
+            youtubeDlParameter = [
+                '--format', 'best',
+                '--add-metadata',
+                '--ignore-errors',
+                // '--no-mtime', // added in 0.4.0
+                // '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath // ffmpeg location
+            ]
+
+            // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
+            if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
+                utils.showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadVideo(). Please report this', 0)
+                return
+            }
+
+            utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+
+            var arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
+            var arrayUrlsProcessedSuccessfully = []
+            var downloadUrlTargetName = []
+
+            // assuming we got an array with urls to process
+            // for each item of the array ... try to start a download-process
+            var arrayLength = arrayUserUrls.length
+            ui.windowMainLogAppend('Queue contains ' + arrayLength + ' urls.')
+            ui.windowMainLogAppend('Starting to download items from queue ... ')
+            for (var i = 0; i < arrayLength; i++) {
+                var url = arrayUserUrls[i] // get url
+
+                // decode url - see #25
+                //
+                // url = decodeURI(url);
+                url = utils.fullyDecodeURI(url)
+
+                windowMainLogAppend('Starting to process the url: ' + url + ' ...')
+                utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Processing URL: _' + url + '_.') // show url
+                utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Using the following parameters: _' + youtubeDlParameter + '_.') // show parameters
+
+                const video = youtubedl(url, youtubeDlParameter)
+
+                // Variables for progress of each download
+                let size = 0
+                let pos = 0
+                let progress = 0
+
+                // When the download fetches info - start writing to file
+                //
+                video.on('info', function (info) {
+                    downloadUrlTargetName[i] = path.join(configuredDownloadFolder, 'Video', info._filename) // define the final name & path
+
+                    size = info.size // needed to handle the progress later on('data'
+
+                    console.log('filename: ' + info._filename)
+                    windowMainLogAppend('Filename: ' + info._filename)
+
+                    console.log('size: ' + info.size)
+                    windowMainLogAppend('Size: ' + utils.formatBytes(info.size))
+
+                    // start the actual download & write to file
+                    var writeStream = fs.createWriteStream(downloadUrlTargetName[i])
+                    video.pipe(writeStream)
+                })
+
+                // updating progress
+                //
+                video.on('data', (chunk) => {
+                    // console.log('Getting another chunk: _' + chunk.length + '_.')
+                    pos += chunk.length
+                    if (size) {
+                        progress = (pos / size * 100).toFixed(2) // calculate progress
+                        console.log('Download-progress is: _' + progress + '_.')
+                        windowMainLogAppend('Download progress: ' + progress + '%')
+                    }
+                })
+
+                // If download was already completed and there is nothing more to download.
+                //
+                /*
+                video.on('complete', function complete (info) {
+                    console.warn('filename: ' + info._filename + ' already downloaded.')
+                    ui.windowMainLogAppend('Filename: ' + info._filename + ' already downloaded.')
+                })
+                */
+
+                // Download finished
+                //
+                video.on('end', function () {
+                    console.log('Finished downloading 1 url')
+
+                    windowMainLogAppend('Finished downloading url')
+                    arrayUrlsProcessedSuccessfully.push(url)
+
+                    // if all downloads finished
+                    if (arrayUrlsProcessedSuccessfully.length === arrayLength) {
+                        utils.showNotification('media-dupes', 'Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.')
+                        windowMainLogAppend('Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.')
+                        windowMainToDoListReset()
+                        windowMainUiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
+                        windowMainLoadingAnimationHide() // stop download animation / spinner
+                        windowMainButtonsOthersEnable() // enable some of the buttons again
                     }
                 })
             }
@@ -529,7 +679,6 @@ function windowMainUiReset () {
 */
 function windowMainToDoListReset () {
     arrayUserUrls = [] // reset the array
-    arrayUrlsThrowingErrors = [] // reset the array
     document.getElementById('textareaTodoList').value = '' // reset todo-list in UI
     utils.writeConsoleMsg('info', 'windowMainToDoListReset ::: Did reset the todolist-textarea')
 }
