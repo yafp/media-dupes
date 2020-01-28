@@ -124,10 +124,6 @@
     "nsis": {
       "unicode": false,
       "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}",
-      "allowToChangeInstallationDirectory": true,
-      "allowElevation": true,
-      "perMachine": true,
-      "runAfterFinish": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     },
