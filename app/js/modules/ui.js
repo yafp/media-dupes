@@ -10,6 +10,8 @@ const utils = require('./utils.js')
 const ffmpeg = require('./ffmpeg.js')
 const youtube = require('./youtubeDl.js')
 
+var distractEnabler = 0
+
 /**
 * @function windowMainApplicationStateSet
 * @summary Updates the application state information

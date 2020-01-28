@@ -36,7 +36,7 @@ var youtubeDlBinaryDetailsPath
 var youtubeDLBinaryDetailsExec
 
 // distract
-var distractEnabler = 0
+//var distractEnabler = 0
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS - MAIN WINDOW CLICKS
