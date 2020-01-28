@@ -39,6 +39,9 @@ const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases
 const minimalWindowHeight = 760
 const minimalWindowWidth = 620
 
+
+const __dirname = path.resolve()
+
 // ----------------------------------------------------------------------------
 // FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -95,8 +98,8 @@ function createWindowSettings () {
         width: 800,
         minWidth: 800,
         // resizable: false, // this conflickts with opening dev tools
-        height: 620,
-        minHeight: 600,
+        height: 680,
+        minHeight: 680,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,
