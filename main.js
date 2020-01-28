@@ -381,7 +381,7 @@ function createWindowMain () {
                     type: 'question',
                     buttons: ['Yes', 'No'],
                     title: 'Save todo list',
-                    message: 'Your todo list contains URLs.\n\nDo you want to restore them on next launch?'
+                    message: 'Your todo list contains unprocessed URLs.\n\nDo you want to restore them on next launch?'
                 })
             if (choiceB === 0) {
                 doLog('info', 'createWindowMain ::: User wants to save his todo list')
