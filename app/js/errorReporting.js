@@ -1,3 +1,9 @@
+/**
+* @file Contains all errorReporting code
+* @author yafp
+* @namespace errorReporting
+*/
+
 // ----------------------------------------------------------------------------
 // Error Handling using: sentry
 // ----------------------------------------------------------------------------
@@ -6,7 +12,6 @@
 // https://docs.sentry.io/platforms/javascript/electron/
 // https://docs.sentry.io/error-reporting/configuration/?platform=electron
 //
-
 const Sentry = require('@sentry/electron')
 Sentry.init({
     release: 'media-dupes@' + process.env.npm_package_version,
@@ -16,22 +21,6 @@ Sentry.init({
 //
 // simple way to force a crash:
 // myUndefinedFunction();
-
-/*
-function enableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    console.log('Sentry is now enabled')
-}
-
-function disableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    console.warn('Sentry is now disabled')
-}
-
-// export both functions
-// exports.enableSentry = enableSentry
-// exports.disableSentry = disableSentry
-*/
 
 // ----------------------------------------------------------------------------
 // Error Handling using unhandled
