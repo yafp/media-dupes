@@ -46,6 +46,9 @@ The following categories are used:
 * Added new user setting ```verbose mode```. See [#70](https://github.com/yafp/media-dupes/issues/70)
 
 #### ```Changed```
+* Update search:
+  * Is now ignoring pre-releases. See [#73](https://github.com/yafp/media-dupes/issues/73)
+  * Added new setting to configure search for pre-releases. See [#74](https://github.com/yafp/media-dupes/issues/74)
 * Setting UI:
   * is now a child window of the main UI. See [#58](https://github.com/yafp/media-dupes/issues/58)
   * is now a modal window. See [#63](https://github.com/yafp/media-dupes/issues/63)
