@@ -397,12 +397,14 @@ function windowMainDownloadContent (mode) {
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             for (var i = 0; i < arrayUserUrls.length; i++) {
+                var statusReport
                 var url = arrayUserUrls[i] // get url
 
                 url = utils.fullyDecodeURI(url) // decode url - see #25
 
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
                 windowMainLogAppend('Added: \t\t\t' + url + ' to queue') // append url to log
+
 
                 // Download
                 //
@@ -415,7 +417,7 @@ function windowMainDownloadContent (mode) {
 
                         // if this was the last url to process - handle overall application progress - see #71
                         if (arrayUserUrls.length === arrayUrlsThrowingErrors.length + arrayUrlsProcessedSuccessfully.length) {
-                            var statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
+                            statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
                             utils.showNotification('media-dupes', statusReport)
                             utils.showNoty('info', statusReport, 0)
                             windowMainLogAppend('\n' + statusReport)
@@ -434,7 +436,7 @@ function windowMainDownloadContent (mode) {
 
                     // If this was the last url to process - Show final notification - see #71
                     if (arrayUrlsThrowingErrors.length + arrayUrlsProcessedSuccessfully.length === arrayUserUrls.length) {
-                        var statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
+                        statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
                         utils.showNotification('media-dupes', statusReport)
                         utils.showNoty('info', statusReport, 0)
                         windowMainLogAppend('\n' + statusReport)
