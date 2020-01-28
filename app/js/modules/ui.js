@@ -407,7 +407,6 @@ function windowMainDownloadContent (mode) {
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
                 windowMainLogAppend('Added: \t\t\t' + url + ' to queue') // append url to log
 
-
                 // Download
                 //
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
