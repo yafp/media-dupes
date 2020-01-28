@@ -39,7 +39,7 @@ const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases
 const minimalWindowHeight = 760
 const minimalWindowWidth = 620
 
-const __dirname = path.resolve()
+//const __dirname = path.resolve()
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS
