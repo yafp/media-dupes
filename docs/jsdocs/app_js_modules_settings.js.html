@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>app/js/modules/ffmpeg.js - media-dupes jsdoc documentation</title>
+    <title>app/js/modules/settings.js - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
     
@@ -40,7 +40,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">app/js/modules/ffmpeg.js</h1>
+    <h1 class="page-title">app/js/modules/settings.js</h1>
     
 
     
@@ -51,30 +51,15 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Contains all ffmpeg functions
+ * @file Contains all settings functions
  * @author yafp
- * @module ffmpeg
+ * @module settings
  */
 
 'use strict'
 
-const utils = require('./utils.js')
-
-/**
-* @function ffmpegGetBinaryPath
-* @summary Get the binary path of the ffmpeg binary
-* @description Get the binary path of the ffmpeg binary
-* @return {string} ffmpeg.path - The path to the ffmpeg binary
-*/
-function ffmpegGetBinaryPath () {
-    var ffmpeg = require('ffmpeg-static-electron')
-    utils.writeConsoleMsg('info', 'ffmpegGetBinaryPath ::: ffmpeg binary path is: _' + ffmpeg.path + '_.')
-    return (ffmpeg.path)
-}
-
-// Exporting the module functions
+// Export
 //
-module.exports.ffmpegGetBinaryPath = ffmpegGetBinaryPath
 </code></pre>
         </article>
     </section>
