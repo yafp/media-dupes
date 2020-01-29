@@ -17,9 +17,9 @@ const urlGithubApiReleases = 'https://api.github.com/repos/yafp/media-dupes/rele
 
 // Define exports
 //
-exports.urlGitHubGeneral = urlGitHubGeneral
-exports.urlGitHubIssues = urlGitHubIssues
-exports.urlGitHubChangelog = urlGitHubChangelog
-exports.urlGitHubReleases = urlGitHubReleases
-exports.urlGitHubRepoTags = urlGitHubRepoTags
+module.exports.urlGitHubGeneral = urlGitHubGeneral
+module.exports.urlGitHubIssues = urlGitHubIssues
+module.exports.urlGitHubChangelog = urlGitHubChangelog
+module.exports.urlGitHubReleases = urlGitHubReleases
+module.exports.urlGitHubRepoTags = urlGitHubRepoTags
 module.exports.urlGithubApiReleases = urlGithubApiReleases

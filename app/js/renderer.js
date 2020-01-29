@@ -25,8 +25,8 @@ const errorReporting = require('./js/errorReporting.js')
 // ----------------------------------------------------------------------------
 // VARIABLES
 // ----------------------------------------------------------------------------
-var arrayUserUrls = [] // contains the urls which should be downloaded
-var arrayUrlsThrowingErrors = [] // coontains urls which throws errors while trying to download
+// var arrayUserUrls = [] // contains the urls which should be downloaded
+// var arrayUrlsThrowingErrors = [] // coontains urls which throws errors while trying to download
 
 // Settings variables
 //
@@ -34,9 +34,6 @@ var ytdlBinaryVersion = '0.0.0'
 var youtubeDlBinaryDetailsVersion
 var youtubeDlBinaryDetailsPath
 var youtubeDLBinaryDetailsExec
-
-// distract
-// var distractEnabler = 0
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS - MAIN WINDOW CLICKS

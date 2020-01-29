@@ -24,10 +24,9 @@ The following categories are used:
 * ```Security```: in case of vulnerabilities.
 
 
-
 ***
 
-### media-dupes 0.5.0 (2020xxyy)
+### media-dupes 0.5.0 (20200129)
 #### ```Added```
 * Added a disclaimer which must be confirmed once per user. See [#52](https://github.com/yafp/media-dupes/issues/52)
 * Added support for saving and restoring urls. See [#66](https://github.com/yafp/media-dupes/issues/66)
@@ -84,7 +83,6 @@ The following categories are used:
 * Fixed several errors in application log showing wrong urls and progress-state informations. See [#60](https://github.com/yafp/media-dupes/issues/60)
 * Fixed error handling when downloading a single url failed. See [#71](https://github.com/yafp/media-dupes/issues/71)
 * Fixed a vertical scrollbar bug
-
 
 ***
 
@@ -155,7 +153,7 @@ The following categories are used:
 ### media-dupes 0.3.0 (20191219)
 #### ```Added```
 * Added an error dialog to show issues with the spawned download process. See [#25](https://github.com/yafp/media-dupes/issues/25)
-* Settings: Added buttons to visit ```youtube-dl``` and ffmpeg project pages. See [#29](https://github.com/yafp/media-dupes/issues/29)
+* Settings: Added buttons to visit ```youtube-dl``` and ```ffmpeg``` project pages. See [#29](https://github.com/yafp/media-dupes/issues/29)
 
 #### ```Changed```
 * Reduced build size by only adding ffmpeg for the actual platform. See [#22](https://github.com/yafp/media-dupes/issues/22)

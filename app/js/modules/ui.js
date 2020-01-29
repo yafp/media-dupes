@@ -11,6 +11,7 @@ const ffmpeg = require('./ffmpeg.js')
 const youtube = require('./youtubeDl.js')
 
 var distractEnabler = 0
+var arrayUserUrls = [] // contains the urls which should be downloaded
 
 /**
 * @function windowMainApplicationStateSet
@@ -282,6 +283,7 @@ function windowMainDownloadContent (mode) {
     // VIDEO:
     // YOUTUBE:         http://www.youtube.com/watch?v=90AiXO1pAiA                      // 11 sec       less then 1 MB
     //                  https://www.youtube.com/watch?v=cmiXteWLNw4                     // 1 hour
+    //                  https://www.youtube.com/watch?v=bZ_C-AVo5xA                     // for simulating download errors
     // VIMEO:           https://vimeo.com/315670384                                     // 48 sec       around 1GB
     //                  https://vimeo.com/274478457                                     // 6 sec        around 4MB
     //
@@ -411,9 +413,9 @@ function windowMainDownloadContent (mode) {
                 //
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
-                        utils.showNoty('error', '<b>Download failed</b><br><br>Downloading <b>' + url + '</b> failed with the output:<br><br>' + error, 0)
-                        utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading url _' + url + '_ with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
-                        windowMainLogAppend('\nFailed downloading the url: ' + url)
+                        utils.showNoty('error', '<b>Download failed</b><br><br>' + error, 0)
+                        utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
+                        windowMainLogAppend('\nFailed to download an url')
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url
 
                         // if this was the last url to process - handle overall application progress - see #71
@@ -672,6 +674,7 @@ function windowMainUiReset () {
     windowMainToDoListReset() // empty todo-list textarea
     windowMainLogReset() // empty log textarea
     windowMainApplicationStateSet() // reset application state
+    utils.globalObjectSet('todoListStateEmpty', true) // store that the todolist is now empty
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Finished resetting the UI')
 }
 

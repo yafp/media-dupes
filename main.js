@@ -35,11 +35,9 @@ const defaultUserDataPath = app.getPath('userData') // for: storing window posit
 
 const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
 
-// minimal window size
+// mainWindow: minimal window size
 const minimalWindowHeight = 760
 const minimalWindowWidth = 620
-
-//const __dirname = path.resolve()
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS
@@ -97,8 +95,10 @@ function createWindowSettings () {
         width: 800,
         minWidth: 800,
         // resizable: false, // this conflickts with opening dev tools
-        height: 680,
-        minHeight: 680,
+        minimizable: false, // not implemented on linux
+        maximizable: false, // not implemented on linux
+        height: 700,
+        minHeight: 700,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,
