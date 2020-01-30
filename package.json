@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.5.0",
+  "version": "0.5.20200130",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -132,7 +132,11 @@
       "unicode": false,
       "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}",
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": false
     },
     "linux": {
       "executableName": "media-dupes",
@@ -210,7 +214,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "docdash": "^1.2.0",
-    "electron": "^7.1.10",
+    "electron": "^7.1.11",
     "electron-builder": "^22.3.2",
     "electron-packager": "^14.2.0",
     "eslint": "^6.8.0",
