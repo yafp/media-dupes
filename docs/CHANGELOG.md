@@ -26,6 +26,18 @@ The following categories are used:
 
 ***
 
+### media-dupes 0.5.x (2020xxyy)
+#### ```Added```
+#### ```Changed```
+* Changed the configurations options for the Windows Installer (NSIS). See [#72](https://github.com/yafp/media-dupes/issues/72)
+* Dependencies
+  * Updated ```electron```  from 7.1.10 to 7.1.11
+
+#### ```Removed```
+#### ```Fixed```
+
+***
+
 ### media-dupes 0.5.0 (20200129)
 #### ```Added```
 * Added a disclaimer which must be confirmed once per user. See [#52](https://github.com/yafp/media-dupes/issues/52)
