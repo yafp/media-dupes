@@ -62,8 +62,14 @@ Please see the [LICENSE](LICENSE) for more details.
 
 You are always welcome to check and even improve the code.
 
-## support
-There is a public **#media-dupes** riot.im room available on **matrix.org**. Click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join.
+## discussion
+If you have question regarding media-dupes - feel free to open an issue on github. In addition there is a public **#media-dupes** riot.im room available on **matrix.org**. Click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join.
+
+
+## support / fund
+If you want to support the development of media-dupes you can fund me on
+* [patreon](https://www.patreon.com/yafp)
+
 
 ## contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
