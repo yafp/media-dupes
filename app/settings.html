@@ -51,7 +51,7 @@
 
          <!-- Header: User-Settings -->
         <div class="row-fluid">
-            <h5><i class="fas fa-cog" onclick="settingsFolderOpen();"></i> User-Settings</h5>
+            <h5><i class="fas fa-cog" onclick="windowSettingsClickIconUserSettingsDir();"></i> User-Settings</h5>
         </div>
 
          <!-- Download directory -->
@@ -62,7 +62,7 @@
             <div class="input-group mb-3">
                 <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
                 <div class="input-group-append">
-                    <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="settingsSelectDownloadDir()"><i class="far fa-folder-open"></i> Choose</button>
+                    <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="windowSettingsClickButtonChooseDownloadDir()"><i class="far fa-folder-open"></i> Choose</button>
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
-                        <input type="checkbox" id="checkboxEnableVerbose" name="checkboxEnableVerbose" onclick="settingsToggleVerboseMode();">
+                        <input type="checkbox" id="checkboxEnableVerbose" name="checkboxEnableVerbose" onclick="windowSettingsClickCheckboxVerboseMode();">
                     </div>
                 </div>
                 <input type="text" class="form-control form-control-sm" value="Verbose mode" disabled>
@@ -89,22 +89,20 @@
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    <input type="checkbox" id="checkboxEnablePreReleases" name="checkboxEnablePreReleases" onclick="settingsTogglePrereleases();">
+                    <input type="checkbox" id="checkboxEnablePreReleases" name="checkboxEnablePreReleases" onclick="windowSettingsClickCheckboxUpdatePolicy();">
                 </div>
             </div>
             <input type="text" class="form-control form-control-sm" value="Include media-dupes pre-releases into update search" disabled>
         </div>
 
-
-
         <!-- Header: Error reportng using sentry -->
         <div class="row-fluid">
-            <h6><i class="fas fa-bug" onclick="settingsOpenDevTools();"></i> Error Reporting</h6>
+            <h6><i class="fas fa-bug" onclick="windowSettingsClickIconBug();"></i> Error Reporting</h6>
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="settingsToggleErrorReporting();">
+                    <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="windowSettingsClickCheckboxErrorReporting();">
                 </div>
             </div>
             <input type="text" class="form-control form-control-sm" value="Error reporting (helps improving the media-dupes source-code)" disabled>
@@ -116,7 +114,7 @@
         </div>
         <div class="row-fluid">
            <div class="input-group">
-                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="settingsAudioFormatSave();">
+                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="windowSettingsClickDropdownAudioFormats();">
                     <option value="aac" title="Advanced Audio Coding">.aac </option>
                     <option value="flac" title="Free Loseless Audio Codec">.flac </option>
                     <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
@@ -151,7 +149,7 @@
                 <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
                 <div class="input-group-append">
                     <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="searchYoutubeDLUpdate(false)"><i class="fab fa-youtube"></i> Update</button>
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingsOpenExternal('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
                 </div>
             </div>
         </div>
@@ -164,7 +162,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control form-control-sm" laceholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="settingsOpenExternal('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
+                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
                 </div>
             </div>
         </div>

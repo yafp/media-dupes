@@ -13,7 +13,7 @@ const utils = require('./js/modules/utils.js')
 const ffmpeg = require('./js/modules/ffmpeg.js')
 const sentry = require('./js/modules/sentry.js')
 const ui = require('./js/modules/ui.js')
-
+const settings = require('./js/modules/settings.js')
 const youtube = require('./js/modules/youtubeDl.js')
 
 // ----------------------------------------------------------------------------
@@ -140,6 +140,90 @@ function windowMainClickButtonUIReset () {
 }
 
 // ----------------------------------------------------------------------------
+// FUNCTIONS - SETTINGS WINDOW CLICKS
+// ----------------------------------------------------------------------------
+/**
+* @function windowSettingsClickIconUserSettingsDir
+* @summary Handles the click on the settings icon
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickIconUserSettingsDir () {
+    settings.settingsFolderOpen()
+}
+
+/**
+* @function windowSettingsClickButtonChooseDownloadDir
+* @summary Handles the click on the choose download dir button
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickButtonChooseDownloadDir () {
+    settings.settingsSelectDownloadDir()
+}
+
+/**
+* @function windowSettingsClickCheckboxVerboseMode
+* @summary Handles the click on the checkbox verbose mode
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickCheckboxVerboseMode () {
+    settings.settingsToggleVerboseMode()
+}
+
+/**
+* @function windowSettingsClickCheckboxUpdatePolicy
+* @summary Handles the click on the checkbox verbose mode
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickCheckboxUpdatePolicy () {
+    settings.settingsTogglePrereleases()
+}
+
+/**
+* @function windowSettingsClickIconBug
+* @summary Handles the click on the bug icon
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickIconBug () {
+    settings.settingsOpenDevTools()
+}
+
+/**
+* @function windowSettingsClickCheckboxErrorReporting
+* @summary Handles the click on the checkbox error reporting
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickCheckboxErrorReporting () {
+    settings.settingsToggleErrorReporting()
+}
+
+/**
+* @function windowSettingsClickDropdownAudioFormats
+* @summary Handles the click on the dropdown audio formats
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickDropdownAudioFormats () {
+    settings.settingsAudioFormatSave()
+}
+
+/**
+* @function windowSettingsClickOpenUrl
+* @summary Handles the click on the dropdown audio formats
+* @description Triggered from the settingsWindow.
+* @param {string} url - the url
+* @memberof renderer
+*/
+function windowSettingsClickOpenUrl (url) {
+    settings.settingsOpenExternal(url)
+}
+
+// ----------------------------------------------------------------------------
 // FUNCTIONS - OTHERS
 // ----------------------------------------------------------------------------
 
@@ -212,58 +296,6 @@ function checkApplicationDependencies () {
 }
 
 /**
-* @function settingsOpenDevTools
-* @summary Tells the main process to open devTools for settings UI
-* @description Tells the main process to open devTools for settings UI
-* @memberof renderer
-*/
-function settingsOpenDevTools () {
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.send('settingsToggleDevTools')
-}
-
-/**
-* @function settingsSelectDownloadDir
-* @summary Let the user choose a custom download target directory
-* @description Is triggered via button on settings.html.
-* @memberof renderer
-*/
-function settingsSelectDownloadDir () {
-    const options = { properties: ['openDirectory'] }
-    const { dialog } = require('electron').remote
-
-    utils.writeConsoleMsg('info', 'settingsSelectDownloadDir ::: User wants to set a custom download directory. Now opening dialog to select a new download target')
-    dialog.showOpenDialog(options).then(res => {
-        utils.writeConsoleMsg('warn', '_' + res.filePaths + '_')
-
-        if (res.filePaths.length === 0) {
-            utils.writeConsoleMsg('warn', 'settingsSelectDownloadDir ::: User aborted selecting a custom download directory path in settings')
-            utils.showNoty('info', 'No changes applied.')
-        } else {
-            var newDownloadDirectory = res.filePaths.toString()
-            userSettingWrite('downloadDir', newDownloadDirectory) // save the value to user-config
-            $('#inputCustomTargetDir').val(newDownloadDirectory) // show it in the UI
-            utils.writeConsoleMsg('info', 'settingsSelectDownloadDir ::: User selected the following directory: _' + newDownloadDirectory + '_ as download target.')
-
-            // FIXME - is this needed?
-            // utils.globalObjectSet('downloadDir', newDownloadDirectory)
-        }
-    })
-}
-
-/**
-* @function settingsAudioFormatSave
-* @summary Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
-* @description Fetches the value from the audio-format select in the settings UI and triggers the update of the related user-settings-file
-* @memberof renderer
-*/
-function settingsAudioFormatSave () {
-    var userSelectedAudioFormat = $('#inputGroupSelectAudio').val() // get value from UI select inputGroupSelectAudio
-    utils.writeConsoleMsg('info', 'settingsAudioFormatSave ::: User selected the audio format: _' + userSelectedAudioFormat + '_.')
-    userSettingWrite('audioFormat', userSelectedAudioFormat) // store this value in a json file
-}
-
-/**
 * @function settingsLoadAllOnAppStart
 * @summary Reads all user-setting-files and fills some global variables
 * @description Reads all user-setting-files and fills some global variables
@@ -271,11 +303,11 @@ function settingsAudioFormatSave () {
 */
 function settingsLoadAllOnAppStart () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now ...')
-    userSettingRead('enableVerboseMode') // verbose mode
-    userSettingRead('enablePrereleases') // pre-releases
-    userSettingRead('enableErrorReporting') // get setting for error-reporting
-    userSettingRead('downloadDir') // download dir
-    userSettingRead('audioFormat') // get setting for configured audio format
+    utils.userSettingRead('enableVerboseMode') // verbose mode
+    utils.userSettingRead('enablePrereleases') // pre-releases
+    utils.userSettingRead('enableErrorReporting') // get setting for error-reporting
+    utils.userSettingRead('downloadDir') // download dir
+    utils.userSettingRead('audioFormat') // get setting for configured audio format
 }
 
 /**
@@ -286,318 +318,11 @@ function settingsLoadAllOnAppStart () {
 */
 function settingsLoadAllOnSettingsUiLoad () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now and adjust the settings UI')
-    userSettingRead('enableVerboseMode', true) // verbose mode
-    userSettingRead('enablePrereleases', true) // pre-releases
-    userSettingRead('enableErrorReporting', true)
-    userSettingRead('downloadDir', true) // download dir
-    userSettingRead('audioFormat', true) // load configured audio format and update the settings UI
-}
-
-/**
-* @function settingsFolderOpen
-* @summary Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
-* @description Gets triggered from button on settings.html. Triggers code in main.js which opens the directory which contains possible user-settings-files
-* @memberof renderer
-*/
-function settingsFolderOpen () {
-    utils.writeConsoleMsg('info', 'settingsFolderOpen ::: User wants to open the folder with user config files.')
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.send('settingsFolderOpen')
-}
-
-/**
-* @function userSettingWrite
-* @summary Write a user setting to file
-* @description Writes a value for a given key to electron-json-storage
-* @memberof renderer
-* @param {String} key - Name of storage key
-* @param {String} value - New value
-* @throws Exception when writing a file failed
-*/
-function userSettingWrite (key, value) {
-    const storage = require('electron-json-storage')
-    const remote = require('electron').remote
-    const app = remote.app
-    const path = require('path')
-
-    // set new path for userUsettings
-    const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
-    storage.setDataPath(userSettingsPath)
-
-    // write the user setting
-    storage.set(key, { setting: value }, function (error) {
-        if (error) {
-            utils.writeConsoleMsg('error', 'userSettingWrite ::: Unable to write setting with key: _' + key + '_ - and new value: _' + value + '_. Error: ' + error)
-            throw error
-        }
-        utils.writeConsoleMsg('info', 'userSettingWrite ::: key: _' + key + '_ - new value: _' + value + '_')
-        utils.globalObjectSet(key, value)
-        utils.showNoty('success', 'Set <b>' + key + '</b> to <b>' + value + '</b>.')
-    })
-}
-
-/**
-* @function defaultDownloadFolderGet
-* @summary Validates if the default download directory of the user is useable.
-* @description Validates if the default download directory of the user is useable.
-* @memberof renderer
-* @retun {boolean} boolean - Is the folder useable
-* @return {String} defaultTargetPath - The path to the folder
-*/
-function defaultDownloadFolderGet () {
-    utils.writeConsoleMsg('warn', 'defaultDownloadFolderGet ::: Searching the default download directory for this user ....')
-    var defaultTargetPath = utils.globalObjectGet('downloadDir') // use the default download target - which was configured in main.js
-
-    utils.writeConsoleMsg('warn', 'defaultDownloadFolderGet ::: Got' + defaultTargetPath + ' from global object')
-
-    // check if that directory still exists
-    if (utils.isDirectoryAvailable(defaultTargetPath)) {
-        utils.writeConsoleMsg('info', 'defaultDownloadFolderGet ::: The default download location _' + defaultTargetPath + '_ exists') // the default download folder exists
-
-        // check if it is writeable
-        if (utils.isDirectoryWriteable(defaultTargetPath)) {
-            utils.writeConsoleMsg('info', 'defaultDownloadFolderGet ::: The default download location _' + defaultTargetPath + '_ exists and is writeable. We are all good and gonna use it now')
-            return [true, defaultTargetPath]
-        } else {
-            // folder exists but is not writeable
-            utils.writeConsoleMsg('error', 'defaultDownloadFolderGet ::: The default download location _' + defaultTargetPath + '_ exists but is not writeable. This is a major problem')
-            utils.showNoty('error', 'Your configured custom download directory <b>' + defaultTargetPath + '</b> exists but is not writeable. Gonna reset the custom setting now back to default', 0)
-            return [false, '']
-        }
-    } else {
-        // was unable to detect a download folder
-        utils.writeConsoleMsg('error', 'defaultDownloadFolderGet ::: Was unable to detect an existing default download location')
-        // should force the user to set a custom one
-        utils.showNoty('error', 'Unable to detect an existing default download location. Please configure a  download directory in the application settings', 0)
-        return [false, '']
-    }
-}
-
-/**
-* @function userSettingRead
-* @summary Read a user setting from file
-* @description Reads a value stored in local storage (for a given key)
-* @memberof renderer
-* @param {String} key - Name of local storage key
-* @param {Boolean} [optionalUpdateSettingUI] Boolean used for an ugly hack
-*/
-function userSettingRead (key, optionalUpdateSettingUI = false) {
-    const storage = require('electron-json-storage')
-    const remote = require('electron').remote
-    const app = remote.app
-    const path = require('path')
-
-    utils.writeConsoleMsg('info', 'userSettingRead ::: Trying to read value of key: _' + key + '_.')
-
-    // change path for userSettings
-    const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
-    storage.setDataPath(userSettingsPath)
-
-    // read the json file
-    storage.get(key, function (error, data) {
-        if (error) {
-            utils.writeConsoleMsg('error', 'userSettingRead ::: Unable to read user setting. Error: ' + error)
-            throw error
-        }
-        var value = data.setting
-        utils.writeConsoleMsg('info', 'userSettingRead ::: key: _' + key + '_ - got value: _' + value + '_.')
-
-        // Setting: enableVerboseMode
-        //
-        if (key === 'enableVerboseMode') {
-            var settingVerboseMode
-
-            // if it is not yet configured
-            if ((value === null) || (value === undefined)) {
-                settingVerboseMode = false // set the default default
-                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingVerboseMode + '_.')
-                userSettingWrite('enableVerboseMode', settingVerboseMode) // write the setting
-            } else {
-                settingVerboseMode = value // update global var
-                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
-            }
-
-            // update the global object
-            utils.globalObjectSet('enableVerboseMode', settingVerboseMode)
-
-            // Optional: update the settings UI
-            if (optionalUpdateSettingUI === true) {
-                if (settingVerboseMode === true) {
-                    $('#checkboxEnableVerbose').prop('checked', true)
-                } else {
-                    $('#checkboxEnableVerbose').prop('checked', false)
-                }
-            }
-        }
-        // end: enableVerboseMode
-
-        // Setting: enablePrereleases
-        //
-        if (key === 'enablePrereleases') {
-            var settingPrereleases
-
-            // if it is not yet configured
-            if ((value === null) || (value === undefined)) {
-                settingPrereleases = false // set the default
-                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingPrereleases + '_.')
-                userSettingWrite('enablePrereleases', settingPrereleases) // write the setting
-            } else {
-                settingPrereleases = value // update global var
-                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingPrereleases + '_.')
-            }
-
-            // update the global object
-            utils.globalObjectSet('enablePrereleases', settingPrereleases)
-
-            // Optional: update the settings UI
-            if (optionalUpdateSettingUI === true) {
-                if (settingPrereleases === true) {
-                    $('#checkboxEnablePreReleases').prop('checked', true)
-                } else {
-                    $('#checkboxEnablePreReleases').prop('checked', false)
-                }
-            }
-        }
-        // end: enablePrereleases
-
-        // Setting: enableErrorReporting
-        //
-        if (key === 'enableErrorReporting') {
-            var settingEnableErrorReporting
-
-            // not configured
-            if ((value === null) || (value === undefined)) {
-                settingEnableErrorReporting = true
-                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingEnableErrorReporting + '_.')
-                userSettingWrite('enableErrorReporting', true) // write the setting
-                sentry.enableSentry()
-            } else {
-                settingEnableErrorReporting = value
-                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingEnableErrorReporting + '_.')
-
-                if (settingEnableErrorReporting === true) {
-                    sentry.enableSentry()
-                } else {
-                    sentry.disableSentry()
-                }
-            }
-
-            // update the global object
-            utils.globalObjectSet('enableErrorReporting', settingEnableErrorReporting)
-
-            // Optional: update the settings UI
-            if (optionalUpdateSettingUI === true) {
-                if (settingEnableErrorReporting === true) {
-                    $('#checkboxEnableErrorReporting').prop('checked', true)
-                } else {
-                    $('#checkboxEnableErrorReporting').prop('checked', false)
-                }
-            }
-        }
-        // end: enableErrorReporting
-
-        // Setting: downloadDir
-        //
-        if (key === 'downloadDir') {
-            const { remote } = require('electron')
-            var settingDownloadDir
-
-            // not yet set - seems like initial run
-            if ((value === null) || (value === undefined)) {
-                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initial run - lets set the defaut dir.')
-                var detectedDefaultDownloadDir = defaultDownloadFolderGet() // lets set it do the users default folder dir
-                if (detectedDefaultDownloadDir[0]) {
-                    settingDownloadDir = detectedDefaultDownloadDir[1]
-                    userSettingWrite('downloadDir', settingDownloadDir)
-                    utils.writeConsoleMsg('info', 'userSettingRead ::: key: _' + key + '_ - got initial value: _' + settingDownloadDir + '_.')
-                    // utils.globalObjectSet('downloadDir', settingDownloadDir)
-                }
-            } else {
-                // there is a setting
-                settingDownloadDir = value
-                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingDownloadDir + '_.')
-
-                // check if directory exists
-                if (utils.isDirectoryAvailable(settingDownloadDir)) {
-                    // check if directory is writeable
-                    if (utils.isDirectoryWriteable(settingDownloadDir)) {
-                        // dir is available and writeable - seems like everything is ok
-                        utils.globalObjectSet('downloadDir', settingDownloadDir)
-                    } else {
-                        utils.writeConsoleMsg('error', 'userSettingRead ::: Configured download dir _' + settingDownloadDir + '_ exists BUT is not writeable. Gonna reset the user-setting.')
-                        settingDownloadDir = ''
-                        utils.globalObjectSet('downloadDir', settingDownloadDir)
-
-                        // delete the config
-                        storage.remove('downloadDir', function (error) {
-                            if (error) {
-                                utils.writeConsoleMsg('error', 'userSettingRead ::: Unable to delete config. Error: ' + error)
-                                throw error
-                            }
-                        })
-                    }
-                } else {
-                    // dir does not exists
-                    settingDownloadDir = ''
-                    utils.writeConsoleMsg('error', 'userSettingRead ::: Configured download dir _' + settingDownloadDir + '_ does not exists. Gonna reset the user-setting.')
-                    utils.globalObjectSet('downloadDir', settingDownloadDir)
-
-                    // delete the config
-                    storage.remove('downloadDir', function (error) {
-                        if (error) {
-                            utils.writeConsoleMsg('error', 'userSettingRead ::: Unable to delete config. Error: ' + error)
-                            throw error
-                        }
-                    })
-                }
-
-                // Update UI select
-                if (optionalUpdateSettingUI === true) {
-                    $('#inputCustomTargetDir').val(settingDownloadDir)
-                }
-            }
-            utils.writeConsoleMsg('info', 'userSettingRead ::: Key: ' + key + ' with value: ' + settingDownloadDir)
-        }
-        // end: downloadDir
-
-        // Setting: audioFormat
-        //
-        if (key === 'audioFormat') {
-            var settingAudioFormat
-            // not configured
-            if ((value === null) || (value === undefined)) {
-                settingAudioFormat = 'mp3'
-                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAudioFormat + '_.')
-                userSettingWrite('audioFormat', settingAudioFormat) // write the setting
-            } else {
-                settingAudioFormat = value
-                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingAudioFormat + '_.')
-                utils.globalObjectSet('audioFormat', settingAudioFormat)
-            }
-
-            // optional: Adjust the UI
-            if (optionalUpdateSettingUI === true) {
-                $('#inputGroupSelectAudio').val(settingAudioFormat) // Update UI select
-            }
-        }
-        // end: audioFormat
-
-        // Setting: confirmedDisclaimer
-        //
-        if (key === 'confirmedDisclaimer') {
-            var settingConfirmedDisclaimer
-            // not configured
-            if ((value === null) || (value === undefined)) {
-                utils.writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Gonna show the disclaimer now')
-                disclaimerShow()
-            } else {
-                settingConfirmedDisclaimer = true
-                utils.globalObjectSet('confirmedDisclaimer', settingConfirmedDisclaimer)
-                utils.writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingConfirmedDisclaimer + '_.')
-            }
-        }
-        // end: enableErrorReporting
-    })
+    utils.userSettingRead('enableVerboseMode', true) // verbose mode
+    utils.userSettingRead('enablePrereleases', true) // pre-releases
+    utils.userSettingRead('enableErrorReporting', true)
+    utils.userSettingRead('downloadDir', true) // download dir
+    utils.userSettingRead('audioFormat', true) // load configured audio format and update the settings UI
 }
 
 /**
@@ -815,84 +540,6 @@ function settingsShowFfmpegInfo () {
 }
 
 /**
-* @function settingsToggleVerboseMode
-* @summary Enables or disabled the verbose mode
-* @description Sentry is used for log output. It is disabled by default. Enables or disabled the verbode mode
-* @memberof renderer
-*/
-function settingsToggleVerboseMode () {
-    if ($('#checkboxEnableVerbose').is(':checked')) {
-        utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now enabled')
-        userSettingWrite('enableVerboseMode', true)
-    } else {
-        utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now disabled')
-        userSettingWrite('enableVerboseMode', false)
-    }
-}
-
-/**
-* @function settingsTogglePrereleases
-* @summary Enables or disables the support for pre-releases
-* @description ...
-* @memberof renderer
-*/
-function settingsTogglePrereleases () {
-    if ($('#checkboxEnablePreReleases').is(':checked')) {
-        utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will now include pre-releases')
-        userSettingWrite('enablePrereleases', true)
-    } else {
-        utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will ignore pre-releases')
-        userSettingWrite('enablePrereleases', false)
-    }
-}
-
-/**
-* @function settingsToggleErrorReporting
-* @summary Enables or disabled the error reporting function
-* @description Sentry is used for error reporting. It is enabled by default. Enables or disabled the error reporting function
-* @memberof renderer
-*/
-function settingsToggleErrorReporting () {
-    if ($('#checkboxEnableErrorReporting').is(':checked')) {
-        utils.writeConsoleMsg('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
-        userSettingWrite('enableErrorReporting', true)
-        sentry.enableSentry()
-    } else {
-        // ask if user really wants to disable error-reporting (using a confirm dialog)
-        const Noty = require('noty')
-        var n = new Noty(
-            {
-                theme: 'bootstrap-v4',
-                layout: 'bottom',
-                type: 'info',
-                closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
-                text: '<b>Do you really want to disable error-reporting?</b><br><br>* We don\'t track users<br>* We don\'t store any IP addresses<br>* We only collect error reports<br><br>This helps us finding and fixing bugs in media-dupes',
-                buttons: [
-                    Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
-                        n.close()
-                        utils.writeConsoleMsg('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
-                        userSettingWrite('enableErrorReporting', false)
-                        sentry.disableSentry()
-                        // myUndefinedFunctionFromRendererAfterDisable()
-                    },
-                    {
-                        id: 'button1', 'data-status': 'ok'
-                    }),
-
-                    Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
-                        n.close()
-                        $('#checkboxEnableErrorReporting').prop('checked', true) // revert state of checkbox
-                        utils.showNoty('success', '<b>Thanks</b> for supporting media-dupes development with your error reports.')
-                        utils.writeConsoleMsg('warn', 'settingsToggleErrorReporting ::: User cancelled disabling of error-reporting')
-                    })
-                ]
-            })
-
-        n.show() // show the noty dialog
-    }
-}
-
-/**
 * @function canWriteFileOrFolder
 * @summary Checks if a file or folder is writeable
 * @description Checks if a file or folder is writeable
@@ -964,53 +611,6 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
     })
 }
 
-/**
-* @function settingsOpenExternal
-* @summary Gets an url from the settings ui and forwards this to the openURL function
-* @description Gets an url from the settings ui and forwards this to the openURL function
-* @memberof renderer
-* @param {string} url - the actual url
-*/
-function settingsOpenExternal (url) {
-    utils.openURL(url)
-}
-
-/**
-* @function disclaimerCheck
-* @summary Checks if the disclaimer should be shown or not
-* @description Is using userSettingRead() to read the user setting confirmedDisclaimer.json. If it exists the user previously confirmed it.
-* @memberof renderer
-*/
-function disclaimerCheck () {
-    utils.writeConsoleMsg('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
-    userSettingRead('confirmedDisclaimer')
-}
-
-/**
-* @function disclaimerShow
-* @summary Opens the disclaimer as dialog
-* @description Displays a disclaimer regarding app usage. User should confirm it once. Setting is saved in UserSettings
-* @memberof renderer
-*/
-function disclaimerShow () {
-    const dialog = require('electron').remote.dialog
-
-    var disclaimerTitle = 'media-dupes disclaimer'
-    var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
-
-    var choice = dialog.showMessageBoxSync(this,
-        {
-            type: 'info',
-            buttons: ['Confirm'],
-            title: disclaimerTitle,
-            message: disclaimerText
-        })
-    if (choice === 0) {
-        utils.writeConsoleMsg('info', 'disclaimerShow ::: User confirmed the disclaimer.')
-        userSettingWrite('confirmedDisclaimer', true)
-    }
-}
-
 // ----------------------------------------------------------------------------
 // IPC
 // ----------------------------------------------------------------------------
@@ -1056,7 +656,7 @@ require('electron').ipcRenderer.on('startCheckingDependencies', function () {
 * @memberof renderer
 */
 require('electron').ipcRenderer.on('startDisclaimerCheck', function () {
-    disclaimerCheck()
+    utils.disclaimerCheck()
 })
 
 /**
