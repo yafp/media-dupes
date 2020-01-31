@@ -28,13 +28,19 @@ The following categories are used:
 
 ### media-dupes 0.5.x (2020xxyy)
 #### ```Added```
+
 #### ```Changed```
 * Changed the configurations options for the Windows Installer (NSIS). See [#72](https://github.com/yafp/media-dupes/issues/72)
+* Moved settings code to module. See [#77](https://github.com/yafp/media-dupes/issues/77)
 * Dependencies
   * Updated ```electron```  from 7.1.10 to 7.1.11
+  * Updated ```custom-electron-titlebar``` from 3.2.1 to 3.2.2
 
 #### ```Removed```
+* Removed ```npx``` from project. See [#41](https://github.com/yafp/media-dupes/issues/41)
+
 #### ```Fixed```
+* Fixed undefined version in sentry error events. See [#75](https://github.com/yafp/media-dupes/issues/75)
 
 ***
 
