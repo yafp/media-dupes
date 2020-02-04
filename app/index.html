@@ -56,7 +56,6 @@
             </div>
 
             <!-- app name -->
-            <!-- bounceInLeft -->
             <h2><img src="img/128x128.png" height="32" onclick="windowMainClickDistract();">media-dupes</h2>
 
             <!-- app description -->
@@ -116,7 +115,7 @@
                 type="button"
                 class="btn btn-warning btn-sm mediaDupes_btnDownloadActionWidth"
                 title="Unstable: Currently works only for youtube.com urls"
-                onclick="downloadVideo();"
+                onclick="windowMainClickButtonVideoV2();"
                 data-step="7"
                 data-intro="The <b>Youtube Video</b> button is experimental right now and works only for youtube.com urls.">
                 <i class="fas fa-video"></i> Youtube video
@@ -140,28 +139,26 @@
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
 
+
         <!-- show log -->
-        <!--
-        <div class="flex-column justify-content-center flex-grow-1 overflow-auto bg_yellow">
-        -->
-            <div class="row-fluid">
-                <textarea
-                    class="form-control"
-                    id="textareaLogOutput"
-                    name="textareaLogOutput"
-                    placeholder="application log"
-                    readonly
-                    rows="12"
-                    data-step="8" data-intro="The <b>application log</b> shows some details about the download process">
-                </textarea>
-            </div>
-        <!--
+        <!-- h-100 d-flex flex-column -->
+        <div class="row-fluid">
+            <textarea
+                class="form-control"
+                id="textareaLogOutput"
+                name="textareaLogOutput"
+                placeholder="application log"
+                readonly
+                rows="12"
+                data-step="8" data-intro="The <b>application log</b> shows some details about the download process">
+            </textarea>
         </div>
-        -->
 
 
-        <!-- empty line -->
-        <div class="row-fluid row-empty">&nbsp;</div>
+
+        <!-- The rest is aligned at bottom of the page -->
+        <div class="fixed-bottom applicationWindowBottom">
+
 
         <!-- extra buttons-->
         <div class="row-fluid">
@@ -205,7 +202,7 @@
                 onclick="windowMainClickButtonDownloads();">
                 <i class="far fa-folder-open"></i> Downloads
             </button>
-            <!-- Reset buttons -->
+            <!-- Right: Reset buttons -->
             <button
                 id="buttonResetUI"
                 name="buttonResetUI"
@@ -222,21 +219,17 @@
                 <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reset the User Interface (UI)</a>
             </div>
 
-
-
         </div>
         <!-- /extra buttons -->
-
-        <!-- empty line -->
-        <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- state -->
         <div id="applicationState" class="row-empty animated pulse infinite">&nbsp;</div>
 
         <!-- empty line -->
-        <!--
         <div class="row-fluid row-empty">&nbsp;</div>
-        -->
+
+        </div>
+        <!-- /bottom -->
 
     </div>
     <!-- container -->

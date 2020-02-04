@@ -120,6 +120,13 @@ textarea {
     font-size: 12px;
 }
 
+/* ########################################################################## */
+/* BOTTOM */
+/* ########################################################################## */
+.applicationWindowBottom {
+    margin-left: 15px;
+    margin-right: 15px;
+}
 
 /* ########################################################################## */
 /* Use the “system font/San Francisco” */
@@ -160,20 +167,20 @@ cssbody {
 
 
 /* ########################################################################## */
-/* FLEX-PLAYGROUND */
+/* PLAYGROUND: Background colors for development */
 /* ########################################################################## */
 .bg_yellow{
-    background-color: yellow;
+    background-color: #F0E68C;
 }
 
 .bg_red{
-    background-color: red;
+    background-color: #FA8072;
 }
 
 .bg_blue{
-    background-color: blue;
+    background-color: #87CEEB;
 }
 
 .bg_green{
-    background-color: green;
+    background-color: #90EE90;
 }
