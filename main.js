@@ -35,6 +35,9 @@ const defaultUserDataPath = app.getPath('userData') // for: storing window posit
 
 const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
 
+// Caution: Warning since electron 8
+//app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
+
 // mainWindow: minimal window size
 const minimalWindowHeight = 760
 const minimalWindowWidth = 620
@@ -332,6 +335,11 @@ function createWindowMain () {
     // Emitted when the web page becomes unresponsive.
     mainWindow.on('unresponsive', function () {
         doLog('warn', 'createWindowMain ::: mainWindow is now unresponsive (event: unresponsive)')
+    })
+
+    // Emitted when the unresponsive web page becomes responsive again.
+    mainWindow.on('responsive', function () {
+        doLog('info', 'createWindowMain ::: mainWindow is now responsive again (event: responsive)')
     })
 
     // Emitted when the web page has been rendered (while not being shown) and window can be displayed without a visual flash.

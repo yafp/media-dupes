@@ -70,6 +70,16 @@ function windowMainClickButtonVideo () {
 }
 
 /**
+* @function windowMainClickButtonVideo
+* @summary Handles the click on the video button
+* @description Triggered from the mainWindow. Starts the video download function
+* @memberof renderer
+*/
+function windowMainClickButtonVideoV2 () {
+    ui.windowMainDownloadVideo()
+}
+
+/**
 * @function windowMainClickButtonAudio
 * @summary Handles the click on the audio button
 * @description Triggered from the mainWindow. Starts the audio download function
@@ -799,3 +809,24 @@ require('electron').ipcRenderer.on('unblurMainUI', function () {
 require('electron').ipcRenderer.on('todoListTryToSave', function () {
     ui.windowMainToDoListSave()
 })
+
+function getInfo () {
+    const youtubedl = require('youtube-dl')
+
+    // const url = 'http://www.youtube.com/watch?v=WKsjaOqDXgg'
+    const url = 'https://vimeo.com/274478457 '
+    // Optional arguments passed to youtube-dl.
+    const options = ['--youtube-skip-dash-manifest']
+
+    youtubedl.getInfo(url, options, function (err, info) {
+        if (err) throw err
+
+        console.log('id:', info.id)
+        console.log('title:', info.title)
+        console.log('url:', info.url)
+        console.log('thumbnail:', info.thumbnail)
+        console.log('description:', info.description)
+        console.log('filename:', info._filename)
+        console.log('format id:', info.format_id)
+    })
+}
