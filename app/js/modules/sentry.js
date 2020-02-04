@@ -3,6 +3,7 @@
  * @author yafp
  * @module sentry
  */
+'use strict'
 
 const utils = require('./utils.js')
 

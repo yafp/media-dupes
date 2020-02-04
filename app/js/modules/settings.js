@@ -3,11 +3,10 @@
  * @author yafp
  * @module settings
  */
+'use strict'
 
 const utils = require('./utils.js')
 const sentry = require('./sentry.js')
-
-'use strict'
 
 /**
 * @function settingsFolderOpen

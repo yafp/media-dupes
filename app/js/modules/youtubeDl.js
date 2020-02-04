@@ -3,7 +3,6 @@
  * @author yafp
  * @module youtubeDl
  */
-
 'use strict'
 
 const ui = require('./ui.js')

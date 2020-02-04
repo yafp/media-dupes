@@ -3,7 +3,6 @@
  * @author yafp
  * @module ffmpeg
  */
-
 'use strict'
 
 const utils = require('./utils.js')

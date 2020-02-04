@@ -3,7 +3,6 @@
  * @author yafp
  * @module githubUrls
  */
-
 'use strict'
 
 // Define github url constants
