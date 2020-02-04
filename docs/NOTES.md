@@ -18,7 +18,7 @@
   * https://github.com/javierjulio/textarea-autosize
   * https://www.jacklmoore.com/autosize/
 * electron-builder: nsis: check if we should teak the installer a bit: https://www.electron.build/configuration/nsis
-
+* youtube-dl- node: exec has a callback. https://github.com/przemyslawpluta/node-youtube-dl/issues/216
 
 ### urls
 * youtube-dl repository: https://github.com/ytdl-org/youtube-dl

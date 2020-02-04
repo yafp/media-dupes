@@ -26,15 +26,19 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.5.x (2020xxyy)
+### media-dupes 0.5.1 (2020xxyy)
 #### ```Added```
 
 #### ```Changed```
+* Improved download resume for user. See [#78](https://github.com/yafp/media-dupes/issues/78)
 * Changed the configurations options for the Windows Installer (NSIS). See [#72](https://github.com/yafp/media-dupes/issues/72)
+* Changed mainWindow Layout. Using the entire height - Part 1. See [#42](https://github.com/yafp/media-dupes/issues/42)
 * Moved settings code to module. See [#77](https://github.com/yafp/media-dupes/issues/77)
 * Dependencies
-  * Updated ```electron```  from 7.1.10 to 7.1.11
+  * Updated ```electron```  from 7.1.10 to 8.0.0
   * Updated ```custom-electron-titlebar``` from 3.2.1 to 3.2.2
+  * Updated ```youtube-dl``` from 3.0.1 to 3.0.2
+  * Updated ```electron-log```  from 4.0.4 to 4.0.5
 
 #### ```Removed```
 * Removed ```npx``` from project. See [#41](https://github.com/yafp/media-dupes/issues/41)
