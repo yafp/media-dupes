@@ -3,7 +3,6 @@
  * @author yafp
  * @module ui
  */
-
 'use strict'
 
 const utils = require('./utils.js')
@@ -12,6 +11,8 @@ const youtube = require('./youtubeDl.js')
 
 var distractEnabler = 0
 var arrayUserUrls = [] // contains the urls which should be downloaded
+
+var supportedDomains = []
 
 /**
 * @function windowMainApplicationStateSet
@@ -401,7 +402,7 @@ function windowMainDownloadContent (mode) {
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             for (var i = 0; i < arrayUserUrls.length; i++) {
-                var statusReport
+                // var statusReport
                 var url = arrayUserUrls[i] // get url
 
                 url = utils.fullyDecodeURI(url) // decode url - see #25
@@ -417,34 +418,17 @@ function windowMainDownloadContent (mode) {
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         windowMainLogAppend('\nFailed to download an url')
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url
-
-                        // if this was the last url to process - handle overall application progress - see #71
-                        if (arrayUserUrls.length === arrayUrlsThrowingErrors.length + arrayUrlsProcessedSuccessfully.length) {
-                            statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
-                            utils.showNotification('media-dupes', statusReport)
-                            utils.showNoty('info', statusReport, 0)
-                            windowMainLogAppend('\n' + statusReport)
-                            windowMainDownloadQueueFinished()
-                        }
+                        utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
                         throw error
                     }
 
                     // no error occured for this url - assuming the download finished
                     //
                     arrayUrlsProcessedSuccessfully.push(url)
-                    // Show processing output for this download task
-                    utils.writeConsoleMsg('info', output.join('\n'))
-                    windowMainLogAppend(output.join('\n'))
+                    utils.writeConsoleMsg('info', output.join('\n')) // Show processing output for this download task
+                    windowMainLogAppend(output.join('\n')) // Show processing output for this download task
                     utils.showNoty('success', 'Finished 1 download') // inform user
-
-                    // If this was the last url to process - Show final notification - see #71
-                    if (arrayUrlsThrowingErrors.length + arrayUrlsProcessedSuccessfully.length === arrayUserUrls.length) {
-                        statusReport = 'Finished download queue (' + arrayUserUrls.length + ') with ' + arrayUrlsProcessedSuccessfully.length + ' success and ' + arrayUrlsThrowingErrors.length + ' errors'
-                        utils.showNotification('media-dupes', statusReport)
-                        utils.showNoty('info', statusReport, 0)
-                        windowMainLogAppend('\n' + statusReport)
-                        windowMainDownloadQueueFinished()
-                    }
+                    utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
                 })
             }
         }
@@ -458,10 +442,18 @@ function windowMainDownloadContent (mode) {
 * @memberof renderer
 */
 function windowMainDownloadVideo () {
-    // http://www.youtube.com/watch?v=90AiXO1pAiA
-    // https://www.youtube.com/watch?v=sJgDYdA8dio
-    // https://vimeo.com/315670384
-    // https://vimeo.com/274478457
+    // some example urls for tests
+    //
+    // VIDEO:
+    // YOUTUBE:         http://www.youtube.com/watch?v=90AiXO1pAiA                      // 11 sec       less then 1 MB
+    //                  https://www.youtube.com/watch?v=cmiXteWLNw4                     // 1 hour
+    //                  https://www.youtube.com/watch?v=bZ_C-AVo5xA                     // for simulating download errors
+    // VIMEO:           https://vimeo.com/315670384                                     // 48 sec       around 1GB
+    //                  https://vimeo.com/274478457                                     // 6 sec        around 4MB
+    //
+    // AUDIO:
+    // SOUNDCLOUD:      https://soundcloud.com/jperiod/rise-up-feat-black-thought-2
+    // BANDCAMP:        https://nosferal.bandcamp.com/album/nosferal-ep-mini-album
 
     // FIXME:
     // This method now seems to work good for youtube urls
@@ -492,13 +484,33 @@ function windowMainDownloadVideo () {
             utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
 
             var youtubeDlParameter = ''
+            /*
             youtubeDlParameter = [
-                '--format', 'best',
-                '--add-metadata',
+                // OPTIONS
                 '--ignore-errors',
-                // '--no-mtime', // added in 0.4.0
-                // '--output', path.join(targetPath, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
-                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath // ffmpeg location
+                '--format', 'best',
+                '--output', path.join(configuredDownloadFolder, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
+                // POST PROCESSING
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
+                '--add-metadata',
+                '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
+                '--fixup', 'detect_or_warn'
+            ]
+            */
+
+            var settingAudioFormat = 'mp3'
+            youtubeDlParameter = [
+                // OPTIONS
+                '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
+                '--format', 'bestaudio',
+                '--output', path.join(configuredDownloadFolder, 'Audio', '%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
+                // POST PROCESSING
+                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
+                '--add-metadata', // since 0.5.0
+                '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
+                '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
+                '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5),
+                '--fixup', 'detect_or_warn'
             ]
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
@@ -540,7 +552,8 @@ function windowMainDownloadVideo () {
                 // When the download fetches info - start writing to file
                 //
                 video.on('info', function (info) {
-                    downloadUrlTargetName[i] = path.join(configuredDownloadFolder, 'Video', info._filename) // define the final name & path
+                    // downloadUrlTargetName[i] = path.join(configuredDownloadFolder, 'Video', info._filename) // define the final name & path
+                    downloadUrlTargetName[i] = info._filename // define the final name & path
 
                     size = info.size // needed to handle the progress later on('data'
 
@@ -835,3 +848,5 @@ module.exports.windowMainToDoListUpdate = windowMainToDoListUpdate
 module.exports.windowMainToDoListRestore = windowMainToDoListRestore
 module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
+
+module.exports.windowMainDownloadVideo = windowMainDownloadVideo

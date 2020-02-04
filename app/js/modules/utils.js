@@ -3,10 +3,10 @@
  * @author yafp
  * @module utils
  */
+'use strict'
 
 const sentry = require('./sentry.js')
-
-'use strict'
+const ui = require('./ui.js')
 
 /**
 * @function writeConsoleMsg
@@ -564,6 +564,55 @@ function disclaimerShow () {
     }
 }
 
+/**
+* @function downloadStatusCheck
+* @summary Checks if all downloads finished
+* @description Checks if all downloads finished and creates a final status report using noty
+* @param {number} - overall - THe amount of overall urls
+* @param {number} - succeeded - The amount of succeeded urls
+* @param {number} - failed - The amount of failed urls
+*/
+function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
+    var statusReport
+    var notificationType
+
+    writeConsoleMsg('warn', 'downloadStatusCheck ::: Overall: ' + overall)
+    writeConsoleMsg('warn', 'downloadStatusCheck ::: Succeeded: ' + succeeded)
+    writeConsoleMsg('warn', 'downloadStatusCheck ::: Failed: ' + failed)
+
+    if (overall === succeeded + failed) {
+        writeConsoleMsg('info', 'downloadStatusCheck ::: All download tasks are finished')
+
+        // everything is fine
+        if (overall === succeeded) {
+            writeConsoleMsg('info', 'downloadStatusCheck ::: All downloads successfully')
+            statusReport = 'Finished entire download queue (' + overall + ') successfully'
+            notificationType = 'success'
+        }
+
+        // some errors
+        if ((overall === succeeded + failed) && (succeeded > 0) && (failed > 0)) {
+            writeConsoleMsg('warn', 'downloadStatusCheck ::: Some downloads failed')
+            statusReport = 'Finished entire download queue (' + overall + ') - ' + succeeded + ' succeeded and ' + failed + ' failed with errors.'
+            notificationType = 'warning'
+        }
+
+        // all failed
+        if ((overall === failed) && (succeeded === 0)) {
+            writeConsoleMsg('error', 'downloadStatusCheck ::: All downloads failed')
+            statusReport = 'Finished entire download queue (' + overall + ') - but all downloads failed with errors.'
+            notificationType = 'error'
+        }
+
+        showNotification('media-dupes', statusReport) // show an OS notification
+        showNoty(notificationType, statusReport, 0) // show an in-app notification
+        ui.windowMainLogAppend('\n' + statusReport) // append to log
+        ui.windowMainDownloadQueueFinished()
+    } else {
+        writeConsoleMsg('info', 'downloadStatusCheck ::: Some download tasks are not yet finished')
+    }
+}
+
 // Export
 //
 module.exports.writeConsoleMsg = writeConsoleMsg
@@ -584,3 +633,4 @@ module.exports.userSettingRead = userSettingRead
 module.exports.defaultDownloadFolderGet = defaultDownloadFolderGet
 module.exports.disclaimerCheck = disclaimerCheck
 module.exports.disclaimerShow = disclaimerShow
+module.exports.downloadStatusCheck = downloadStatusCheck
