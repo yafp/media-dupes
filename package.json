@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.5.20200131",
+  "version": "0.5.20200204",
   "description": "a minimal media duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -214,7 +214,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "docdash": "^1.2.0",
-    "electron": "^7.1.11",
+    "electron": "^8.0.0",
     "electron-builder": "^22.3.2",
     "electron-packager": "^14.2.0",
     "eslint": "^6.8.0",
@@ -234,7 +234,7 @@
     "classic-tetris-js": "^1.0.2",
     "custom-electron-titlebar": "^3.2.2",
     "electron-json-storage": "^4.1.8",
-    "electron-log": "^4.0.4",
+    "electron-log": "^4.0.5",
     "electron-unhandled": "^3.0.2",
     "electron-util": "^0.13.1",
     "ffmpeg-static-electron": "^2.0.1",
@@ -242,7 +242,7 @@
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.1",
-    "youtube-dl": "^3.0.1"
+    "youtube-dl": "^3.0.2"
   },
   "standardx": {
     "ignore": [
