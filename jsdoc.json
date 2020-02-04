@@ -51,7 +51,7 @@
         "navLevel": [10],
         "private": [true],
         "menu": {
-            "github.com/yafp/media-dupes": {
+            "Github": {
                 "href":"https://github.com/yafp/media-dupes",
                 "target":"_blank",
                 "class":"menu-item",
