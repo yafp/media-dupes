@@ -4,43 +4,42 @@
 ## Build
 
 ### Warning
-Be aware that you have you package and build on the platform you want to build for. 
-Bulding windows on linux works in theory, but this is causing trouble with the youtube-dl binary. 
+Be aware that you have you package and build on the platform you want to build for.
+Bulding windows on linux works in theory, but this is causing trouble with the ```youtube-dl``` binary.
 See #47 for more details
 
-### PRE
+### Pre
+```
+# Cleaning up node_modules
+npm run reinstall
 
-#### Cleaning up node_modules
-* Navigate to repository
-* Execute: ```npm run reinstall```
-
-#### Generating jsdoc files
-* Navigate to repository
-* Execute: ```npm run jsdocs-update```
-
+# Updating jsdoc files
+npm run jsdocs-update
+```
 
 ### Packaging
-* Navigate to repository
+```
+# linux
+npm run pack-linux
 
-#### linux
-* Execute: ```npm run pack-linux```
+# mac
+npm run pack-mac
 
-#### mac
-* Execute: ```npm run pack-mac```
-
-#### windows
-* Execute: ```npm run pack-win```
+# windows
+npm run pack-win
+```
 
 
 
 ### Building
-* Navigate to repository
 
-#### linux
-* Execute: ```npm run build-linux```
+```
+# linux
+npm run build-linux
 
-#### mac
-* Execute: ```npm run build-mac```
+# mac
+npm run build-mac
 
-#### windows
-* Execute: ```npm run build-win```
+# windows
+npm run build-win
+```
