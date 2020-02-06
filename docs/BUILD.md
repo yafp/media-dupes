@@ -4,9 +4,9 @@
 ## Build
 
 ### Warning
-Be aware that you have you package and build on the platform you want to build for.
+Be aware that you have to package and build on the platform you want to build for.
 Bulding windows on linux works in theory, but this is causing trouble with the ```youtube-dl``` binary.
-See #47 for more details
+See [#47](https://github.com/yafp/media-dupes/issues/47) for more details.
 
 ### Pre
 ```
@@ -15,6 +15,9 @@ npm run reinstall
 
 # Updating jsdoc files
 npm run jsdocs-update
+
+# Check synthax of .js files
+npm run standardx
 ```
 
 ### Packaging
