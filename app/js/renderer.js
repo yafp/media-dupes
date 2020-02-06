@@ -796,6 +796,16 @@ require('electron').ipcRenderer.on('unblurMainUI', function () {
     ui.windowMainBlurSet(false)
 })
 
+/**
+* @name blurMainUI
+* @summary Triggers bluring the UI
+* @description Called via ipc from main.js when the main window is ready-to-show
+* @memberof renderer
+*/
+require('electron').ipcRenderer.on('blurMainUI', function () {
+    ui.windowMainBlurSet(true)
+})
+
 // ----------------------------------------------------------------------------
 // IPC - by mainwindow close event
 // ----------------------------------------------------------------------------
@@ -809,24 +819,3 @@ require('electron').ipcRenderer.on('unblurMainUI', function () {
 require('electron').ipcRenderer.on('todoListTryToSave', function () {
     ui.windowMainToDoListSave()
 })
-
-function getInfo () {
-    const youtubedl = require('youtube-dl')
-
-    // const url = 'http://www.youtube.com/watch?v=WKsjaOqDXgg'
-    const url = 'https://vimeo.com/274478457 '
-    // Optional arguments passed to youtube-dl.
-    const options = ['--youtube-skip-dash-manifest']
-
-    youtubedl.getInfo(url, options, function (err, info) {
-        if (err) throw err
-
-        console.log('id:', info.id)
-        console.log('title:', info.title)
-        console.log('url:', info.url)
-        console.log('thumbnail:', info.thumbnail)
-        console.log('description:', info.description)
-        console.log('filename:', info._filename)
-        console.log('format id:', info.format_id)
-    })
-}

@@ -184,7 +184,7 @@ function windowMainResetAskUser () {
                 layout: 'bottom',
                 type: 'info',
                 closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
-                text: 'media-dupes is currently downloading. Do you really want to reset the UI?',
+                text: 'Seems like <b>media-dupes</b> is currently downloading. Do you really want to reset the UI?',
                 buttons: [
                     Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
                         n.close()
@@ -344,32 +344,38 @@ function windowMainDownloadContent (mode) {
                     '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                     '--format', 'bestaudio',
                     '--output', path.join(configuredDownloadFolder, 'Audio', '%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
+                    // FILESYSTEM OPTIONS
+                    '--restrict-filenames', // Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
+                    '--continue', // Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.
                     // POST PROCESSING
                     '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
-                    '--add-metadata', // since 0.5.0
+                    '--add-metadata', // Write metadata to the video file
                     '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
                     '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
                     '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5),
-                    '--fixup', 'detect_or_warn'
+                    '--fixup', 'detect_or_warn' // Automatically correct known faults of the file.
                 ]
 
                 // prepend/add some case-specific parameter / flag
-                if (settingAudioFormat === 'mp3') {
-                    youtubeDlParameter.unshift('--embed-thumbnail') // prepend
+                if ((settingAudioFormat === 'mp3') || (settingAudioFormat === 'm4a')) {
+                    youtubeDlParameter.unshift('--embed-thumbnail') // prepend Post-processing Option
                 }
                 break
 
             case 'video':
                 youtubeDlParameter = [
                     // OPTIONS
-                    '--ignore-errors',
+                    '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                     '--format', 'best',
                     '--output', path.join(configuredDownloadFolder, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
+                    // FILESYSTEM OPTIONS
+                    '--restrict-filenames', // Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
+                    '--continue', // Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.
                     // POST PROCESSING
                     '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
-                    '--add-metadata',
+                    '--add-metadata', // Write metadata to the video file
                     '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
-                    '--fixup', 'detect_or_warn'
+                    '--fixup', 'detect_or_warn' // Automatically correct known faults of the file.
                 ]
                 break
 
@@ -385,7 +391,7 @@ function windowMainDownloadContent (mode) {
             // show the selected audio-format
             if (mode === 'audio') {
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
-                windowMainLogAppend('Audio-Format:\t\t' + settingAudioFormat) // Show mode in log
+                windowMainLogAppend('Audio-Format:\t' + settingAudioFormat) // Show mode in log
             }
 
             // if verboseMode is enabled - append the related youtube-dl flags to the parameter array
@@ -402,22 +408,19 @@ function windowMainDownloadContent (mode) {
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             for (var i = 0; i < arrayUserUrls.length; i++) {
-                // var statusReport
                 var url = arrayUserUrls[i] // get url
-
                 url = utils.fullyDecodeURI(url) // decode url - see #25
-
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
-                windowMainLogAppend('Added: \t\t\t' + url + ' to queue') // append url to log
+                windowMainLogAppend('Added: \t\t' + url + ' to queue') // append url to log
 
                 // Download
                 //
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
-                        utils.showNoty('error', '<b>Download failed</b><br><br>' + error, 0)
+                        utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Country-/ and/or similar restrictions</small>', 0)
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
-                        windowMainLogAppend('\nFailed to download an url')
-                        arrayUrlsThrowingErrors.push(url) // remember troublesome url
+                        windowMainLogAppend('\nFailed to download a single url')
+                        arrayUrlsThrowingErrors.push(url) // remember troublesome url (Attention: this is not the actual url . we got a problem here)
                         utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
                         throw error
                     }
@@ -429,6 +432,14 @@ function windowMainDownloadContent (mode) {
                     windowMainLogAppend(output.join('\n')) // Show processing output for this download task
                     utils.showNoty('success', 'Finished 1 download') // inform user
                     utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
+
+                    // FIXME:
+                    //
+                    // the variable URL contains in both cases the last processed url
+                    // thats why we can't show the actual url in the log
+                    //
+                    //windowMainLogAppend('\n\n\nSuccessful\n' + arrayUrlsProcessedSuccessfully)
+                    //windowMainLogAppend('\n\n\nFailed\n' + arrayUrlsThrowingErrors)
                 })
             }
         }
@@ -742,7 +753,6 @@ function windowMainToDoListRestore () {
         if (error) {
             throw error
         }
-
         // console.error(data); // object with all setting files
 
         // loop over them and find each which starts with todoListEntry_
@@ -755,7 +765,6 @@ function windowMainToDoListRestore () {
                     utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restoring the url: _' + curUrl + '_.') // key = name of json file
 
                     arrayUserUrls.push(curUrl) // append to array
-                    windowMainToDoListUpdate() // update todo list
 
                     restoreCounter = restoreCounter + 1
 
@@ -767,13 +776,19 @@ function windowMainToDoListRestore () {
                     })
                 }
             }
-
             // console.error(restoreCounter)
         }
 
         // inform the user if something got restored
         if (restoreCounter > 0) {
+            windowMainToDoListReset() // empty the todolist
+            windowMainToDoListUpdate() // update todo list
+
             utils.showNoty('success', 'Restored <b>' + restoreCounter + '</b> URLs from your last session.')
+
+            // get focus
+            const { ipcRenderer } = require('electron')
+            ipcRenderer.send('makeWindowUrgent')
         }
     })
 
@@ -789,23 +804,28 @@ function windowMainToDoListSave () {
     const storage = require('electron-json-storage')
     utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Should backup todolist')
 
-    var baseName = 'todoListEntry_'
-    var tempName
-    var arrayLength = arrayUserUrls.length
-    for (var i = 0; i < arrayLength; i++) {
-        var url = arrayUserUrls[i]
-        tempName = baseName + i
-        utils.writeConsoleMsg('info', 'windowMainToDoListSave :::  Trying to save the URL: ' + url + '_ to the file: _' + tempName + '_.')
+    var isToDoListEmpty = utils.globalObjectGet('todoListStateEmpty') // #79
+    if (isToDoListEmpty === false) {
+        var baseName = 'todoListEntry_'
+        var tempName
+        var arrayLength = arrayUserUrls.length
+        for (var i = 0; i < arrayLength; i++) {
+            var url = arrayUserUrls[i]
+            tempName = baseName + i
+            utils.writeConsoleMsg('info', 'windowMainToDoListSave :::  Trying to save the URL: ' + url + '_ to the file: _' + tempName + '_.')
 
-        storage.set(tempName, { url: url }, function (error) {
-            if (error) {
-                utils.writeConsoleMsg('error', 'Error writing json file')
-                throw error
-            }
-            utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Written the url _' + url + '_ to the file: _' + tempName + '_.')
-        })
+            storage.set(tempName, { url: url }, function (error) {
+                if (error) {
+                    utils.writeConsoleMsg('error', 'Error writing json file')
+                    throw error
+                }
+                utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Written the url _' + url + '_ to the file: _' + tempName + '_.')
+            })
+        }
+        utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Finished saving todoList content to files.')
+    } else {
+        utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: todoList was empty - nothing to store.') // #79
     }
-    utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Finished saving todoList content to files.')
 }
 
 /**

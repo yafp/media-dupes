@@ -36,7 +36,7 @@ const defaultUserDataPath = app.getPath('userData') // for: storing window posit
 const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
 
 // Caution: Warning since electron 8
-//app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
+// app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
 
 // mainWindow: minimal window size
 const minimalWindowHeight = 760
@@ -298,7 +298,11 @@ function createWindowMain () {
     ipcMain.on('globalObjectSet', function (event, property, value) {
         doLog('info', 'Set property _' + property + '_ to new value: _' + value + '_')
         global.sharedObj[property] = value
-        console.warn(global.sharedObj)
+
+        const isDev = require('electron-is-dev');
+        if (isDev) { 
+            console.warn(global.sharedObj)
+        }
     })
 
     // Global object
@@ -344,9 +348,11 @@ function createWindowMain () {
 
     // Emitted when the web page has been rendered (while not being shown) and window can be displayed without a visual flash.
     mainWindow.on('ready-to-show', function () {
+        doLog('info', 'createWindowMain ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
         mainWindow.show()
         mainWindow.focus()
-        doLog('info', 'createWindowMain ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
+
+        mainWindow.webContents.send('blurMainUI') // blur the main UI
 
         // do some checks & routines once at start of the application
         mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
@@ -354,6 +360,7 @@ function createWindowMain () {
         mainWindow.webContents.send('startSearchUpdatesSilent') // search silently for media-dupes updates
         mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // search silently for youtube-dl binary updates
         mainWindow.webContents.send('todoListCheck') // search if there are urls to restore
+        mainWindow.webContents.send('unblurMainUI') // unblur the main UI
     })
 
     // Emitted before the window is closed.
@@ -730,12 +737,14 @@ function powerMonitorInit () {
     // suspend
     powerMonitor.on('suspend', () => {
         doLog('warn', 'powerMonitorInit ::: The system is going to sleep (event: suspend)')
+        mainWindow.webContents.send('todoListTryToSave') // try to save the todolist - see #79
         powerMonitorNotify('warning', 'The system is going to sleep (event: suspend)', 0)
     })
 
     // resume
     powerMonitor.on('resume', () => {
         doLog('info', 'powerMonitorInit ::: The system is resuming (event: resume)')
+        mainWindow.webContents.send('todoListCheck') // search if there are urls to restore
         powerMonitorNotify('info', 'The system resumed (event: resume)', 0)
     })
 
