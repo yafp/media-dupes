@@ -26,19 +26,33 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.5.1 (2020xxyy)
+### media-dupes 0.6.0 (2020xxyy) - DEV
 #### ```Added```
+* Energy-management
+  * Added todoList save function on sleep event. See [#79](https://github.com/yafp/media-dupes/issues/79)
+  * Added todoList restore function on resume event. See [#79](https://github.com/yafp/media-dupes/issues/79)
+* Audio
+  * Added thumbnail embedding support for .m4a
 
 #### ```Changed```
 * Improved download resume for user. See [#78](https://github.com/yafp/media-dupes/issues/78)
 * Changed the configurations options for the Windows Installer (NSIS). See [#72](https://github.com/yafp/media-dupes/issues/72)
 * Changed mainWindow Layout. Using the entire height - Part 1. See [#42](https://github.com/yafp/media-dupes/issues/42)
 * Moved settings code to module. See [#77](https://github.com/yafp/media-dupes/issues/77)
+* Changed textarea font to monospace family to ensure correct indenting in the log
+* Added youtube-dl flag ```--restrict-filenames``` to the parameter list.
+* URL Restore: Added makeUrgent notification to the end of a successful executed URL restore.
+* Settings: Initial settings creation with default values is now silent. See [#80](https://github.com/yafp/media-dupes/issues/80)
+* UI
+  * mainWindow: added fadeIn effect to entire body
+  * Settings: added fadeIn effect to entire body
 * Dependencies
-  * Updated ```electron```  from 7.1.10 to 8.0.0
-  * Updated ```custom-electron-titlebar``` from 3.2.1 to 3.2.2
-  * Updated ```youtube-dl``` from 3.0.1 to 3.0.2
-  * Updated ```electron-log```  from 4.0.4 to 4.0.5
+  * Updated ```electron```  from ```7.1.10``` to ```8.0.0```
+  * Updated ```custom-electron-titlebar``` from ```3.2.1``` to ```3.2.2```
+  * Updated ```youtube-dl``` from ```3.0.1``` to ```3.0.2```
+  * Updated ```electron-log```  from ```4.0.4``` to ```4.0.6```
+  * Updated ```spectron```  from ```10.0.0``` to ```10.0.1```
+  * Updated ```fontawesome```  from ```5.12.0``` to ```5.12.1```
 
 #### ```Removed```
 * Removed ```npx``` from project. See [#41](https://github.com/yafp/media-dupes/issues/41)

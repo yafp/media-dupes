@@ -5,11 +5,12 @@
 <div align="center">
   <h1>media-dupes</h1>
 
-a minimal media duplicator for common media services like youtube
+a minimal content duplicator for common media services like youtube
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c30508f8add43ee8fbb62c2a669e76b)](https://www.codacy.com/manual/yafp/media-dupes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yafp/media-dupes&amp;utm_campaign=Badge_Grade)
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/k4c1nve3xejgolbr?svg=true)](https://ci.appveyor.com/project/yafp/media-dupes)
 [![Build Status](https://travis-ci.org/yafp/media-dupes.svg?branch=master)](https://travis-ci.org/yafp/media-dupes)
+![npm audit](https://github.com/yafp/media-dupes/workflows/npm%20audit/badge.svg)
 ![GitHub Current Release](https://img.shields.io/github/release/yafp/media-dupes.svg?style=flat)
 ![GitHub Release Date](https://img.shields.io/github/release-date/yafp/media-dupes.svg?style=flat)
 ![GitHub Download All releases](https://img.shields.io/github/downloads/yafp/media-dupes/total.svg)
@@ -63,11 +64,11 @@ Please see the [LICENSE](LICENSE) for more details.
 You are always welcome to check and even improve the code.
 
 ## discussion
-If you have question regarding **media-dupes**:
+If you have question regarding **media-dupes** use one of the following options
 
-* Github: using the issue function
-* Discord: [join](https://discord.gg/gHnqdHy)
-* Riot: [click](https://riot.im/app/#/room/#media-dupes:matrix.org) to join the public **#media-dupes** riot.im room available on **matrix.org**.
+* Github: by creating [issues](https://github.com/yafp/media-dupes/issues)
+* Discord: click [here](https://discord.gg/gHnqdHy) to join the discord server
+* Riot: click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join the public **#media-dupes** riot.im room available on **matrix.org**.
 
 
 ## support / fund
@@ -75,13 +76,17 @@ If you want to support the development of **media-dupes** you can fund me on:
 
 * [patreon](https://www.patreon.com/yafp)
 
+## disclosure
+**media-dupes** is not affiliated with any of the supported apps/services.
 
-## contributing
+
+## developers
+
+### contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
 A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
 
-## build
+### build
 Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
 
-## disclosure
-**media-dupes** is not affiliated with any of the supported apps/services.
+
