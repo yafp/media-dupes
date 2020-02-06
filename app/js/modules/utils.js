@@ -52,7 +52,11 @@ function showNoty (type, message, timeout = 3000) {
         timeout: timeout,
         theme: 'bootstrap-v4',
         layout: 'bottom',
-        text: message
+        text: message,
+        animation: {
+            open: 'animated fadeIn', // Animate.css class names: default: bounceInRight
+            close: 'animated fadeOut' // Animate.css class names: default:bounceOutRight
+        }
     }).show()
 }
 
@@ -244,9 +248,10 @@ function isDirectoryWriteable (dirPath) {
 * @description Writes a value for a given key to electron-json-storage
 * @param {String} key - Name of storage key
 * @param {String} value - New value
+* @param {boolean} [silent] - If true - no notification is displayed on initial settingscreation
 * @throws Exception when writing a file failed
 */
-function userSettingWrite (key, value) {
+function userSettingWrite (key, value, silent=false) {
     const storage = require('electron-json-storage')
     const remote = require('electron').remote
     const app = remote.app
@@ -264,7 +269,10 @@ function userSettingWrite (key, value) {
         }
         writeConsoleMsg('info', 'userSettingWrite ::: key: _' + key + '_ - new value: _' + value + '_')
         globalObjectSet(key, value)
-        showNoty('success', 'Set <b>' + key + '</b> to <b>' + value + '</b>.')
+
+        if (silent === false) {
+            showNoty('success', 'Set <b>' + key + '</b> to <b>' + value + '</b>.')
+        }
     })
 }
 
@@ -305,7 +313,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             if ((value === null) || (value === undefined)) {
                 settingVerboseMode = false // set the default default
                 writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingVerboseMode + '_.')
-                userSettingWrite('enableVerboseMode', settingVerboseMode) // write the setting
+                userSettingWrite('enableVerboseMode', settingVerboseMode, true) // write the setting
             } else {
                 settingVerboseMode = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
@@ -334,7 +342,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             if ((value === null) || (value === undefined)) {
                 settingPrereleases = false // set the default
                 writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingPrereleases + '_.')
-                userSettingWrite('enablePrereleases', settingPrereleases) // write the setting
+                userSettingWrite('enablePrereleases', settingPrereleases, true) // write the setting
             } else {
                 settingPrereleases = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingPrereleases + '_.')
@@ -363,7 +371,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             if ((value === null) || (value === undefined)) {
                 settingEnableErrorReporting = true
                 writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingEnableErrorReporting + '_.')
-                userSettingWrite('enableErrorReporting', true) // write the setting
+                userSettingWrite('enableErrorReporting', true, true) // write the setting
                 sentry.enableSentry()
             } else {
                 settingEnableErrorReporting = value
@@ -402,9 +410,8 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 var detectedDefaultDownloadDir = defaultDownloadFolderGet() // lets set it do the users default folder dir
                 if (detectedDefaultDownloadDir[0]) {
                     settingDownloadDir = detectedDefaultDownloadDir[1]
-                    userSettingWrite('downloadDir', settingDownloadDir)
+                    userSettingWrite('downloadDir', settingDownloadDir, true)
                     writeConsoleMsg('info', 'userSettingRead ::: key: _' + key + '_ - got initial value: _' + settingDownloadDir + '_.')
-                    // globalObjectSet('downloadDir', settingDownloadDir)
                 }
             } else {
                 // there is a setting
@@ -462,7 +469,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             if ((value === null) || (value === undefined)) {
                 settingAudioFormat = 'mp3'
                 writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAudioFormat + '_.')
-                userSettingWrite('audioFormat', settingAudioFormat) // write the setting
+                userSettingWrite('audioFormat', settingAudioFormat, true) // write the setting
             } else {
                 settingAudioFormat = value
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingAudioFormat + '_.')
@@ -490,7 +497,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingConfirmedDisclaimer + '_.')
             }
         }
-        // end: enableErrorReporting
+        // end: confirmedDisclaimer
     })
 }
 
