@@ -65,7 +65,8 @@ h6{
 textarea {
     font-size: 12px !important;
     font-weight: bold;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    /* font-family: Verdana, Arial, Helvetica, sans-serif; */
+    font-family: monospace;
     background-color: #ecf0f1;
     background-repeat: no-repeat;
     background-position: center;
