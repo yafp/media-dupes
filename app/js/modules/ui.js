@@ -386,6 +386,7 @@ function windowMainDownloadContent (mode) {
                 return
             }
 
+            windowMainLogAppend('### QUEUE STARTED ###\n') // Show mode in log
             windowMainLogAppend('Download mode:\t' + mode) // Show mode in log
 
             // show the selected audio-format
@@ -438,8 +439,8 @@ function windowMainDownloadContent (mode) {
                     // the variable URL contains in both cases the last processed url
                     // thats why we can't show the actual url in the log
                     //
-                    //windowMainLogAppend('\n\n\nSuccessful\n' + arrayUrlsProcessedSuccessfully)
-                    //windowMainLogAppend('\n\n\nFailed\n' + arrayUrlsThrowingErrors)
+                    // windowMainLogAppend('\n\n\nSuccessful\n' + arrayUrlsProcessedSuccessfully)
+                    // windowMainLogAppend('\n\n\nFailed\n' + arrayUrlsThrowingErrors)
                 })
             }
         }
@@ -450,7 +451,6 @@ function windowMainDownloadContent (mode) {
 * @function windowMainDownloadVideo
 * @summary Does the actual video download
 * @description Does the actual video download (without using youtube-dl.exec)
-* @memberof renderer
 */
 function windowMainDownloadVideo () {
     // some example urls for tests
@@ -639,6 +639,7 @@ function windowMainAddUrl () {
             arrayUserUrls.push(newUrl) // append to array
             windowMainToDoListUpdate() // update todo list
             $('#inputNewUrl').val('') // reset input
+            inputUrlFieldSetState() // empty = white
         } else {
             // invalid url
             utils.writeConsoleMsg('warn', 'windowMainAddUrl ::: Detected invalid url: _' + newUrl + '_.')
@@ -693,6 +694,7 @@ function windowMainDownloadQueueFinished () {
 function windowMainUiReset () {
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Starting to reset the UI')
     $('#inputNewUrl').val('') // empty the URL input field
+    inputUrlFieldSetState() // empty = white
     windowMainButtonsStartDisable() // disable start button
     windowMainButtonsOthersEnable() // ensure some buttons are enabled
     windowMainToDoListReset() // empty todo-list textarea
@@ -719,6 +721,17 @@ function windowMainToDoListReset () {
 * @description Is called by addUrl(). Makes the url array unique to remove duplicated entries. Updates the UI todo item. Calls windowMainButtonsStartEnable() if array is > 0
 */
 function windowMainToDoListUpdate () {
+    // check for duplicates
+    var alreadySeen = []
+    arrayUserUrls.forEach(function (str) {
+        if (alreadySeen[str]) {
+            utils.writeConsoleMsg('warn', 'windowMainToDoListUpdate ::: Duplicate url found: _' + str + '_.')
+            windowMainLogAppend('Warning:\tFound and removed url duplicate: ' + str)
+        } else {
+            alreadySeen[str] = true
+        }
+    })
+
     arrayUserUrls = $.unique(arrayUserUrls) // remove duplicate entries in array
 
     // write the now unique url array content to textarea
@@ -765,12 +778,13 @@ function windowMainToDoListRestore () {
                     utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restoring the url: _' + curUrl + '_.') // key = name of json file
 
                     arrayUserUrls.push(curUrl) // append to array
+                    windowMainToDoListUpdate() // update todo list
+                    restoreCounter = restoreCounter + 1 // update url-restore counter
 
-                    restoreCounter = restoreCounter + 1
-
-                    // Delete the file
+                    // Delete the related file
                     storage.remove(key, function (error) {
                         if (error) {
+                            utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Failed to delete a url restore file: _' + key + '_.') // key = name of json file
                             throw error
                         }
                     })
@@ -781,7 +795,7 @@ function windowMainToDoListRestore () {
 
         // inform the user if something got restored
         if (restoreCounter > 0) {
-            windowMainToDoListReset() // empty the todolist
+            // windowMainToDoListReset() // empty the todolist
             windowMainToDoListUpdate() // update todo list
 
             utils.showNoty('success', 'Restored <b>' + restoreCounter + '</b> URLs from your last session.')
@@ -832,12 +846,33 @@ function windowMainToDoListSave () {
 * @function windowMainUiMakeUrgent
 * @summary Tells the main process to mark the application as urgent (blinking in task manager)
 * @description Is used to inform the user about an important state-change (all downloads finished). Triggers code in main.js which does the actual work
-* @memberof renderer
 */
 function windowMainUiMakeUrgent () {
-    // make window urgent after having finished downloading. See #7
     const { ipcRenderer } = require('electron')
-    ipcRenderer.send('makeWindowUrgent')
+    ipcRenderer.send('makeWindowUrgent') // make window urgent after having finished downloading. See #7
+}
+
+/**
+* @function inputUrlFieldSetState
+* @summary Sets the background color of the url input field based on the given state
+* @description Sets the background color of the url input field based on the given state
+* @param {String} state - Known states or 'reachable', 'unchecked', 'unreachable' and default/any else
+*/
+function inputUrlFieldSetState (state) {
+    switch (state) {
+    case 'reachable':
+        $('#inputNewUrl').css('background-color', '#90EE90') // green
+        break
+    case 'unchecked':
+        $('#inputNewUrl').css('background-color', '#F0E68C') //  yellow
+        break
+    case 'unreachable':
+        $('#inputNewUrl').css('background-color', '#FA8072') // red
+        break
+    default:
+        $('#inputNewUrl').css('background-color', '#FFFFFF') // white
+        break
+    }
 }
 
 // Exporting the module functions
@@ -870,3 +905,5 @@ module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
 
 module.exports.windowMainDownloadVideo = windowMainDownloadVideo
+
+module.exports.inputUrlFieldSetState = inputUrlFieldSetState

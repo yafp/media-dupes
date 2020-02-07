@@ -251,7 +251,7 @@ function isDirectoryWriteable (dirPath) {
 * @param {boolean} [silent] - If true - no notification is displayed on initial settingscreation
 * @throws Exception when writing a file failed
 */
-function userSettingWrite (key, value, silent=false) {
+function userSettingWrite (key, value, silent = false) {
     const storage = require('electron-json-storage')
     const remote = require('electron').remote
     const app = remote.app
@@ -613,11 +613,38 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
 
         showNotification('media-dupes', statusReport) // show an OS notification
         showNoty(notificationType, statusReport, 0) // show an in-app notification
-        ui.windowMainLogAppend('\n' + statusReport) // append to log
+        ui.windowMainLogAppend('\n' + statusReport + '') // append to log
+        ui.windowMainLogAppend('### QUEUE ENDED ###\n\n') // Show mode in log
         ui.windowMainDownloadQueueFinished()
     } else {
         writeConsoleMsg('info', 'downloadStatusCheck ::: Some download tasks are not yet finished')
     }
+}
+
+/**
+* @function urlIsReachable
+* @summary Checks if a given url is reachable or not
+* @description Checks if a given url is reachable or not. Changes the color of the url input field
+* @param {number} - overall - THe amount of overall urls
+* @param {number} - succeeded - The amount of succeeded urls
+* @param {number} - failed - The amount of failed urls
+*/
+function urlIsReachable (userInput) {
+    writeConsoleMsg('info', 'urlIsReachable ::: Start checking if _' + userInput + '_ is reachable or not')
+
+    // check if url is reachable
+    const isReachable = require('is-reachable');
+    (async () => {
+        if (await isReachable(userInput) === true) {
+            writeConsoleMsg('info', 'urlIsReachable ::: is reachable')
+            ui.inputUrlFieldSetState('reachable')
+            // ui.windowMainLogAppend(userInput + ' is reachable')
+        } else {
+            writeConsoleMsg('error', 'urlIsReachable ::: is NOT reachable')
+            ui.inputUrlFieldSetState('unreachable')
+            // ui.windowMainLogAppend('Error: ' + userInput + ' is not reachable')
+        }
+    })()
 }
 
 // Export
@@ -641,3 +668,4 @@ module.exports.defaultDownloadFolderGet = defaultDownloadFolderGet
 module.exports.disclaimerCheck = disclaimerCheck
 module.exports.disclaimerShow = disclaimerShow
 module.exports.downloadStatusCheck = downloadStatusCheck
+module.exports.urlIsReachable = urlIsReachable

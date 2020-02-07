@@ -336,13 +336,53 @@ function settingsLoadAllOnSettingsUiLoad () {
 }
 
 /**
-* @function checkUrlInputField
+* @function urlInputFieldOnKeyUp
+* @summary On Key up event, checks if the field is empty or not
+* @description On Key up event, checks if the field is empty or not
+* @memberof renderer
+*/
+function urlInputFieldOnKeyUp () {
+    var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
+    if (currentContentOfUrlInputField === '') {
+        utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: Is now empty, gonna reset the background color')
+        ui.inputUrlFieldSetState() // empty = white
+    } else {
+        ui.inputUrlFieldSetState('unchecked') // unchecked = yellow
+
+        var isUrlValid = utils.validURL(currentContentOfUrlInputField)
+        if (isUrlValid) {
+            utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is a valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
+            utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
+        } else {
+            utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is not a valid URL (' + currentContentOfUrlInputField + ').')
+        }
+    }
+}
+
+/**
+* @function urlInputFieldOnKeyPress
+* @summary Executed on keypress inside url-input-field
+* @description Checks if the key-press was the ENTER-key - if so simulates a press of the button ADD URL
+* @memberof renderer
+* @event keyCode - The key press event
+*/
+function urlInputFieldOnKeyPress (event) {
+    var code = 0
+    code = event.keyCode
+    if (code === 13) {
+        windowMainClickButtonAddUrl() // simulare click on ADD URL buttom
+    }
+}
+
+/**
+* @function urlInputFieldOnFocus
 * @summary Handles auto-pasting urls to url input field
 * @description Executed on focus - checks if the clipboard contains a valid URL - if so - its auto-pasted into the field
 * @memberof renderer
 */
-function checkUrlInputField () {
-    utils.writeConsoleMsg('info', 'checkUrlInputField ::: Triggered on focus')
+function urlInputFieldOnFocus () {
+    utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: url input field got focus')
+
     var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
 
     // if the field is empty - continue
@@ -351,30 +391,20 @@ function checkUrlInputField () {
         var currentClipboardContent = clipboard.readText() // get content of clipboard
         currentClipboardContent = currentClipboardContent.trim() // remove leading and trailing blanks
 
-        // check if it is a valid url - if so paste it
         var isUrlValid = utils.validURL(currentClipboardContent)
         if (isUrlValid) {
+            utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a valid URL: _' + currentClipboardContent + '_. Now check if it is reachable.')
             $('#inputNewUrl').val(currentClipboardContent) // paste it
             $('#inputNewUrl').select() // select it entirely
-            utils.writeConsoleMsg('info', 'checkUrlInputField ::: Clipboard contains a valid URL (' + currentClipboardContent + '). Pasted it into the input field.')
-        } else {
-            utils.writeConsoleMsg('info', 'checkUrlInputField ::: Clipboard contains a non valid URL (' + currentClipboardContent + ').')
-        }
-    }
-}
 
-/**
-* @function onEnter
-* @summary Executed on keypress inside url-input-field
-* @description Checks if the key-press was the ENTER-key - if so simulates a press of the button ADD URL
-* @memberof renderer
-* @event keyCode - The key press event
-*/
-function onEnter (event) {
-    var code = 0
-    code = event.keyCode
-    if (code === 13) {
-        windowMainClickButtonAddUrl() // simulare click on ADD URL buttom
+            // check if url is reachable
+            utils.urlIsReachable(currentClipboardContent)
+        } else {
+            utils.writeConsoleMsg('warn', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL: _' + currentClipboardContent + '_.')
+        }
+    } else {
+        // input field is not empty
+        // doing nothing at this point
     }
 }
 
@@ -474,7 +504,7 @@ function searchUpdate (silent = true) {
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
-                utils.showNoty('success', 'No <b>media-dupes</b> updates available')
+                utils.showNoty('success', 'No updates for <b>media-dupes (' + localAppVersion + ')</b> available.')
             }
         }
 
@@ -819,3 +849,22 @@ require('electron').ipcRenderer.on('blurMainUI', function () {
 require('electron').ipcRenderer.on('todoListTryToSave', function () {
     ui.windowMainToDoListSave()
 })
+
+//
+// Baustelle
+function validateUrlBeforeAdd () {
+    var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
+
+    // if the field is empty - continue
+    if (currentContentOfUrlInputField === '') {
+        utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: Empty field')
+    } else {
+        var isUrlValid = utils.validURL(currentContentOfUrlInputField)
+        if (isUrlValid) {
+            utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
+            utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
+        } else {
+            utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL (' + currentContentOfUrlInputField + ').')
+        }
+    }
+}
