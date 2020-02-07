@@ -2,7 +2,28 @@
 /* BODY */
 /* ########################################################################## */
 body{
-    display: none;
+}
+
+/* ########################################################################## */
+/* BOOTSTRAP MODAL - used as SPLASH */
+/* ########################################################################## */
+/* opacity of background */
+.modal-backdrop
+{
+    opacity:0.0 !important;
+}
+
+/* removing border from splash */
+.no-border{
+  border:none !important;
+}
+
+
+/* ########################################################################## */
+/* THE MAIN UI WINDOW CONTAINER */
+/* ########################################################################## */
+#mainContainer{
+    animation-delay: 0.5s; /* custom animation delay */
 }
 
 /* ########################################################################## */
@@ -28,7 +49,6 @@ body{
 .window-title{
     font-size: 13px !important;
 }
-
 
 /* ########################################################################## */
 /* HEADINGS */
@@ -75,7 +95,6 @@ textarea {
 }
 
 #textareaTodoList {
-    background-image: url("../img/background/icon_textarea_todo_64x64.png");
     min-width: 100%;
     width: 100%;
     resize: none;
@@ -133,12 +152,15 @@ textarea {
 /* Use the “system font/San Francisco” */
 /* ########################################################################## */
 cssbody {
+    /*
     font: caption;
+    */
 }
 
 /* ########################################################################## */
 /* FADEIN THE WINDOW */
 /* ########################################################################## */
+/*
 @keyframes fadein {
   from
   {
@@ -148,6 +170,7 @@ cssbody {
     opacity: 1;
   }
 }
+*/
 
 .app {
     /* Disable text selection, or your app will feel like a web page */
