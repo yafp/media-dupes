@@ -39,10 +39,37 @@
     <link rel="stylesheet" href="css/core.css">
 
     <title>media-dupes</title>
+
 </head>
 
-<body class="animated fadeIn">
-    <div id="mainContainer" class="container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
+<body class="">
+
+    <!--Splash -->
+    <div class="modal animated fadeOut" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content no-border">
+                <!--
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                -->
+                <div class="modal-body">
+                    <center><img src="img/icon/icon.png" class="ifl-image" height="256"></center>
+                </div>
+                <!--
+                <div class="modal-footer">
+                    footer
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+    <!-- splash -->
+
+    <div id="mainContainer" class="animated fadeIn delay-1s container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -56,7 +83,7 @@
             </div>
 
             <!-- app name -->
-            <h2><img src="img/128x128.png" height="32" onclick="windowMainClickDistract();">media-dupes</h2>
+            <h2>media-dupes <img src="img/icon/icon.png" height="32" onclick="windowMainClickDistract();"></h2>
 
             <!-- app description: effect in 0.5.0: bounceInLeft -->
             <h3>a minimal content duplicator for common media services like youtube</h3>
@@ -69,7 +96,7 @@
 
         <!-- add URL -->
         <div class="input-group mb-3">
-            <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onfocus="checkUrlInputField();" onKeyPress="onEnter(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
+            <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onkeyup="urlInputFieldOnKeyUp()" onfocus="urlInputFieldOnFocus();" onKeyPress="urlInputFieldOnKeyPress(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
                 <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="windowMainClickButtonAddUrl();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
             </div>
@@ -248,10 +275,19 @@
 $( document ).ready(function()
 {
     console.log( 'index.html ready' )
+
+    $('#myModal').modal('show') // load splash
+
     titlebarInit() // init titleBar
     settingsLoadAllOnAppStart() // load user settings
     windowMainClickButtonUIReset() // FIXME: still needed?
-    $('body').fadeIn(500) // Fades in page on load
+
+    // modal hide
+    setTimeout(function(){
+        $('#myModal').modal('hide')
+    }, 1000);
+    
+
 });
 </script>
 
