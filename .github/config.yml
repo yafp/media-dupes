@@ -1,0 +1,30 @@
+# Configuration for the-welcome-bot - https://github.com/bash-bot/the-welcome-bot
+
+# Message for a new user who open an issue
+issueOpen: >
+  Welcome to media-dupes!
+  Thanks and congrats for opening your very first issue in this project.
+
+# Message for a new user who comments on an issue
+issueComment: >
+  Welcome to the media-dupes!
+  Thanks and congrats for your very first comment on this project.
+  Want to contribute? Make an issue or submit a PR.
+
+# Message for a new user who opens a PR
+prOpen: >
+  Welcome to media-dupes!
+  Thank you and congrats for your first PR on this project.
+  We will review it soon!
+
+# Default message for a new user
+welcomeMessage: >
+  Welcome to media-dupes! 
+  Checkout the README.md for more details about this project.
+  Want to contribute? Make an issue or submit a PR.
+  You can check the contributing guides.
+
+#
+firstPRMergeComment: >
+  Welcome to media-dupes!
+  Congrats on merging your first pull request to media-dupes!
