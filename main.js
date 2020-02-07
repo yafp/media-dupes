@@ -155,8 +155,8 @@ function createWindowDistraction () {
         width: 550,
         minWidth: 550,
         resizable: false,
-        height: 700,
-        minHeight: 700,
+        height: 720,
+        minHeight: 720,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             webSecurity: true
@@ -299,8 +299,8 @@ function createWindowMain () {
         doLog('info', 'Set property _' + property + '_ to new value: _' + value + '_')
         global.sharedObj[property] = value
 
-        const isDev = require('electron-is-dev');
-        if (isDev) { 
+        const isDev = require('electron-is-dev')
+        if (isDev) {
             console.warn(global.sharedObj)
         }
     })
@@ -397,7 +397,7 @@ function createWindowMain () {
                     icon: path.join(__dirname, 'app/img/icon/icon.png'),
                     type: 'question',
                     buttons: ['Yes', 'No'],
-                    title: 'Save todo list',
+                    title: 'Save current todo list?',
                     message: 'Your todo list contains unprocessed URLs.\n\nDo you want to restore them on next launch?'
                 })
             if (choiceB === 0) {

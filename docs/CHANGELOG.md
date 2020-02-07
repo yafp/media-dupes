@@ -28,13 +28,17 @@ The following categories are used:
 
 ### media-dupes 0.6.0 (2020xxyy) - DEV
 #### ```Added```
+* URL input: Url-input-field is now color-coded (red = unreachable, yellow = unchecked, green = reachable). See [#82](https://github.com/yafp/media-dupes/issues/82)
+* Added splash screen. See [#78](https://github.com/yafp/media-dupes/issues/83)
 * Energy-management
   * Added todoList save function on sleep event. See [#79](https://github.com/yafp/media-dupes/issues/79)
   * Added todoList restore function on resume event. See [#79](https://github.com/yafp/media-dupes/issues/79)
 * Audio
   * Added thumbnail embedding support for .m4a
 
+
 #### ```Changed```
+* Changed application icon
 * Improved download resume for user. See [#78](https://github.com/yafp/media-dupes/issues/78)
 * Changed the configurations options for the Windows Installer (NSIS). See [#72](https://github.com/yafp/media-dupes/issues/72)
 * Changed mainWindow Layout. Using the entire height - Part 1. See [#42](https://github.com/yafp/media-dupes/issues/42)
@@ -59,6 +63,7 @@ The following categories are used:
 
 #### ```Fixed```
 * Fixed undefined version in sentry error events. See [#75](https://github.com/yafp/media-dupes/issues/75)
+* Fixed issues with the windows installer. See [#76](https://github.com/yafp/media-dupes/issues/76)
 
 ***
 
