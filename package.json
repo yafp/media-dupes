@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.5.20200206",
+  "version": "0.5.20200207",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -130,7 +130,7 @@
     },
     "nsis": {
       "unicode": false,
-      "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}",
+      "artifactName": "${productName}.${ext}",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "oneClick": false,
@@ -240,6 +240,7 @@
     "electron-util": "^0.13.1",
     "ffmpeg-static-electron": "^2.0.1",
     "intro.js": "^2.9.3",
+    "is-reachable": "^4.0.0",
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.1",
