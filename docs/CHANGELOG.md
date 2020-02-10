@@ -47,16 +47,19 @@ The following categories are used:
 * Added youtube-dl flag ```--restrict-filenames``` to the parameter list.
 * URL Restore: Added makeUrgent notification to the end of a successful executed URL restore.
 * Settings: Initial settings creation with default values is now silent. See [#80](https://github.com/yafp/media-dupes/issues/80)
+* Removed success notification on 'Loading supported extractors'.
 * UI
   * mainWindow: added fadeIn effect to entire body
   * Settings: added fadeIn effect to entire body
 * Dependencies
   * Updated ```electron```  from ```7.1.10``` to ```8.0.0```
+  * Updated ```electron-packager```  from ```14.2.0``` to ```14.2.1```
   * Updated ```custom-electron-titlebar``` from ```3.2.1``` to ```3.2.2```
   * Updated ```youtube-dl``` from ```3.0.1``` to ```3.0.2```
   * Updated ```electron-log```  from ```4.0.4``` to ```4.0.6```
   * Updated ```spectron```  from ```10.0.0``` to ```10.0.1```
   * Updated ```fontawesome```  from ```5.12.0``` to ```5.12.1```
+  * Updated ```rimraf```  from ```3.0.1``` to ```3.0.2```
 
 #### ```Removed```
 * Removed ```npx``` from project. See [#41](https://github.com/yafp/media-dupes/issues/41)
