@@ -251,7 +251,7 @@ function windowMainShowSupportedExtractors () {
         windowMainLogAppend(list.join('\n'))
 
         utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
-        utils.showNoty('success', 'Successfully fetched a list of all supported extractors.') // summary for user
+        //utils.showNoty('success', 'Successfully fetched a list of all supported extractors.') // summary for user
         windowMainLogAppend('\nFound ' + list.length + ' extractors for media-services')
         windowMainButtonsOthersEnable()
         windowMainApplicationStateSet()
