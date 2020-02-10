@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: 10
 
-    - name: Install xmllint
-      run: sudo apt-get install bsdtar rpm
+      - name: Install bsdtar and rpm
+        run: sudo apt-get install bsdtar rpm
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
