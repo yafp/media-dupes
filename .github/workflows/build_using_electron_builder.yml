@@ -21,6 +21,7 @@ jobs:
 
       - name: Install bsdtar and rpm
         run: sudo apt-get install bsdtar rpm
+        os: ubuntu-latest
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
