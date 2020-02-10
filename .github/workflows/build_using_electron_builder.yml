@@ -19,8 +19,7 @@ jobs:
         with:
           node-version: 10
 
-
-      - name: Install bsdtar and rpm
+      - name: On Linux: Install 'bsdtar' and 'rpm'
         if: startsWith(matrix.os, 'ubuntu-latest')
         run: sudo apt-get install bsdtar rpm
 
