@@ -24,7 +24,7 @@ Sentry.init({
 })
 //
 // simple way to force a crash:
-//myUndefinedFunctionInSentryModul();
+// myUndefinedFunctionInSentryModul();
 
 /**
 * @function enableSentry

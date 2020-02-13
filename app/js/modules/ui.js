@@ -7,7 +7,7 @@
 
 const utils = require('./utils.js')
 const ffmpeg = require('./ffmpeg.js')
-const youtube = require('./youtubeDl.js')
+const youtubeDl = require('./youtubeDl.js')
 
 var distractEnabler = 0
 var arrayUserUrls = [] // contains the urls which should be downloaded
@@ -40,8 +40,11 @@ function windowMainApplicationStateSet (newState = 'idle') {
 * @description Shows the loading animation / download spinner. applicationStateSet() is using this function
 */
 function windowMainLoadingAnimationShow () {
-    utils.writeConsoleMsg('info', 'windowMainLoadingAnimationShow ::: Showing spinner')
-    $('#md_spinner').attr('hidden', false)
+    // if ( $('#md_spinner').attr( "hidden" )) { // only if it isnt already displayed
+    if ($('#div').data('hidden', true)) { // only if it isnt already displayed
+        utils.writeConsoleMsg('info', 'windowMainLoadingAnimationShow ::: Showing spinner')
+        $('#md_spinner').attr('hidden', false)
+    }
 }
 
 /**
@@ -50,8 +53,10 @@ function windowMainLoadingAnimationShow () {
 * @description Hides the loading animation / download spinner. applicationStateSet() is using this function
 */
 function windowMainLoadingAnimationHide () {
-    utils.writeConsoleMsg('info', 'windowMainLoadingAnimationHide ::: Hiding spinner')
-    $('#md_spinner').attr('hidden', true)
+    if ($('#div').data('hidden', false)) { // only if it isnt already hidden
+        utils.writeConsoleMsg('info', 'windowMainLoadingAnimationHide ::: Hiding spinner')
+        $('#md_spinner').attr('hidden', true)
+    }
 }
 
 /**
@@ -88,11 +93,13 @@ function windowMainButtonsOthersDisable () {
 * @description Is executed when the todo-list contains at least 1 item
 */
 function windowMainButtonsStartEnable () {
-    // enable start buttons
-    $('#buttonStartVideoExec').prop('disabled', false)
-    $('#buttonStartVideo').prop('disabled', false)
-    $('#buttonStartAudioExec').prop('disabled', false)
-    utils.writeConsoleMsg('info', 'windowMainButtonsStartEnable ::: Did enable both start buttons')
+    // enable start buttons if needed - if needed
+    if ($('#buttonStartVideoExec').is(':disabled')) {
+        $('#buttonStartVideoExec').prop('disabled', false)
+        $('#buttonStartVideo').prop('disabled', false)
+        $('#buttonStartAudioExec').prop('disabled', false)
+        utils.writeConsoleMsg('info', 'windowMainButtonsStartEnable ::: Did enable both start buttons')
+    }
 }
 
 /**
@@ -101,11 +108,13 @@ function windowMainButtonsStartEnable () {
 * @description Is executed when a download task is started by the user
 */
 function windowMainButtonsStartDisable () {
-    // disable start buttons
-    $('#buttonStartVideoExec').prop('disabled', true)
-    $('#buttonStartVideo').prop('disabled', true)
-    $('#buttonStartAudioExec').prop('disabled', true)
-    utils.writeConsoleMsg('info', 'windowMainButtonsStartDisable ::: Did disable both start buttons')
+    // disable start buttons - if needed
+    if ($('#buttonStartVideoExec').is(':enabled')) {
+        $('#buttonStartVideoExec').prop('disabled', true)
+        $('#buttonStartVideo').prop('disabled', true)
+        $('#buttonStartAudioExec').prop('disabled', true)
+        utils.writeConsoleMsg('info', 'windowMainButtonsStartDisable ::: Did disable both start buttons')
+    }
 }
 
 /**
@@ -143,7 +152,12 @@ function windowMainIntroShow () {
 * @description Appends text to the log textarea
 * @param {String} newLine - The content for the line which should be appended to the UI Log
 */
-function windowMainLogAppend (newLine) {
+function windowMainLogAppend (newLine, addTimestamp = false) {
+    if (addTimestamp === true) {
+        var currentTimestamp = utils.generateTimestamp() // get a current timestamp
+        newLine = currentTimestamp + ' > ' + newLine
+    }
+
     $('#textareaLogOutput').val(function (i, text) {
         return text + newLine + '\n'
     })
@@ -227,7 +241,7 @@ function windowMainShowSupportedExtractors () {
     windowMainApplicationStateSet('Loading extractors list')
 
     utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Loading list of all supported extractors...')
-    windowMainLogAppend('\nLoading list of supported media-services extractors')
+    windowMainLogAppend('Fetching list of supported youtube-dl extractors', true)
 
     windowMainButtonsOthersDisable()
 
@@ -251,8 +265,7 @@ function windowMainShowSupportedExtractors () {
         windowMainLogAppend(list.join('\n'))
 
         utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
-        //utils.showNoty('success', 'Successfully fetched a list of all supported extractors.') // summary for user
-        windowMainLogAppend('\nFound ' + list.length + ' extractors for media-services')
+        windowMainLogAppend('Found ' + list.length + ' supported youtube-dl extractors', true)
         windowMainButtonsOthersEnable()
         windowMainApplicationStateSet()
     })
@@ -313,7 +326,7 @@ function windowMainDownloadContent (mode) {
             const path = require('path')
 
             // youtube-dl
-            utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Using youtube.dl from: _' + youtube.youtubeDlBinaryPathGet() + '_.')
+            utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Using youtube.dl from: _' + youtubeDl.youtubeDlBinaryPathGet() + '_.')
 
             // ffmpeg
             var ffmpegPath = ffmpeg.ffmpegGetBinaryPath()
@@ -386,13 +399,13 @@ function windowMainDownloadContent (mode) {
                 return
             }
 
-            windowMainLogAppend('### QUEUE STARTED ###\n') // Show mode in log
-            windowMainLogAppend('Download mode:\t' + mode) // Show mode in log
+            windowMainLogAppend('### QUEUE STARTED ###', true) // Show mode in log
+            windowMainLogAppend('Download mode:\t' + mode, true) // Show mode in log
 
             // show the selected audio-format
             if (mode === 'audio') {
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: AudioFormat is set to: _' + settingAudioFormat + '_')
-                windowMainLogAppend('Audio-Format:\t' + settingAudioFormat) // Show mode in log
+                windowMainLogAppend('Audio-Format:\t' + settingAudioFormat, true) // Show mode in log
             }
 
             // if verboseMode is enabled - append the related youtube-dl flags to the parameter array
@@ -404,7 +417,7 @@ function windowMainDownloadContent (mode) {
             } else {
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Verbose Mode is disabled')
             }
-            windowMainLogAppend('Verbose mode:\t' + settingVerboseMode) // Show verbose mode in log
+            windowMainLogAppend('Verbose mode:\t' + settingVerboseMode, true) // Show verbose mode in log
 
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
@@ -412,7 +425,7 @@ function windowMainDownloadContent (mode) {
                 var url = arrayUserUrls[i] // get url
                 url = utils.fullyDecodeURI(url) // decode url - see #25
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
-                windowMainLogAppend('Added: \t\t' + url + ' to queue') // append url to log
+                windowMainLogAppend('Added: \t\t' + url + ' to queue', true) // append url to log
 
                 // Download
                 //
@@ -420,7 +433,7 @@ function windowMainDownloadContent (mode) {
                     if (error) {
                         utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Country-/ and/or similar restrictions</small>', 0)
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
-                        windowMainLogAppend('\nFailed to download a single url')
+                        windowMainLogAppend('Failed to download a single url', true)
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url (Attention: this is not the actual url . we got a problem here)
                         utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
                         throw error
@@ -513,15 +526,17 @@ function windowMainDownloadVideo () {
             youtubeDlParameter = [
                 // OPTIONS
                 '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
-                '--format', 'bestaudio',
-                '--output', path.join(configuredDownloadFolder, 'Audio', '%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
+                '--format', 'bestaudio', // FIXME: https://github.com/przemyslawpluta/node-youtube-dl/issues/188
+                '--format', 'best',
+                '--output', path.join(configuredDownloadFolder, 'Video', '%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
                 // POST PROCESSING
                 '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
                 '--add-metadata', // since 0.5.0
                 '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
-                '--extract-audio', // Convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)
                 '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5),
-                '--fixup', 'detect_or_warn'
+                '--fixup', 'detect_or_warn',
+
+                '--print-json'
             ]
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
@@ -530,7 +545,7 @@ function windowMainDownloadVideo () {
                 return
             }
 
-            utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Using youtube.dl: _' + youtubedl.getYtdlBinary() + '_.')
+            utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Using youtube.dl: _' + youtubeDl.youtubeDlBinaryPathGet() + '_.')
 
             var arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
             var arrayUrlsProcessedSuccessfully = []
@@ -610,8 +625,8 @@ function windowMainDownloadVideo () {
 
                     // if all downloads finished
                     if (arrayUrlsProcessedSuccessfully.length === arrayLength) {
-                        utils.showNotification('media-dupes', 'Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.')
-                        windowMainLogAppend('Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.')
+                        utils.showNotification('Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.')
+                        windowMainLogAppend('Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.', true)
                         windowMainToDoListReset()
                         windowMainUiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
                         windowMainLoadingAnimationHide() // stop download animation / spinner
@@ -726,7 +741,7 @@ function windowMainToDoListUpdate () {
     arrayUserUrls.forEach(function (str) {
         if (alreadySeen[str]) {
             utils.writeConsoleMsg('warn', 'windowMainToDoListUpdate ::: Duplicate url found: _' + str + '_.')
-            windowMainLogAppend('Warning:\tFound and removed url duplicate: ' + str)
+            windowMainLogAppend('Warning:\tFound and removed url duplicate\n\t\t' + str)
         } else {
             alreadySeen[str] = true
         }
@@ -764,6 +779,7 @@ function windowMainToDoListRestore () {
 
     storage.getAll(function (error, data) {
         if (error) {
+            utils.writeConsoleMsg('error', 'windowMaintoDoListRestore ::: Failed to fetch all json files. Error: ' + error)
             throw error
         }
         // console.error(data); // object with all setting files
@@ -772,24 +788,27 @@ function windowMainToDoListRestore () {
         for (var key in data) {
             // utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Current config file: _' + key + '_.') // key = name of json file
 
-            if (data.hasOwnProperty(key)) {
-                if (key.startsWith('todoListEntry_')) {
-                    curUrl = data[key].url
-                    utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restoring the url: _' + curUrl + '_.') // key = name of json file
+            // FIXME:
+            // Check for better approach:
+            // https://eslint.org/docs/rules/no-prototype-builtins
 
-                    arrayUserUrls.push(curUrl) // append to array
-                    windowMainToDoListUpdate() // update todo list
-                    restoreCounter = restoreCounter + 1 // update url-restore counter
+            if (key.startsWith('todoListEntry_')) {
+                curUrl = data[key].url
+                utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restoring the url: _' + curUrl + '_ from settings file: _' + key + '_.') // key = name of json file
 
-                    // Delete the related file
-                    storage.remove(key, function (error) {
-                        if (error) {
-                            utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Failed to delete a url restore file: _' + key + '_.') // key = name of json file
-                            throw error
-                        }
-                    })
-                }
+                arrayUserUrls.push(curUrl) // append to array
+                windowMainToDoListUpdate() // update todo list
+                restoreCounter = restoreCounter + 1 // update url-restore counter
+
+                // Delete the related file
+                storage.remove(key, function (error) {
+                    if (error) {
+                        utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Failed to delete a url restore file: _' + key + '_.') // key = name of json file
+                        throw error
+                    }
+                })
             }
+
             // console.error(restoreCounter)
         }
 
@@ -798,15 +817,16 @@ function windowMainToDoListRestore () {
             // windowMainToDoListReset() // empty the todolist
             windowMainToDoListUpdate() // update todo list
 
+            utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restored ' + restoreCounter + ' URLs from previous session.')
             utils.showNoty('success', 'Restored <b>' + restoreCounter + '</b> URLs from your last session.')
 
             // get focus
             const { ipcRenderer } = require('electron')
             ipcRenderer.send('makeWindowUrgent')
+        } else {
+            utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Found no urls to restore from previous session.')
         }
     })
-
-    utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Finished')
 }
 
 /**
@@ -875,6 +895,99 @@ function inputUrlFieldSetState (state) {
     }
 }
 
+/**
+* @function youtubeSuggest
+* @summary Opens a dialog to ask for a user string. Is then using the string to get youtube suggestions for the string
+* @description Opens a dialog to ask for a user string. Is then using the string to get youtube suggestions for the string. Results are appended to the log
+*/
+function youtubeSuggest () {
+    const prompt = require('electron-prompt')
+
+    const youtubeSearchUrlBase = 'https://www.youtube.com/results?search_query='
+    var url
+    var curResult
+
+    prompt({
+        title: 'Prompt example',
+        label: 'URL:',
+        value: '',
+        inputAttrs: {
+            type: 'text'
+        },
+        type: 'input'
+    })
+        .then((r) => {
+            if (r === null) {
+                utils.writeConsoleMsg('warn', 'youtubeSuggest ::: User aborted input dialog')
+            } else {
+                if ((r !== null) && (r !== '')) {
+                    windowMainLoadingAnimationShow()
+                    utils.writeConsoleMsg('warn', 'youtubeSuggest ::: User search string is: _' + r + '_.')
+                    windowMainLogAppend('Searching for Youtube suggestions for the searchphase: ' + r, true)
+
+                    var youtubeSuggest = require('youtube-suggest')
+                    var assert = require('assert')
+
+                    youtubeSuggest(r).then(function (results) {
+                        assert(Array.isArray(results))
+
+                        if (results.length > 0) { // if we got suggestions
+                            assert(typeof results[0] === 'string')
+
+                            // Loop over array and append to log
+                            for (var i = 0; i < results.length; i++) {
+                                curResult = results[i].replace(/ /g, '+') // replace space with +
+                                url = youtubeSearchUrlBase + curResult
+                                windowMainLogAppend('> ' + results[i] + ' : ' + url)
+                            }
+                            windowMainLogAppend('Finished searching for Youtube suggestions for the search phase: ' + r + '\n', true)
+                            windowMainLoadingAnimationHide()
+
+                            // ask user if he wants to open all those urls
+                            const Noty = require('noty')
+                            var n = new Noty(
+                                {
+                                    theme: 'bootstrap-v4',
+                                    layout: 'bottom',
+                                    type: 'info',
+                                    closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
+                                    text: 'Do you want to open all suggestions in your browser?',
+                                    buttons: [
+                                        Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
+                                            n.close()
+
+                                            // loop over array and call openURL
+                                            for (var i = 0; i < results.length; i++) {
+                                                curResult = results[i].replace(/ /g, '+') // replace space with +
+                                                url = youtubeSearchUrlBase + curResult
+                                                utils.openURL(url)
+                                            }
+                                        },
+                                        {
+                                            id: 'button1', 'data-status': 'ok'
+                                        }),
+                                        Noty.button('No', 'btn btn-secondary mediaDupes_btnDefaultWidth float-right', function () {
+                                            n.close()
+                                        })
+                                    ]
+                                })
+
+                            n.show() // show the noty dialog
+                        } else {
+                            utils.showNoty('warning', '<b>Warning:</b> Unable to get suggestions for this search phrase')
+                            windowMainLogAppend('Finished searching for Youtube suggestions for the searchphase: ' + r + ' without results', true)
+                            windowMainLoadingAnimationHide()
+                        }
+                    })
+                    // end suggest
+                } else {
+                    utils.showNoty('warning', '<b>Warning:</b> Unable to search suggestions without search string')
+                }
+            }
+        })
+        .catch(console.error)
+}
+
 // Exporting the module functions
 //
 module.exports.windowMainApplicationStateSet = windowMainApplicationStateSet
@@ -903,7 +1016,6 @@ module.exports.windowMainToDoListUpdate = windowMainToDoListUpdate
 module.exports.windowMainToDoListRestore = windowMainToDoListRestore
 module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
-
 module.exports.windowMainDownloadVideo = windowMainDownloadVideo
-
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
+module.exports.youtubeSuggest = youtubeSuggest

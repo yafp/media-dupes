@@ -4,22 +4,34 @@
 * @namespace main
 */
 
+// ----------------------------------------------------------------------------
+// REQUIRE: MEDIA-DUPES MODULES
+// ----------------------------------------------------------------------------
+const crash = require('./app/js/modules/crashReporter.js') // crashReporter
+const sentry = require('./app/js/modules/sentry.js') // sentry
+const unhandled = require('./app/js/modules/unhandled.js') // electron-unhandled
+const utils = require('./app/js/modules/utils.js')
+
+// -----------------------------------------------------------------------------
+// REQUIRE: 3rd PARTY
+// -----------------------------------------------------------------------------
 const { app, BrowserWindow, electron, ipcMain, Menu } = require('electron')
 const shell = require('electron').shell
 const path = require('path')
 const fs = require('fs')
 const openAboutWindow = require('about-window').default // for: about-window
 
-// media-dupes module
-const utils = require('./app/js/modules/utils.js')
-
-// npm-check -s // to ignore all non-referenced node_modules
+// npm-check:
+// use:
+//   npm-check -s
+// to ignore all non-referenced node_modules
 
 // ----------------------------------------------------------------------------
-// ERROR-HANDLING
+// ERROR-HANDLING:
 // ----------------------------------------------------------------------------
-require('./app/js/errorReporting.js')
-// myUndefinedFunctionFromMain();
+crash.initCrashReporter()
+unhandled.initUnhandled()
+sentry.enableSentry() // sentry is enabled by default
 
 // ----------------------------------------------------------------------------
 // VARIABLES & CONSTANTS
@@ -236,8 +248,8 @@ function createWindowMain () {
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,
-            webSecurity: true, // introduced in 0.3.0
-            preload: path.join(__dirname, 'preload.js')
+            webSecurity: true // introduced in 0.3.0
+            // preload: path.join(__dirname, 'preload.js')
         }
     })
 
@@ -294,15 +306,17 @@ function createWindowMain () {
         createWindowDistraction()
     })
 
+    // Call from renderer: show mainUI
+    ipcMain.on('showAndFocusMainUI', function () {
+        mainWindow.show()
+        mainWindow.focus()
+    })
+
     // Call from renderer: Update property from globalObj
     ipcMain.on('globalObjectSet', function (event, property, value) {
-        doLog('info', 'Set property _' + property + '_ to new value: _' + value + '_')
+        doLog('info', 'globalObjectSet ::: Set _' + property + '_ to: _' + value + '_')
         global.sharedObj[property] = value
-
-        const isDev = require('electron-is-dev')
-        if (isDev) {
-            console.warn(global.sharedObj)
-        }
+        // console.warn(global.sharedObj)
     })
 
     // Global object
@@ -355,12 +369,18 @@ function createWindowMain () {
         mainWindow.webContents.send('blurMainUI') // blur the main UI
 
         // do some checks & routines once at start of the application
+        //
+        // mainWindow.webContents.send('initSettings')
         mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
         mainWindow.webContents.send('startDisclaimerCheck') // check if disclaimer must be shown
-        mainWindow.webContents.send('startSearchUpdatesSilent') // search silently for media-dupes updates
-        mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // search silently for youtube-dl binary updates
+        // mainWindow.webContents.send('startSearchUpdatesSilent') // search silently for media-dupes updates
+        // mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // search silently for youtube-dl binary updates
         mainWindow.webContents.send('todoListCheck') // search if there are urls to restore
         mainWindow.webContents.send('unblurMainUI') // unblur the main UI
+
+        // Start checks for updates scheduled to improve startup time
+        mainWindow.webContents.send('scheduleUpdateCheckMediaDupes')
+        mainWindow.webContents.send('scheduleUpdateCheckYoutubeDl')
     })
 
     // Emitted before the window is closed.
@@ -528,6 +548,20 @@ function createMenuMain () {
                         mainWindow.reload()
                     },
                     accelerator: 'CmdOrCtrl+R'
+                }
+            ]
+        },
+
+        // Menu: Youtube
+        {
+            label: 'Search',
+            submenu: [
+                {
+                    label: 'Youtube suggestions',
+                    click (item, mainWindow) {
+                        mainWindow.webContents.send('openYoutubeSuggestDialog')
+                    },
+                    accelerator: 'CmdOrCtrl+S'
                 }
             ]
         },

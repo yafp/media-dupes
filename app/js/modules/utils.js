@@ -64,10 +64,10 @@ function showNoty (type, message, timeout = 3000) {
 * @function showNotification
 * @summary Shows a desktop notification
 * @description Shows a desktop notification
-* @param {string} [title] - The title of the desktop notification
 * @param {string} message - The notification message text
+* @param {string} [title] - The title of the desktop notification
 */
-function showNotification (title = 'media-dupes', message) {
+function showNotification (message, title = 'media-dupes') {
     const myNotification = new Notification(title, {
         body: message,
         icon: 'img/notification/icon.png'
@@ -75,6 +75,9 @@ function showNotification (title = 'media-dupes', message) {
 
     myNotification.onclick = () => {
         writeConsoleMsg('info', 'showNotification ::: Notification clicked')
+
+        const { ipcRenderer } = require('electron')
+        ipcRenderer.send('showAndFocusMainUI') // tell main.js to show the main UI
     }
 }
 
@@ -242,6 +245,24 @@ function isDirectoryWriteable (dirPath) {
     }
 }
 
+function isFileWriteable (filePath) {
+    if (filePath !== '') {
+        const fs = require('fs')
+
+        // sync: check if folder is writeable
+        try {
+            fs.accessSync(filePath, fs.constants.W_OK)
+            writeConsoleMsg('info', 'isFileWriteable ::: File _' + filePath + '_ is writeable')
+            return true
+        } catch (err) {
+            writeConsoleMsg('error', 'isFileWriteable ::: File _' + filePath + '_ is not writeable. Error: _' + err + '_.')
+            return false
+        }
+    } else {
+        writeConsoleMsg('error', 'isFileWriteable ::: Should check if a file is writeable but the supplied parameter _' + filePath + '_ was empty.')
+    }
+}
+
 /**
 * @function userSettingWrite
 * @summary Write a user setting to file
@@ -264,10 +285,10 @@ function userSettingWrite (key, value, silent = false) {
     // write the user setting
     storage.set(key, { setting: value }, function (error) {
         if (error) {
-            writeConsoleMsg('error', 'userSettingWrite ::: Unable to write setting with key: _' + key + '_ - and new value: _' + value + '_. Error: ' + error)
+            writeConsoleMsg('error', 'userSettingWrite ::: Unable to write setting _' + key + '_ = _' + value + '_. Error: ' + error)
             throw error
         }
-        writeConsoleMsg('info', 'userSettingWrite ::: key: _' + key + '_ - new value: _' + value + '_')
+        writeConsoleMsg('info', 'userSettingWrite ::: _' + key + '_ = _' + value + '_')
         globalObjectSet(key, value)
 
         if (silent === false) {
@@ -289,7 +310,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
     const app = remote.app
     const path = require('path')
 
-    writeConsoleMsg('info', 'userSettingRead ::: Trying to read value of key: _' + key + '_.')
+    // writeConsoleMsg('info', 'userSettingRead ::: Trying to read value of key: _' + key + '_.')
 
     // change path for userSettings
     const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
@@ -302,7 +323,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             throw error
         }
         var value = data.setting
-        writeConsoleMsg('info', 'userSettingRead ::: key: _' + key + '_ - got value: _' + value + '_.')
+        writeConsoleMsg('info', 'userSettingRead :::  _' + key + '_ = _' + value + '_.')
 
         // Setting: enableVerboseMode
         //
@@ -411,7 +432,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 if (detectedDefaultDownloadDir[0]) {
                     settingDownloadDir = detectedDefaultDownloadDir[1]
                     userSettingWrite('downloadDir', settingDownloadDir, true)
-                    writeConsoleMsg('info', 'userSettingRead ::: key: _' + key + '_ - got initial value: _' + settingDownloadDir + '_.')
+                    writeConsoleMsg('info', 'userSettingRead :::  _' + key + '_ got initial value: _' + settingDownloadDir + '_.')
                 }
             } else {
                 // there is a setting
@@ -457,7 +478,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                     $('#inputCustomTargetDir').val(settingDownloadDir)
                 }
             }
-            writeConsoleMsg('info', 'userSettingRead ::: Key: ' + key + ' with value: ' + settingDownloadDir)
+            writeConsoleMsg('info', 'userSettingRead ::: _' + key + '_ = _' + settingDownloadDir + '_.')
         }
         // end: downloadDir
 
@@ -543,7 +564,7 @@ function defaultDownloadFolderGet () {
 * @description Is using userSettingRead() to read the user setting confirmedDisclaimer.json. If it exists the user previously confirmed it.
 */
 function disclaimerCheck () {
-    writeConsoleMsg('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
+    // writeConsoleMsg('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
     userSettingRead('confirmedDisclaimer')
 }
 
@@ -554,6 +575,8 @@ function disclaimerCheck () {
 */
 function disclaimerShow () {
     const dialog = require('electron').remote.dialog
+
+    writeConsoleMsg('warn', 'disclaimerShow ::: Showing the disclaimer now.')
 
     var disclaimerTitle = 'media-dupes disclaimer'
     var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
@@ -611,10 +634,10 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
             notificationType = 'error'
         }
 
-        showNotification('media-dupes', statusReport) // show an OS notification
+        showNotification(statusReport) // show an OS notification
         showNoty(notificationType, statusReport, 0) // show an in-app notification
-        ui.windowMainLogAppend('\n' + statusReport + '') // append to log
-        ui.windowMainLogAppend('### QUEUE ENDED ###\n\n') // Show mode in log
+        ui.windowMainLogAppend(statusReport + '', true) // append to log
+        ui.windowMainLogAppend('### QUEUE ENDED ###\n\n', true) // Show mode in log
         ui.windowMainDownloadQueueFinished()
     } else {
         writeConsoleMsg('info', 'downloadStatusCheck ::: Some download tasks are not yet finished')
@@ -625,26 +648,48 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
 * @function urlIsReachable
 * @summary Checks if a given url is reachable or not
 * @description Checks if a given url is reachable or not. Changes the color of the url input field
-* @param {number} - overall - THe amount of overall urls
+* @param {number} - overall - The amount of overall urls
 * @param {number} - succeeded - The amount of succeeded urls
 * @param {number} - failed - The amount of failed urls
 */
 function urlIsReachable (userInput) {
-    writeConsoleMsg('info', 'urlIsReachable ::: Start checking if _' + userInput + '_ is reachable or not')
-
-    // check if url is reachable
     const isReachable = require('is-reachable');
     (async () => {
         if (await isReachable(userInput) === true) {
             writeConsoleMsg('info', 'urlIsReachable ::: is reachable')
             ui.inputUrlFieldSetState('reachable')
-            // ui.windowMainLogAppend(userInput + ' is reachable')
         } else {
             writeConsoleMsg('error', 'urlIsReachable ::: is NOT reachable')
             ui.inputUrlFieldSetState('unreachable')
-            // ui.windowMainLogAppend('Error: ' + userInput + ' is not reachable')
         }
     })()
+}
+
+/**
+* @function generateTimestamp
+* @summary Generates a timestamp
+* @description Generates a timestamp using time-stamp
+* @return {string} - timestamp - The generates timestamp
+
+*/
+function generateTimestamp () {
+    const timestamp = require('time-stamp')
+    var currentTimestamp = timestamp('HH:mm:ss') // hours : minutes : seconds
+    // writeConsoleMsg('info', 'generateTimestamp ::: Timestamp is: ' + currentTimestamp)
+    return currentTimestamp
+}
+
+/**
+* @function canWriteFileOrFolder
+* @summary Checks if a file or folder is writeable
+* @description Checks if a file or folder is writeable
+* @param {String} path - Path which should be checked
+*/
+function canWriteFileOrFolder (path, callback) {
+    const fs = require('fs')
+    fs.access(path, fs.W_OK, function (err) {
+        callback(null, !err)
+    })
 }
 
 // Export
@@ -662,6 +707,7 @@ module.exports.globalObjectGet = globalObjectGet
 module.exports.globalObjectSet = globalObjectSet
 module.exports.isDirectoryAvailable = isDirectoryAvailable
 module.exports.isDirectoryWriteable = isDirectoryWriteable
+module.exports.isFileWriteable = isFileWriteable
 module.exports.userSettingWrite = userSettingWrite
 module.exports.userSettingRead = userSettingRead
 module.exports.defaultDownloadFolderGet = defaultDownloadFolderGet
@@ -669,3 +715,5 @@ module.exports.disclaimerCheck = disclaimerCheck
 module.exports.disclaimerShow = disclaimerShow
 module.exports.downloadStatusCheck = downloadStatusCheck
 module.exports.urlIsReachable = urlIsReachable
+module.exports.generateTimestamp = generateTimestamp
+module.exports.canWriteFileOrFolder = canWriteFileOrFolder

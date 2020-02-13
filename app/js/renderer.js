@@ -11,16 +11,21 @@
 // ----------------------------------------------------------------------------
 const utils = require('./js/modules/utils.js')
 const ffmpeg = require('./js/modules/ffmpeg.js')
-const sentry = require('./js/modules/sentry.js')
 const ui = require('./js/modules/ui.js')
 const settings = require('./js/modules/settings.js')
-const youtube = require('./js/modules/youtubeDl.js')
+const youtubeDl = require('./js/modules/youtubeDl.js')
+const sentry = require('./js/modules/sentry.js')
+const crash = require('./js/modules/crashReporter.js') // crashReporter
+const unhandled = require('./js/modules/unhandled.js') // electron-unhandled
 
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
-const errorReporting = require('./js/errorReporting.js')
+// const errorReporting = require('./js/errorReporting.js')
 // myUndefinedFunctionFromRenderer();
+
+crash.initCrashReporter()
+unhandled.initUnhandled()
 
 // ----------------------------------------------------------------------------
 // VARIABLES
@@ -233,6 +238,16 @@ function windowSettingsClickOpenUrl (url) {
     settings.settingsOpenExternal(url)
 }
 
+/**
+* @function windowSettingsClickYoutubeDlUpdate
+* @summary Starts the check for youtube-dl updates routine with feedback to the user
+* @description Starts the check for youtube-dl updates routine with feedback to the user
+* @memberof renderer
+*/
+function windowSettingsClickYoutubeDlUpdate () {
+    youtubeDl.youtubeDlBinaryUpdateCheck(false, false) // If silent = false -> Forces result feedback, even if no update is available
+}
+
 // ----------------------------------------------------------------------------
 // FUNCTIONS - OTHERS
 // ----------------------------------------------------------------------------
@@ -273,7 +288,7 @@ function checkApplicationDependencies () {
 
     // youtube-dl
     //
-    var youtubeDlBinaryPath = youtube.youtubeDlBinaryPathGet()
+    var youtubeDlBinaryPath = youtubeDl.youtubeDlBinaryPathGet()
     if (utils.pathExists(youtubeDlBinaryPath) === true) {
         utils.writeConsoleMsg('info', 'checkApplicationDependencies ::: Found youtube-dl in: _' + youtubeDlBinaryPath + '_.')
     } else {
@@ -434,8 +449,10 @@ function searchUpdate (silent = true) {
     localAppVersion = require('electron').remote.app.getVersion()
     // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
-    var updateStatus = $.get(urlGithubApiReleases, function (data) {
-        3000 // in milliseconds
+    var updateStatus = $.get(urlGithubApiReleases, function (data, status) {
+        // 3000 // in milliseconds
+
+        utils.writeConsoleMsg('info', 'searchUpdate ::: Accessing _' + urlGithubApiReleases + '_ ended with: _' + status + '_')
 
         // success
         versions = data.sort(function (v1, v2) {
@@ -504,7 +521,7 @@ function searchUpdate (silent = true) {
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
-                utils.showNoty('success', 'No updates for <b>media-dupes (' + localAppVersion + ')</b> available.')
+                utils.showNoty('info', 'No updates for <b>media-dupes (' + localAppVersion + ')</b> available.')
             }
         }
 
@@ -580,53 +597,6 @@ function settingsShowFfmpegInfo () {
 }
 
 /**
-* @function canWriteFileOrFolder
-* @summary Checks if a file or folder is writeable
-* @description Checks if a file or folder is writeable
-* @memberof renderer
-* @param {String} path - Path which should be checked
-*/
-function canWriteFileOrFolder (path, callback) {
-    const fs = require('fs')
-    fs.access(path, fs.W_OK, function (err) {
-        callback(null, !err)
-    })
-}
-
-/**
-* @function searchYoutubeDLUpdate
-* @summary Checks if there is a new release  for the youtube-dl binary available
-* @description Compares the local app version number with the tag of the latest github release. Displays a notification in the settings window if an update is available.
-* @memberof renderer
-* @param {boolean} [silent] - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
-*/
-function searchYoutubeDLUpdate (silent = true) {
-    ui.windowMainLoadingAnimationShow()
-    ui.windowMainApplicationStateSet('Searching updates for youtube-dl binary')
-
-    // check if we could update in general = is details file writeable?
-    // if not - we can cancel right away
-    var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet()
-    canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
-        if (error) {
-            utils.writeConsoleMsg('error', 'searchYoutubeDLUpdate ::: Error while trying to read the youtube-dl details file. Error: ' + error)
-            throw error
-        }
-
-        if (isWritable === true) {
-            // technically we could execute an update if there is one.
-            // so lets search for updates
-            // check if there is an update
-            utils.writeConsoleMsg('info', 'searchYoutubeDLUpdate ::: Updating youtube-dl binary is technically possible - so start searching for avaulable updates.')
-            var isYoutubeBinaryUpdateAvailable = youtube.youtubeDlBinaryUpdateSearch(silent)
-        } else {
-            // details file cant be resetted due to permission issues
-            utils.writeConsoleMsg('warn', 'searchYoutubeDLUpdate ::: Updating youtube-dl binary is not possible on this setup due to permission issues.')
-        }
-    })
-}
-
-/**
 * @function settingsGetYoutubeDLBinaryVersion
 * @summary Gets the youtube-dl binary version and displays it in settings ui
 * @description Reads the youtube-dl binary version from 'node_modules/youtube-dl/bin/details'
@@ -636,7 +606,7 @@ function searchYoutubeDLUpdate (silent = true) {
 function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
 
-    var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details
+    var youtubeDlBinaryDetailsPath = youtubeDl.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
             utils.writeConsoleMsg('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')
@@ -649,6 +619,29 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
             _callback()
         }
     })
+}
+
+/**
+* @function validateUrlBeforeAdd
+* @summary Gets the content of the url field, checks if it is a valid url, if so checks if it is reachable or not
+* @description Gets the content of the url field, checks if it is a valid url, if so checks if it is reachable or not
+* @memberof renderer
+*/
+function validateUrlBeforeAdd () {
+    var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
+
+    // if the field is empty - continue
+    if (currentContentOfUrlInputField === '') {
+        utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: Empty field')
+    } else {
+        var isUrlValid = utils.validURL(currentContentOfUrlInputField)
+        if (isUrlValid) {
+            utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
+            utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
+        } else {
+            utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL (' + currentContentOfUrlInputField + ').')
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -665,9 +658,11 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
 * @description Called via ipc from main.js on-ready to start the search for media-dupes updates
 * @memberof renderer
 */
+/*
 require('electron').ipcRenderer.on('startSearchUpdatesSilent', function () {
     searchUpdate(true) // If silent = false -> Forces result feedback, even if no update is available
 })
+*/
 
 /**
 * @name youtubeDlSearchUpdatesSilent
@@ -675,9 +670,23 @@ require('electron').ipcRenderer.on('startSearchUpdatesSilent', function () {
 * @description Called via ipc from main.js on-ready to check the search for youtube-dl updates
 * @memberof renderer
 */
+/*
 require('electron').ipcRenderer.on('youtubeDlSearchUpdatesSilent', function () {
-    searchYoutubeDLUpdate(true) // If silent = false -> Forces result feedback, even if no update is available
+    youtubeDl.youtubeDlBinaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
 })
+*/
+
+/**
+* @name initSettings
+* @summary Triggers the check for the application dependencies
+* @description Called via ipc from main.js on-ready to check the application dependencies
+* @memberof renderer
+*/
+/*
+require('electron').ipcRenderer.on('initSettings', function () {
+    settingsLoadAllOnAppStart()
+})
+*/
 
 /**
 * @name startCheckingDependencies
@@ -687,6 +696,34 @@ require('electron').ipcRenderer.on('youtubeDlSearchUpdatesSilent', function () {
 */
 require('electron').ipcRenderer.on('startCheckingDependencies', function () {
     checkApplicationDependencies()
+})
+
+/**
+* @name scheduleUpdateCheckMediaDupes
+* @summary Starts the silent search for media-dupes updates
+* @description Starts the silent search for media-dupes updates after several seconds (to speed up the application startup)
+* @memberof renderer
+*/
+require('electron').ipcRenderer.on('scheduleUpdateCheckMediaDupes', function () {
+    setTimeout(
+        function () {
+            utils.writeConsoleMsg('info', 'scheduleUpdateCheckMediaDupes ::: Starting scheduled search for new media-dupes updates.')
+            searchUpdate(true) // silent
+        }, 15000) // after 15 seconds
+})
+
+/**
+* @name scheduleUpdateCheckYoutubeDl
+* @summary Starts the silent search for youtube-dl updates
+* @description Starts the silent search for youtube-dl updates after several seconds (to speed up the application startup)
+* @memberof renderer
+*/
+require('electron').ipcRenderer.on('scheduleUpdateCheckYoutubeDl', function () {
+    setTimeout(
+        function () {
+            utils.writeConsoleMsg('info', 'scheduleUpdateCheckYoutubeDl ::: Starting scheduled search for new youtube-dl updates.')
+            youtubeDl.youtubeDlBinaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
+        }, 60000) // after 1 minute
 })
 
 /**
@@ -735,13 +772,23 @@ require('electron').ipcRenderer.on('openSettings', function () {
 })
 
 /**
+* @name openYoutubeSuggestDialog
+* @summary Triggers a input dialog to search for youtube suggest based on an input string
+* @description Called via ipc from main.js / menu to ....
+* @memberof renderer
+*/
+require('electron').ipcRenderer.on('openYoutubeSuggestDialog', function () {
+    ui.youtubeSuggest()
+})
+
+/**
 * @name youtubeDlBinaryUpdate
 * @summary Triggers updating the youtube-dl binary
 * @description Called via ipc from main.js / menu to update the youtube-dl binary
 * @memberof renderer
 */
 require('electron').ipcRenderer.on('youtubeDlBinaryUpdate', function () {
-    youtube.youtubeDlBinaryUpdate()
+    youtubeDl.youtubeDlBinaryUpdateCheck(false, true) // silent = false && force = true
 })
 
 /**
@@ -751,9 +798,9 @@ require('electron').ipcRenderer.on('youtubeDlBinaryUpdate', function () {
 * @memberof renderer
 */
 require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
-    var youtubeDlBinaryDetailsPath = youtube.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details file
+    var youtubeDlBinaryDetailsPath = youtubeDl.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details file
 
-    canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
+    utils.canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
         if (error) {
             utils.writeConsoleMsg('error', 'youtubeDlBinaryPathReset ::: Error while trying to check if the youtube-dl details file is writeable or not. Error: ' + error)
             throw error
@@ -774,7 +821,7 @@ require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
                     buttons: [
                         Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
                             n.close()
-                            youtube.youtubeDlBinaryPathReset(youtubeDlBinaryDetailsPath)
+                            youtubeDl.youtubeDlBinaryPathReset(youtubeDlBinaryDetailsPath)
                         },
                         {
                             id: 'button1', 'data-status': 'ok'
@@ -849,22 +896,3 @@ require('electron').ipcRenderer.on('blurMainUI', function () {
 require('electron').ipcRenderer.on('todoListTryToSave', function () {
     ui.windowMainToDoListSave()
 })
-
-//
-// Baustelle
-function validateUrlBeforeAdd () {
-    var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
-
-    // if the field is empty - continue
-    if (currentContentOfUrlInputField === '') {
-        utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: Empty field')
-    } else {
-        var isUrlValid = utils.validURL(currentContentOfUrlInputField)
-        if (isUrlValid) {
-            utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
-            utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
-        } else {
-            utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL (' + currentContentOfUrlInputField + ').')
-        }
-    }
-}
