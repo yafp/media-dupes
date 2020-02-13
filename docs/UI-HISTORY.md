@@ -3,7 +3,7 @@
 # media-dupes
 
 ## user interface
-This page shows how the UI of media-dupes changed over the time
+This page shows how the UI of **media-dupes** changed over the time
 
 ### 0.1.0
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/screenshots/ui_0.1.0.png)
@@ -19,3 +19,6 @@ This page shows how the UI of media-dupes changed over the time
 
 ### 0.5.0
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/screenshots/ui_0.5.0.png)
+
+### 0.6.0
+![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/screenshots/ui_0.6.0.png)

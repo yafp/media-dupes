@@ -35,7 +35,8 @@ The following categories are used:
   * Added todoList restore function on resume event. See [#79](https://github.com/yafp/media-dupes/issues/79)
 * Audio
   * Added thumbnail embedding support for .m4a
-
+* Log: Added support for leading timestamps in the log. See [#84](https://github.com/yafp/media-dupes/issues/84)
+* Added youtube suggestion function. See [#86](https://github.com/yafp/media-dupes/issues/86)
 
 #### ```Changed```
 * Changed application icon
@@ -48,9 +49,14 @@ The following categories are used:
 * URL Restore: Added makeUrgent notification to the end of a successful executed URL restore.
 * Settings: Initial settings creation with default values is now silent. See [#80](https://github.com/yafp/media-dupes/issues/80)
 * Removed success notification on 'Loading supported extractors'.
+* Standardx: Added ```snazzy``` to ```npm run standardx```  and ```npm run standardx-fix``` scripts to enable funky output for developers.
+* OS notifications: Clicking the notification is now raising the application UI. See [#85](https://github.com/yafp/media-dupes/issues/85)
 * UI
   * mainWindow: added fadeIn effect to entire body
   * Settings: added fadeIn effect to entire body
+* Update checks
+  * Search fopr media-dupes updates is now triggered once 15 second after app start. Might speed up the start
+  * Search for youtube-dl updates is now triggered once 60 seconds after app start. Might speed up the start
 * Dependencies
   * Updated ```electron```  from ```7.1.10``` to ```8.0.0```
   * Updated ```electron-packager```  from ```14.2.0``` to ```14.2.1```
