@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.5.20200210",
+  "version": "0.5.20200213",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "jsdocs-delete": "rimraf docs/jsdocs/*",
     "jsdocs-create": "./node_modules/jsdoc/jsdoc.js --configure jsdoc.json --readme README.md",
     "jsdocs-update": "npm run jsdocs-delete && npm run jsdocs-create",
-    "standardx": "standardx",
-    "standardx-fix": "standardx --fix",
+    "standardx": "standardx --verbose | snazzy",
+    "standardx-fix": "standardx --fix --verbose | snazzy",
     "test": "mocha",
     "lint": "node_modules/eslint/bin/eslint.js app/js --ignore-path=.eslintignore",
     "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icon.icns --prune=true --out=dist",
@@ -222,6 +222,7 @@
     "mocha": "^7.0.1",
     "ntl": "^5.0.0",
     "rimraf": "^3.0.2",
+    "snazzy": "^8.0.0",
     "spectron": "^10.0.1",
     "standardx": "^5.0.0"
   },
@@ -233,9 +234,9 @@
     "bootstrap": "^4.4.1",
     "classic-tetris-js": "^1.0.2",
     "custom-electron-titlebar": "^3.2.2",
-    "electron-is-dev": "^1.1.0",
     "electron-json-storage": "^4.1.8",
     "electron-log": "^4.0.6",
+    "electron-prompt": "^1.5.1",
     "electron-unhandled": "^3.0.2",
     "electron-util": "^0.13.1",
     "ffmpeg-static-electron": "^2.0.1",
@@ -244,7 +245,9 @@
     "jquery": "^3.4.1",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.1",
-    "youtube-dl": "^3.0.2"
+    "time-stamp": "^2.2.0",
+    "youtube-dl": "^3.0.2",
+    "youtube-suggest": "^1.1.0"
   },
   "standardx": {
     "ignore": [
