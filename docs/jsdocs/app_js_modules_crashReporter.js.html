@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>app/js/modules/sentry.js - media-dupes jsdoc documentation</title>
+    <title>app/js/modules/crashReporter.js - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
     
@@ -40,7 +40,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">app/js/modules/sentry.js</h1>
+    <h1 class="page-title">app/js/modules/crashReporter.js</h1>
     
 
     
@@ -51,56 +51,37 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Contains all sentry functions
- * @author yafp
- * @module sentry
- */
+* @file crashReporter.js
+* @fileOverview This module contains all crashReporter functions, See: https://electronjs.org/docs/api/crash-reporter
+* @author yafp
+* @module crashReporter
+*/
+
 'use strict'
 
 const utils = require('./utils.js')
 
-// ----------------------------------------------------------------------------
-// Error Handling using: sentry
-// ----------------------------------------------------------------------------
-//
-// https://sentry.io/organizations/yafp/
-// https://docs.sentry.io/platforms/javascript/electron/
-// https://docs.sentry.io/error-reporting/configuration/?platform=electron
-//
-const Sentry = require('@sentry/electron')
-const process = require('process')
-Sentry.init({
-    release: 'media-dupes@' + process.env.npm_package_version,
-    dsn: 'https://4bd3f512a1e34e24ab9838b00f57d131@sentry.io/1847606',
-    debug: true
-})
-//
-// simple way to force a crash:
-// myUndefinedFunctionInSentryModul();
-
 /**
-* @function enableSentry
-* @summary Enables sentry
-* @description Enabled sentry to log errors
+* @name initCrashReporter
+* @summary Initialized the crashReporter
+* @description Initialized the crashReporter. See: https://electronjs.org/docs/api/crash-reporter
 */
-function enableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    utils.writeConsoleMsg('info', 'enableSentry ::: Enabled sentry')
+function initCrashReporter () {
+    const { crashReporter } = require('electron')
+    crashReporter.start({
+        productName: 'ttth',
+        companyName: 'yafp',
+        submitURL: 'https://sentry.io/api/1757940/minidump/?sentry_key=bbaa8fa09ca84a8da6a545c04d086859',
+        uploadToServer: false
+    })
+    utils.writeConsoleMsg('info', 'initCrashReporter ::: crashReporter is now initialized')
+
+    // To simulate a crash - execute: process.crash();
 }
 
-/**
-* @function disableSentry
-* @summary Disables sentry
-* @description Disables sentry to log errors
-*/
-function disableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    utils.writeConsoleMsg('warn', 'disableSentry ::: Disabled sentry')
-}
-
-// export both functions
-module.exports.enableSentry = enableSentry
-module.exports.disableSentry = disableSentry
+// export functions
+//
+module.exports.initCrashReporter = initCrashReporter
 </code></pre>
         </article>
     </section>

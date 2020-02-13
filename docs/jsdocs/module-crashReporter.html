@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>app/js/modules/sentry.js - media-dupes jsdoc documentation</title>
+    <title>crashReporter - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
     
@@ -40,70 +40,212 @@
 
 <div id="main">
     
-    <h1 class="page-title">app/js/modules/sentry.js</h1>
+    <h1 class="page-title">crashReporter</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Contains all sentry functions
- * @author yafp
- * @module sentry
- */
-'use strict'
+        
+            
+        
+    
+</header>
 
-const utils = require('./utils.js')
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description usertext"><p>This module contains all crashReporter functions, See: https://electronjs.org/docs/api/crash-reporter</p></div>
+            
 
-// ----------------------------------------------------------------------------
-// Error Handling using: sentry
-// ----------------------------------------------------------------------------
-//
-// https://sentry.io/organizations/yafp/
-// https://docs.sentry.io/platforms/javascript/electron/
-// https://docs.sentry.io/error-reporting/configuration/?platform=electron
-//
-const Sentry = require('@sentry/electron')
-const process = require('process')
-Sentry.init({
-    release: 'media-dupes@' + process.env.npm_package_version,
-    dsn: 'https://4bd3f512a1e34e24ab9838b00f57d131@sentry.io/1847606',
-    debug: true
-})
-//
-// simple way to force a crash:
-// myUndefinedFunctionInSentryModul();
+            
+                
 
-/**
-* @function enableSentry
-* @summary Enables sentry
-* @description Enabled sentry to log errors
-*/
-function enableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    utils.writeConsoleMsg('info', 'enableSentry ::: Enabled sentry')
-}
 
-/**
-* @function disableSentry
-* @summary Disables sentry
-* @description Disables sentry to log errors
-*/
-function disableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    utils.writeConsoleMsg('warn', 'disableSentry ::: Disabled sentry')
-}
 
-// export both functions
-module.exports.enableSentry = enableSentry
-module.exports.disableSentry = disableSentry
-</code></pre>
-        </article>
-    </section>
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_crashReporter.js.html">app/js/modules/crashReporter.js</a>, <a href="app_js_modules_crashReporter.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>yafp</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~initCrashReporter"><span class="type-signature">(inner) </span>initCrashReporter<span class="type-signature"></span></h4>
+
+
+<p class="summary"><p>Initialized the crashReporter</p></p>
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_crashReporter.js.html">app/js/modules/crashReporter.js</a>, <a href="app_js_modules_crashReporter.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Initialized the crashReporter. See: https://electronjs.org/docs/api/crash-reporter</p>
+</div>
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>app/js/modules/sentry.js - media-dupes jsdoc documentation</title>
+    <title>app/js/modules/unhandled.js - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
     
@@ -40,7 +40,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">app/js/modules/sentry.js</h1>
+    <h1 class="page-title">app/js/modules/unhandled.js</h1>
     
 
     
@@ -51,56 +51,56 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Contains all sentry functions
- * @author yafp
- * @module sentry
- */
+* @file unhandled.js
+* @fileOverview This module contains all unhandled functions, See: https://github.com/sindresorhus/electron-unhandled
+* @author yafp
+* @module unhandled
+*/
+
 'use strict'
 
-const utils = require('./utils.js')
+// const utils = require('./utils.js')
 
-// ----------------------------------------------------------------------------
-// Error Handling using: sentry
-// ----------------------------------------------------------------------------
-//
-// https://sentry.io/organizations/yafp/
-// https://docs.sentry.io/platforms/javascript/electron/
-// https://docs.sentry.io/error-reporting/configuration/?platform=electron
-//
-const Sentry = require('@sentry/electron')
-const process = require('process')
-Sentry.init({
-    release: 'media-dupes@' + process.env.npm_package_version,
-    dsn: 'https://4bd3f512a1e34e24ab9838b00f57d131@sentry.io/1847606',
-    debug: true
+const unhandled = require('electron-unhandled')
+const { openNewGitHubIssue, debugInfo } = require('electron-util')
+
+unhandled({
+    showDialog: true,
+    reportButton: error => {
+        openNewGitHubIssue({
+            user: 'yafp',
+            repo: 'ttth',
+            body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
+        })
+    }
 })
+
+/**
+* @function initUnhandled
+* @summary Initializes electron-unhandled
+* @description Initializes electron-unhandled. Is used in main and renderer
+*/
+function initUnhandled () {
+    const unhandled = require('electron-unhandled')
+    const { openNewGitHubIssue, debugInfo } = require('electron-util')
+
+    unhandled({
+        showDialog: true,
+        reportButton: error => {
+            openNewGitHubIssue({
+                user: 'yafp',
+                repo: 'ttth',
+                body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
+            })
+        }
+    })
+
+    // utils.writeConsoleMsg('info', 'initUnhandled ::: electron-unhandled is now initialized')
+}
+
+// export the functions
 //
-// simple way to force a crash:
-// myUndefinedFunctionInSentryModul();
-
-/**
-* @function enableSentry
-* @summary Enables sentry
-* @description Enabled sentry to log errors
-*/
-function enableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    utils.writeConsoleMsg('info', 'enableSentry ::: Enabled sentry')
-}
-
-/**
-* @function disableSentry
-* @summary Disables sentry
-* @description Disables sentry to log errors
-*/
-function disableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    utils.writeConsoleMsg('warn', 'disableSentry ::: Disabled sentry')
-}
-
-// export both functions
-module.exports.enableSentry = enableSentry
-module.exports.disableSentry = disableSentry
+module.exports.initUnhandled = initUnhandled
 </code></pre>
         </article>
     </section>
