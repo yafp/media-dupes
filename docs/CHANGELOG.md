@@ -58,7 +58,7 @@ The following categories are used:
   * Search fopr media-dupes updates is now triggered once 15 second after app start. Might speed up the start
   * Search for youtube-dl updates is now triggered once 60 seconds after app start. Might speed up the start
 * Dependencies
-  * Updated ```electron```  from ```7.1.10``` to ```8.0.0```
+  * Updated ```electron```  from ```7.1.10``` to ```8.0.1```
   * Updated ```electron-packager```  from ```14.2.0``` to ```14.2.1```
   * Updated ```custom-electron-titlebar``` from ```3.2.1``` to ```3.2.2```
   * Updated ```youtube-dl``` from ```3.0.1``` to ```3.0.2```
