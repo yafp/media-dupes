@@ -67,9 +67,11 @@ function settingsToggleVerboseMode () {
     if ($('#checkboxEnableVerbose').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now enabled')
         utils.userSettingWrite('enableVerboseMode', true)
+        sentry.countClickEvent('usageSettingsVerboseModeEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now disabled')
         utils.userSettingWrite('enableVerboseMode', false)
+        sentry.countClickEvent('usageSettingsVerboseModeDisabled')
     }
 }
 
@@ -82,9 +84,11 @@ function settingsTogglePrereleases () {
     if ($('#checkboxEnablePreReleases').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will now include pre-releases')
         utils.userSettingWrite('enablePrereleases', true)
+        sentry.countClickEvent('usageSettingsPrereleasesEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will ignore pre-releases')
         utils.userSettingWrite('enablePrereleases', false)
+        sentry.countClickEvent('usageSettingsPrereleasesDisabled')
     }
 }
 
@@ -98,6 +102,7 @@ function settingsToggleErrorReporting () {
         utils.writeConsoleMsg('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
         utils.userSettingWrite('enableErrorReporting', true)
         sentry.enableSentry()
+        sentry.countClickEvent('usageSettingsErrorReportingEnabled')
     } else {
         // ask if user really wants to disable error-reporting (using a confirm dialog)
         const Noty = require('noty')
@@ -114,6 +119,7 @@ function settingsToggleErrorReporting () {
                         utils.writeConsoleMsg('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
                         utils.userSettingWrite('enableErrorReporting', false)
                         sentry.disableSentry()
+                        sentry.countClickEvent('usageSettingsErrorReportingDisabled')
                         // myUndefinedFunctionFromRendererAfterDisable()
                     },
                     {

@@ -8,6 +8,7 @@
 const utils = require('./utils.js')
 const ffmpeg = require('./ffmpeg.js')
 const youtubeDl = require('./youtubeDl.js')
+const sentry = require('./sentry.js')
 
 var distractEnabler = 0
 var arrayUserUrls = [] // contains the urls which should be downloaded
@@ -422,6 +423,7 @@ function windowMainDownloadContent (mode) {
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             for (var i = 0; i < arrayUserUrls.length; i++) {
+                sentry.countClickEvent('usageURLsOverall')
                 var url = arrayUserUrls[i] // get url
                 url = utils.fullyDecodeURI(url) // decode url - see #25
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
@@ -431,6 +433,7 @@ function windowMainDownloadContent (mode) {
                 //
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
+                        sentry.countClickEvent('usageURLsFailed')
                         utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Country-/ and/or similar restrictions</small>', 0)
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         windowMainLogAppend('Failed to download a single url', true)
@@ -441,6 +444,7 @@ function windowMainDownloadContent (mode) {
 
                     // no error occured for this url - assuming the download finished
                     //
+                    sentry.countClickEvent('usageURLsSucceeded')
                     arrayUrlsProcessedSuccessfully.push(url)
                     utils.writeConsoleMsg('info', output.join('\n')) // Show processing output for this download task
                     windowMainLogAppend(output.join('\n')) // Show processing output for this download task
@@ -680,6 +684,7 @@ function windowMainDistract () {
     distractEnabler = distractEnabler + 1
     utils.writeConsoleMsg('info', 'distract ::: Enabler is now: ' + distractEnabler)
     if (distractEnabler === 3) {
+        sentry.countClickEvent('usageTetris')
         distractEnabler = 0 // reset the counter
         utils.writeConsoleMsg('info', 'distract ::: Init some distraction')
         ipcRenderer.send('startDistraction') // tell main.js to load distraction UI

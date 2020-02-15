@@ -62,6 +62,7 @@ function windowMainClickDistract () {
 */
 function windowMainClickButtonAddUrl () {
     ui.windowMainAddUrl()
+    sentry.countClickEvent('usageButtonAddUrl')
 }
 
 /**
@@ -72,6 +73,7 @@ function windowMainClickButtonAddUrl () {
 */
 function windowMainClickButtonVideo () {
     ui.windowMainDownloadContent('video')
+    sentry.countClickEvent('usageButtonVideoExec')
 }
 
 /**
@@ -92,6 +94,7 @@ function windowMainClickButtonVideoV2 () {
 */
 function windowMainClickButtonAudio () {
     ui.windowMainDownloadContent('audio')
+    sentry.countClickEvent('usageButtonAudioExec')
 }
 
 /**
@@ -102,6 +105,7 @@ function windowMainClickButtonAudio () {
 */
 function windowMainClickButtonSettings () {
     ui.windowMainSettingsUiLoad()
+    sentry.countClickEvent('usageButtonSettings')
 }
 
 /**
@@ -112,6 +116,7 @@ function windowMainClickButtonSettings () {
 */
 function windowMainClickButtonIntro () {
     ui.windowMainIntroShow()
+    sentry.countClickEvent('usageButtonIntro')
 }
 
 /**
@@ -122,6 +127,7 @@ function windowMainClickButtonIntro () {
 */
 function windowMainClickButtonExtrators () {
     ui.windowMainShowSupportedExtractors()
+    sentry.countClickEvent('usageButtonExtractors')
 }
 
 /**
@@ -132,6 +138,7 @@ function windowMainClickButtonExtrators () {
 */
 function windowMainClickButtonDownloads () {
     ui.windowMainOpenDownloadFolder()
+    sentry.countClickEvent('usageButtonOpenDownloadFolder')
 }
 
 /**
@@ -142,6 +149,7 @@ function windowMainClickButtonDownloads () {
 */
 function windowMainClickButtonLogReset () {
     ui.windowMainLogReset()
+    sentry.countClickEvent('usageButtonResetLog')
 }
 
 /**
@@ -152,6 +160,7 @@ function windowMainClickButtonLogReset () {
 */
 function windowMainClickButtonUIReset () {
     ui.windowMainResetAskUser()
+    sentry.countClickEvent('usageButtonResetUI')
 }
 
 // ----------------------------------------------------------------------------
@@ -165,6 +174,7 @@ function windowMainClickButtonUIReset () {
 */
 function windowSettingsClickIconUserSettingsDir () {
     settings.settingsFolderOpen()
+    sentry.countClickEvent('usageSettingsOpenSettingsFolder')
 }
 
 /**
@@ -175,6 +185,7 @@ function windowSettingsClickIconUserSettingsDir () {
 */
 function windowSettingsClickButtonChooseDownloadDir () {
     settings.settingsSelectDownloadDir()
+    sentry.countClickEvent('usageSettingsChooseDownloadDir')
 }
 
 /**
@@ -205,6 +216,7 @@ function windowSettingsClickCheckboxUpdatePolicy () {
 */
 function windowSettingsClickIconBug () {
     settings.settingsOpenDevTools()
+    sentry.countClickEvent('usageSettingsOpenDevTools')
 }
 
 /**
@@ -218,6 +230,18 @@ function windowSettingsClickCheckboxErrorReporting () {
 }
 
 /**
+* @function windowSettingsClickCheckboxErrorReportingMoreInfo
+* @summary Handles the click on the question icon in the error reporting section
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickCheckboxErrorReportingMoreInfo () {
+    const { urlGithubSentryUsage } = require('./js/modules/githubUrls.js') // get url
+    utils.openURL(urlGithubSentryUsage)
+    sentry.countClickEvent('usageSettingsErrorReportingShowMoreInfo')
+}
+
+/**
 * @function windowSettingsClickDropdownAudioFormats
 * @summary Handles the click on the dropdown audio formats
 * @description Triggered from the settingsWindow.
@@ -225,6 +249,7 @@ function windowSettingsClickCheckboxErrorReporting () {
 */
 function windowSettingsClickDropdownAudioFormats () {
     settings.settingsAudioFormatSave()
+    sentry.countClickEvent('usageSettingsChooseAudioFormat')
 }
 
 /**

@@ -56,10 +56,12 @@ Updates must be installed manually as automatic updating of electron application
 Please see the [LICENSE](LICENSE) for more details.
 
 ## privacy
-* **media-dupes** is using sentry to collect error reports. This helps heavily finding bugs which might occur only in some specific use-cases. Please see the sentry privacy policy for more details.
-* error reporting is enabled by default, but can be disabled in the application settings UI.
+* **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases. Please see
+* reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
 * no ip addresses are stored
+
+Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 
 You are always welcome to check and even improve the code.
 
@@ -88,5 +90,3 @@ A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
 
 ### build
 Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
-
-

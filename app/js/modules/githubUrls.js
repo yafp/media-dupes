@@ -13,6 +13,7 @@ const urlGitHubChangelog = 'https://github.com/yafp/media-dupes/blob/master/docs
 const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases' // the releases url
 const urlGitHubRepoTags = 'https://api.github.com/repos/yafp/media-dupes/tags' // the tags api url
 const urlGithubApiReleases = 'https://api.github.com/repos/yafp/media-dupes/releases' // the release api
+const urlGithubSentryUsage = 'https://github.com/yafp/media-dupes/blob/master/docs/SENTRY.md' // the release api
 
 // Define exports
 //
@@ -22,3 +23,4 @@ module.exports.urlGitHubChangelog = urlGitHubChangelog
 module.exports.urlGitHubReleases = urlGitHubReleases
 module.exports.urlGitHubRepoTags = urlGitHubRepoTags
 module.exports.urlGithubApiReleases = urlGithubApiReleases
+module.exports.urlGithubSentryUsage = urlGithubSentryUsage
