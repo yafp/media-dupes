@@ -51,8 +51,12 @@ const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases
 // app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
 
 // mainWindow: minimal window size
-const minimalWindowHeight = 760
-const minimalWindowWidth = 620
+const mainWindowMinimalWindowHeight = 760
+const mainWindowMinimalWindowWidth = 620
+
+// settingsWundow: minimal window size
+const settingsWindowMinimalWindowHeight = 730
+const settingsWindowMinimalWindowWidth = 800
 
 // ----------------------------------------------------------------------------
 // FUNCTIONS
@@ -107,13 +111,13 @@ function createWindowSettings () {
         backgroundColor: '#ffffff', // since 0.3.0
         show: true, // hide until: ready-to-show
         center: true, // Show window in the center of the screen. (since 0.3.0)
-        width: 800,
-        minWidth: 800,
+        width: settingsWindowMinimalWindowWidth,
+        minWidth: settingsWindowMinimalWindowWidth,
         // resizable: false, // this conflickts with opening dev tools
         minimizable: false, // not implemented on linux
         maximizable: false, // not implemented on linux
-        height: 700,
-        minHeight: 700,
+        height: settingsWindowMinimalWindowHeight,
+        minHeight: settingsWindowMinimalWindowHeight,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,
@@ -230,8 +234,8 @@ function createWindowMain () {
         doLog('warn', 'createWindowMain ::: No last window position and size information found in _' + customUserDataPath + '_. Using fallback values')
 
         // set some default values for window size
-        windowWidth = minimalWindowWidth
-        windowHeight = minimalWindowHeight
+        windowWidth = mainWindowMinimalWindowWidth
+        windowHeight = mainWindowMinimalWindowHeight
     }
 
     // Create the browser window.
@@ -242,9 +246,9 @@ function createWindowMain () {
         show: false, // hide until: ready-to-show
         center: true, // Show window in the center of the screen. (since 0.3.0)
         width: windowWidth,
-        minWidth: minimalWindowWidth,
+        minWidth: mainWindowMinimalWindowWidth,
         height: windowHeight,
-        minHeight: minimalWindowHeight,
+        minHeight: mainWindowMinimalWindowHeight,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
             nodeIntegration: true,
@@ -323,6 +327,8 @@ function createWindowMain () {
     //
     // Settings UI
     var enableVerboseMode = false
+    var enableAdditionalParameter = false
+    var additionalYoutubeDlParameter = ''
     var enableErrorReporting = true
     var downloadDir = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
     var audioFormat = 'mp3' // mp3 is the default
@@ -335,6 +341,8 @@ function createWindowMain () {
         // settings UI
         enableErrorReporting: enableErrorReporting,
         enableVerboseMode: enableVerboseMode,
+        enableAdditionalParameter: enableAdditionalParameter,
+        additionalYoutubeDlParameter: additionalYoutubeDlParameter,
         downloadDir: downloadDir,
         audioFormat: audioFormat,
         confirmedDisclaimer: confirmedDisclaimer,
@@ -367,6 +375,7 @@ function createWindowMain () {
         mainWindow.focus()
 
         mainWindow.webContents.send('blurMainUI') // blur the main UI
+        mainWindow.webContents.send('countAppStarts') // count app starts
 
         // do some checks & routines once at start of the application
         //
@@ -557,7 +566,7 @@ function createMenuMain () {
             label: 'Search',
             submenu: [
                 {
-                    label: 'Youtube suggestions',
+                    label: 'Youtube',
                     click (item, mainWindow) {
                         mainWindow.webContents.send('openYoutubeSuggestDialog')
                     },
