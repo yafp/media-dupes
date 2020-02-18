@@ -1,10 +1,10 @@
-![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/logo/128x128.png)
+![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/logo/128x128.png)
 
 # media-dupes
 
 ## installation instructions
 
-### ![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/linux_32x32.png) linux
+### ![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/linux_32x32.png) linux
 
 #### .AppImage
 * Download the latest .AppImage
@@ -30,13 +30,13 @@
 * Download the latest .snap
 * execute: ```sudo snap install /path/to/local/media-dupes-file.snap```
 
-### ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/apple_32x32.png) macOS
+### ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/apple_32x32.png) macOS
 #### .dmg
 * Download the latest ```.dmg```
 * Mount the .dmg
 * Drag the .app to ```/Applications```
 
-### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/windows_32x32.png) windows
+### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows
 
 #### installer
 * Download the latest ```win-installer.exe```

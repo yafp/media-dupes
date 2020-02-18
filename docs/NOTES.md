@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/logo/128x128.png)
+![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/logo/128x128.png)
 
 # media-dupes
 ## notes
@@ -14,6 +14,9 @@
   * ffmpeg: make pull request to https://github.com/pietrop/ffmpeg-static-electron to update from ffmpeg 3.x to 4.x
     * 20191210 - Created pull request for ffmpeg 4.2.1
 * Progress for stream (non exec use): https://www.npmjs.com/package/progress-stream
+* youtube-dl flags:
+  * --socket-timeout    What is a good default value? 120 ?
+  * --retries           What is a good default value ? 9999 ?
 
 ### urls
 * youtube-dl: https://github.com/ytdl-org/youtube-dl

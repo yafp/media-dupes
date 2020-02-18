@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/logo/128x128.png)
+![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/logo/128x128.png)
 
 # media-dupes
 ## changelog
@@ -37,6 +37,9 @@ The following categories are used:
   * Added thumbnail embedding support for .m4a
 * Log: Added support for leading timestamps in the log. See [#84](https://github.com/yafp/media-dupes/issues/84)
 * Added youtube suggestion function. See [#86](https://github.com/yafp/media-dupes/issues/86)
+* Added getInfo routine for urls, executed when Url is added to queue. See [#87](https://github.com/yafp/media-dupes/issues/87)
+* Added url thumbnail preview (after adding an url to queue). See [#89](https://github.com/yafp/media-dupes/issues/89)
+* Added support for additional youtube-dl flags/parameter by using the settings UI. See [#88](https://github.com/yafp/media-dupes/issues/88)
 
 #### ```Changed```
 * Changed application icon
@@ -53,6 +56,7 @@ The following categories are used:
 * OS notifications: Clicking the notification is now raising the application UI. See [#85](https://github.com/yafp/media-dupes/issues/85)
 * UI
   * mainWindow: added fadeIn effect to entire body
+  * mainWindow: Blur effect now affects as well the titlebar. See [#91](https://github.com/yafp/media-dupes/issues/91)
   * Settings: added fadeIn effect to entire body
 * Update checks
   * Search fopr media-dupes updates is now triggered once 15 second after app start. Might speed up the start
@@ -60,6 +64,7 @@ The following categories are used:
 * Dependencies
   * Updated ```electron```  from ```7.1.10``` to ```8.0.1```
   * Updated ```electron-packager```  from ```14.2.0``` to ```14.2.1```
+  * Updated ```electron-util```  from ```0.13.1``` to ```0.14.0```
   * Updated ```custom-electron-titlebar``` from ```3.2.1``` to ```3.2.2```
   * Updated ```youtube-dl``` from ```3.0.1``` to ```3.0.2```
   * Updated ```electron-log```  from ```4.0.4``` to ```4.0.6```
@@ -73,6 +78,7 @@ The following categories are used:
 #### ```Fixed```
 * Fixed undefined version in sentry error events. See [#75](https://github.com/yafp/media-dupes/issues/75)
 * Fixed issues with the windows installer. See [#76](https://github.com/yafp/media-dupes/issues/76)
+* Fixed a bug with the Intro. See [#92](https://github.com/yafp/media-dupes/issues/92)
 
 ***
 
