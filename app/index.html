@@ -48,26 +48,42 @@
     <div class="modal animated fadeOut" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content no-border">
-                <!--
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                -->
                 <div class="modal-body">
                     <center><img src="img/icon/icon.png" class="ifl-image" height="256"></center>
                 </div>
-                <!--
-                <div class="modal-footer">
-                    footer
-                </div>
-                -->
             </div>
         </div>
     </div>
     <!-- splash -->
+
+    <!-- thumnail -->
+    <div class="modal animated fadeIn" id="myModalThumbnail" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewTitle"></h5>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- body -->
+                <div class="modal-body">
+                    <center><img id="previewThumbnailImage" src="" class="ifl-image" height="256"></center>
+                </div>
+
+                <!-- footer -->
+                <div class="modal-footer">
+                    <h6 class="modal-title" id="previewId"></h6>
+                    <h6 class="modal-title" id="previewDesc"></h6>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /thumbnail -->
 
     <div id="mainContainer" class="animated fadeIn delay-1s container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
 
@@ -85,7 +101,10 @@
             <!-- app name -->
             <h2>media-dupes <img src="img/icon/icon.png" height="32" onclick="windowMainClickDistract();"></h2>
 
-            <!-- app description: effect in 0.5.0: bounceInLeft -->
+            <!-- thumb preview -->
+            <img id="mainWindowThumbnailPreview" class="float-left rounded" onclick='$("#myModalThumbnail").modal("show")' src='' height="30">
+
+            <!-- app description: -->
             <h3>a minimal content duplicator for common media services like youtube</h3>
         </div>
 
@@ -148,6 +167,7 @@
                 <i class="fas fa-video"></i> Youtube video
             </button>
             -->
+
             <!-- audio: using exec() -->
             <button
                 id="buttonStartAudioExec"
