@@ -126,12 +126,20 @@ function windowMainButtonsStartDisable () {
 */
 function windowMainBlurSet (enable) {
     if (enable === true) {
+        // mainContainer
         $('#mainContainer').css('filter', 'blur(2px)') // blur
         $('#mainContainer').css('pointer-events', 'none') // disable click events
+        // titlebar
+        $('.titlebar').css('filter', 'blur(2px)') // blur
+        $('.titlebar').css('pointer-events', 'none') // disable click events
         utils.writeConsoleMsg('info', 'windowMainBlurSet ::: Enabled blur effect')
     } else {
-        $('#mainContainer').css('filter', 'blur(0px)')
-        $('#mainContainer').css('pointer-events', 'auto')
+        // mainContainer
+        $('#mainContainer').css('filter', 'blur(0px)') // unblur
+        $('#mainContainer').css('pointer-events', 'auto') // enable click-events
+        // titlebar
+        $('.titlebar').css('filter', 'blur(0px)') // unblur
+        $('.titlebar').css('pointer-events', 'auto') // enable click-events
         utils.writeConsoleMsg('info', 'windowMainBlurSet ::: Disabled blur effect')
     }
 }
@@ -400,6 +408,7 @@ function windowMainDownloadContent (mode) {
                 return
             }
 
+            windowMainLogAppend('\n') // Show mode in log
             windowMainLogAppend('### QUEUE STARTED ###', true) // Show mode in log
             windowMainLogAppend('Download mode:\t' + mode, true) // Show mode in log
 
@@ -420,10 +429,26 @@ function windowMainDownloadContent (mode) {
             }
             windowMainLogAppend('Verbose mode:\t' + settingVerboseMode, true) // Show verbose mode in log
 
+            // if configured - add custom additional parameter to parameter array - see #88
+            var isAdditionalParameterEnabled = utils.globalObjectGet('enableAdditionalParameter')
+            if (isAdditionalParameterEnabled === true) {
+                var configuredAdditionalParameter = utils.globalObjectGet('additionalYoutubeDlParameter')
+                var splittedParameters = configuredAdditionalParameter.split(' ')
+                windowMainLogAppend('Added parameters:\t' + splittedParameters, true) // Show mode in log
+
+                if (splittedParameters.length > 0) { // append custom parameter to parameter array
+                    for (var j = 0; j < splittedParameters.length; j++) {
+                        youtubeDlParameter.push(splittedParameters[j])
+                        utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Appending custom parameter: _' + splittedParameters[j] + '_ to the youtube-dl parameter set.')
+                    }
+                }
+                sentry.countEvent('usageQueueWithAdditionalParameters')
+            }
+
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             for (var i = 0; i < arrayUserUrls.length; i++) {
-                sentry.countClickEvent('usageURLsOverall')
+                sentry.countEvent('usageURLsOverall')
                 var url = arrayUserUrls[i] // get url
                 url = utils.fullyDecodeURI(url) // decode url - see #25
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
@@ -433,7 +458,7 @@ function windowMainDownloadContent (mode) {
                 //
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
-                        sentry.countClickEvent('usageURLsFailed')
+                        sentry.countEvent('usageURLsFailed')
                         utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Country-/ and/or similar restrictions</small>', 0)
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         windowMainLogAppend('Failed to download a single url', true)
@@ -444,11 +469,15 @@ function windowMainDownloadContent (mode) {
 
                     // no error occured for this url - assuming the download finished
                     //
-                    sentry.countClickEvent('usageURLsSucceeded')
+                    sentry.countEvent('usageURLsSucceeded')
                     arrayUrlsProcessedSuccessfully.push(url)
                     utils.writeConsoleMsg('info', output.join('\n')) // Show processing output for this download task
                     windowMainLogAppend(output.join('\n')) // Show processing output for this download task
-                    utils.showNoty('success', 'Finished 1 download') // inform user
+
+                    if (arrayUserUrls.length > 1) {
+                        utils.showNoty('success', 'Finished 1 download') // inform user
+                    }
+
                     utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
 
                     // FIXME:
@@ -659,6 +688,9 @@ function windowMainAddUrl () {
             windowMainToDoListUpdate() // update todo list
             $('#inputNewUrl').val('') // reset input
             inputUrlFieldSetState() // empty = white
+
+            // #87
+            youtubeDl.youtubeDlGetUrlInfo(newUrl)
         } else {
             // invalid url
             utils.writeConsoleMsg('warn', 'windowMainAddUrl ::: Detected invalid url: _' + newUrl + '_.')
@@ -684,7 +716,7 @@ function windowMainDistract () {
     distractEnabler = distractEnabler + 1
     utils.writeConsoleMsg('info', 'distract ::: Enabler is now: ' + distractEnabler)
     if (distractEnabler === 3) {
-        sentry.countClickEvent('usageTetris')
+        sentry.countEvent('usageTetris')
         distractEnabler = 0 // reset the counter
         utils.writeConsoleMsg('info', 'distract ::: Init some distraction')
         ipcRenderer.send('startDistraction') // tell main.js to load distraction UI
@@ -701,7 +733,8 @@ function windowMainDownloadQueueFinished () {
     windowMainUiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
     windowMainLoadingAnimationHide() // stop download animation / spinner
     windowMainButtonsOthersEnable() // enable some of the buttons again
-    windowMainApplicationStateSet()
+    windowMainApplicationStateSet() // reset application state
+    windowMainThumbnailPreviewReset() // reset the thumbnail
 
     utils.globalObjectSet('todoListStateEmpty', true)
 }
@@ -720,6 +753,7 @@ function windowMainUiReset () {
     windowMainToDoListReset() // empty todo-list textarea
     windowMainLogReset() // empty log textarea
     windowMainApplicationStateSet() // reset application state
+    windowMainThumbnailPreviewReset() // reset the thumbnail
     utils.globalObjectSet('todoListStateEmpty', true) // store that the todolist is now empty
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Finished resetting the UI')
 }
@@ -828,6 +862,8 @@ function windowMainToDoListRestore () {
             // get focus
             const { ipcRenderer } = require('electron')
             ipcRenderer.send('makeWindowUrgent')
+
+            sentry.countEvent('usageRestoredUrlFromPreviousSession')
         } else {
             utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Found no urls to restore from previous session.')
         }
@@ -862,6 +898,7 @@ function windowMainToDoListSave () {
             })
         }
         utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Finished saving todoList content to files.')
+        sentry.countEvent('usageSavedUrlsForNextSession')
     } else {
         utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: todoList was empty - nothing to store.') // #79
     }
@@ -906,6 +943,7 @@ function inputUrlFieldSetState (state) {
 * @description Opens a dialog to ask for a user string. Is then using the string to get youtube suggestions for the string. Results are appended to the log
 */
 function youtubeSuggest () {
+    sentry.countEvent('usageYoutubeSuggest')
     const prompt = require('electron-prompt')
 
     const youtubeSearchUrlBase = 'https://www.youtube.com/results?search_query='
@@ -913,7 +951,7 @@ function youtubeSuggest () {
     var curResult
 
     prompt({
-        title: 'Prompt example',
+        title: 'YouTube Search Suggestions',
         label: 'URL:',
         value: '',
         inputAttrs: {
@@ -945,7 +983,7 @@ function youtubeSuggest () {
                                 url = youtubeSearchUrlBase + curResult
                                 windowMainLogAppend('> ' + results[i] + ' : ' + url)
                             }
-                            windowMainLogAppend('Finished searching for Youtube suggestions for the search phase: ' + r + '\n', true)
+                            windowMainLogAppend('Finished searching for Youtube suggestions for the search phrase: ' + r + '\n', true)
                             windowMainLoadingAnimationHide()
 
                             // ask user if he wants to open all those urls
@@ -993,6 +1031,21 @@ function youtubeSuggest () {
         .catch(console.error)
 }
 
+/**
+* @function windowMainThumbnailPreviewReset
+* @summary Resets the thumbnail preview back to default / empty
+* @description Resets the thumbnail preview back to default / empty
+*/
+function windowMainThumbnailPreviewReset () {
+    // mainWindow
+    $('#mainWindowThumbnailPreview').attr('src', '') // empty the thumbnail preview
+    // modal:
+    $('#previewTitle').html('') // reset the title
+    $('#previewThumbnailImage').attr('src', '') // remove the image from thumbnail modal dialog
+    $('#previewId').html('') // id
+    $('#previewDesc').html('') // description
+}
+
 // Exporting the module functions
 //
 module.exports.windowMainApplicationStateSet = windowMainApplicationStateSet
@@ -1024,3 +1077,4 @@ module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
 module.exports.windowMainDownloadVideo = windowMainDownloadVideo
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
 module.exports.youtubeSuggest = youtubeSuggest
+module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
