@@ -354,6 +354,60 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
         }
         // end: enableVerboseMode
 
+        // Setting: enableAdditionalParameter
+        //
+        if (key === 'enableAdditionalParameter') {
+            var settingAdditionalParameter
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingAdditionalParameter = false // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAdditionalParameter + '_.')
+                userSettingWrite('enableAdditionalParameter', settingAdditionalParameter, true) // write the setting
+            } else {
+                settingAdditionalParameter = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('enableAdditionalParameter', settingAdditionalParameter)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingAdditionalParameter === true) {
+                    $('#checkboxEnableAdditionalParameter').prop('checked', true)
+                } else {
+                    $('#checkboxEnableAdditionalParameter').prop('checked', false)
+                }
+            }
+        }
+        // end: enableAdditionalParameter
+
+        // Setting: additonalYoutubeDlParameter
+        //
+        if (key === 'additionalYoutubeDlParameter') {
+            var settingAdditionalDefinedParameter
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingAdditionalDefinedParameter = '' // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAdditionalParameter + '_.')
+                userSettingWrite('additionalYoutubeDlParameter', settingAdditionalDefinedParameter, true) // write the setting
+            } else {
+                settingAdditionalDefinedParameter = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingAdditionalDefinedParameter + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('additionalYoutubeDlParameter', settingAdditionalDefinedParameter)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                $('#textInputAdditionalParameter').val(settingAdditionalDefinedParameter)
+            }
+        }
+        // end: enableAdditionalParameter
+
         // Setting: enablePrereleases
         //
         if (key === 'enablePrereleases') {
@@ -590,6 +644,7 @@ function disclaimerShow () {
         })
     if (choice === 0) {
         writeConsoleMsg('info', 'disclaimerShow ::: User confirmed the disclaimer.')
+        sentry.countEvent('usageDisclaimerConfirmed')
         userSettingWrite('confirmedDisclaimer', true)
     }
 }
@@ -658,9 +713,11 @@ function urlIsReachable (userInput) {
         if (await isReachable(userInput) === true) {
             writeConsoleMsg('info', 'urlIsReachable ::: is reachable')
             ui.inputUrlFieldSetState('reachable')
+            sentry.countEvent('usageUrlReachable')
         } else {
             writeConsoleMsg('error', 'urlIsReachable ::: is NOT reachable')
             ui.inputUrlFieldSetState('unreachable')
+            sentry.countEvent('usageUrlUnreachable')
         }
     })()
 }
