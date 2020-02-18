@@ -82,6 +82,22 @@
             </div>
         </div>
 
+        <!-- Additional youtube-dl flags / parameter -->
+        <div class="row-fluid">
+            <h6><i class="fas fa-puzzle-piece"></i> Additional youtube-dl parameter</h6>
+        </div>
+        <div class="row-fluid">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" id="checkboxEnableAdditionalParameter" name="checkboxEnableAdditionalParameter" onclick="windowSettingsClickCheckboxAdditionalParameter();">
+                    </div>
+                </div>
+                <input type="text" class="form-control form-control-sm" id="textInputAdditionalParameter" name="textInputAdditionalParameter" placeholder="--socket-timeout 5 --retries 15" value="">
+                <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickButtonAdditionalParameterSave();"><i class="fas fa-save"></i> Save</button>
+            </div>
+        </div>
+
         <!-- Header: Update policy-->
         <div class="row-fluid">
             <h6><i class="fas fa-cloud-download-alt"></i> Update policy</h6>
@@ -97,7 +113,7 @@
 
         <!-- Header: Error reportng using sentry -->
         <div class="row-fluid">
-            <h6><i class="fas fa-bug" onclick="windowSettingsClickIconBug();"></i> Error Reporting & Usage Stats <i class="fas fa-question-circle" onclick=""></i></h6>
+            <h6><i class="fas fa-bug" onclick="windowSettingsClickIconBug();"></i> Error Reporting & Event Counting <i class="fas fa-question-circle" onclick="windowSettingsClickCheckboxErrorReportingMoreInfo()"></i></h6>
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -105,7 +121,7 @@
                     <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="windowSettingsClickCheckboxErrorReporting();">
                 </div>
             </div>
-            <input type="text" class="form-control form-control-sm" value="Error reporting and usage stats (helps improving media-dupes)." disabled>
+            <input type="text" class="form-control form-control-sm" value="Error reporting and event counting (helps improving media-dupes)." disabled>
         </div>
 
         <!-- Audio Format-->
