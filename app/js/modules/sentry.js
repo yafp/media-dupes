@@ -47,11 +47,11 @@ function disableSentry () {
 }
 
 /**
-* @function countClickEvent
+* @function countEvent
 * @summary Captures a message or event
 * @description Captures a message or event
 */
-function countClickEvent (eventName) {
+function countEvent (eventName) {
     var isReportingEnabled = utils.globalObjectGet('enableErrorReporting')
     if (isReportingEnabled === true) {
         Sentry.captureMessage(eventName)
@@ -61,4 +61,4 @@ function countClickEvent (eventName) {
 // export both functions
 module.exports.enableSentry = enableSentry
 module.exports.disableSentry = disableSentry
-module.exports.countClickEvent = countClickEvent
+module.exports.countEvent = countEvent
