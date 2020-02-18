@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#"><img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/logo/128x128.png" width="128"></a>
+  <a href="#"><img src="https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/logo/128x128.png" width="128"></a>
 </p>
 
 <div align="center">
@@ -21,7 +21,7 @@ a minimal content duplicator for common media services like youtube
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
 
 
-![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/screenshots/ui_latest.png)
+![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_latest.png)
 
 </div>
 
@@ -32,9 +32,11 @@ a minimal content duplicator for common media services like youtube
 * download video from common media services
 * download audio from common media services
 
+if the url/media-service is supported by `youtube-dl`.
+
 **media-dupes** is:
 
-* available for ![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/linux_32x32.png) linux, ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/apple_32x32.png) macOS and ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/platform/windows_32x32.png) windows.
+* available for ![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/linux_32x32.png) linux, ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/apple_32x32.png) macOS and ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows.
 * free and open source
 * based on `electron`
 * using bundled versions of `youtube-dl` and `ffmpeg` to do it's magic
@@ -63,12 +65,10 @@ Please see the [LICENSE](LICENSE) for more details.
 
 Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 
-You are always welcome to check and even improve the code.
-
 ## discussion
 If you have question regarding **media-dupes** use one of the following options
 
-* Github: by creating [issues](https://github.com/yafp/media-dupes/issues)
+* Github: click [here](https://github.com/yafp/media-dupes/issues) to create an issue
 * Discord: click [here](https://discord.gg/gHnqdHy) to join the discord server
 * Riot: click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join the public **#media-dupes** riot.im room available on **matrix.org**.
 
@@ -76,13 +76,14 @@ If you have question regarding **media-dupes** use one of the following options
 ## support / fund
 If you want to support the development of **media-dupes** you can fund me on:
 
+* [github](https://github.com/sponsors/yafp)
 * [patreon](https://www.patreon.com/yafp)
 
 ## disclosure
 **media-dupes** is not affiliated with any of the supported apps/services.
 
-
 ## developers
+You are always welcome to check and even improve the code.
 
 ### contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
