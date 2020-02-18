@@ -62,7 +62,7 @@ function windowMainClickDistract () {
 */
 function windowMainClickButtonAddUrl () {
     ui.windowMainAddUrl()
-    sentry.countClickEvent('usageButtonAddUrl')
+    sentry.countEvent('usageButtonAddUrl')
 }
 
 /**
@@ -73,7 +73,7 @@ function windowMainClickButtonAddUrl () {
 */
 function windowMainClickButtonVideo () {
     ui.windowMainDownloadContent('video')
-    sentry.countClickEvent('usageButtonVideoExec')
+    sentry.countEvent('usageButtonVideoExec')
 }
 
 /**
@@ -94,7 +94,7 @@ function windowMainClickButtonVideoV2 () {
 */
 function windowMainClickButtonAudio () {
     ui.windowMainDownloadContent('audio')
-    sentry.countClickEvent('usageButtonAudioExec')
+    sentry.countEvent('usageButtonAudioExec')
 }
 
 /**
@@ -105,7 +105,7 @@ function windowMainClickButtonAudio () {
 */
 function windowMainClickButtonSettings () {
     ui.windowMainSettingsUiLoad()
-    sentry.countClickEvent('usageButtonSettings')
+    sentry.countEvent('usageButtonSettings')
 }
 
 /**
@@ -116,7 +116,7 @@ function windowMainClickButtonSettings () {
 */
 function windowMainClickButtonIntro () {
     ui.windowMainIntroShow()
-    sentry.countClickEvent('usageButtonIntro')
+    sentry.countEvent('usageButtonIntro')
 }
 
 /**
@@ -127,7 +127,7 @@ function windowMainClickButtonIntro () {
 */
 function windowMainClickButtonExtrators () {
     ui.windowMainShowSupportedExtractors()
-    sentry.countClickEvent('usageButtonExtractors')
+    sentry.countEvent('usageButtonExtractors')
 }
 
 /**
@@ -138,7 +138,7 @@ function windowMainClickButtonExtrators () {
 */
 function windowMainClickButtonDownloads () {
     ui.windowMainOpenDownloadFolder()
-    sentry.countClickEvent('usageButtonOpenDownloadFolder')
+    sentry.countEvent('usageButtonOpenDownloadFolder')
 }
 
 /**
@@ -149,7 +149,7 @@ function windowMainClickButtonDownloads () {
 */
 function windowMainClickButtonLogReset () {
     ui.windowMainLogReset()
-    sentry.countClickEvent('usageButtonResetLog')
+    sentry.countEvent('usageButtonResetLog')
 }
 
 /**
@@ -160,7 +160,7 @@ function windowMainClickButtonLogReset () {
 */
 function windowMainClickButtonUIReset () {
     ui.windowMainResetAskUser()
-    sentry.countClickEvent('usageButtonResetUI')
+    sentry.countEvent('usageButtonResetUI')
 }
 
 // ----------------------------------------------------------------------------
@@ -174,7 +174,7 @@ function windowMainClickButtonUIReset () {
 */
 function windowSettingsClickIconUserSettingsDir () {
     settings.settingsFolderOpen()
-    sentry.countClickEvent('usageSettingsOpenSettingsFolder')
+    sentry.countEvent('usageSettingsOpenSettingsFolder')
 }
 
 /**
@@ -185,7 +185,7 @@ function windowSettingsClickIconUserSettingsDir () {
 */
 function windowSettingsClickButtonChooseDownloadDir () {
     settings.settingsSelectDownloadDir()
-    sentry.countClickEvent('usageSettingsChooseDownloadDir')
+    sentry.countEvent('usageSettingsChooseDownloadDir')
 }
 
 /**
@@ -196,6 +196,29 @@ function windowSettingsClickButtonChooseDownloadDir () {
 */
 function windowSettingsClickCheckboxVerboseMode () {
     settings.settingsToggleVerboseMode()
+    sentry.countEvent('usageSettingsToggleVerboseMode')
+}
+
+/**
+* @function windowSettingsClickCheckboxAdditionalParameter
+* @summary Handles the click on the checkbox vadditional parameter
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickCheckboxAdditionalParameter () {
+    settings.settingsToggleAdditionalParameter()
+    sentry.countEvent('usageSettingsToggleAdditionalParameter')
+}
+
+/**
+* @function windowSettingsClickButtonAdditionalParameterSave
+* @summary Handles the click on the button additional parameter save
+* @description Triggered from the settingsWindow.
+* @memberof renderer
+*/
+function windowSettingsClickButtonAdditionalParameterSave () {
+    settings.settingsSaveAdditionalParameter()
+    sentry.countEvent('usageSettingsSaveAdditionalParameter')
 }
 
 /**
@@ -206,6 +229,7 @@ function windowSettingsClickCheckboxVerboseMode () {
 */
 function windowSettingsClickCheckboxUpdatePolicy () {
     settings.settingsTogglePrereleases()
+    sentry.countEvent('usageSettingsTogglePrereleases')
 }
 
 /**
@@ -216,7 +240,7 @@ function windowSettingsClickCheckboxUpdatePolicy () {
 */
 function windowSettingsClickIconBug () {
     settings.settingsOpenDevTools()
-    sentry.countClickEvent('usageSettingsOpenDevTools')
+    sentry.countEvent('usageSettingsOpenDevTools')
 }
 
 /**
@@ -227,6 +251,7 @@ function windowSettingsClickIconBug () {
 */
 function windowSettingsClickCheckboxErrorReporting () {
     settings.settingsToggleErrorReporting()
+    sentry.countEvent('usageSettingsToggleErrorReporting')
 }
 
 /**
@@ -238,7 +263,7 @@ function windowSettingsClickCheckboxErrorReporting () {
 function windowSettingsClickCheckboxErrorReportingMoreInfo () {
     const { urlGithubSentryUsage } = require('./js/modules/githubUrls.js') // get url
     utils.openURL(urlGithubSentryUsage)
-    sentry.countClickEvent('usageSettingsErrorReportingShowMoreInfo')
+    sentry.countEvent('usageSettingsErrorReportingShowMoreInfo')
 }
 
 /**
@@ -249,7 +274,7 @@ function windowSettingsClickCheckboxErrorReportingMoreInfo () {
 */
 function windowSettingsClickDropdownAudioFormats () {
     settings.settingsAudioFormatSave()
-    sentry.countClickEvent('usageSettingsChooseAudioFormat')
+    sentry.countEvent('usageSettingsChooseAudioFormat')
 }
 
 /**
@@ -271,6 +296,7 @@ function windowSettingsClickOpenUrl (url) {
 */
 function windowSettingsClickYoutubeDlUpdate () {
     youtubeDl.youtubeDlBinaryUpdateCheck(false, false) // If silent = false -> Forces result feedback, even if no update is available
+    sentry.countEvent('usageSettingsButtonYoutubeDlUpdatePressed')
 }
 
 // ----------------------------------------------------------------------------
@@ -354,6 +380,8 @@ function checkApplicationDependencies () {
 function settingsLoadAllOnAppStart () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now ...')
     utils.userSettingRead('enableVerboseMode') // verbose mode
+    utils.userSettingRead('enableAdditionalParameter') // additional parameter
+    utils.userSettingRead('additionalYoutubeDlParameter') // additional parameter
     utils.userSettingRead('enablePrereleases') // pre-releases
     utils.userSettingRead('enableErrorReporting') // get setting for error-reporting
     utils.userSettingRead('downloadDir') // download dir
@@ -369,8 +397,10 @@ function settingsLoadAllOnAppStart () {
 function settingsLoadAllOnSettingsUiLoad () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now and adjust the settings UI')
     utils.userSettingRead('enableVerboseMode', true) // verbose mode
+    utils.userSettingRead('enableAdditionalParameter', true) // enable or not: additional parameter
+    utils.userSettingRead('additionalYoutubeDlParameter', true) // the actual additional youtube-dl parameter
     utils.userSettingRead('enablePrereleases', true) // pre-releases
-    utils.userSettingRead('enableErrorReporting', true)
+    utils.userSettingRead('enableErrorReporting', true) // get setting for error-reporting
     utils.userSettingRead('downloadDir', true) // download dir
     utils.userSettingRead('audioFormat', true) // load configured audio format and update the settings UI
 }
@@ -457,6 +487,7 @@ function urlInputFieldOnFocus () {
 */
 function searchUpdate (silent = true) {
     ui.windowMainApplicationStateSet('Searching media-dupes updates')
+    sentry.countEvent('usageUpdateSearchMediaDupesStarted')
 
     // check if pre-releases should be included or not
     var curEnablePrereleasesSetting = utils.globalObjectGet('enablePrereleases')
@@ -514,6 +545,7 @@ function searchUpdate (silent = true) {
         // If a stable (not a prelease) update is available - see #73
         if (localAppVersion < remoteAppVersionLatest) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Found update, notify user')
+            sentry.countEvent('usageUpdateSearchMediaDupesFoundUpdate')
 
             // ask user using a noty confirm dialog
             const Noty = require('noty')
@@ -543,6 +575,7 @@ function searchUpdate (silent = true) {
             n.show()
         } else {
             utils.writeConsoleMsg('info', 'searchUpdate ::: No newer version of media-dupes found.')
+            sentry.countEvent('usageUpdateSearchMediaDupesNoUpdatesAvailable')
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
@@ -578,6 +611,7 @@ function openReleasesOverview () {
     const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
     utils.writeConsoleMsg('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
     utils.openURL(urlGitHubReleases)
+    sentry.countEvent('usageOpenReleaseOverview')
 }
 
 /**
@@ -654,17 +688,21 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
 */
 function validateUrlBeforeAdd () {
     var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
+    sentry.countEvent('usageValidateUrlStarted')
 
     // if the field is empty - continue
     if (currentContentOfUrlInputField === '') {
         utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: Empty field')
+        sentry.countEvent('usageValidateUrlEmptyUrl')
     } else {
         var isUrlValid = utils.validURL(currentContentOfUrlInputField)
         if (isUrlValid) {
             utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
+            sentry.countEvent('usageValidateUrlSuccess')
             utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
         } else {
             utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL (' + currentContentOfUrlInputField + ').')
+            sentry.countEvent('usageValidateUrlError')
         }
     }
 }
@@ -734,7 +772,7 @@ require('electron').ipcRenderer.on('scheduleUpdateCheckMediaDupes', function () 
         function () {
             utils.writeConsoleMsg('info', 'scheduleUpdateCheckMediaDupes ::: Starting scheduled search for new media-dupes updates.')
             searchUpdate(true) // silent
-        }, 15000) // after 15 seconds
+        }, 5000) // after 5 seconds
 })
 
 /**
@@ -748,7 +786,7 @@ require('electron').ipcRenderer.on('scheduleUpdateCheckYoutubeDl', function () {
         function () {
             utils.writeConsoleMsg('info', 'scheduleUpdateCheckYoutubeDl ::: Starting scheduled search for new youtube-dl updates.')
             youtubeDl.youtubeDlBinaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
-        }, 60000) // after 1 minute
+        }, 5000) // after 5 seconds
 })
 
 /**
@@ -906,6 +944,16 @@ require('electron').ipcRenderer.on('unblurMainUI', function () {
 */
 require('electron').ipcRenderer.on('blurMainUI', function () {
     ui.windowMainBlurSet(true)
+})
+
+/**
+* @name countAppStarts
+* @summary ..
+* @description Called via ipc from main.js when the main window is ready-to-show
+* @memberof renderer
+*/
+require('electron').ipcRenderer.on('countAppStarts', function () {
+    sentry.countEvent('usageApplicationStarted')
 })
 
 // ----------------------------------------------------------------------------
