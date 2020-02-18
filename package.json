@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.5.20200214",
+  "version": "0.5.20200218",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -238,7 +238,7 @@
     "electron-log": "^4.0.6",
     "electron-prompt": "^1.5.1",
     "electron-unhandled": "^3.0.2",
-    "electron-util": "^0.13.1",
+    "electron-util": "^0.14.0",
     "ffmpeg-static-electron": "^2.0.1",
     "intro.js": "^2.9.3",
     "is-reachable": "^4.0.0",
