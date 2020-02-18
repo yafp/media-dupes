@@ -67,12 +67,40 @@ function settingsToggleVerboseMode () {
     if ($('#checkboxEnableVerbose').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now enabled')
         utils.userSettingWrite('enableVerboseMode', true)
-        sentry.countClickEvent('usageSettingsVerboseModeEnabled')
+        sentry.countEvent('usageSettingsVerboseModeEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now disabled')
         utils.userSettingWrite('enableVerboseMode', false)
-        sentry.countClickEvent('usageSettingsVerboseModeDisabled')
+        sentry.countEvent('usageSettingsVerboseModeDisabled')
     }
+}
+
+/**
+* @function settingsToggleAdditionalParameter
+* @summary Enables or disabled the verbose mode
+* @description Sentry is used for log output. It is disabled by default. Enables or disabled the verbode mode
+*/
+function settingsToggleAdditionalParameter () {
+    if ($('#checkboxEnableAdditionalParameter').is(':checked')) {
+        utils.writeConsoleMsg('info', 'settingsToggleAdditionalParameter ::: Additional parameter is now enabled')
+        utils.userSettingWrite('enableAdditionalParameter', true)
+        sentry.countEvent('usageSettingsAdditionalParamterEnabled')
+    } else {
+        utils.writeConsoleMsg('info', 'settingsToggleAdditionalParameter ::: Additional parameter is now disabled')
+        utils.userSettingWrite('enableAdditionalParameter', false)
+        sentry.countEvent('usageSettingsAdditionalParamterEnabled')
+    }
+}
+
+/**
+* @function settingsSaveAdditionalParameter
+* @summary Saves the content of the input field for additional paramters
+* @description Saves the content of the input field for additional paramters
+*/
+function settingsSaveAdditionalParameter () {
+    var newAdditionalParameter = $('#textInputAdditionalParameter').val()
+    utils.writeConsoleMsg('info', 'settingsSaveAdditionalParameter ::: Saving additional parameters - new value is: _' + newAdditionalParameter + '_.')
+    utils.userSettingWrite('additionalYoutubeDlParameter', newAdditionalParameter)
 }
 
 /**
@@ -84,11 +112,11 @@ function settingsTogglePrereleases () {
     if ($('#checkboxEnablePreReleases').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will now include pre-releases')
         utils.userSettingWrite('enablePrereleases', true)
-        sentry.countClickEvent('usageSettingsPrereleasesEnabled')
+        sentry.countEvent('usageSettingsPrereleasesEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will ignore pre-releases')
         utils.userSettingWrite('enablePrereleases', false)
-        sentry.countClickEvent('usageSettingsPrereleasesDisabled')
+        sentry.countEvent('usageSettingsPrereleasesDisabled')
     }
 }
 
@@ -102,7 +130,7 @@ function settingsToggleErrorReporting () {
         utils.writeConsoleMsg('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
         utils.userSettingWrite('enableErrorReporting', true)
         sentry.enableSentry()
-        sentry.countClickEvent('usageSettingsErrorReportingEnabled')
+        sentry.countEvent('usageSettingsErrorReportingEnabled')
     } else {
         // ask if user really wants to disable error-reporting (using a confirm dialog)
         const Noty = require('noty')
@@ -119,7 +147,7 @@ function settingsToggleErrorReporting () {
                         utils.writeConsoleMsg('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
                         utils.userSettingWrite('enableErrorReporting', false)
                         sentry.disableSentry()
-                        sentry.countClickEvent('usageSettingsErrorReportingDisabled')
+                        sentry.countEvent('usageSettingsErrorReportingDisabled')
                         // myUndefinedFunctionFromRendererAfterDisable()
                     },
                     {
@@ -166,6 +194,8 @@ module.exports.settingsFolderOpen = settingsFolderOpen
 module.exports.settingsOpenDevTools = settingsOpenDevTools
 module.exports.settingsSelectDownloadDir = settingsSelectDownloadDir
 module.exports.settingsToggleVerboseMode = settingsToggleVerboseMode
+module.exports.settingsToggleAdditionalParameter = settingsToggleAdditionalParameter
+module.exports.settingsSaveAdditionalParameter = settingsSaveAdditionalParameter
 module.exports.settingsTogglePrereleases = settingsTogglePrereleases
 module.exports.settingsToggleErrorReporting = settingsToggleErrorReporting
 module.exports.settingsAudioFormatSave = settingsAudioFormatSave
