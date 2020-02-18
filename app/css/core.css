@@ -1,7 +1,18 @@
+@font-face {
+    font-family: 'SourceCodePro';
+    src:  url('../fonts/source-code-pro/SourceSansPro-Bold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 /* ########################################################################## */
 /* BODY */
 /* ########################################################################## */
 body{
+    /*
+    font-family: 'SourceCodePro';
+    */
 }
 
 /* ########################################################################## */
@@ -127,7 +138,6 @@ textarea {
     min-width: 160px;
 }
 
-
 /* ########################################################################## */
 /* APPLICATION STATE */
 /* ########################################################################## */
@@ -188,6 +198,20 @@ cssbody {
     animation: fadein 0.5s;
 }
 
+
+/* ########################################################################## */
+/* INTRO.JS - Fixing issues where the UI element was just white - not visible */
+/* see: https://github.com/usablica/intro.js/issues/840 */
+/* ########################################################################## */
+.introjs-helperLayer { 
+    background: transparent !important; 
+    box-shadow: 0 0 0 9999px 
+    rgba(1, 1, 1, 0.8); 
+}
+
+.introjs-overlay { 
+    background: transparent !important; 
+}
 
 
 /* ########################################################################## */
