@@ -27,6 +27,13 @@
     <link rel="stylesheet" href="css/core.css" >
 
     <title>media-dupes - settings</title>
+
+    <script>
+        $('.stat-wrap a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+    </script>
 </head>
 
 <body class="animated fadeIn">
@@ -35,11 +42,13 @@
         <!-- empty line -->
         <div class="row-fluid row-empty">
             &nbsp;
+            <h6><i class="fas fa-terminal float-right" onclick="windowSettingsClickIconBug();"></i></h6>
         </div>
 
         <!-- Settings header -->
         <div class="row-fluid">
-            <h4 class="border-bottom">Settings</h4>
+            <h4 class="border-bottom"><i class="fas fa-cog" onclick="windowSettingsClickIconUserSettingsDir();"></i> Settings</h4>
+
         </div>
 
         <!-- empty line -->
@@ -47,146 +56,195 @@
             &nbsp;
         </div>
 
-        <!-- USER SETTINGS -->
-
-         <!-- Header: User-Settings -->
+        <!-- Tabs -->
         <div class="row-fluid">
-            <h5><i class="fas fa-cog" onclick="windowSettingsClickIconUserSettingsDir();"></i> User-Settings</h5>
-        </div>
-
-         <!-- Download directory -->
-        <div class="row-fluid">
-            <h6><i class="far fa-folder"></i> Download directory</h6>
-        </div>
-        <div class="row-fluid">
-            <div class="input-group mb-3">
-                <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
-                <div class="input-group-append">
-                    <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="windowSettingsClickButtonChooseDownloadDir()"><i class="far fa-folder-open"></i> Choose</button>
-                </div>
+            <div class="nav nav-tabs" id="pills-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#general-tab" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fas fa-cog"></i> General</a>
+                <a class="nav-item nav-link" id="nav-updates-tab" data-toggle="tab" href="#updates-tab" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="fas fa-cloud-download-alt"></i> Updates</a>
+                <a class="nav-item nav-link" id="nav-audio-tab" data-toggle="tab" href="#audio-tab" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="fas fa-music"></i> Audio</a>
+                <a class="nav-item nav-link" id="nav-youtubedl-tab" data-toggle="tab" href="#youtubedl-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fab fa-youtube"></i> youtube-dl</a>
+                <a class="nav-item nav-link" id="nav-ffmpeg-tab" data-toggle="tab" href="#ffmpeg-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fas fa-tools"></i> ffmpeg</a>
+                <a class="nav-item nav-link" id="nav-reporting-tab" data-toggle="tab" href="#reporting-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fas fa-bug"></i> Reporting</a> 
             </div>
         </div>
+        <!-- /Tabs -->
 
-        <!-- Logging / Verbose Mode -->
-        <div class="row-fluid">
-            <h6><i class="far fa-file-alt"></i> Logging</h6>
+        <!-- empty line -->
+        <div class="row-fluid row-empty">
+            &nbsp;
         </div>
-        <div class="row-fluid">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <input type="checkbox" id="checkboxEnableVerbose" name="checkboxEnableVerbose" onclick="windowSettingsClickCheckboxVerboseMode();">
+
+        <!-- tabs content -->
+        <div class="tab-content">
+
+            <!-- Tab: General -->
+            <div class="tab-pane active" id="general-tab" role="tabpanel">
+
+                 <!-- Download directory -->
+                <div class="row-fluid">
+                    <h6><i class="far fa-folder"></i> Download directory</h6>
+                </div>
+                <div class="row-fluid">
+                    <div class="input-group mb-3">
+                        <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
+                        <div class="input-group-append">
+                            <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="windowSettingsClickButtonChooseDownloadDir()"><i class="far fa-folder-open"></i> Choose</button>
+                        </div>
                     </div>
                 </div>
-                <input type="text" class="form-control form-control-sm" value="Verbose mode" disabled>
-            </div>
-        </div>
 
-        <!-- Additional youtube-dl flags / parameter -->
-        <div class="row-fluid">
-            <h6><i class="fas fa-puzzle-piece"></i> Additional youtube-dl parameter</h6>
-        </div>
-        <div class="row-fluid">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <input type="checkbox" id="checkboxEnableAdditionalParameter" name="checkboxEnableAdditionalParameter" onclick="windowSettingsClickCheckboxAdditionalParameter();">
+                <!-- Logging / Verbose Mode -->
+                <div class="row-fluid">
+                    <h6><i class="far fa-file-alt"></i> Verbose mode</h6>
+                </div>
+                <div class="row-fluid">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" id="checkboxEnableVerbose" name="checkboxEnableVerbose" onclick="windowSettingsClickCheckboxVerboseMode();">
+                            </div>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" value="Enable verbose mode for downloads" disabled>
                     </div>
                 </div>
-                <input type="text" class="form-control form-control-sm" id="textInputAdditionalParameter" name="textInputAdditionalParameter" placeholder="--socket-timeout 5 --retries 15" value="">
-                <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickButtonAdditionalParameterSave();"><i class="fas fa-save"></i> Save</button>
             </div>
-        </div>
+            <!-- /Tab: General -->
 
-        <!-- Header: Update policy-->
-        <div class="row-fluid">
-            <h6><i class="fas fa-cloud-download-alt"></i> Update policy</h6>
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <input type="checkbox" id="checkboxEnablePreReleases" name="checkboxEnablePreReleases" onclick="windowSettingsClickCheckboxUpdatePolicy();">
+
+            <!-- Tab: Updates -->
+            <div class="tab-pane" id="updates-tab" role="tabpanel">
+                <!-- Header: Update policy-->
+                <div class="row-fluid">
+                    <h6>Update policy</h6>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" id="checkboxEnablePreReleases" name="checkboxEnablePreReleases" onclick="windowSettingsClickCheckboxUpdatePolicy();">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" value="Include pre-releases into the media-dupes update search" disabled>
                 </div>
             </div>
-            <input type="text" class="form-control form-control-sm" value="Include media-dupes pre-releases into update search" disabled>
-        </div>
+            <!-- /Tab: Updates -->
 
-        <!-- Header: Error reportng using sentry -->
-        <div class="row-fluid">
-            <h6><i class="fas fa-bug" onclick="windowSettingsClickIconBug();"></i> Error Reporting & Event Counting <i class="fas fa-question-circle" onclick="windowSettingsClickCheckboxErrorReportingMoreInfo()"></i></h6>
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="windowSettingsClickCheckboxErrorReporting();">
+
+            <!-- Tab: Audio -->
+            <div class="tab-pane" id="audio-tab" role="tabpanel">
+                <!-- Audio Format-->
+                <div class="row-fluid">
+                    <h6>Audio format</h6>
+                </div>
+                <div class="row-fluid">
+                   <div class="input-group">
+                        <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="windowSettingsClickDropdownAudioFormats();">
+                            <option value="aac" title="Advanced Audio Coding">.aac </option>
+                            <option value="flac" title="Free Loseless Audio Codec">.flac </option>
+                            <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
+                            <option value="m4a" title="MPEG 4 Audio">.m4a </option>
+                            <option value="opus" title="Opus">.opus </option>
+                            <option value="vorbis" title="Ogg Vorbis">.ogg </option>
+                            <option value="wav" title="Waveform Audio File Format">.wav </option>
+                            <option value="best" title="Best">[best] </option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <input type="text" class="form-control form-control-sm" value="Error reporting and event counting (helps improving media-dupes)." disabled>
-        </div>
+            <!-- /Tab: Audio -->
 
-        <!-- Audio Format-->
-        <div class="row-fluid">
-            <h6><i class="fas fa-music"></i> Audio formats</h6>
-        </div>
-        <div class="row-fluid">
-           <div class="input-group">
-                <select class="custom-select custom-select-sm" id="inputGroupSelectAudio" onchange="windowSettingsClickDropdownAudioFormats();">
-                    <option value="aac" title="Advanced Audio Coding">.aac </option>
-                    <option value="flac" title="Free Loseless Audio Codec">.flac </option>
-                    <option value="mp3" title="MPEG-1 Audio Layer-3" selected>.mp3</option>
-                    <option value="m4a" title="MPEG 4 Audio">.m4a </option>
-                    <option value="opus" title="Opus">.opus </option>
-                    <option value="vorbis" title="Ogg Vorbis">.ogg </option>
-                    <option value="wav" title="Waveform Audio File Format">.wav </option>
-                    <option value="best" title="Best">[best] </option>
-                </select>
+
+            <!-- Tab: youtubedl -->
+            <div class="tab-pane" id="youtubedl-tab" role="tabpanel">
+
+                <!-- youtube-dl path -->
+                <div class="row-fluid">
+                    <h6 id="headerYoutubeDL">Installation</h6>
+                </div>
+                <div class="row-fluid">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickYoutubeDlUpdate()"><i class="fab fa-youtube"></i> Update</button>
+                            <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fetch URL Infos-->
+                <div class="row-fluid">
+                    <h6>Url informations</h6>
+                </div>
+                <div class="row-fluid">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" id="checkboxEnableUrlInformations" name="checkboxEnableUrlInformations" onclick="windowSettingsClickCheckboxUrlInformations();">
+                            </div>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" value="Fetch url informations while adding urls to queue (slows down the process)" disabled>
+                    </div>
+                </div>
+
+                <!-- Additional youtube-dl flags / parameter -->
+                <div class="row-fluid">
+                    <h6>Additional youtube-dl parameter <i class="fas fa-info-circle" onclick="windowSettingsClickOpenUrl('https://github.com/ytdl-org/youtube-dl')"></i></h6>
+                </div>
+                <div class="row-fluid">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" id="checkboxEnableAdditionalParameter" name="checkboxEnableAdditionalParameter" onclick="windowSettingsClickCheckboxAdditionalParameter();">
+                            </div>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="textInputAdditionalParameter" name="textInputAdditionalParameter" placeholder="--socket-timeout 5 --retries 15" value="">
+                        <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickButtonAdditionalParameterSave();"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </div>
+
             </div>
-        </div>
-
-        <!-- empty line -->
-        <div class="row-fluid row-empty">
-            &nbsp;
-        </div>
+            <!-- Tab: youtubedl -->
 
 
-        <!-- DEPENDENCIES -->
-
-        <!-- Header: Dependencies -->
-        <div class="row-fluid">
-            <h5><i class="fas fa-cubes"></i> Dependencies</h5>
-        </div>
-
-        <!-- youtube-dl -->
-        <div class="row-fluid">
-            <h6 id="headerYoutubeDL"><i class="fab fa-youtube"></i> youtube-dl</h6>
-        </div>
-        <div class="row-fluid">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
-                <div class="input-group-append">
-                    <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickYoutubeDlUpdate()"><i class="fab fa-youtube"></i> Update</button>
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
+            <!-- Tab: ffmpeg -->
+            <div class="tab-pane" id="ffmpeg-tab" role="tabpanel">
+                <!-- ffmpeg -->
+                <div class="row-fluid">
+                    <h6>Installation</h6>
+                </div>
+                <div class="row-fluid">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-sm" placeholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <!-- Tab: ffmpeg -->
 
-        <!-- ffmpeg -->
-        <div class="row-fluid">
-            <h6><i class="fas fa-tools"></i> ffmpeg</h6>
-        </div>
-        <div class="row-fluid">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control form-control-sm" laceholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
-                <div class="input-group-append">
-                    <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
+
+            <!-- Tab: reporting -->
+            <div class="tab-pane" id="reporting-tab" role="tabpanel">
+                <!-- Header: Error reportng using sentry -->
+                <div class="row-fluid">
+                    <h6>Error Reporting & Event Counting</h6>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" id="checkboxEnableErrorReporting" name="checkboxEnableErrorReporting" onclick="windowSettingsClickCheckboxErrorReporting();">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" value="Enable error reporting and event counting (helps improving media-dupes)." disabled>
+                </div>
+                <div class="row-fluid">
+                    <h6>Additional informations about media-dupes error reporting and event counting can be found <a href='#' class="classicLink" onclick="windowSettingsClickCheckboxErrorReportingMoreInfo();">here</a>.</h6>
                 </div>
             </div>
-        </div>
+            <!-- Tab: reporting -->
 
-        <!-- empty line -->
-        <div class="row-fluid row-empty">
-            &nbsp;
         </div>
+        <!-- /tabs content -->
 
     </div>
     <!-- end container-fluid -->
