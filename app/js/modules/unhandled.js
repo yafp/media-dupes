@@ -46,6 +46,8 @@ function initUnhandled () {
     // utils.writeConsoleMsg('info', 'initUnhandled ::: electron-unhandled is now initialized')
 }
 
-// export the functions
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.initUnhandled = initUnhandled

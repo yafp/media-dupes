@@ -55,7 +55,7 @@ const mainWindowMinimalWindowHeight = 760
 const mainWindowMinimalWindowWidth = 620
 
 // settingsWundow: minimal window size
-const settingsWindowMinimalWindowHeight = 730
+const settingsWindowMinimalWindowHeight = 400
 const settingsWindowMinimalWindowWidth = 800
 
 // ----------------------------------------------------------------------------
@@ -330,6 +330,7 @@ function createWindowMain () {
     var enableAdditionalParameter = false
     var additionalYoutubeDlParameter = ''
     var enableErrorReporting = true
+    var enableUrlInformations = false
     var downloadDir = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
     var audioFormat = 'mp3' // mp3 is the default
     var confirmedDisclaimer = false
@@ -340,6 +341,7 @@ function createWindowMain () {
     global.sharedObj = {
         // settings UI
         enableErrorReporting: enableErrorReporting,
+        enableUrlInformations: enableUrlInformations,
         enableVerboseMode: enableVerboseMode,
         enableAdditionalParameter: enableAdditionalParameter,
         additionalYoutubeDlParameter: additionalYoutubeDlParameter,
@@ -566,7 +568,7 @@ function createMenuMain () {
             label: 'Search',
             submenu: [
                 {
-                    label: 'Youtube',
+                    label: 'Youtube Suggest',
                     click (item, mainWindow) {
                         mainWindow.webContents.send('openYoutubeSuggestDialog')
                     },

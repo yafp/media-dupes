@@ -7,6 +7,12 @@
 
 a minimal content duplicator for common media services like youtube
 
+available for:
+
+![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/linux_32x32.png)
+![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/apple_32x32.png)
+![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png)
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c30508f8add43ee8fbb62c2a669e76b)](https://www.codacy.com/manual/yafp/media-dupes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yafp/media-dupes&amp;utm_campaign=Badge_Grade)
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/k4c1nve3xejgolbr?svg=true)](https://ci.appveyor.com/project/yafp/media-dupes)
 [![Build Status](https://travis-ci.org/yafp/media-dupes.svg?branch=master)](https://travis-ci.org/yafp/media-dupes)
@@ -18,8 +24,9 @@ a minimal content duplicator for common media services like youtube
 ![GitHub Issues Open](https://img.shields.io/github/issues-raw/yafp/media-dupes.svg?style=flat)
 [![GitHub contributors](https://img.shields.io/github/contributors/yafp/media-dupes.svg)](https://github.com/yafp//graphs/contributors/)
 [![Merged PRs](https://img.shields.io/github/issues-pr-closed-raw/yafp/media-dupes.svg?label=merged+PRs)](https://github.com/yafp/media-dupes/pulls?q=is:pr+is:merged)
+[![GitHub stars](https://img.shields.io/github/stars/yafp/media-dupes)](https://github.com/yafp/media-dupes/stargazers)
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
-
+[![Discord](https://img.shields.io/discord/672401845855191040.svg)](https://discord.gg/gHnqdHy)
 
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_latest.png)
 
@@ -27,12 +34,10 @@ a minimal content duplicator for common media services like youtube
 
 
 ## about media-dupes
-**media-dupes** can:
+Assuming the provided url is supported by `youtube-dl`, **media-dupes** can:
 
-* download video from common media services
-* download audio from common media services
-
-if the url/media-service is supported by `youtube-dl`.
+* download video
+* download audio
 
 **media-dupes** is:
 

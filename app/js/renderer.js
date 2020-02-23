@@ -57,7 +57,7 @@ function windowMainClickDistract () {
 /**
 * @function windowMainClickButtonAddUrl
 * @summary Handles the click on the AddUrl button
-* @description Triggered from the mainWindow. Starts the add url function
+* @description Triggered from the mainWindow. Starts the add url function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonAddUrl () {
@@ -68,7 +68,7 @@ function windowMainClickButtonAddUrl () {
 /**
 * @function windowMainClickButtonVideo
 * @summary Handles the click on the video button
-* @description Triggered from the mainWindow. Starts the video download function
+* @description Triggered from the mainWindow. Starts the video download function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonVideo () {
@@ -79,7 +79,7 @@ function windowMainClickButtonVideo () {
 /**
 * @function windowMainClickButtonVideo
 * @summary Handles the click on the video button
-* @description Triggered from the mainWindow. Starts the video download function
+* @description Triggered from the mainWindow. Starts the video download function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonVideoV2 () {
@@ -89,7 +89,7 @@ function windowMainClickButtonVideoV2 () {
 /**
 * @function windowMainClickButtonAudio
 * @summary Handles the click on the audio button
-* @description Triggered from the mainWindow. Starts the audio download function
+* @description Triggered from the mainWindow. Starts the audio download function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonAudio () {
@@ -100,7 +100,7 @@ function windowMainClickButtonAudio () {
 /**
 * @function windowMainClickButtonSettings
 * @summary Handles the click on the settings button
-* @description Triggered from the mainWindow. Starts the settings UI
+* @description Triggered from the mainWindow. Starts the settings UI from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonSettings () {
@@ -111,7 +111,7 @@ function windowMainClickButtonSettings () {
 /**
 * @function windowMainClickButtonIntro
 * @summary Handles the click on the intro button
-* @description Triggered from the mainWindow. Starts the application intro
+* @description Triggered from the mainWindow. Starts the application intro from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonIntro () {
@@ -122,7 +122,7 @@ function windowMainClickButtonIntro () {
 /**
 * @function windowMainClickButtonExtrators
 * @summary Handles the click on the extractors button
-* @description Triggered from the mainWindow. Starts the show supported extractors function
+* @description Triggered from the mainWindow. Starts the show supported extractors function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonExtrators () {
@@ -133,7 +133,7 @@ function windowMainClickButtonExtrators () {
 /**
 * @function windowMainClickButtonDownloads
 * @summary Handles the click on the Downloads button
-* @description Triggered from the mainWindow. Starts the open-download-folder function
+* @description Triggered from the mainWindow. Starts the open-download-folder function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonDownloads () {
@@ -144,7 +144,7 @@ function windowMainClickButtonDownloads () {
 /**
 * @function windowMainClickButtonLogReset
 * @summary Handles the click on the log-reset button
-* @description Triggered from the mainWindow. Starts the reset-log function
+* @description Triggered from the mainWindow. Starts the reset-log function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonLogReset () {
@@ -155,7 +155,7 @@ function windowMainClickButtonLogReset () {
 /**
 * @function windowMainClickButtonUIReset
 * @summary Handles the click on the reset-UI button
-* @description Triggered from the mainWindow. Starts the reset-UI function
+* @description Triggered from the mainWindow. Starts the reset-UI function from the module ui
 * @memberof renderer
 */
 function windowMainClickButtonUIReset () {
@@ -169,7 +169,7 @@ function windowMainClickButtonUIReset () {
 /**
 * @function windowSettingsClickIconUserSettingsDir
 * @summary Handles the click on the settings icon
-* @description Triggered from the settingsWindow.
+* @description Triggered from the settingsWindow. Starts the open-settings-folder function from the module settings
 * @memberof renderer
 */
 function windowSettingsClickIconUserSettingsDir () {
@@ -179,7 +179,7 @@ function windowSettingsClickIconUserSettingsDir () {
 
 /**
 * @function windowSettingsClickButtonChooseDownloadDir
-* @summary Handles the click on the choose download dir button
+* @summary Handles the click on the choose download dir button. Starts the select-download-dir function from the module settings
 * @description Triggered from the settingsWindow.
 * @memberof renderer
 */
@@ -295,8 +295,13 @@ function windowSettingsClickOpenUrl (url) {
 * @memberof renderer
 */
 function windowSettingsClickYoutubeDlUpdate () {
-    youtubeDl.youtubeDlBinaryUpdateCheck(false, false) // If silent = false -> Forces result feedback, even if no update is available
+    youtubeDl.binaryUpdateCheck(false, false) // If silent = false -> Forces result feedback, even if no update is available
     sentry.countEvent('usageSettingsButtonYoutubeDlUpdatePressed')
+}
+
+function windowSettingsClickCheckboxUrlInformations () {
+    settings.settingsToggleUrlInformations()
+    sentry.countEvent('usageSettingsToggleUrlInformations')
 }
 
 // ----------------------------------------------------------------------------
@@ -339,7 +344,7 @@ function checkApplicationDependencies () {
 
     // youtube-dl
     //
-    var youtubeDlBinaryPath = youtubeDl.youtubeDlBinaryPathGet()
+    var youtubeDlBinaryPath = youtubeDl.binaryPathGet()
     if (utils.pathExists(youtubeDlBinaryPath) === true) {
         utils.writeConsoleMsg('info', 'checkApplicationDependencies ::: Found youtube-dl in: _' + youtubeDlBinaryPath + '_.')
     } else {
@@ -380,6 +385,7 @@ function checkApplicationDependencies () {
 function settingsLoadAllOnAppStart () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now ...')
     utils.userSettingRead('enableVerboseMode') // verbose mode
+    utils.userSettingRead('enableUrlInformations') // url informations
     utils.userSettingRead('enableAdditionalParameter') // additional parameter
     utils.userSettingRead('additionalYoutubeDlParameter') // additional parameter
     utils.userSettingRead('enablePrereleases') // pre-releases
@@ -397,6 +403,7 @@ function settingsLoadAllOnAppStart () {
 function settingsLoadAllOnSettingsUiLoad () {
     utils.writeConsoleMsg('info', 'settingsLoadAllOnAppStart ::: Gonna read several user config files now and adjust the settings UI')
     utils.userSettingRead('enableVerboseMode', true) // verbose mode
+    utils.userSettingRead('enableUrlInformations', true) // url informations
     utils.userSettingRead('enableAdditionalParameter', true) // enable or not: additional parameter
     utils.userSettingRead('additionalYoutubeDlParameter', true) // the actual additional youtube-dl parameter
     utils.userSettingRead('enablePrereleases', true) // pre-releases
@@ -424,7 +431,7 @@ function urlInputFieldOnKeyUp () {
             utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is a valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
             utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
         } else {
-            utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is not a valid URL (' + currentContentOfUrlInputField + ').')
+            // utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is not a valid URL (' + currentContentOfUrlInputField + ').')
         }
     }
 }
@@ -503,7 +510,6 @@ function searchUpdate (silent = true) {
     // get local version
     //
     localAppVersion = require('electron').remote.app.getVersion()
-    // localAppVersion = '0.0.1'; //  overwrite variable to simulate
 
     var updateStatus = $.get(urlGithubApiReleases, function (data, status) {
         // 3000 // in milliseconds
@@ -538,6 +544,17 @@ function searchUpdate (silent = true) {
             remoteAppVersionLatest = versions[i].tag_name // Example: 0.4.2
             remoteAppVersionLatestPrerelease = versions[i].prerelease // boolean
         }
+
+        // simulate different  update scenarios:
+        //
+        // localAppVersion = '0.0.1'; //  overwrite variable to simulate
+        // remoteAppVersionLatest = 'v0.6.0' //  overwrite variable to simulate
+
+        // strip the v away
+        // - up to 0.5.0 the tag used on github did not start with v.
+        // - comapring versions without leading chars is much easier.
+        localAppVersion = localAppVersion.replace('v', '')
+        remoteAppVersionLatest = remoteAppVersionLatest.replace('v', '')
 
         utils.writeConsoleMsg('info', 'searchUpdate ::: Local media-dupes version: ' + localAppVersion)
         utils.writeConsoleMsg('info', 'searchUpdate ::: Latest media-dupes version: ' + remoteAppVersionLatest)
@@ -632,7 +649,7 @@ function settingsShowYoutubeDLInfo () {
         } else {
             utils.writeConsoleMsg('info', 'settingsShowYoutubeDLInfo ::: Found youtube-dl in: _' + youtubeDl + '_.')
             $('#userSettingsYouTubeDLPathInfo').val(youtubeDl) // show in UI
-            $('#headerYoutubeDL').html('<i class="fab fa-youtube"></i> youtube-dl <small>Version: ' + ytdlBinaryVersion + '</small>')
+            $('#headerYoutubeDL').html('Installation <small>Version: ' + ytdlBinaryVersion + '</small>')
         }
     })
 }
@@ -645,7 +662,7 @@ function settingsShowYoutubeDLInfo () {
 */
 function settingsShowFfmpegInfo () {
     var ffmpeg = require('ffmpeg-static-electron')
-    utils.writeConsoleMsg('info', 'settingsShowFfmpegInfo ::: Searching ffmpeg ...')
+    // utils.writeConsoleMsg('info', 'settingsShowFfmpegInfo ::: Searching ffmpeg ...')
     if (ffmpeg === '') {
         utils.writeConsoleMsg('error', 'settingsShowFfmpegInfo ::: Unable to find ffmpeg')
         utils.showNoty('error', 'Unable to find dependency <b>ffmpeg</b>.', 0)
@@ -665,7 +682,7 @@ function settingsShowFfmpegInfo () {
 function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
 
-    var youtubeDlBinaryDetailsPath = youtubeDl.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details
+    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetailsPathGet() // get path to youtube-dl binary details
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
             utils.writeConsoleMsg('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')
@@ -735,7 +752,7 @@ require('electron').ipcRenderer.on('startSearchUpdatesSilent', function () {
 */
 /*
 require('electron').ipcRenderer.on('youtubeDlSearchUpdatesSilent', function () {
-    youtubeDl.youtubeDlBinaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
+    youtubeDl.binaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
 })
 */
 
@@ -785,7 +802,7 @@ require('electron').ipcRenderer.on('scheduleUpdateCheckYoutubeDl', function () {
     setTimeout(
         function () {
             utils.writeConsoleMsg('info', 'scheduleUpdateCheckYoutubeDl ::: Starting scheduled search for new youtube-dl updates.')
-            youtubeDl.youtubeDlBinaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
+            youtubeDl.binaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
         }, 5000) // after 5 seconds
 })
 
@@ -806,7 +823,7 @@ require('electron').ipcRenderer.on('startDisclaimerCheck', function () {
 * @memberof renderer
 */
 require('electron').ipcRenderer.on('todoListCheck', function () {
-    utils.writeConsoleMsg('info', 'todoListCheck ::: main.js forces renderer to check for urls to restore')
+    // utils.writeConsoleMsg('info', 'todoListCheck ::: main.js forces renderer to check for urls to restore')
     ui.windowMainToDoListRestore()
 })
 
@@ -851,7 +868,7 @@ require('electron').ipcRenderer.on('openYoutubeSuggestDialog', function () {
 * @memberof renderer
 */
 require('electron').ipcRenderer.on('youtubeDlBinaryUpdate', function () {
-    youtubeDl.youtubeDlBinaryUpdateCheck(false, true) // silent = false && force = true
+    youtubeDl.binaryUpdateCheck(false, true) // silent = false && force = true
 })
 
 /**
@@ -861,7 +878,7 @@ require('electron').ipcRenderer.on('youtubeDlBinaryUpdate', function () {
 * @memberof renderer
 */
 require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
-    var youtubeDlBinaryDetailsPath = youtubeDl.youtubeDlBinaryDetailsPathGet() // get path to youtube-dl binary details file
+    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetailsPathGet() // get path to youtube-dl binary details file
 
     utils.canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
         if (error) {
@@ -884,7 +901,7 @@ require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
                     buttons: [
                         Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
                             n.close()
-                            youtubeDl.youtubeDlBinaryPathReset(youtubeDlBinaryDetailsPath)
+                            youtubeDl.binaryPathReset(youtubeDlBinaryDetailsPath)
                         },
                         {
                             id: 'button1', 'data-status': 'ok'

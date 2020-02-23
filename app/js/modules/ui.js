@@ -43,7 +43,7 @@ function windowMainApplicationStateSet (newState = 'idle') {
 function windowMainLoadingAnimationShow () {
     // if ( $('#md_spinner').attr( "hidden" )) { // only if it isnt already displayed
     if ($('#div').data('hidden', true)) { // only if it isnt already displayed
-        utils.writeConsoleMsg('info', 'windowMainLoadingAnimationShow ::: Showing spinner')
+        utils.writeConsoleMsg('info', 'windowMainLoadingAnimationShow ::: Show spinner')
         $('#md_spinner').attr('hidden', false)
     }
 }
@@ -55,7 +55,7 @@ function windowMainLoadingAnimationShow () {
 */
 function windowMainLoadingAnimationHide () {
     if ($('#div').data('hidden', false)) { // only if it isnt already hidden
-        utils.writeConsoleMsg('info', 'windowMainLoadingAnimationHide ::: Hiding spinner')
+        utils.writeConsoleMsg('info', 'windowMainLoadingAnimationHide ::: Hide spinner')
         $('#md_spinner').attr('hidden', true)
     }
 }
@@ -68,7 +68,6 @@ function windowMainLoadingAnimationHide () {
 function windowMainButtonsOthersEnable () {
     // enable some buttons
     $('#inputNewUrl').prop('disabled', false) // url input field
-    $('#buttonAddUrl').prop('disabled', false) // add url
     $('#buttonShowHelp').prop('disabled', false) // help / intro
     $('#buttonShowExtractors').prop('disabled', false) // showExtractors
     utils.writeConsoleMsg('info', 'windowMainButtonsOthersEnable ::: Did enable some other UI elements')
@@ -82,7 +81,6 @@ function windowMainButtonsOthersEnable () {
 function windowMainButtonsOthersDisable () {
     // disable some buttons
     $('#inputNewUrl').prop('disabled', true) // url input field
-    $('#buttonAddUrl').prop('disabled', true) // add url
     $('#buttonShowHelp').prop('disabled', true) // help / intro
     $('#buttonShowExtractors').prop('disabled', true) // showExtractors
     utils.writeConsoleMsg('info', 'windowMainButtonsOthersDisable ::: Did disable some other UI elements')
@@ -150,7 +148,7 @@ function windowMainBlurSet (enable) {
 * @description Starts a short intro / tutorial which explains the user-interface. Using introJs
 */
 function windowMainIntroShow () {
-    utils.writeConsoleMsg('info', 'windowMainIntroShow ::: User wants to see the intro. Here you go!')
+    utils.writeConsoleMsg('info', 'windowMainIntroShow ::: Starting the media-dupes intro')
     const introJs = require('intro.js')
     introJs().start()
 }
@@ -235,7 +233,6 @@ function windowMainResetAskUser () {
 */
 function windowMainOpenDownloadFolder () {
     const { ipcRenderer } = require('electron')
-
     var configuredDownloadFolder = utils.globalObjectGet('downloadDir')
     utils.writeConsoleMsg('info', 'windowMainOpenDownloadFolder ::: Seems like we should use the following dir: _' + configuredDownloadFolder + '_.')
     ipcRenderer.send('openUserDownloadFolder', configuredDownloadFolder)
@@ -251,7 +248,6 @@ function windowMainShowSupportedExtractors () {
 
     utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Loading list of all supported extractors...')
     windowMainLogAppend('Fetching list of supported youtube-dl extractors', true)
-
     windowMainButtonsOthersDisable()
 
     const youtubedl = require('youtube-dl')
@@ -265,9 +261,11 @@ function windowMainShowSupportedExtractors () {
         utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Found ' + list.length + ' extractors')
 
         // show all extractors in console
+        /*
         for (let i = 0; i < list.length; i++) {
-            // utils.writeConsoleMsg('info', 'showSupportedExtractors ::: ' + list[i])
+            utils.writeConsoleMsg('info', 'showSupportedExtractors ::: ' + list[i])
         }
+        */
 
         // show all extractors in Ui log
         // document.getElementById('textareaLogOutput').value = list.join('\n')
@@ -324,25 +322,24 @@ function windowMainDownloadContent (mode) {
         // check if it is writeable
         if (utils.isDirectoryWriteable(configuredDownloadFolder)) {
             // Prepare UI
-            // TODO: should set cursor position to 0/1
             windowMainButtonsStartDisable() // disable the start buttons
             windowMainButtonsOthersDisable() // disables some other buttons
-            windowMainApplicationStateSet('Download in progress')
+            windowMainApplicationStateSet('Download in progress') // set the application state
 
             // require some stuff
             const youtubedl = require('youtube-dl')
             const { remote } = require('electron')
             const path = require('path')
 
+            var arrayUrlsProcessedSuccessfully = [] // prepare array for urls which got successfully downloaded
+            var arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
+
             // youtube-dl
-            utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Using youtube.dl from: _' + youtubeDl.youtubeDlBinaryPathGet() + '_.')
+            utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Using youtube.dl from: _' + youtubeDl.binaryPathGet() + '_.')
 
             // ffmpeg
             var ffmpegPath = ffmpeg.ffmpegGetBinaryPath()
             utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
-
-            var arrayUrlsProcessedSuccessfully = [] // prepare array for urls which got successfully downloaded
-            var arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
             if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
@@ -447,12 +444,19 @@ function windowMainDownloadContent (mode) {
 
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
+            var url
             for (var i = 0; i < arrayUserUrls.length; i++) {
                 sentry.countEvent('usageURLsOverall')
-                var url = arrayUserUrls[i] // get url
-                url = utils.fullyDecodeURI(url) // decode url - see #25
+                url = utils.fullyDecodeURI(arrayUserUrls[i]) // decode url - see #25
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
-                windowMainLogAppend('Added: \t\t' + url + ' to queue', true) // append url to log
+                // windowMainLogAppend('Added: \t\t' + url + ' to queue', true) // append url to log
+
+                // Check if url is a playlist (example: https://www.youtube.com/playlist?list=PL53E6B270F5FF0D49 )
+                if ((url.includes('playlist')) && (url.includes('list='))) {
+                    windowMainLogAppend('Added: \t\t' + url + ' to queue (might be a playlist)', true) // append url to log
+                } else {
+                    windowMainLogAppend('Added: \t\t' + url + ' to queue', true) // append url to log
+                }
 
                 // Download
                 //
@@ -484,9 +488,6 @@ function windowMainDownloadContent (mode) {
                     //
                     // the variable URL contains in both cases the last processed url
                     // thats why we can't show the actual url in the log
-                    //
-                    // windowMainLogAppend('\n\n\nSuccessful\n' + arrayUrlsProcessedSuccessfully)
-                    // windowMainLogAppend('\n\n\nFailed\n' + arrayUrlsThrowingErrors)
                 })
             }
         }
@@ -499,6 +500,7 @@ function windowMainDownloadContent (mode) {
 * @description Does the actual video download (without using youtube-dl.exec)
 */
 function windowMainDownloadVideo () {
+
     // some example urls for tests
     //
     // VIDEO:
@@ -517,6 +519,7 @@ function windowMainDownloadVideo () {
     // BUT not for non-youtube urls
     // media-dupes is currently not using this function
 
+    /*
     var configuredDownloadFolder = utils.globalObjectGet('downloadDir') // What is the target dir
     utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Download target directory is set to: _' + configuredDownloadFolder + '_.')
 
@@ -541,35 +544,22 @@ function windowMainDownloadVideo () {
             utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
 
             var youtubeDlParameter = ''
-            /*
-            youtubeDlParameter = [
-                // OPTIONS
-                '--ignore-errors',
-                '--format', 'best',
-                '--output', path.join(configuredDownloadFolder, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
-                // POST PROCESSING
-                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
-                '--add-metadata',
-                '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
-                '--fixup', 'detect_or_warn'
-            ]
-            */
 
-            var settingAudioFormat = 'mp3'
             youtubeDlParameter = [
                 // OPTIONS
                 '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
-                '--format', 'bestaudio', // FIXME: https://github.com/przemyslawpluta/node-youtube-dl/issues/188
-                '--format', 'best',
-                '--output', path.join(configuredDownloadFolder, 'Video', '%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
+                //'--format=best',
+                '--output', path.join(configuredDownloadFolder, 'Video', '%(title)s-%(id)s.%(ext)s'), // output path
+                // FILESYSTEM OPTIONS
+                '--restrict-filenames', // Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
+                '--continue', // Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.
+                // VERBOSE
+                '--print-json',
                 // POST PROCESSING
-                '--prefer-ffmpeg', '--ffmpeg-location', ffmpegPath, // ffmpeg location
-                '--add-metadata', // since 0.5.0
-                '--audio-format', settingAudioFormat, //  Specify audio format: "best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", or "wav"; "best" by default; No effect without -x
-                '--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5),
-                '--fixup', 'detect_or_warn',
-
-                '--print-json'
+                '--prefer-ffmpeg', '--ffmpeg-location=' + ffmpegPath, // ffmpeg location
+                '--add-metadata', // Write metadata to the video file
+                ///'--audio-quality', '0', // value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)
+                //'--fixup', 'detect_or_warn' // Automatically correct known faults of the file.
             ]
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
@@ -578,7 +568,7 @@ function windowMainDownloadVideo () {
                 return
             }
 
-            utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Using youtube.dl: _' + youtubeDl.youtubeDlBinaryPathGet() + '_.')
+            utils.writeConsoleMsg('info', 'windowMainDownloadVideo ::: Using youtube.dl: _' + youtubeDl.binaryPathGet() + '_.')
 
             var arrayUrlsThrowingErrors = [] // prepare array for urls which are throwing errors
             var arrayUrlsProcessedSuccessfully = []
@@ -607,6 +597,14 @@ function windowMainDownloadVideo () {
                 let size = 0
                 let pos = 0
                 let progress = 0
+
+                video.on('error', function error(error) {
+                    //console.log(error)
+                    utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Country-/ and/or similar restrictions</small>', 0)
+                    utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
+                    windowMainLogAppend('Failed to download a single url', true)
+                    throw error
+                })
 
                 // When the download fetches info - start writing to file
                 //
@@ -641,12 +639,10 @@ function windowMainDownloadVideo () {
 
                 // If download was already completed and there is nothing more to download.
                 //
-                /*
                 video.on('complete', function complete (info) {
                     console.warn('filename: ' + info._filename + ' already downloaded.')
                     windowMainLogAppend('Filename: ' + info._filename + ' already downloaded.')
                 })
-                */
 
                 // Download finished
                 //
@@ -669,6 +665,7 @@ function windowMainDownloadVideo () {
             }
         }
     }
+    */
 }
 
 /**
@@ -689,8 +686,11 @@ function windowMainAddUrl () {
             $('#inputNewUrl').val('') // reset input
             inputUrlFieldSetState() // empty = white
 
-            // #87
-            youtubeDl.youtubeDlGetUrlInfo(newUrl)
+            // if urlInformations is enabled - launch them
+            var curSettingUrlInformations = utils.globalObjectGet('enableUrlInformations') // #95
+            if (curSettingUrlInformations === true) {
+                youtubeDl.getUrlInfo(newUrl) // #87
+            }
         } else {
             // invalid url
             utils.writeConsoleMsg('warn', 'windowMainAddUrl ::: Detected invalid url: _' + newUrl + '_.')
@@ -748,6 +748,7 @@ function windowMainUiReset () {
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Starting to reset the UI')
     $('#inputNewUrl').val('') // empty the URL input field
     inputUrlFieldSetState() // empty = white
+    windowMainDisableAddUrlButton()
     windowMainButtonsStartDisable() // disable start button
     windowMainButtonsOthersEnable() // ensure some buttons are enabled
     windowMainToDoListReset() // empty todo-list textarea
@@ -811,7 +812,7 @@ function windowMainToDoListUpdate () {
 */
 function windowMainToDoListRestore () {
     const storage = require('electron-json-storage')
-    utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Check if there are urls to restore ...')
+    // utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Check if there are urls to restore ...')
 
     var curUrl
     var restoreCounter = 0
@@ -856,7 +857,7 @@ function windowMainToDoListRestore () {
             // windowMainToDoListReset() // empty the todolist
             windowMainToDoListUpdate() // update todo list
 
-            utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restored ' + restoreCounter + ' URLs from previous session.')
+            utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Finished restored ' + restoreCounter + ' URLs from previous session.')
             utils.showNoty('success', 'Restored <b>' + restoreCounter + '</b> URLs from your last session.')
 
             // get focus
@@ -915,6 +916,45 @@ function windowMainUiMakeUrgent () {
 }
 
 /**
+* @function windowMainThumbnailPreviewReset
+* @summary Resets the thumbnail preview back to default / empty
+* @description Resets the thumbnail preview back to default / empty
+*/
+function windowMainThumbnailPreviewReset () {
+    // mainWindow
+    $('#mainWindowThumbnailPreview').attr('src', '') // empty the thumbnail preview
+    // modal:
+    $('#previewTitle').html('') // reset the title
+    $('#previewThumbnailImage').attr('src', '') // remove the image from thumbnail modal dialog
+    $('#previewId').html('') // id
+    $('#previewDesc').html('') // description
+}
+
+/**
+* @function windowMainEnableAddUrlButton
+* @summary Enables the AddUrlButton
+* @description Enables the AddUrlButton if it isnt already
+*/
+function windowMainEnableAddUrlButton () {
+    if ($('#buttonAddUrl').is(':disabled')) {
+        $('#buttonAddUrl').prop('disabled', false) // enable the add url button
+        utils.writeConsoleMsg('info', 'windowMainEnableAddUrlButton ::: Enabled the add URL button.')
+    }
+}
+
+/**
+* @function windowMainDisableAddUrlButton
+* @summary Disables the AddUrlButton
+* @description Disabled the AddUrlButton if it isnt already
+*/
+function windowMainDisableAddUrlButton () {
+    if ($('#buttonAddUrl').is(':enabled')) {
+        $('#buttonAddUrl').prop('disabled', true) // disable the add url button
+        utils.writeConsoleMsg('info', 'windowMainDisableAddUrlButton ::: Disabled the add URL button.')
+    }
+}
+
+/**
 * @function inputUrlFieldSetState
 * @summary Sets the background color of the url input field based on the given state
 * @description Sets the background color of the url input field based on the given state
@@ -924,15 +964,19 @@ function inputUrlFieldSetState (state) {
     switch (state) {
     case 'reachable':
         $('#inputNewUrl').css('background-color', '#90EE90') // green
+        windowMainEnableAddUrlButton()
         break
     case 'unchecked':
         $('#inputNewUrl').css('background-color', '#F0E68C') //  yellow
+        windowMainDisableAddUrlButton()
         break
     case 'unreachable':
         $('#inputNewUrl').css('background-color', '#FA8072') // red
+        windowMainDisableAddUrlButton()
         break
     default:
         $('#inputNewUrl').css('background-color', '#FFFFFF') // white
+        windowMainDisableAddUrlButton()
         break
     }
 }
@@ -952,7 +996,7 @@ function youtubeSuggest () {
 
     prompt({
         title: 'YouTube Search Suggestions',
-        label: 'URL:',
+        label: 'Searchphrase:',
         value: '',
         inputAttrs: {
             type: 'text'
@@ -965,7 +1009,7 @@ function youtubeSuggest () {
             } else {
                 if ((r !== null) && (r !== '')) {
                     windowMainLoadingAnimationShow()
-                    utils.writeConsoleMsg('warn', 'youtubeSuggest ::: User search string is: _' + r + '_.')
+                    utils.writeConsoleMsg('info', 'youtubeSuggest ::: User search string is: _' + r + '_.')
                     windowMainLogAppend('Searching for Youtube suggestions for the searchphase: ' + r, true)
 
                     var youtubeSuggest = require('youtube-suggest')
@@ -1031,22 +1075,9 @@ function youtubeSuggest () {
         .catch(console.error)
 }
 
-/**
-* @function windowMainThumbnailPreviewReset
-* @summary Resets the thumbnail preview back to default / empty
-* @description Resets the thumbnail preview back to default / empty
-*/
-function windowMainThumbnailPreviewReset () {
-    // mainWindow
-    $('#mainWindowThumbnailPreview').attr('src', '') // empty the thumbnail preview
-    // modal:
-    $('#previewTitle').html('') // reset the title
-    $('#previewThumbnailImage').attr('src', '') // remove the image from thumbnail modal dialog
-    $('#previewId').html('') // id
-    $('#previewDesc').html('') // description
-}
-
-// Exporting the module functions
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.windowMainApplicationStateSet = windowMainApplicationStateSet
 module.exports.windowMainLoadingAnimationShow = windowMainLoadingAnimationShow
@@ -1075,6 +1106,10 @@ module.exports.windowMainToDoListRestore = windowMainToDoListRestore
 module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
 module.exports.windowMainDownloadVideo = windowMainDownloadVideo
+module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
+module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
+module.exports.windowMainEnableAddUrlButton = windowMainEnableAddUrlButton
+module.exports.windowMainDisableAddUrlButton = windowMainDisableAddUrlButton
+
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
 module.exports.youtubeSuggest = youtubeSuggest
-module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset

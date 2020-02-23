@@ -182,7 +182,7 @@ function pathExists (path) {
 function globalObjectGet (property) {
     const { remote } = require('electron')
     var value = remote.getGlobal('sharedObj')[property]
-    writeConsoleMsg('info', 'globalObjectGet ::: Property: _' + property + '_ has the value: _' + value + '_.')
+    // writeConsoleMsg('info', 'globalObjectGet ::: Property: _' + property + '_ has the value: _' + value + '_.')
     return value
 }
 
@@ -353,6 +353,35 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             }
         }
         // end: enableVerboseMode
+
+        // Setting: enableUrlInformations
+        //
+        if (key === 'enableUrlInformations') {
+            var settingUrlInformations
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingUrlInformations = false // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingUrlInformations + '_.')
+                userSettingWrite('enableUrlInformations', settingUrlInformations, true) // write the setting
+            } else {
+                settingUrlInformations = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingUrlInformations + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('enableUrlInformations', settingUrlInformations)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingUrlInformations === true) {
+                    $('#checkboxEnableUrlInformations').prop('checked', true)
+                } else {
+                    $('#checkboxEnableUrlInformations').prop('checked', false)
+                }
+            }
+        }
+        // end: enableAdditionalParameter
 
         // Setting: enableAdditionalParameter
         //
@@ -661,8 +690,8 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
     var statusReport
     var notificationType
 
-    writeConsoleMsg('warn', 'downloadStatusCheck ::: Overall: ' + overall)
-    writeConsoleMsg('warn', 'downloadStatusCheck ::: Succeeded: ' + succeeded)
+    writeConsoleMsg('info', 'downloadStatusCheck ::: Overall: ' + overall)
+    writeConsoleMsg('info', 'downloadStatusCheck ::: Succeeded: ' + succeeded)
     writeConsoleMsg('warn', 'downloadStatusCheck ::: Failed: ' + failed)
 
     if (overall === succeeded + failed) {
@@ -711,11 +740,11 @@ function urlIsReachable (userInput) {
     const isReachable = require('is-reachable');
     (async () => {
         if (await isReachable(userInput) === true) {
-            writeConsoleMsg('info', 'urlIsReachable ::: is reachable')
+            writeConsoleMsg('info', 'urlIsReachable ::: The input _' + userInput + '_ is reachable')
             ui.inputUrlFieldSetState('reachable')
             sentry.countEvent('usageUrlReachable')
         } else {
-            writeConsoleMsg('error', 'urlIsReachable ::: is NOT reachable')
+            writeConsoleMsg('error', 'urlIsReachable ::: The input _' + userInput + '_ is NOT reachable')
             ui.inputUrlFieldSetState('unreachable')
             sentry.countEvent('usageUrlUnreachable')
         }
@@ -749,7 +778,9 @@ function canWriteFileOrFolder (path, callback) {
     })
 }
 
-// Export
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.writeConsoleMsg = writeConsoleMsg
 module.exports.showNoty = showNoty

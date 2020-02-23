@@ -15,7 +15,9 @@ const urlGitHubRepoTags = 'https://api.github.com/repos/yafp/media-dupes/tags' /
 const urlGithubApiReleases = 'https://api.github.com/repos/yafp/media-dupes/releases' // the release api
 const urlGithubSentryUsage = 'https://github.com/yafp/media-dupes/blob/master/docs/SENTRY.md' // the release api
 
-// Define exports
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.urlGitHubGeneral = urlGitHubGeneral
 module.exports.urlGitHubIssues = urlGitHubIssues

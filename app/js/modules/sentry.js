@@ -58,7 +58,10 @@ function countEvent (eventName) {
     }
 }
 
-// export both functions
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
+//
 module.exports.enableSentry = enableSentry
 module.exports.disableSentry = disableSentry
 module.exports.countEvent = countEvent

@@ -19,6 +19,8 @@ function ffmpegGetBinaryPath () {
     return (ffmpeg.path)
 }
 
-// Exporting the module functions
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.ffmpegGetBinaryPath = ffmpegGetBinaryPath

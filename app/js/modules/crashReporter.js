@@ -27,6 +27,8 @@ function initCrashReporter () {
     // To simulate a crash - execute: process.crash();
 }
 
-// export functions
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.initCrashReporter = initCrashReporter

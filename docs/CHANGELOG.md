@@ -33,19 +33,18 @@ The following categories are used:
 * Energy-management
   * Added todoList save function on sleep event. See [#79](https://github.com/yafp/media-dupes/issues/79)
   * Added todoList restore function on resume event. See [#79](https://github.com/yafp/media-dupes/issues/79)
-* Audio
-  * Added thumbnail embedding support for .m4a
+* Audio: Added thumbnail-embedding support for .m4a
 * Log: Added support for leading timestamps in the log. See [#84](https://github.com/yafp/media-dupes/issues/84)
 * Added youtube suggestion function. See [#86](https://github.com/yafp/media-dupes/issues/86)
 * Added getInfo routine for urls, executed when Url is added to queue. See [#87](https://github.com/yafp/media-dupes/issues/87)
 * Added url thumbnail preview (after adding an url to queue). See [#89](https://github.com/yafp/media-dupes/issues/89)
 * Added support for additional youtube-dl flags/parameter by using the settings UI. See [#88](https://github.com/yafp/media-dupes/issues/88)
+* Added new setting: Fetch url informations. See [#95](https://github.com/yafp/media-dupes/issues/95)
 
 #### ```Changed```
 * Changed application icon
 * Improved download resume for user. See [#78](https://github.com/yafp/media-dupes/issues/78)
 * Changed the configurations options for the Windows Installer (NSIS). See [#72](https://github.com/yafp/media-dupes/issues/72)
-* Changed mainWindow Layout. Using the entire height - Part 1. See [#42](https://github.com/yafp/media-dupes/issues/42)
 * Moved settings code to module. See [#77](https://github.com/yafp/media-dupes/issues/77)
 * Changed textarea font to monospace family to ensure correct indenting in the log
 * Added youtube-dl flag ```--restrict-filenames``` to the parameter list.
@@ -55,12 +54,15 @@ The following categories are used:
 * Standardx: Added ```snazzy``` to ```npm run standardx```  and ```npm run standardx-fix``` scripts to enable funky output for developers.
 * OS notifications: Clicking the notification is now raising the application UI. See [#85](https://github.com/yafp/media-dupes/issues/85)
 * UI
+  * Fonts: Added Arial and ArialMono to the project to ensure the same font is used on all installations. See [#94](https://github.com/yafp/media-dupes/issues/94)
+  * mainWindow: Changed the layout. Using the entire window height now - Part 1. See [#42](https://github.com/yafp/media-dupes/issues/42)
   * mainWindow: added fadeIn effect to entire body
   * mainWindow: Blur effect now affects as well the titlebar. See [#91](https://github.com/yafp/media-dupes/issues/91)
   * Settings: added fadeIn effect to entire body
+  * Settings: now using tabs. See [#93](https://github.com/yafp/media-dupes/issues/93)
 * Update checks
-  * Search fopr media-dupes updates is now triggered once 15 second after app start. Might speed up the start
-  * Search for youtube-dl updates is now triggered once 60 seconds after app start. Might speed up the start
+  * Search fopr media-dupes updates is now triggered once 5 second after app start. Might speed up the start
+  * Search for youtube-dl updates is now triggered once 5 seconds after app start. Might speed up the start
 * Dependencies
   * Updated ```electron```  from ```7.1.10``` to ```8.0.1```
   * Updated ```electron-packager```  from ```14.2.0``` to ```14.2.1```
@@ -77,7 +79,7 @@ The following categories are used:
 
 #### ```Fixed```
 * Fixed undefined version in sentry error events. See [#75](https://github.com/yafp/media-dupes/issues/75)
-* Fixed issues with the windows installer. See [#76](https://github.com/yafp/media-dupes/issues/76)
+* Fixed issues with the windows installer (NSIS). See [#76](https://github.com/yafp/media-dupes/issues/76)
 * Fixed a bug with the Intro. See [#92](https://github.com/yafp/media-dupes/issues/92)
 
 ***
