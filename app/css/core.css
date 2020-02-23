@@ -1,19 +1,36 @@
 @font-face {
-    font-family: 'SourceCodePro';
-    src:  url('../fonts/source-code-pro/SourceSansPro-Bold.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
+    font-family: 'Arial';
+    src:  url('../fonts/Arial/Arial.ttf') format('opentype');
 
+    font-family: 'ArialMono';
+    src:  url('../fonts/ArialMono/Arial_Monospaced_MT.ttf') format('opentype');
+
+}
 
 /* ########################################################################## */
 /* BODY */
 /* ########################################################################## */
 body{
-    /*
-    font-family: 'SourceCodePro';
-    */
+    font-family: 'Arial';
 }
+
+
+
+/* ########################################################################## */
+/* NAV COLOR ON SETTINGS */
+/* ########################################################################## */
+.nav-link{
+    color: gray;
+}
+
+.nav-link:hover{
+    color: #c0392b;
+}
+
+.nav-item.nav-link.active{
+    color: #c0392b;
+}
+
 
 /* ########################################################################## */
 /* BOOTSTRAP MODAL - used as SPLASH */
@@ -97,7 +114,11 @@ textarea {
     font-size: 12px !important;
     font-weight: bold;
     /* font-family: Verdana, Arial, Helvetica, sans-serif; */
+    /*
     font-family: monospace;
+    */
+    font-family: 'ArialMono';
+
     background-color: #ecf0f1;
     background-repeat: no-repeat;
     background-position: center;
@@ -117,6 +138,22 @@ textarea {
     width: 100%;
     min-height: 270px;
 }
+
+
+
+/* ########################################################################## */
+/* LINKs */
+/* ########################################################################## */
+ /* unvisited link */
+.classicLink {
+  color: #c0392b;
+}
+
+.classicLink:hover {
+  color: #c0392b;
+}
+
+
 
 /* ########################################################################## */
 /* ROW EMPTY */
