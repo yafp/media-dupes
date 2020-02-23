@@ -7,6 +7,7 @@
 
 const utils = require('./utils.js')
 const sentry = require('./sentry.js')
+const youtubeDl = require('./youtubeDl.js')
 
 /**
 * @function settingsFolderOpen
@@ -98,9 +99,28 @@ function settingsToggleAdditionalParameter () {
 * @description Saves the content of the input field for additional paramters
 */
 function settingsSaveAdditionalParameter () {
-    var newAdditionalParameter = $('#textInputAdditionalParameter').val()
-    utils.writeConsoleMsg('info', 'settingsSaveAdditionalParameter ::: Saving additional parameters - new value is: _' + newAdditionalParameter + '_.')
-    utils.userSettingWrite('additionalYoutubeDlParameter', newAdditionalParameter)
+    const youtubeDlUnsupportedParameter = youtubeDl.blacklistedParameter // get the blacklisted parameters
+
+    var inputContainsErrors = false // used to remember if an error occured
+
+    var newAdditionalUserParameters = $('#textInputAdditionalParameter').val() // get value from UI
+    var splittedParameters = newAdditionalUserParameters.split(' ') // split the input string into single elements
+    if (splittedParameters.length > 0) { // If there are elements
+        for (var j = 0; j < splittedParameters.length; j++) { // check for each element
+            if ($.inArray(splittedParameters[j], youtubeDlUnsupportedParameter) > -1) { // if it is blacklistet
+                utils.writeConsoleMsg('warn', 'settingsSaveAdditionalParameter ::: The additional paramter: _' + splittedParameters[j] + '_ is blacklisted.')
+                utils.showNoty('error', 'The additional parameter <b>' + splittedParameters[j] + '</b> is blacklisted. Please remove it and try it again.', 0)
+                inputContainsErrors = true
+            } else { // or not
+                utils.writeConsoleMsg('info', 'settingsSaveAdditionalParameter ::: The additional paramter: _' + splittedParameters[j] + '_ is not blacklisted.')
+            }
+        }
+    }
+
+    if (inputContainsErrors === false) {
+        utils.writeConsoleMsg('info', 'settingsSaveAdditionalParameter ::: Saving additional parameters - new value is: _' + newAdditionalUserParameters + '_.')
+        utils.userSettingWrite('additionalYoutubeDlParameter', newAdditionalUserParameters)
+    }
 }
 
 /**
@@ -117,6 +137,18 @@ function settingsTogglePrereleases () {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will ignore pre-releases')
         utils.userSettingWrite('enablePrereleases', false)
         sentry.countEvent('usageSettingsPrereleasesDisabled')
+    }
+}
+
+function settingsToggleUrlInformations () {
+    if ($('#checkboxEnableUrlInformations').is(':checked')) {
+        utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now enabled')
+        utils.userSettingWrite('enableUrlInformations', true)
+        sentry.countEvent('usageSettingsUrlInformationsEnabled')
+    } else {
+        utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now disabled')
+        utils.userSettingWrite('enableUrlInformations', false)
+        sentry.countEvent('usageSettingsUrlInformationsDisabled')
     }
 }
 
@@ -140,11 +172,11 @@ function settingsToggleErrorReporting () {
                 layout: 'bottom',
                 type: 'info',
                 closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
-                text: '<b>Do you really want to disable error-reporting?</b><br><br>* We don\'t track users<br>* We don\'t store any IP addresses<br>* We only collect error reports<br><br>This helps us finding and fixing bugs in media-dupes',
+                text: '<b>Do you really want to disable reporting?</b><br><br>* We don\'t track users<br>* We don\'t store any IP informations<br>* We only collect error reports and event counts<br><br>This helps improving media-dupes',
                 buttons: [
-                    Noty.button('Yes', 'btn btn-success mediaDupes_btnDownloadActionWidth', function () {
+                    Noty.button('Yes', 'btn btn-danger mediaDupes_btnDownloadActionWidth', function () {
                         n.close()
-                        utils.writeConsoleMsg('warn', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
+                        utils.writeConsoleMsg('info', 'settingsToggleErrorReporting ::: Error reporting is now disabled')
                         utils.userSettingWrite('enableErrorReporting', false)
                         sentry.disableSentry()
                         sentry.countEvent('usageSettingsErrorReportingDisabled')
@@ -154,11 +186,11 @@ function settingsToggleErrorReporting () {
                         id: 'button1', 'data-status': 'ok'
                     }),
 
-                    Noty.button('No', 'btn btn-secondary mediaDupes_btnDownloadActionWidth float-right', function () {
+                    Noty.button('No', 'btn btn-success mediaDupes_btnDownloadActionWidth float-right', function () {
                         n.close()
                         $('#checkboxEnableErrorReporting').prop('checked', true) // revert state of checkbox
                         utils.showNoty('success', '<b>Thanks</b> for supporting media-dupes development with your error reports.')
-                        utils.writeConsoleMsg('warn', 'settingsToggleErrorReporting ::: User cancelled disabling of error-reporting')
+                        utils.writeConsoleMsg('info', 'settingsToggleErrorReporting ::: User cancelled disabling of error-reporting')
                     })
                 ]
             })
@@ -188,7 +220,9 @@ function settingsOpenExternal (url) {
     utils.openURL(url)
 }
 
-// Export
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
 //
 module.exports.settingsFolderOpen = settingsFolderOpen
 module.exports.settingsOpenDevTools = settingsOpenDevTools
@@ -197,6 +231,7 @@ module.exports.settingsToggleVerboseMode = settingsToggleVerboseMode
 module.exports.settingsToggleAdditionalParameter = settingsToggleAdditionalParameter
 module.exports.settingsSaveAdditionalParameter = settingsSaveAdditionalParameter
 module.exports.settingsTogglePrereleases = settingsTogglePrereleases
+module.exports.settingsToggleUrlInformations = settingsToggleUrlInformations
 module.exports.settingsToggleErrorReporting = settingsToggleErrorReporting
 module.exports.settingsAudioFormatSave = settingsAudioFormatSave
 module.exports.settingsOpenExternal = settingsOpenExternal
