@@ -1,4 +1,4 @@
-- name: Build
+- name: Building jsdocs
   uses: andstor/jsdoc-action@v1
   with:
     source_dir: ./app
