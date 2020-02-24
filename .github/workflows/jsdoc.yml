@@ -1,0 +1,8 @@
+- name: Build
+  uses: andstor/jsdoc-action@v1
+  with:
+    source_dir: ./app
+    output_dir: ./docs/test
+    config_file: ./jsdoc.json
+    template_name: docdash
+    front_page: README.md
