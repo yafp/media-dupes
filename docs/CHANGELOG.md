@@ -70,7 +70,7 @@ The following categories are used:
   * Updated ```electron-util```  from ```0.13.1``` to ```0.14.0```
   * Updated ```custom-electron-titlebar``` from ```3.2.1``` to ```3.2.2```
   * Updated ```youtube-dl``` from ```3.0.1``` to ```3.0.2```
-  * Updated ```electron-log```  from ```4.0.4``` to ```4.0.6```
+  * Updated ```electron-log```  from ```4.0.4``` to ```4.0.7```
   * Updated ```spectron```  from ```10.0.0``` to ```10.0.1```
   * Updated ```fontawesome```  from ```5.12.0``` to ```5.12.1```
   * Updated ```rimraf```  from ```3.0.1``` to ```3.0.2```
