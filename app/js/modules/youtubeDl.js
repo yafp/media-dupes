@@ -14,6 +14,7 @@ var youtubeDLBinaryDetailsExec
 
 // ----------------------------------------------------------------------------
 // YOUTUBE-DL: Arguments which should be filtered out if the user sets them
+// idea from: https://github.com/mayeaux/videodownloader/blob/master/util.js
 // ----------------------------------------------------------------------------
 const blacklistedParameter = [
     '-h',
@@ -44,8 +45,6 @@ const blacklistedParameter = [
     '--dump-intermediate-pages',
     '--write-pages'
 ]
-
-// idea from: https://github.com/mayeaux/videodownloader/blob/master/util.js
 
 // ----------------------------------------------------------------------------
 // YOUTUBE-DL: Binary Details

@@ -7,6 +7,11 @@
 'use strict'
 
 // ----------------------------------------------------------------------------
+// IMPORT MODULES
+// ----------------------------------------------------------------------------
+require('v8-compile-cache')
+
+// ----------------------------------------------------------------------------
 // IMPORT MEDIA-DUPES MODULES
 // ----------------------------------------------------------------------------
 const utils = require('./js/modules/utils.js')
@@ -21,9 +26,6 @@ const unhandled = require('./js/modules/unhandled.js') // electron-unhandled
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
-// const errorReporting = require('./js/errorReporting.js')
-// myUndefinedFunctionFromRenderer();
-
 crash.initCrashReporter()
 unhandled.initUnhandled()
 

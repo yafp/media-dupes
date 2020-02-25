@@ -40,6 +40,7 @@ The following categories are used:
 * Added url thumbnail preview (after adding an url to queue). See [#89](https://github.com/yafp/media-dupes/issues/89)
 * Added support for additional youtube-dl flags/parameter by using the settings UI. See [#88](https://github.com/yafp/media-dupes/issues/88)
 * Added new setting: Fetch url informations. See [#95](https://github.com/yafp/media-dupes/issues/95)
+* Added ```v8-compile-cache``` to the project.
 
 #### ```Changed```
 * Changed application icon
