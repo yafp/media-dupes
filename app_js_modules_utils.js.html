@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>app/js/modules/utils.js - media-dupes jsdoc documentation</title>
+    
+    <meta name="description" content="a simple jsdoc based documentation for media-dupes" />
+    
+        <meta name="keywords" content="media-dupes" />
+        <meta name="keyword" content="media-dupes" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/yafp/media-dupes" target="_blank" class="menu-item" id="website_link" >Github</a></h2><h3>Modules</h3><ul><li><a href="module-crashReporter.html">crashReporter</a></li><li></li><li><a href="module-ffmpeg.html">ffmpeg</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-ffmpeg.html#~ffmpegGetBinaryPath">ffmpegGetBinaryPath</a></li><li data-type='method' style='display: none;'><a href="module-ffmpeg.html#~ffmpegGetBinaryPath">ffmpegGetBinaryPath</a></li></ul></li><li></li><li><a href="module-githubUrls.html">githubUrls</a></li><li></li><li><a href="module-sentry.html">sentry</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-sentry.html#~countEvent">countEvent</a></li><li data-type='method' style='display: none;'><a href="module-sentry.html#~countEvent">countEvent</a></li><li data-type='method' style='display: none;'><a href="module-sentry.html#~disableSentry">disableSentry</a></li><li data-type='method' style='display: none;'><a href="module-sentry.html#~disableSentry">disableSentry</a></li><li data-type='method' style='display: none;'><a href="module-sentry.html#~enableSentry">enableSentry</a></li><li data-type='method' style='display: none;'><a href="module-sentry.html#~enableSentry">enableSentry</a></li></ul></li><li></li><li><a href="module-settings.html">settings</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsAudioFormatSave">settingsAudioFormatSave</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsAudioFormatSave">settingsAudioFormatSave</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsOpenDevTools">settingsOpenDevTools</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsOpenDevTools">settingsOpenDevTools</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsOpenExternal">settingsOpenExternal</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsOpenExternal">settingsOpenExternal</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsSaveAdditionalParameter">settingsSaveAdditionalParameter</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsSaveAdditionalParameter">settingsSaveAdditionalParameter</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsSelectDownloadDir">settingsSelectDownloadDir</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsSelectDownloadDir">settingsSelectDownloadDir</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsToggleAdditionalParameter">settingsToggleAdditionalParameter</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsToggleAdditionalParameter">settingsToggleAdditionalParameter</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsToggleErrorReporting">settingsToggleErrorReporting</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsTogglePrereleases">settingsTogglePrereleases</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsTogglePrereleases">settingsTogglePrereleases</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsToggleVerboseMode">settingsToggleVerboseMode</a></li><li data-type='method' style='display: none;'><a href="module-settings.html#~settingsToggleVerboseMode">settingsToggleVerboseMode</a></li></ul></li><li></li><li><a href="module-ui.html">ui</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-ui.html#~inputUrlFieldSetState">inputUrlFieldSetState</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~inputUrlFieldSetState">inputUrlFieldSetState</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainAddUrl">windowMainAddUrl</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainAddUrl">windowMainAddUrl</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainApplicationStateSet">windowMainApplicationStateSet</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainApplicationStateSet">windowMainApplicationStateSet</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainBlurSet">windowMainBlurSet</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainBlurSet">windowMainBlurSet</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsOthersDisable">windowMainButtonsOthersDisable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsOthersDisable">windowMainButtonsOthersDisable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsOthersEnable">windowMainButtonsOthersEnable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsOthersEnable">windowMainButtonsOthersEnable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsStartDisable">windowMainButtonsStartDisable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsStartDisable">windowMainButtonsStartDisable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsStartEnable">windowMainButtonsStartEnable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainButtonsStartEnable">windowMainButtonsStartEnable</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDisableAddUrlButton">windowMainDisableAddUrlButton</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDisableAddUrlButton">windowMainDisableAddUrlButton</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDistract">windowMainDistract</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDistract">windowMainDistract</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDownloadContent">windowMainDownloadContent</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDownloadContent">windowMainDownloadContent</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDownloadQueueFinished">windowMainDownloadQueueFinished</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDownloadQueueFinished">windowMainDownloadQueueFinished</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDownloadVideo">windowMainDownloadVideo</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainDownloadVideo">windowMainDownloadVideo</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainEnableAddUrlButton">windowMainEnableAddUrlButton</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainEnableAddUrlButton">windowMainEnableAddUrlButton</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainIntroShow">windowMainIntroShow</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainIntroShow">windowMainIntroShow</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLoadingAnimationHide">windowMainLoadingAnimationHide</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLoadingAnimationHide">windowMainLoadingAnimationHide</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLoadingAnimationShow">windowMainLoadingAnimationShow</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLoadingAnimationShow">windowMainLoadingAnimationShow</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLogAppend">windowMainLogAppend</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLogAppend">windowMainLogAppend</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLogReset">windowMainLogReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLogReset">windowMainLogReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLogScrollToEnd">windowMainLogScrollToEnd</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainLogScrollToEnd">windowMainLogScrollToEnd</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainOpenDownloadFolder">windowMainOpenDownloadFolder</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainOpenDownloadFolder">windowMainOpenDownloadFolder</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainResetAskUser">windowMainResetAskUser</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainResetAskUser">windowMainResetAskUser</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainSettingsUiLoad">windowMainSettingsUiLoad</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainSettingsUiLoad">windowMainSettingsUiLoad</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainShowSupportedExtractors">windowMainShowSupportedExtractors</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainShowSupportedExtractors">windowMainShowSupportedExtractors</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainThumbnailPreviewReset">windowMainThumbnailPreviewReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainThumbnailPreviewReset">windowMainThumbnailPreviewReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListReset">windowMainToDoListReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListReset">windowMainToDoListReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListRestore">windowMainToDoListRestore</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListRestore">windowMainToDoListRestore</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListSave">windowMainToDoListSave</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListSave">windowMainToDoListSave</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListUpdate">windowMainToDoListUpdate</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainToDoListUpdate">windowMainToDoListUpdate</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainUiMakeUrgent">windowMainUiMakeUrgent</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainUiMakeUrgent">windowMainUiMakeUrgent</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainUiReset">windowMainUiReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~windowMainUiReset">windowMainUiReset</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~youtubeSuggest">youtubeSuggest</a></li><li data-type='method' style='display: none;'><a href="module-ui.html#~youtubeSuggest">youtubeSuggest</a></li></ul></li><li></li><li><a href="module-unhandled.html">unhandled</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-unhandled.html#~initUnhandled">initUnhandled</a></li><li data-type='method' style='display: none;'><a href="module-unhandled.html#~initUnhandled">initUnhandled</a></li></ul></li><li></li><li><a href="module-utils.html">utils</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-utils.html#~canWriteFileOrFolder">canWriteFileOrFolder</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~canWriteFileOrFolder">canWriteFileOrFolder</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~defaultDownloadFolderGet">defaultDownloadFolderGet</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~defaultDownloadFolderGet">defaultDownloadFolderGet</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~disclaimerCheck">disclaimerCheck</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~disclaimerCheck">disclaimerCheck</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~disclaimerShow">disclaimerShow</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~disclaimerShow">disclaimerShow</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~downloadStatusCheck">downloadStatusCheck</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~downloadStatusCheck">downloadStatusCheck</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~formatBytes">formatBytes</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~formatBytes">formatBytes</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~fullyDecodeURI">fullyDecodeURI</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~fullyDecodeURI">fullyDecodeURI</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~generateTimestamp">generateTimestamp</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~generateTimestamp">generateTimestamp</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~globalObjectGet">globalObjectGet</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~globalObjectGet">globalObjectGet</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~globalObjectSet">globalObjectSet</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~globalObjectSet">globalObjectSet</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~isDirectoryAvailable">isDirectoryAvailable</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~isDirectoryAvailable">isDirectoryAvailable</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~isDirectoryWriteable">isDirectoryWriteable</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~isDirectoryWriteable">isDirectoryWriteable</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~isEncoded">isEncoded</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~isEncoded">isEncoded</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~openURL">openURL</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~openURL">openURL</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~pathExists">pathExists</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~pathExists">pathExists</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~showNotification">showNotification</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~showNotification">showNotification</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~showNoty">showNoty</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~showNoty">showNoty</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~urlIsReachable">urlIsReachable</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~urlIsReachable">urlIsReachable</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~userSettingRead">userSettingRead</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~userSettingRead">userSettingRead</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~userSettingWrite">userSettingWrite</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~userSettingWrite">userSettingWrite</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~validURL">validURL</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~validURL">validURL</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~writeConsoleMsg">writeConsoleMsg</a></li><li data-type='method' style='display: none;'><a href="module-utils.html#~writeConsoleMsg">writeConsoleMsg</a></li></ul></li><li></li><li><a href="module-youtubeDl.html">youtubeDl</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryDetailsPathGet">binaryDetailsPathGet</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryDetailsPathGet">binaryDetailsPathGet</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryDetailsValueGet">binaryDetailsValueGet</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryDetailsValueGet">binaryDetailsValueGet</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryPathGet">binaryPathGet</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryPathGet">binaryPathGet</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryPathReset">binaryPathReset</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryPathReset">binaryPathReset</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryUpdateCheck">binaryUpdateCheck</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryUpdateCheck">binaryUpdateCheck</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryUpdateExecute">binaryUpdateExecute</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryUpdateExecute">binaryUpdateExecute</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryUpdateSearch">binaryUpdateSearch</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~binaryUpdateSearch">binaryUpdateSearch</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~getUrlInfo">getUrlInfo</a></li><li data-type='method' style='display: none;'><a href="module-youtubeDl.html#~getUrlInfo">getUrlInfo</a></li></ul></li><li></li></ul><h3>Events</h3><ul><li><a href="renderer.html#.event:keyCode-Thekeypressevent">keyCode - The key press event</a></li><li></li></ul><h3>Namespaces</h3><ul><li><a href="main.html">main</a><ul class='methods'><li data-type='method' style='display: none;'><a href="main.html#.createMenuMain">createMenuMain</a></li><li data-type='method' style='display: none;'><a href="main.html#.createWindowDistraction">createWindowDistraction</a></li><li data-type='method' style='display: none;'><a href="main.html#.createWindowMain">createWindowMain</a></li><li data-type='method' style='display: none;'><a href="main.html#.createWindowSettings">createWindowSettings</a></li><li data-type='method' style='display: none;'><a href="main.html#.doLog">doLog</a></li><li data-type='method' style='display: none;'><a href="main.html#.forceSingleAppInstance">forceSingleAppInstance</a></li><li data-type='method' style='display: none;'><a href="main.html#.powerMonitorInit">powerMonitorInit</a></li><li data-type='method' style='display: none;'><a href="main.html#.powerMonitorNotify">powerMonitorNotify</a></li></ul></li><li><a href="renderer.html">renderer</a><ul class='members'><li data-type='member' style='display: none;'><a href="renderer.html#.blurMainUI">blurMainUI</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.blurMainUI">blurMainUI</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.countAppStarts">countAppStarts</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.countAppStarts">countAppStarts</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.initSettings">initSettings</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.initSettings">initSettings</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.openSettings">openSettings</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.openSettings">openSettings</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.openYoutubeSuggestDialog">openYoutubeSuggestDialog</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.openYoutubeSuggestDialog">openYoutubeSuggestDialog</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.powerMonitorNotification">powerMonitorNotification</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.powerMonitorNotification">powerMonitorNotification</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.scheduleUpdateCheckMediaDupes">scheduleUpdateCheckMediaDupes</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.scheduleUpdateCheckMediaDupes">scheduleUpdateCheckMediaDupes</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.scheduleUpdateCheckYoutubeDl">scheduleUpdateCheckYoutubeDl</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.scheduleUpdateCheckYoutubeDl">scheduleUpdateCheckYoutubeDl</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startCheckingDependencies">startCheckingDependencies</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startCheckingDependencies">startCheckingDependencies</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startDisclaimerCheck">startDisclaimerCheck</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startDisclaimerCheck">startDisclaimerCheck</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startSearchUpdatesSilent">startSearchUpdatesSilent</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startSearchUpdatesSilent">startSearchUpdatesSilent</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startSearchUpdatesVerbose">startSearchUpdatesVerbose</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.startSearchUpdatesVerbose">startSearchUpdatesVerbose</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.todoListCheck">todoListCheck</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.todoListCheck">todoListCheck</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.todoListTryToSave">todoListTryToSave</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.todoListTryToSave">todoListTryToSave</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.unblurMainUI">unblurMainUI</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.unblurMainUI">unblurMainUI</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.youtubeDlBinaryPathReset">youtubeDlBinaryPathReset</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.youtubeDlBinaryPathReset">youtubeDlBinaryPathReset</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.youtubeDlBinaryUpdate">youtubeDlBinaryUpdate</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.youtubeDlBinaryUpdate">youtubeDlBinaryUpdate</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.youtubeDlSearchUpdatesSilent">youtubeDlSearchUpdatesSilent</a></li><li data-type='member' style='display: none;'><a href="renderer.html#.youtubeDlSearchUpdatesSilent">youtubeDlSearchUpdatesSilent</a></li></ul><ul class='methods'><li data-type='method' style='display: none;'><a href="renderer.html#.checkApplicationDependencies">checkApplicationDependencies</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.checkApplicationDependencies">checkApplicationDependencies</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.openReleasesOverview">openReleasesOverview</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.openReleasesOverview">openReleasesOverview</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.searchUpdate">searchUpdate</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.searchUpdate">searchUpdate</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsFolderOpen">settingsFolderOpen</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsFolderOpen">settingsFolderOpen</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsGetYoutubeDLBinaryVersion">settingsGetYoutubeDLBinaryVersion</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsLoadAllOnAppStart">settingsLoadAllOnAppStart</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsLoadAllOnSettingsUiLoad">settingsLoadAllOnSettingsUiLoad</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsShowFfmpegInfo">settingsShowFfmpegInfo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.settingsShowYoutubeDLInfo">settingsShowYoutubeDLInfo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.titlebarInit">titlebarInit</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.titlebarInit">titlebarInit</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.urlInputFieldOnFocus">urlInputFieldOnFocus</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.urlInputFieldOnFocus">urlInputFieldOnFocus</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.urlInputFieldOnKeyUp">urlInputFieldOnKeyUp</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.urlInputFieldOnKeyUp">urlInputFieldOnKeyUp</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.validateUrlBeforeAdd">validateUrlBeforeAdd</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.validateUrlBeforeAdd">validateUrlBeforeAdd</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonAddUrl">windowMainClickButtonAddUrl</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonAddUrl">windowMainClickButtonAddUrl</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonAudio">windowMainClickButtonAudio</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonAudio">windowMainClickButtonAudio</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonDownloads">windowMainClickButtonDownloads</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonDownloads">windowMainClickButtonDownloads</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonExtrators">windowMainClickButtonExtrators</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonExtrators">windowMainClickButtonExtrators</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonIntro">windowMainClickButtonIntro</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonIntro">windowMainClickButtonIntro</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonLogReset">windowMainClickButtonLogReset</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonLogReset">windowMainClickButtonLogReset</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonSettings">windowMainClickButtonSettings</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonSettings">windowMainClickButtonSettings</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonUIReset">windowMainClickButtonUIReset</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonUIReset">windowMainClickButtonUIReset</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonVideo">windowMainClickButtonVideo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonVideo">windowMainClickButtonVideo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonVideo">windowMainClickButtonVideo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickButtonVideo">windowMainClickButtonVideo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickDistract">windowMainClickDistract</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowMainClickDistract">windowMainClickDistract</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickButtonAdditionalParameterSave">windowSettingsClickButtonAdditionalParameterSave</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickButtonAdditionalParameterSave">windowSettingsClickButtonAdditionalParameterSave</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickButtonChooseDownloadDir">windowSettingsClickButtonChooseDownloadDir</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickButtonChooseDownloadDir">windowSettingsClickButtonChooseDownloadDir</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxAdditionalParameter">windowSettingsClickCheckboxAdditionalParameter</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxAdditionalParameter">windowSettingsClickCheckboxAdditionalParameter</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxErrorReporting">windowSettingsClickCheckboxErrorReporting</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxErrorReporting">windowSettingsClickCheckboxErrorReporting</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxErrorReportingMoreInfo">windowSettingsClickCheckboxErrorReportingMoreInfo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxErrorReportingMoreInfo">windowSettingsClickCheckboxErrorReportingMoreInfo</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxUpdatePolicy">windowSettingsClickCheckboxUpdatePolicy</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxUpdatePolicy">windowSettingsClickCheckboxUpdatePolicy</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxVerboseMode">windowSettingsClickCheckboxVerboseMode</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickCheckboxVerboseMode">windowSettingsClickCheckboxVerboseMode</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickDropdownAudioFormats">windowSettingsClickDropdownAudioFormats</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickDropdownAudioFormats">windowSettingsClickDropdownAudioFormats</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickIconBug">windowSettingsClickIconBug</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickIconBug">windowSettingsClickIconBug</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickIconUserSettingsDir">windowSettingsClickIconUserSettingsDir</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickIconUserSettingsDir">windowSettingsClickIconUserSettingsDir</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickOpenUrl">windowSettingsClickOpenUrl</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickOpenUrl">windowSettingsClickOpenUrl</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickYoutubeDlUpdate">windowSettingsClickYoutubeDlUpdate</a></li><li data-type='method' style='display: none;'><a href="renderer.html#.windowSettingsClickYoutubeDlUpdate">windowSettingsClickYoutubeDlUpdate</a></li></ul></li><li></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">app/js/modules/utils.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Contains all helper and utility functions
+ * @author yafp
+ * @module utils
+ */
+'use strict'
+
+const sentry = require('./sentry.js')
+const ui = require('./ui.js')
+
+/**
+* @function writeConsoleMsg
+* @summary Writes console output for the renderer process
+* @description Writes console output for the renderer process
+* @param {string} type - String which defines the log type
+* @param {string} message - String which defines the log message
+*/
+function writeConsoleMsg (type, message) {
+    const prefix = '[ Renderer ] '
+    const log = require('electron-log')
+    // electron-log can: error, warn, info, verbose, debug, silly
+    switch (type) {
+    case 'info':
+        log.info(prefix + message)
+        break
+
+    case 'warn':
+        log.warn(prefix + message)
+        break
+
+    case 'error':
+        log.error(prefix + message)
+        break
+
+    default:
+        log.silly(prefix + message)
+    }
+}
+
+/**
+* @function showNoty
+* @summary Shows a noty notification
+* @description Creates an in-app notification using the noty framework
+* @param {string} type - Options: alert, success, warning, error, info/information
+* @param {string} message - notification text
+* @param {number} [timeout] - Timevalue, defines how long the message should be displayed. Use 0 for no-timeout
+*/
+function showNoty (type, message, timeout = 3000) {
+    const Noty = require('noty')
+    new Noty({
+        type: type,
+        timeout: timeout,
+        theme: 'bootstrap-v4',
+        layout: 'bottom',
+        text: message,
+        animation: {
+            open: 'animated fadeIn', // Animate.css class names: default: bounceInRight
+            close: 'animated fadeOut' // Animate.css class names: default:bounceOutRight
+        }
+    }).show()
+}
+
+/**
+* @function showNotification
+* @summary Shows a desktop notification
+* @description Shows a desktop notification
+* @param {string} message - The notification message text
+* @param {string} [title] - The title of the desktop notification
+*/
+function showNotification (message, title = 'media-dupes') {
+    const myNotification = new Notification(title, {
+        body: message,
+        icon: 'img/notification/icon.png'
+    })
+
+    myNotification.onclick = () => {
+        writeConsoleMsg('info', 'showNotification ::: Notification clicked')
+
+        const { ipcRenderer } = require('electron')
+        ipcRenderer.send('showAndFocusMainUI') // tell main.js to show the main UI
+    }
+}
+
+/**
+* @function openURL
+* @summary Opens an url in browser
+* @description Opens a given url in default browser. This is pretty slow, but got no better solution so far.
+* @param {string} url - URL string which contains the target url
+*/
+function openURL (url) {
+    const { shell } = require('electron')
+    writeConsoleMsg('info', 'openURL ::: Trying to open the url: _' + url + '_.')
+    shell.openExternal(url)
+}
+
+/**
+* @function validURL
+* @summary checks if a given string is a valid url
+* @description checks if a given string is a valid url
+* @param {string} -str - Given url
+* @return {boolean}
+*/
+function validURL (str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&amp;a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$', 'i') // fragment locator
+    return !!pattern.test(str)
+}
+
+/**
+* @function formatBytes
+* @summary Calculate bytes to...
+* @description Calculate bytes to...
+* @param bytes - Incoming bytes value
+* @param decimals (optimal, defaults to 2)
+* @return Human readable value
+*/
+function formatBytes (bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals &lt; 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+}
+
+/**
+* @function isEncoded
+* @summary Helper method for fullyDecodeURI
+* @description Helper method for fullyDecodeURI
+* @param {string} uri - the uri to check
+* @return {string} uri - the decoded uri
+*/
+function isEncoded (uri) {
+    uri = uri || ''
+    return uri !== decodeURIComponent(uri)
+}
+
+/**
+* @function fullyDecodeURI
+* @summary Used to decode URLs
+* @description Used to decode URLs
+* param {string} uri - The incoming uri
+* @return {string} uri - a decoded url
+*/
+function fullyDecodeURI (uri) {
+    while (isEncoded(uri)) {
+        uri = decodeURIComponent(uri)
+    }
+    return uri
+}
+
+/**
+* @function pathExists
+* @summary Checks if a given filepath exists
+* @description Checks if a given filepath exists using fs. Returns a boolean
+* param {string} path - The path which should be checked for existance
+* @return {boolean} -If path exists or not
+*/
+function pathExists (path) {
+    const fs = require('fs')
+    if (fs.existsSync(path)) {
+        return true // path exists
+    } else {
+        return false // path does not exists
+    }
+}
+
+/**
+* @function globalObjectGet
+* @summary Gets a value of a single property from the global object in main.js
+* @description Gets a value of a single property from the global object in main.js
+* @param {String} property - Name of the property
+* @return {string} value - Value of the property
+*/
+function globalObjectGet (property) {
+    const { remote } = require('electron')
+    var value = remote.getGlobal('sharedObj')[property]
+    // writeConsoleMsg('info', 'globalObjectGet ::: Property: _' + property + '_ has the value: _' + value + '_.')
+    return value
+}
+
+/**
+* @function globalObjectSet
+* @summary Updates the value of a single property from the global object in main.js
+* @description Updates the value of a single property from the global object in main.js
+* @param {String} property - Name of the property
+* @param {String} value - The new value of the property
+*/
+function globalObjectSet (property, value) {
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('globalObjectSet', property, value)
+}
+
+/**
+* @function isDirectoryAvailable
+* @summary Checks if a given directory exists
+* @description Checks if a given directory exists and returns a boolean
+* @param {string} dirPath - The directory path which should be checked
+* @return {boolean}
+*/
+function isDirectoryAvailable (dirPath) {
+    if (dirPath !== '') {
+        const fs = require('fs')
+        if (fs.existsSync(dirPath)) {
+            writeConsoleMsg('info', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ exists')
+            return true
+        } else {
+            writeConsoleMsg('error', 'isDirectoryAvailable ::: The directory _' + dirPath + '_ does not exist')
+            return false
+        }
+    } else {
+        writeConsoleMsg('error', 'isDirectoryAvailable ::: Should check if a directory exists but the supplied parameter _' + dirPath + '_ was empty')
+    }
+}
+
+/**
+* @function isDirectoryWriteable
+* @summary Checks if a given directory is writeable
+* @description Checks if a given directory is writeable and returns a boolean
+* @param {string} dirPath  - The directory path which should be checked
+* @return {boolean}
+*/
+function isDirectoryWriteable (dirPath) {
+    if (dirPath !== '') {
+        const fs = require('fs')
+
+        // sync: check if folder is writeable
+        try {
+            fs.accessSync(dirPath, fs.constants.W_OK)
+            writeConsoleMsg('info', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is writeable')
+            return true
+        } catch (err) {
+            writeConsoleMsg('error', 'isDirectoryWriteable ::: Directory _' + dirPath + '_ is not writeable. Error: _' + err + '_.')
+            return false
+        }
+    } else {
+        writeConsoleMsg('error', 'isDirectoryWriteable ::: Should check if a directory is writeable but the supplied parameter _' + dirPath + '_ was empty.')
+    }
+}
+
+function isFileWriteable (filePath) {
+    if (filePath !== '') {
+        const fs = require('fs')
+
+        // sync: check if folder is writeable
+        try {
+            fs.accessSync(filePath, fs.constants.W_OK)
+            writeConsoleMsg('info', 'isFileWriteable ::: File _' + filePath + '_ is writeable')
+            return true
+        } catch (err) {
+            writeConsoleMsg('error', 'isFileWriteable ::: File _' + filePath + '_ is not writeable. Error: _' + err + '_.')
+            return false
+        }
+    } else {
+        writeConsoleMsg('error', 'isFileWriteable ::: Should check if a file is writeable but the supplied parameter _' + filePath + '_ was empty.')
+    }
+}
+
+/**
+* @function userSettingWrite
+* @summary Write a user setting to file
+* @description Writes a value for a given key to electron-json-storage
+* @param {String} key - Name of storage key
+* @param {String} value - New value
+* @param {boolean} [silent] - If true - no notification is displayed on initial settingscreation
+* @throws Exception when writing a file failed
+*/
+function userSettingWrite (key, value, silent = false) {
+    const storage = require('electron-json-storage')
+    const remote = require('electron').remote
+    const app = remote.app
+    const path = require('path')
+
+    // set new path for userUsettings
+    const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
+    storage.setDataPath(userSettingsPath)
+
+    // write the user setting
+    storage.set(key, { setting: value }, function (error) {
+        if (error) {
+            writeConsoleMsg('error', 'userSettingWrite ::: Unable to write setting _' + key + '_ = _' + value + '_. Error: ' + error)
+            throw error
+        }
+        writeConsoleMsg('info', 'userSettingWrite ::: _' + key + '_ = _' + value + '_')
+        globalObjectSet(key, value)
+
+        if (silent === false) {
+            showNoty('success', 'Set &lt;b>' + key + '&lt;/b> to &lt;b>' + value + '&lt;/b>.')
+        }
+    })
+}
+
+/**
+* @function userSettingRead
+* @summary Read a user setting from file
+* @description Reads a value stored in local storage (for a given key)
+* @param {String} key - Name of local storage key
+* @param {Boolean} [optionalUpdateSettingUI] Boolean used for an ugly hack
+*/
+function userSettingRead (key, optionalUpdateSettingUI = false) {
+    const storage = require('electron-json-storage')
+    const remote = require('electron').remote
+    const app = remote.app
+    const path = require('path')
+
+    // writeConsoleMsg('info', 'userSettingRead ::: Trying to read value of key: _' + key + '_.')
+
+    // change path for userSettings
+    const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings')
+    storage.setDataPath(userSettingsPath)
+
+    // read the json file
+    storage.get(key, function (error, data) {
+        if (error) {
+            writeConsoleMsg('error', 'userSettingRead ::: Unable to read user setting. Error: ' + error)
+            throw error
+        }
+        var value = data.setting
+        writeConsoleMsg('info', 'userSettingRead :::  _' + key + '_ = _' + value + '_.')
+
+        // Setting: enableVerboseMode
+        //
+        if (key === 'enableVerboseMode') {
+            var settingVerboseMode
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingVerboseMode = false // set the default default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingVerboseMode + '_.')
+                userSettingWrite('enableVerboseMode', settingVerboseMode, true) // write the setting
+            } else {
+                settingVerboseMode = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('enableVerboseMode', settingVerboseMode)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingVerboseMode === true) {
+                    $('#checkboxEnableVerbose').prop('checked', true)
+                } else {
+                    $('#checkboxEnableVerbose').prop('checked', false)
+                }
+            }
+        }
+        // end: enableVerboseMode
+
+        // Setting: enableUrlInformations
+        //
+        if (key === 'enableUrlInformations') {
+            var settingUrlInformations
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingUrlInformations = false // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingUrlInformations + '_.')
+                userSettingWrite('enableUrlInformations', settingUrlInformations, true) // write the setting
+            } else {
+                settingUrlInformations = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingUrlInformations + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('enableUrlInformations', settingUrlInformations)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingUrlInformations === true) {
+                    $('#checkboxEnableUrlInformations').prop('checked', true)
+                } else {
+                    $('#checkboxEnableUrlInformations').prop('checked', false)
+                }
+            }
+        }
+        // end: enableAdditionalParameter
+
+        // Setting: enableAdditionalParameter
+        //
+        if (key === 'enableAdditionalParameter') {
+            var settingAdditionalParameter
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingAdditionalParameter = false // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAdditionalParameter + '_.')
+                userSettingWrite('enableAdditionalParameter', settingAdditionalParameter, true) // write the setting
+            } else {
+                settingAdditionalParameter = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('enableAdditionalParameter', settingAdditionalParameter)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingAdditionalParameter === true) {
+                    $('#checkboxEnableAdditionalParameter').prop('checked', true)
+                } else {
+                    $('#checkboxEnableAdditionalParameter').prop('checked', false)
+                }
+            }
+        }
+        // end: enableAdditionalParameter
+
+        // Setting: additonalYoutubeDlParameter
+        //
+        if (key === 'additionalYoutubeDlParameter') {
+            var settingAdditionalDefinedParameter
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingAdditionalDefinedParameter = '' // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAdditionalParameter + '_.')
+                userSettingWrite('additionalYoutubeDlParameter', settingAdditionalDefinedParameter, true) // write the setting
+            } else {
+                settingAdditionalDefinedParameter = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingAdditionalDefinedParameter + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('additionalYoutubeDlParameter', settingAdditionalDefinedParameter)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                $('#textInputAdditionalParameter').val(settingAdditionalDefinedParameter)
+            }
+        }
+        // end: enableAdditionalParameter
+
+        // Setting: enablePrereleases
+        //
+        if (key === 'enablePrereleases') {
+            var settingPrereleases
+
+            // if it is not yet configured
+            if ((value === null) || (value === undefined)) {
+                settingPrereleases = false // set the default
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingPrereleases + '_.')
+                userSettingWrite('enablePrereleases', settingPrereleases, true) // write the setting
+            } else {
+                settingPrereleases = value // update global var
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingPrereleases + '_.')
+            }
+
+            // update the global object
+            globalObjectSet('enablePrereleases', settingPrereleases)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingPrereleases === true) {
+                    $('#checkboxEnablePreReleases').prop('checked', true)
+                } else {
+                    $('#checkboxEnablePreReleases').prop('checked', false)
+                }
+            }
+        }
+        // end: enablePrereleases
+
+        // Setting: enableErrorReporting
+        //
+        if (key === 'enableErrorReporting') {
+            var settingEnableErrorReporting
+
+            // not configured
+            if ((value === null) || (value === undefined)) {
+                settingEnableErrorReporting = true
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingEnableErrorReporting + '_.')
+                userSettingWrite('enableErrorReporting', true, true) // write the setting
+                sentry.enableSentry()
+            } else {
+                settingEnableErrorReporting = value
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingEnableErrorReporting + '_.')
+
+                if (settingEnableErrorReporting === true) {
+                    sentry.enableSentry()
+                } else {
+                    sentry.disableSentry()
+                }
+            }
+
+            // update the global object
+            globalObjectSet('enableErrorReporting', settingEnableErrorReporting)
+
+            // Optional: update the settings UI
+            if (optionalUpdateSettingUI === true) {
+                if (settingEnableErrorReporting === true) {
+                    $('#checkboxEnableErrorReporting').prop('checked', true)
+                } else {
+                    $('#checkboxEnableErrorReporting').prop('checked', false)
+                }
+            }
+        }
+        // end: enableErrorReporting
+
+        // Setting: downloadDir
+        //
+        if (key === 'downloadDir') {
+            const { remote } = require('electron')
+            var settingDownloadDir
+
+            // not yet set - seems like initial run
+            if ((value === null) || (value === undefined)) {
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initial run - lets set the defaut dir.')
+                var detectedDefaultDownloadDir = defaultDownloadFolderGet() // lets set it do the users default folder dir
+                if (detectedDefaultDownloadDir[0]) {
+                    settingDownloadDir = detectedDefaultDownloadDir[1]
+                    userSettingWrite('downloadDir', settingDownloadDir, true)
+                    writeConsoleMsg('info', 'userSettingRead :::  _' + key + '_ got initial value: _' + settingDownloadDir + '_.')
+                }
+            } else {
+                // there is a setting
+                settingDownloadDir = value
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingDownloadDir + '_.')
+
+                // check if directory exists
+                if (isDirectoryAvailable(settingDownloadDir)) {
+                    // check if directory is writeable
+                    if (isDirectoryWriteable(settingDownloadDir)) {
+                        // dir is available and writeable - seems like everything is ok
+                        globalObjectSet('downloadDir', settingDownloadDir)
+                    } else {
+                        writeConsoleMsg('error', 'userSettingRead ::: Configured download dir _' + settingDownloadDir + '_ exists BUT is not writeable. Gonna reset the user-setting.')
+                        settingDownloadDir = ''
+                        globalObjectSet('downloadDir', settingDownloadDir)
+
+                        // delete the config
+                        storage.remove('downloadDir', function (error) {
+                            if (error) {
+                                writeConsoleMsg('error', 'userSettingRead ::: Unable to delete config. Error: ' + error)
+                                throw error
+                            }
+                        })
+                    }
+                } else {
+                    // dir does not exists
+                    settingDownloadDir = ''
+                    writeConsoleMsg('error', 'userSettingRead ::: Configured download dir _' + settingDownloadDir + '_ does not exists. Gonna reset the user-setting.')
+                    globalObjectSet('downloadDir', settingDownloadDir)
+
+                    // delete the config
+                    storage.remove('downloadDir', function (error) {
+                        if (error) {
+                            writeConsoleMsg('error', 'userSettingRead ::: Unable to delete config. Error: ' + error)
+                            throw error
+                        }
+                    })
+                }
+
+                // Update UI select
+                if (optionalUpdateSettingUI === true) {
+                    $('#inputCustomTargetDir').val(settingDownloadDir)
+                }
+            }
+            writeConsoleMsg('info', 'userSettingRead ::: _' + key + '_ = _' + settingDownloadDir + '_.')
+        }
+        // end: downloadDir
+
+        // Setting: audioFormat
+        //
+        if (key === 'audioFormat') {
+            var settingAudioFormat
+            // not configured
+            if ((value === null) || (value === undefined)) {
+                settingAudioFormat = 'mp3'
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingAudioFormat + '_.')
+                userSettingWrite('audioFormat', settingAudioFormat, true) // write the setting
+            } else {
+                settingAudioFormat = value
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingAudioFormat + '_.')
+                globalObjectSet('audioFormat', settingAudioFormat)
+            }
+
+            // optional: Adjust the UI
+            if (optionalUpdateSettingUI === true) {
+                $('#inputGroupSelectAudio').val(settingAudioFormat) // Update UI select
+            }
+        }
+        // end: audioFormat
+
+        // Setting: confirmedDisclaimer
+        //
+        if (key === 'confirmedDisclaimer') {
+            var settingConfirmedDisclaimer
+            // not configured
+            if ((value === null) || (value === undefined)) {
+                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Gonna show the disclaimer now')
+                disclaimerShow()
+            } else {
+                settingConfirmedDisclaimer = true
+                globalObjectSet('confirmedDisclaimer', settingConfirmedDisclaimer)
+                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingConfirmedDisclaimer + '_.')
+            }
+        }
+        // end: confirmedDisclaimer
+    })
+}
+
+/**
+* @function defaultDownloadFolderGet
+* @summary Validates if the default download directory of the user is useable.
+* @description Validates if the default download directory of the user is useable.
+* @retun {boolean} boolean - Is the folder useable
+* @return {String} defaultTargetPath - The path to the folder
+*/
+function defaultDownloadFolderGet () {
+    writeConsoleMsg('warn', 'defaultDownloadFolderGet ::: Searching the default download directory for this user ....')
+    var defaultTargetPath = globalObjectGet('downloadDir') // use the default download target - which was configured in main.js
+
+    writeConsoleMsg('warn', 'defaultDownloadFolderGet ::: Got' + defaultTargetPath + ' from global object')
+
+    // check if that directory still exists
+    if (isDirectoryAvailable(defaultTargetPath)) {
+        writeConsoleMsg('info', 'defaultDownloadFolderGet ::: The default download location _' + defaultTargetPath + '_ exists') // the default download folder exists
+
+        // check if it is writeable
+        if (isDirectoryWriteable(defaultTargetPath)) {
+            writeConsoleMsg('info', 'defaultDownloadFolderGet ::: The default download location _' + defaultTargetPath + '_ exists and is writeable. We are all good and gonna use it now')
+            return [true, defaultTargetPath]
+        } else {
+            // folder exists but is not writeable
+            writeConsoleMsg('error', 'defaultDownloadFolderGet ::: The default download location _' + defaultTargetPath + '_ exists but is not writeable. This is a major problem')
+            showNoty('error', 'Your configured custom download directory &lt;b>' + defaultTargetPath + '&lt;/b> exists but is not writeable. Gonna reset the custom setting now back to default', 0)
+            return [false, '']
+        }
+    } else {
+        // was unable to detect a download folder
+        writeConsoleMsg('error', 'defaultDownloadFolderGet ::: Was unable to detect an existing default download location')
+        // should force the user to set a custom one
+        showNoty('error', 'Unable to detect an existing default download location. Please configure a  download directory in the application settings', 0)
+        return [false, '']
+    }
+}
+
+/**
+* @function disclaimerCheck
+* @summary Checks if the disclaimer should be shown or not
+* @description Is using userSettingRead() to read the user setting confirmedDisclaimer.json. If it exists the user previously confirmed it.
+*/
+function disclaimerCheck () {
+    // writeConsoleMsg('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
+    userSettingRead('confirmedDisclaimer')
+}
+
+/**
+* @function disclaimerShow
+* @summary Opens the disclaimer as dialog
+* @description Displays a disclaimer regarding app usage. User should confirm it once. Setting is saved in UserSettings
+*/
+function disclaimerShow () {
+    const dialog = require('electron').remote.dialog
+
+    writeConsoleMsg('warn', 'disclaimerShow ::: Showing the disclaimer now.')
+
+    var disclaimerTitle = 'media-dupes disclaimer'
+    var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
+
+    var choice = dialog.showMessageBoxSync(this,
+        {
+            type: 'info',
+            buttons: ['Confirm'],
+            title: disclaimerTitle,
+            message: disclaimerText
+        })
+    if (choice === 0) {
+        writeConsoleMsg('info', 'disclaimerShow ::: User confirmed the disclaimer.')
+        sentry.countEvent('usageDisclaimerConfirmed')
+        userSettingWrite('confirmedDisclaimer', true)
+    }
+}
+
+/**
+* @function downloadStatusCheck
+* @summary Checks if all downloads finished
+* @description Checks if all downloads finished and creates a final status report using noty
+* @param {number} - overall - THe amount of overall urls
+* @param {number} - succeeded - The amount of succeeded urls
+* @param {number} - failed - The amount of failed urls
+*/
+function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
+    var statusReport
+    var notificationType
+
+    writeConsoleMsg('info', 'downloadStatusCheck ::: Overall: ' + overall)
+    writeConsoleMsg('info', 'downloadStatusCheck ::: Succeeded: ' + succeeded)
+    writeConsoleMsg('warn', 'downloadStatusCheck ::: Failed: ' + failed)
+
+    if (overall === succeeded + failed) {
+        writeConsoleMsg('info', 'downloadStatusCheck ::: All download tasks are finished')
+
+        // everything is fine
+        if (overall === succeeded) {
+            writeConsoleMsg('info', 'downloadStatusCheck ::: All downloads successfully')
+            statusReport = 'Finished entire download queue (' + overall + ') successfully'
+            notificationType = 'success'
+        }
+
+        // some errors
+        if ((overall === succeeded + failed) &amp;&amp; (succeeded > 0) &amp;&amp; (failed > 0)) {
+            writeConsoleMsg('warn', 'downloadStatusCheck ::: Some downloads failed')
+            statusReport = 'Finished entire download queue (' + overall + ') - ' + succeeded + ' succeeded and ' + failed + ' failed with errors.'
+            notificationType = 'warning'
+        }
+
+        // all failed
+        if ((overall === failed) &amp;&amp; (succeeded === 0)) {
+            writeConsoleMsg('error', 'downloadStatusCheck ::: All downloads failed')
+            statusReport = 'Finished entire download queue (' + overall + ') - but all downloads failed with errors.'
+            notificationType = 'error'
+        }
+
+        showNotification(statusReport) // show an OS notification
+        showNoty(notificationType, statusReport, 0) // show an in-app notification
+        ui.windowMainLogAppend(statusReport + '', true) // append to log
+        ui.windowMainLogAppend('### QUEUE ENDED ###\n\n', true) // Show mode in log
+        ui.windowMainDownloadQueueFinished()
+    } else {
+        writeConsoleMsg('info', 'downloadStatusCheck ::: Some download tasks are not yet finished')
+    }
+}
+
+/**
+* @function urlIsReachable
+* @summary Checks if a given url is reachable or not
+* @description Checks if a given url is reachable or not. Changes the color of the url input field
+* @param {number} - overall - The amount of overall urls
+* @param {number} - succeeded - The amount of succeeded urls
+* @param {number} - failed - The amount of failed urls
+*/
+function urlIsReachable (userInput) {
+    const isReachable = require('is-reachable');
+    (async () => {
+        if (await isReachable(userInput) === true) {
+            writeConsoleMsg('info', 'urlIsReachable ::: The input _' + userInput + '_ is reachable')
+            ui.inputUrlFieldSetState('reachable')
+            sentry.countEvent('usageUrlReachable')
+        } else {
+            writeConsoleMsg('error', 'urlIsReachable ::: The input _' + userInput + '_ is NOT reachable')
+            ui.inputUrlFieldSetState('unreachable')
+            sentry.countEvent('usageUrlUnreachable')
+        }
+    })()
+}
+
+/**
+* @function generateTimestamp
+* @summary Generates a timestamp
+* @description Generates a timestamp using time-stamp
+* @return {string} - timestamp - The generates timestamp
+
+*/
+function generateTimestamp () {
+    const timestamp = require('time-stamp')
+    var currentTimestamp = timestamp('HH:mm:ss') // hours : minutes : seconds
+    // writeConsoleMsg('info', 'generateTimestamp ::: Timestamp is: ' + currentTimestamp)
+    return currentTimestamp
+}
+
+/**
+* @function canWriteFileOrFolder
+* @summary Checks if a file or folder is writeable
+* @description Checks if a file or folder is writeable
+* @param {String} path - Path which should be checked
+*/
+function canWriteFileOrFolder (path, callback) {
+    const fs = require('fs')
+    fs.access(path, fs.W_OK, function (err) {
+        callback(null, !err)
+    })
+}
+
+// ----------------------------------------------------------------------------
+// EXPORT THE MODULE FUNCTIONS
+// ----------------------------------------------------------------------------
+//
+module.exports.writeConsoleMsg = writeConsoleMsg
+module.exports.showNoty = showNoty
+module.exports.showNotification = showNotification
+module.exports.openURL = openURL
+module.exports.validURL = validURL
+module.exports.formatBytes = formatBytes
+module.exports.isEncoded = isEncoded
+module.exports.fullyDecodeURI = fullyDecodeURI
+module.exports.pathExists = pathExists
+module.exports.globalObjectGet = globalObjectGet
+module.exports.globalObjectSet = globalObjectSet
+module.exports.isDirectoryAvailable = isDirectoryAvailable
+module.exports.isDirectoryWriteable = isDirectoryWriteable
+module.exports.isFileWriteable = isFileWriteable
+module.exports.userSettingWrite = userSettingWrite
+module.exports.userSettingRead = userSettingRead
+module.exports.defaultDownloadFolderGet = defaultDownloadFolderGet
+module.exports.disclaimerCheck = disclaimerCheck
+module.exports.disclaimerShow = disclaimerShow
+module.exports.downloadStatusCheck = downloadStatusCheck
+module.exports.urlIsReachable = urlIsReachable
+module.exports.generateTimestamp = generateTimestamp
+module.exports.canWriteFileOrFolder = canWriteFileOrFolder
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Feb 25 2020 20:25:15 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
