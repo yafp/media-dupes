@@ -34,14 +34,16 @@ available for:
 
 
 ## about media-dupes
-Assuming the provided url is supported by `youtube-dl`, **media-dupes** can:
+**media-dupes** can:
 
 * download video
 * download audio
 
+Assuming the provided url is supported by `youtube-dl`.
+
 **media-dupes** is:
 
-* available for ![linux](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/linux_32x32.png) linux, ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/apple_32x32.png) macOS and ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows.
+* available for linux, macOS and windows.
 * free and open source
 * based on `electron`
 * using bundled versions of `youtube-dl` and `ffmpeg` to do it's magic
@@ -89,6 +91,9 @@ If you want to support the development of **media-dupes** you can fund me on:
 
 ## developers
 You are always welcome to check and even improve the code.
+
+### jsdoc
+The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/).
 
 ### contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.

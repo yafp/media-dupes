@@ -10,7 +10,7 @@ When contributing to this repository, please first discuss the change you wish t
 email, or any other method with the owners of this repository before making a change.
 
 ### jsdocs
-A documentation of all media-dupes specific js code is located in ```/docs/jsdocs```.
+The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/).
 
 ### CI
 The project repository is using:

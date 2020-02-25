@@ -13,9 +13,6 @@ See [#47](https://github.com/yafp/media-dupes/issues/47) for more details.
 # Cleaning up node_modules
 npm run reinstall
 
-# Updating jsdoc files
-npm run jsdocs-update
-
 # Check synthax of .js files
 npm run standardx
 ```
