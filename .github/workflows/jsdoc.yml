@@ -1,4 +1,10 @@
-name: jsdoc to GitHub pages
+#
+# This action / workflow generates a jsdoc based documentation on each commit to the master branch
+# and uploads it to the project github-page
+# here: https://yafp.github.io/media-dupes/
+#
+
+name: jsdoc to gh-pages
 
 on:
   push:
