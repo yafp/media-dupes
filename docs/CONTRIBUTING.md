@@ -4,6 +4,7 @@
 # media-dupes
 ## Contributing
 
+---
 
 ### general
 When contributing to this repository, please first discuss the change you wish to make via issue,
@@ -11,6 +12,7 @@ email, or any other method with the owners of this repository before making a ch
 
 ### jsdocs
 The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/).
+It is auto-generated on each commit.
 
 ### CI
 The project repository is using:
@@ -25,6 +27,7 @@ Build instructions can be found [here](BUILD.md).
 ### Sentry (Crashreports)
 Crashreport informations are located [here](https://sentry.io/organizations/yafp/issues/?project=1847606).
 
+---
 
 ### Getting started
 
@@ -40,17 +43,13 @@ Crashreport informations are located [here](https://sentry.io/organizations/yafp
 ##### Run the code
 * Execute: ```npm start```
 
-
 ##### Run the code with debug logging
 * Execute ```npm run start-debug```
-
 
 ##### Run some basic test
 * Execute: ```npm test```
 
-
-
-
+---
 
 #### 2. Misc howto's
 
@@ -90,7 +89,6 @@ or using ```npm-check```:
 
 ###### update all packages
 * ```npm update```
-
 
 
 ##### Others
