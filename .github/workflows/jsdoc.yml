@@ -15,13 +15,13 @@ jobs:
       - name: Build
         uses: andstor/jsdoc-action@v1
         with:
+          output_dir: ./out
           config_file: jsdoc.json
           template_name: docdash
           front_page: README.md
-          recurse: true
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./jsdocs
+          publish_dir: ./out
