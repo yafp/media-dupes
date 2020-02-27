@@ -10,14 +10,14 @@
 const utils = require('./utils.js')
 
 /**
-* @name initCrashReporter
+* @function initCrashReporter
 * @summary Initialized the crashReporter
-* @description Initialized the crashReporter. See: https://electronjs.org/docs/api/crash-reporter
+* @description Initialized the electron crashReporter. See: https://electronjs.org/docs/api/crash-reporter
 */
 function initCrashReporter () {
     const { crashReporter } = require('electron')
     crashReporter.start({
-        productName: 'ttth',
+        productName: 'media-dupes',
         companyName: 'yafp',
         submitURL: 'https://sentry.io/api/1757940/minidump/?sentry_key=bbaa8fa09ca84a8da6a545c04d086859',
         uploadToServer: false

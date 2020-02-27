@@ -22,11 +22,12 @@ available for:
 ![GitHub Download All releases](https://img.shields.io/github/downloads/yafp/media-dupes/total.svg)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/yafp/media-dupes.svg?style=flat)
 ![GitHub Issues Open](https://img.shields.io/github/issues-raw/yafp/media-dupes.svg?style=flat)
-[![GitHub contributors](https://img.shields.io/github/contributors/yafp/media-dupes.svg)](https://github.com/yafp//graphs/contributors/)
+[![GitHub contributors](https://img.shields.io/github/contributors/yafp/media-dupes.svg)](https://github.com/yafp/media-dupes/graphs/contributors/)
 [![Merged PRs](https://img.shields.io/github/issues-pr-closed-raw/yafp/media-dupes.svg?label=merged+PRs)](https://github.com/yafp/media-dupes/pulls?q=is:pr+is:merged)
 [![GitHub stars](https://img.shields.io/github/stars/yafp/media-dupes)](https://github.com/yafp/media-dupes/stargazers)
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
 [![Discord](https://img.shields.io/discord/672401845855191040.svg)](https://discord.gg/gHnqdHy)
+[![jsDoc](https://github.com/yafp/media-dupes/workflows/GitHub%20pages/badge.svg)](https://yafp.github.io/media-dupes/)
 
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_latest.png)
 
@@ -34,12 +35,10 @@ available for:
 
 
 ## about media-dupes
-**media-dupes** can:
+**media-dupes** can<sup>[1](#footnote1)</sup>:
 
 * download video
 * download audio
-
-Assuming the provided url is supported by `youtube-dl`.
 
 **media-dupes** is:
 
@@ -47,6 +46,8 @@ Assuming the provided url is supported by `youtube-dl`.
 * free and open source
 * based on `electron`
 * using bundled versions of `youtube-dl` and `ffmpeg` to do it's magic
+
+<a name="footnote1">1</a>: Assuming the provided url is supported by `youtube-dl`.
 
 ## changelog
 Please see the [changelog](docs/CHANGELOG.md) for more details.
@@ -65,7 +66,7 @@ Updates must be installed manually as automatic updating of electron application
 Please see the [LICENSE](LICENSE) for more details.
 
 ## privacy
-* **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases. Please see
+* **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases.
 * reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
 * no ip addresses are stored
@@ -76,8 +77,9 @@ Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 If you have question regarding **media-dupes** use one of the following options
 
 * Github: click [here](https://github.com/yafp/media-dupes/issues) to create an issue
-* Discord: click [here](https://discord.gg/gHnqdHy) to join the discord server
+* Discord: click [here](https://discord.gg/gHnqdHy) to join the yafp discord server
 * Riot: click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join the public **#media-dupes** riot.im room available on **matrix.org**.
+* Slack: click [here](https://join.slack.com/t/yafp/shared_invite/enQtOTU2NzAzNzIzMTM4LTdhNjdjOTI1MTBhNmNjYmY0NzM0YmFlZDgyOWFjYmY5ZGM2NzE4NWFhNzdkYzMzNjhlNjViOGI3MzE0OWNjNGY) to join the yafp workspace
 
 
 ## support / fund
@@ -92,12 +94,12 @@ If you want to support the development of **media-dupes** you can fund me on:
 ## developers
 You are always welcome to check and even improve the code.
 
-### jsdoc
-The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/).
-
 ### contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
 A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
+
+### jsdoc
+The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/). It is auto-generated (using [JsDoc Action](https://github.com/marketplace/actions/jsdoc-action)) on each commit of this project.
 
 ### build
 Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.

@@ -41,7 +41,7 @@
         ],
         "meta": {
             "title": "media-dupes jsdoc documentation",
-            "description": "a simple jsdoc based documentation for media-dupes",
+            "description": "a simple JSDoc based documentation for media-dupes",
             "keyword": "media-dupes"
         },
         "search": [true], 

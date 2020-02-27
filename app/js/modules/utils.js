@@ -738,6 +738,7 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
 */
 function urlIsReachable (userInput) {
     const isReachable = require('is-reachable');
+
     (async () => {
         if (await isReachable(userInput) === true) {
             writeConsoleMsg('info', 'urlIsReachable ::: The input _' + userInput + '_ is reachable')
