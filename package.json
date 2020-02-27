@@ -19,12 +19,12 @@
     "standardx-fix": "standardx --fix --verbose | snazzy",
     "test": "mocha",
     "lint": "node_modules/eslint/bin/eslint.js app/js --ignore-path=.eslintignore",
-    "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icon.icns --prune=true --out=dist",
+    "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=resources/installer/icons/macOS/icon.icns --prune=true --out=dist",
     "pack-win": "npm run pack-win-32 && npm run pack-win-64",
-    "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
-    "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
+    "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icons/win/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
+    "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icons/win/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
     "pack-linux": "npm run pack-linux-64",
-    "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
+    "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/linux/1024x1024.png --prune=true --out=dist",
     "build-mac": "electron-builder --mac",
     "build-win": "electron-builder --win --ia32 --x64",
     "build-linux": "electron-builder --linux"
@@ -93,7 +93,7 @@
     },
     "dmg": {
       "title": "media-dupes",
-      "background": "resources/installer/dmg_background.png",
+      "background": "resources/installer/icons/macOS/dmg_background.png",
       "iconSize": 80,
       "iconTextSize": 12,
       "contents": [
@@ -111,7 +111,7 @@
       ]
     },
     "win": {
-      "icon": "resources/installer/icon.ico",
+      "icon": "resources/installer/icons/win/icon.ico",
       "publisherName": "yafp",
       "files": [
         "!node_modules/ffmpeg-static-electron/bin/linux/*",
