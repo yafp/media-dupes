@@ -1,0 +1,12 @@
+name: av scan
+
+on: [push]
+
+jobs:
+  gitavscan:
+    runs-on: ubuntu-latest
+    name: AV scan
+    steps:
+    - uses: actions/checkout@v2
+    - name: Git AV Scan
+      uses: djdefi/gitavscan@v1
