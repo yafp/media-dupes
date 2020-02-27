@@ -1,4 +1,12 @@
-name: Build/release
+#  ----------------------------------------------------------------------------
+# This action / workflow:
+# - builds using electron-builder
+# - releases if properly tagged
+#
+# Using: https://github.com/marketplace/actions/electron-builder-action
+#  ----------------------------------------------------------------------------
+
+name: Build and release
 
 on: push
 
@@ -19,9 +27,9 @@ jobs:
         with:
           node-version: 10
 
-      - name: Install bsdtar and rpm on Linux
+      - name: Install bsdtar rpm and snapcraft on Linux
         if: startsWith(matrix.os, 'ubuntu-latest')
-        run: sudo apt-get install bsdtar rpm
+        run: sudo apt-get install bsdtar rpm snapcraft
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
