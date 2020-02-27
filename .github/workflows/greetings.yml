@@ -1,3 +1,11 @@
+#  ----------------------------------------------------------------------------
+# This action / workflow:
+# - greets first time issuer
+# - greets first time PR
+#
+# Using: https://github.com/marketplace/actions/first-interaction
+#  ----------------------------------------------------------------------------
+
 name: Greetings
 
 on: [pull_request, issues]

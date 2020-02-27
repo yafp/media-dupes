@@ -1,3 +1,11 @@
+#  ----------------------------------------------------------------------------
+# This action / workflow:
+# - executes npm audit
+# - on each push to the master branch
+#
+# Using: https://github.com/marketplace/actions/npm-audit-action
+#  ----------------------------------------------------------------------------
+
 name: npm audit
 
 on:

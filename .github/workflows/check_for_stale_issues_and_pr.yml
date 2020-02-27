@@ -1,3 +1,13 @@
+#  ----------------------------------------------------------------------------
+# This action / workflow:
+# - checks for stale issues
+# - and pull requests
+# - labels them stale after x days
+# - closed them after Y days
+#
+# Using: https://github.com/marketplace/actions/close-stale-issues
+#  ----------------------------------------------------------------------------
+
 name: Mark stale issues and pull requests
 
 on:
