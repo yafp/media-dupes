@@ -27,9 +27,13 @@ jobs:
         with:
           node-version: 10
 
-      - name: Install bsdtar rpm and snapcraft on Linux
+      - name: Install bsdtar rpm on Linux
         if: startsWith(matrix.os, 'ubuntu-latest')
-        run: sudo apt-get install bsdtar rpm snapcraft
+        run: sudo apt-get install bsdtar rpm
+
+      - name: Install snapcraft
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo snap install snapcraft --classic 
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
