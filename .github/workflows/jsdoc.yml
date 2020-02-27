@@ -1,4 +1,4 @@
-name: GitHub pages
+name: jsdoc to GitHub pages
 
 on:
   push:
@@ -15,14 +15,14 @@ jobs:
       - name: Build
         uses: andstor/jsdoc-action@v1
         with:
-          source_dir: ./app
-          output_dir: ./docs/test
           config_file: jsdoc.json
           template_name: docdash
           front_page: README.md
+          recurse: true
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./docs/test
+          publish_dir: ./public
+          keep_files: false
