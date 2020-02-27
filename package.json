@@ -130,7 +130,7 @@
     },
     "nsis": {
       "unicode": false,
-      "artifactName": "${productName}-win-installer.${ext}",
+      "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "oneClick": false,
