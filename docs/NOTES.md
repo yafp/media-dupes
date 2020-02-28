@@ -17,6 +17,13 @@
 * youtube-dl flags:
   * --socket-timeout    What is a good default value? 120 ?
   * --retries           What is a good default value ? 9999 ?
+* seperate electron-builder.conf from package-json
+
+### Currently working on
+
+* fix snap for building process
+* custom flags for NSIS
+
 
 ### urls
 * youtube-dl: https://github.com/ytdl-org/youtube-dl

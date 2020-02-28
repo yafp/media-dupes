@@ -129,6 +129,7 @@
     },
     "nsis": {
       "include": "resources/installer/nsis/installer.nsh",
+      "deleteAppDataOnUninstall": true,
       "unicode": false,
       "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}",
       "createDesktopShortcut": true,

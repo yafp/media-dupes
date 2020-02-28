@@ -42,12 +42,10 @@ available for:
 
 **media-dupes** is:
 
-* available for linux, macOS and windows.
-* free and open source
 * based on `electron`
 * using bundled versions of `youtube-dl` and `ffmpeg` to do it's magic
-
-<a name="footnote1">1</a>: Assuming the provided url is supported by `youtube-dl`.
+* available for linux, macOS and windows.
+* free and open source
 
 ## changelog
 Please see the [changelog](docs/CHANGELOG.md) for more details.
@@ -103,3 +101,7 @@ The current jsdoc documentation can be found on [https://yafp.github.io/media-du
 
 ### build
 Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
+
+
+## footnotes
+<a name="footnote1">1</a>: Assuming the provided url is supported by `youtube-dl`.
