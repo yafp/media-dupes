@@ -1,12 +1,16 @@
 #  ----------------------------------------------------------------------------
 # This action / workflow:
+# - executed on: macOS, linux and windows
+# - checksout the source
+# - installs some requirements
+# - installs some more requirements on linux
 # - builds using electron-builder
 # - releases if properly tagged
 #
 # Using: https://github.com/marketplace/actions/electron-builder-action
 #  ----------------------------------------------------------------------------
 
-name: Build and release
+name: electron_builder
 
 on: push
 

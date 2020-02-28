@@ -7,7 +7,7 @@
 # Using: https://github.com/marketplace/actions/git-anti-virus-scan
 #  ----------------------------------------------------------------------------
 
-name: av scan
+name: av_scan
 
 on: [push]
 

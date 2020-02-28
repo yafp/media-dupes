@@ -8,7 +8,7 @@
 # Using: https://github.com/marketplace/actions/close-stale-issues
 #  ----------------------------------------------------------------------------
 
-name: Mark stale issues and pull requests
+name: mark_stale
 
 on:
   schedule:

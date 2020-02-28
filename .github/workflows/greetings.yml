@@ -6,7 +6,7 @@
 # Using: https://github.com/marketplace/actions/first-interaction
 #  ----------------------------------------------------------------------------
 
-name: Greetings
+name: greetings
 
 on: [pull_request, issues]
 

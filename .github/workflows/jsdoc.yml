@@ -9,7 +9,7 @@
 # See: https://yafp.github.io/media-dupes/
 #  ----------------------------------------------------------------------------
 
-name: jsdoc to gh-pages
+name: jsdoc
 
 on:
   push:
