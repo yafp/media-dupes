@@ -74,7 +74,6 @@
   "build": {
     "productName": "media-dupes",
     "appId": "de.yafp.media-dupes",
-    "publish": "onTag",
     "extraFiles": [
       "LICENSE",
       "README.md",
