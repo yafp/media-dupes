@@ -23,11 +23,10 @@
     "pack-win": "npm run pack-win-32 && npm run pack-win-64",
     "pack-win-32": "electron-packager . media-dupes --overwrite --platform=win32 --arch=ia32 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
     "pack-win-64": "electron-packager . media-dupes --overwrite --platform=win32 --arch=x64 --icon=resources/installer/icon.ico --prune=true --out=dist --version-string.CompanyName=yafp --version-string.FileDescription=${productName} --version-string.ProductName=\"media-dupes\"",
-    "pack-linux": "npm run pack-linux-64",
-    "pack-linux-64": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
-    "build-mac": "electron-builder --mac",
-    "build-win": "electron-builder --win --ia32 --x64",
-    "build-linux": "electron-builder --linux -c.snap.publish=github"
+    "pack-linux": "electron-packager . media-dupes --overwrite --platform=linux --arch=x64 --icon=resources/installer/icons/1024x1024.png --prune=true --out=dist",
+    "build-mac": "electron-builder --mac --publish=onTagOrDraft",
+    "build-win": "electron-builder --win --ia32 --x64 --publish=onTagOrDraft",
+    "build-linux": "electron-builder --linux --publish=onTagOrDraft"
   },
   "repository": {
     "type": "git",
@@ -129,6 +128,7 @@
       "artifactName": "${productName}-${version}-win-portable-${arch}.${ext}"
     },
     "nsis": {
+      "include": "resources/installer/nsis/installer.nsh",
       "unicode": false,
       "artifactName": "${productName}-${version}-win-installer-${arch}.${ext}",
       "createDesktopShortcut": true,
@@ -138,6 +138,13 @@
       "allowToChangeInstallationDirectory": true,
       "runAfterFinish": false,
       "uninstallDisplayName": "${productName}-${version}"
+    },
+    "snap": {
+      "publish": [
+        {
+          "provider": "github"
+        }
+      ]
     },
     "linux": {
       "executableName": "media-dupes",
