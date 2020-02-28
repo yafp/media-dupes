@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.5.20200227",
+  "version": "0.5.20200228",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -73,7 +73,8 @@
   "license": "GPL-3.0",
   "build": {
     "productName": "media-dupes",
-    "appId": "de.yafp.media-dupes",
+    "appId": "de.yafp.media-dupes"
+    "publish": "onTag",
     "extraFiles": [
       "LICENSE",
       "README.md",
@@ -174,6 +175,7 @@
         },
         {
           "target": "snap",
+          "publish": "never",
           "arch": [
             "x64"
           ]
