@@ -7,11 +7,12 @@
 
 'use strict'
 
-// const utils = require('./utils.js')
-
-const unhandled = require('electron-unhandled')
+// ----------------------------------------------------------------------------
+// REQUIRE MODULES
+// ----------------------------------------------------------------------------
+//
 const { openNewGitHubIssue, debugInfo } = require('electron-util')
-
+const unhandled = require('electron-unhandled')
 unhandled({
     showDialog: true,
     reportButton: error => {

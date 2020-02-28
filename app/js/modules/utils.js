@@ -5,6 +5,10 @@
  */
 'use strict'
 
+// ----------------------------------------------------------------------------
+// REQUIRE MODULES
+// ----------------------------------------------------------------------------
+//
 const sentry = require('./sentry.js')
 const ui = require('./ui.js')
 
@@ -124,7 +128,6 @@ function formatBytes (bytes, decimals = 2) {
     const k = 1024
     const dm = decimals < 0 ? 0 : decimals
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
@@ -323,7 +326,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
             throw error
         }
         var value = data.setting
-        writeConsoleMsg('info', 'userSettingRead :::  _' + key + '_ = _' + value + '_.')
+        // writeConsoleMsg('info', 'userSettingRead :::  _' + key + '_ = _' + value + '_.')
 
         // Setting: enableVerboseMode
         //
@@ -339,9 +342,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 settingVerboseMode = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
             }
-
-            // update the global object
-            globalObjectSet('enableVerboseMode', settingVerboseMode)
+            globalObjectSet('enableVerboseMode', settingVerboseMode) // update the global object
 
             // Optional: update the settings UI
             if (optionalUpdateSettingUI === true) {
@@ -368,9 +369,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 settingUrlInformations = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingUrlInformations + '_.')
             }
-
-            // update the global object
-            globalObjectSet('enableUrlInformations', settingUrlInformations)
+            globalObjectSet('enableUrlInformations', settingUrlInformations) // update the global object
 
             // Optional: update the settings UI
             if (optionalUpdateSettingUI === true) {
@@ -397,9 +396,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 settingAdditionalParameter = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingVerboseMode + '_.')
             }
-
-            // update the global object
-            globalObjectSet('enableAdditionalParameter', settingAdditionalParameter)
+            globalObjectSet('enableAdditionalParameter', settingAdditionalParameter) // update the global object
 
             // Optional: update the settings UI
             if (optionalUpdateSettingUI === true) {
@@ -426,9 +423,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 settingAdditionalDefinedParameter = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingAdditionalDefinedParameter + '_.')
             }
-
-            // update the global object
-            globalObjectSet('additionalYoutubeDlParameter', settingAdditionalDefinedParameter)
+            globalObjectSet('additionalYoutubeDlParameter', settingAdditionalDefinedParameter) // update the global object
 
             // Optional: update the settings UI
             if (optionalUpdateSettingUI === true) {
@@ -451,9 +446,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                 settingPrereleases = value // update global var
                 writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingPrereleases + '_.')
             }
-
-            // update the global object
-            globalObjectSet('enablePrereleases', settingPrereleases)
+            globalObjectSet('enablePrereleases', settingPrereleases) // update the global object
 
             // Optional: update the settings UI
             if (optionalUpdateSettingUI === true) {
@@ -487,9 +480,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                     sentry.disableSentry()
                 }
             }
-
-            // update the global object
-            globalObjectSet('enableErrorReporting', settingEnableErrorReporting)
+            globalObjectSet('enableErrorReporting', settingEnableErrorReporting) // update the global object
 
             // Optional: update the settings UI
             if (optionalUpdateSettingUI === true) {
@@ -613,10 +604,9 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
 * @return {String} defaultTargetPath - The path to the folder
 */
 function defaultDownloadFolderGet () {
-    writeConsoleMsg('warn', 'defaultDownloadFolderGet ::: Searching the default download directory for this user ....')
     var defaultTargetPath = globalObjectGet('downloadDir') // use the default download target - which was configured in main.js
-
-    writeConsoleMsg('warn', 'defaultDownloadFolderGet ::: Got' + defaultTargetPath + ' from global object')
+    writeConsoleMsg('info', 'defaultDownloadFolderGet ::: Searching the default download directory for this user ....')
+    writeConsoleMsg('info', 'defaultDownloadFolderGet ::: Got' + defaultTargetPath + ' from global object')
 
     // check if that directory still exists
     if (isDirectoryAvailable(defaultTargetPath)) {
@@ -633,9 +623,8 @@ function defaultDownloadFolderGet () {
             return [false, '']
         }
     } else {
-        // was unable to detect a download folder
+        // was unable to detect a download folder. Should force the user to set a custom one
         writeConsoleMsg('error', 'defaultDownloadFolderGet ::: Was unable to detect an existing default download location')
-        // should force the user to set a custom one
         showNoty('error', 'Unable to detect an existing default download location. Please configure a  download directory in the application settings', 0)
         return [false, '']
     }
@@ -647,14 +636,13 @@ function defaultDownloadFolderGet () {
 * @description Is using userSettingRead() to read the user setting confirmedDisclaimer.json. If it exists the user previously confirmed it.
 */
 function disclaimerCheck () {
-    // writeConsoleMsg('info', 'disclaimerCheck ::: check if the disclaimer must be shown.')
     userSettingRead('confirmedDisclaimer')
 }
 
 /**
 * @function disclaimerShow
 * @summary Opens the disclaimer as dialog
-* @description Displays a disclaimer regarding app usage. User should confirm it once. Setting is saved in UserSettings
+* @description Displays a disclaimer regarding app usage. User should confirm it once. Setting is saved in UserSettings (.json file)
 */
 function disclaimerShow () {
     const dialog = require('electron').remote.dialog
@@ -682,7 +670,7 @@ function disclaimerShow () {
 * @function downloadStatusCheck
 * @summary Checks if all downloads finished
 * @description Checks if all downloads finished and creates a final status report using noty
-* @param {number} - overall - THe amount of overall urls
+* @param {number} - overall - The amount of overall urls
 * @param {number} - succeeded - The amount of succeeded urls
 * @param {number} - failed - The amount of failed urls
 */
@@ -732,9 +720,7 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
 * @function urlIsReachable
 * @summary Checks if a given url is reachable or not
 * @description Checks if a given url is reachable or not. Changes the color of the url input field
-* @param {number} - overall - The amount of overall urls
-* @param {number} - succeeded - The amount of succeeded urls
-* @param {number} - failed - The amount of failed urls
+* @param {string} - userInput - The url which should be checked if reachable or not
 */
 function urlIsReachable (userInput) {
     const isReachable = require('is-reachable');
@@ -757,12 +743,10 @@ function urlIsReachable (userInput) {
 * @summary Generates a timestamp
 * @description Generates a timestamp using time-stamp
 * @return {string} - timestamp - The generates timestamp
-
 */
 function generateTimestamp () {
     const timestamp = require('time-stamp')
     var currentTimestamp = timestamp('HH:mm:ss') // hours : minutes : seconds
-    // writeConsoleMsg('info', 'generateTimestamp ::: Timestamp is: ' + currentTimestamp)
     return currentTimestamp
 }
 

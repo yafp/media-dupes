@@ -5,17 +5,30 @@
  */
 'use strict'
 
+// ----------------------------------------------------------------------------
+// REQUIRE MODULES
+// ----------------------------------------------------------------------------
+//
 const ui = require('./ui.js')
 const utils = require('./utils.js')
 
+// ----------------------------------------------------------------------------
+// VARIABLES
+// ----------------------------------------------------------------------------
+//
 var youtubeDlBinaryDetailsVersion
 var youtubeDlBinaryDetailsPath
 var youtubeDLBinaryDetailsExec
 
 // ----------------------------------------------------------------------------
-// YOUTUBE-DL: Arguments which should be filtered out if the user sets them
-// idea from: https://github.com/mayeaux/videodownloader/blob/master/util.js
+// YOUTUBE-DL: Arguments which should be filtered out if the user sets them.
+// Idea from: https://github.com/mayeaux/videodownloader/blob/master/util.js
 // ----------------------------------------------------------------------------
+/**
+* @constant
+* @type {array}
+* @default
+*/
 const blacklistedParameter = [
     '-h',
     '--help',

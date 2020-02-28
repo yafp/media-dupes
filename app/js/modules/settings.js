@@ -5,6 +5,10 @@
  */
 'use strict'
 
+// ----------------------------------------------------------------------------
+// REQUIRE MODULES
+// ----------------------------------------------------------------------------
+//
 const utils = require('./utils.js')
 const sentry = require('./sentry.js')
 const youtubeDl = require('./youtubeDl.js')
@@ -85,18 +89,18 @@ function settingsToggleAdditionalParameter () {
     if ($('#checkboxEnableAdditionalParameter').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleAdditionalParameter ::: Additional parameter is now enabled')
         utils.userSettingWrite('enableAdditionalParameter', true)
-        sentry.countEvent('usageSettingsAdditionalParamterEnabled')
+        sentry.countEvent('usageSettingsAdditionalParameterEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleAdditionalParameter ::: Additional parameter is now disabled')
         utils.userSettingWrite('enableAdditionalParameter', false)
-        sentry.countEvent('usageSettingsAdditionalParamterEnabled')
+        sentry.countEvent('usageSettingsAdditionalParameterEnabled')
     }
 }
 
 /**
 * @function settingsSaveAdditionalParameter
-* @summary Saves the content of the input field for additional paramters
-* @description Saves the content of the input field for additional paramters
+* @summary Saves the content of the input field for additional parameters
+* @description Saves the content of the input field for additional parameters
 */
 function settingsSaveAdditionalParameter () {
     const youtubeDlUnsupportedParameter = youtubeDl.blacklistedParameter // get the blacklisted parameters
@@ -108,11 +112,11 @@ function settingsSaveAdditionalParameter () {
     if (splittedParameters.length > 0) { // If there are elements
         for (var j = 0; j < splittedParameters.length; j++) { // check for each element
             if ($.inArray(splittedParameters[j], youtubeDlUnsupportedParameter) > -1) { // if it is blacklistet
-                utils.writeConsoleMsg('warn', 'settingsSaveAdditionalParameter ::: The additional paramter: _' + splittedParameters[j] + '_ is blacklisted.')
+                utils.writeConsoleMsg('warn', 'settingsSaveAdditionalParameter ::: The additional parameter: _' + splittedParameters[j] + '_ is blacklisted.')
                 utils.showNoty('error', 'The additional parameter <b>' + splittedParameters[j] + '</b> is blacklisted. Please remove it and try it again.', 0)
                 inputContainsErrors = true
             } else { // or not
-                utils.writeConsoleMsg('info', 'settingsSaveAdditionalParameter ::: The additional paramter: _' + splittedParameters[j] + '_ is not blacklisted.')
+                utils.writeConsoleMsg('info', 'settingsSaveAdditionalParameter ::: The additional parameter: _' + splittedParameters[j] + '_ is not blacklisted.')
             }
         }
     }
@@ -126,7 +130,7 @@ function settingsSaveAdditionalParameter () {
 /**
 * @function settingsTogglePrereleases
 * @summary Enables or disables the support for pre-releases
-* @description ...
+* @description  Enables or disables the setting to include pre-releases into the update -search
 */
 function settingsTogglePrereleases () {
     if ($('#checkboxEnablePreReleases').is(':checked')) {
@@ -140,6 +144,11 @@ function settingsTogglePrereleases () {
     }
 }
 
+/**
+* @function settingsToggleUrlInformations
+* @summary Enables or disables the fetch-url-informations function
+* @description Enables or disables the setting to fetch-url-informations using .getInfo on each added url
+*/
 function settingsToggleUrlInformations () {
     if ($('#checkboxEnableUrlInformations').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now enabled')

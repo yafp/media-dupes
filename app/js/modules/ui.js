@@ -5,15 +5,21 @@
  */
 'use strict'
 
+// ----------------------------------------------------------------------------
+// REQUIRE MODULES
+// ----------------------------------------------------------------------------
+//
 const utils = require('./utils.js')
 const ffmpeg = require('./ffmpeg.js')
 const youtubeDl = require('./youtubeDl.js')
 const sentry = require('./sentry.js')
 
+// ----------------------------------------------------------------------------
+// VARIABLES
+// ----------------------------------------------------------------------------
+//
 var distractEnabler = 0
 var arrayUserUrls = [] // contains the urls which should be downloaded
-
-var supportedDomains = []
 
 /**
 * @function windowMainApplicationStateSet

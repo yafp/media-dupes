@@ -566,6 +566,14 @@ function searchUpdate (silent = true) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Found update, notify user')
             sentry.countEvent('usageUpdateSearchMediaDupesFoundUpdate')
 
+            // prepare the message for the user - depending on the fact if it is a pre-release or not
+            var updateText
+            if (remoteAppVersionLatestPrerelease === false) {
+                updateText = 'A media-dupes update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?'
+            } else {
+                updateText = 'A media-dupes <b>pre-release</b> update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?'
+            }
+
             // ask user using a noty confirm dialog
             const Noty = require('noty')
             var n = new Noty(
@@ -574,7 +582,7 @@ function searchUpdate (silent = true) {
                     layout: 'bottom',
                     type: 'info',
                     closeWith: [''], // to prevent closing the confirm-dialog by clicking something other then a confirm-dialog-button
-                    text: 'A media-dupes update from <b>' + localAppVersion + '</b> to version <b>' + remoteAppVersionLatest + '</b> is available. Do you want to visit the release page?',
+                    text: updateText,
                     buttons: [
                         Noty.button('Yes', 'btn btn-success mediaDupes_btnDefaultWidth', function () {
                             n.close()
