@@ -31,6 +31,14 @@ jobs:
         with:
           node-version: 10
 
+      - name: apt-update
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt-get update
+        
+      - name: autoremove
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt autoremove
+
       - name: Install bsdtar rpm on Linux
         if: startsWith(matrix.os, 'ubuntu-latest')
         run: sudo apt-get install bsdtar rpm
