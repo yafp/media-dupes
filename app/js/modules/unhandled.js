@@ -18,7 +18,7 @@ unhandled({
     reportButton: error => {
         openNewGitHubIssue({
             user: 'yafp',
-            repo: 'ttth',
+            repo: 'media-dupes',
             body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
         })
     }
@@ -38,7 +38,7 @@ function initUnhandled () {
         reportButton: error => {
             openNewGitHubIssue({
                 user: 'yafp',
-                repo: 'ttth',
+                repo: 'media-dupes',
                 body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
             })
         }
