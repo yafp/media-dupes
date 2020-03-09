@@ -320,11 +320,39 @@ function createWindowMain () {
     ipcMain.on('globalObjectSet', function (event, property, value) {
         doLog('info', 'globalObjectSet ::: Set _' + property + '_ to: _' + value + '_')
         global.sharedObj[property] = value
-        // console.warn(global.sharedObj)
+        console.warn(global.sharedObj)
+    })
+
+    // Call from renderer - Enable the power save blocker. See #97
+    ipcMain.on('enablePowerSaveBlocker', function () {
+        const { powerSaveBlocker } = require('electron')
+        const id = powerSaveBlocker.start('prevent-display-sleep')
+
+        if (powerSaveBlocker.isStarted(id)) {
+            doLog('info', 'Successfully enabled the PowerSaveBlocker with the ID _' + id + '_ as app is currently downloading')
+            global.sharedObj['powerSaveBlockerEnabled'] = true
+            global.sharedObj['powerSaveBlockerId'] = id
+        } else {
+            doLog('error', 'Enabling the Power-Save-Blocker for the current download failed')
+            global.sharedObj['powerSaveBlockerEnabled'] = false
+            global.sharedObj['powerSaveBlockerId'] = -1
+        }
+    })
+
+    // Call from renderer: disables the powersaveblocker
+    ipcMain.on('disablePowerSaveBlocker', function (event, id) {
+        const { powerSaveBlocker } = require('electron')
+        powerSaveBlocker.stop(id)
+        global.sharedObj.powerSaveBlockerEnabled = false
+        global.sharedObj.powerSaveBlockerId = -1
+        doLog('info', 'Disabled the PowerSaveBlocker with the ID: _' + id + '_.')
     })
 
     // Global object
     //
+    // power save blocker
+    var powerSaveBlockerEnabled = false
+    var powerSaveBlockerId = -1
     // Settings UI
     var enableVerboseMode = false
     var enableAdditionalParameter = false
@@ -339,6 +367,11 @@ function createWindowMain () {
     var todoListStateEmpty = true // is empty by default
 
     global.sharedObj = {
+
+        // power management
+        powerSaveBlockerEnabled: powerSaveBlockerEnabled,
+        powerSaveBlockerId: powerSaveBlockerId, 
+
         // settings UI
         enableErrorReporting: enableErrorReporting,
         enableUrlInformations: enableUrlInformations,

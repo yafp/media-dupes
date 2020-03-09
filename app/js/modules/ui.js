@@ -29,6 +29,14 @@ var arrayUserUrls = [] // contains the urls which should be downloaded
 */
 
 function windowMainApplicationStateSet (newState = 'idle') {
+
+    if(newState === 'Download in progress') { // #97
+        // enable powerSaveBlocker
+        const { ipcRenderer } = require('electron')
+        utils.writeConsoleMsg('info', 'windowMainApplicationStateSet ::: Trying to enable the PowerSaveBlocker now, as media-dupes is currently downloading.')
+        ipcRenderer.send('enablePowerSaveBlocker')
+    }
+
     utils.globalObjectSet('applicationState', newState) // update the global object
     utils.writeConsoleMsg('info', 'windowMainApplicationStateSet ::: Setting application state to: _' + newState + '_.')
 
@@ -741,8 +749,11 @@ function windowMainDownloadQueueFinished () {
     windowMainButtonsOthersEnable() // enable some of the buttons again
     windowMainApplicationStateSet() // reset application state
     windowMainThumbnailPreviewReset() // reset the thumbnail
+    windowMainDisablePowerSaveBlocker() // disabled the power save blocker
 
     utils.globalObjectSet('todoListStateEmpty', true)
+
+
 }
 
 /**
@@ -1081,6 +1092,25 @@ function youtubeSuggest () {
         .catch(console.error)
 }
 
+
+function windowMainDisablePowerSaveBlocker() {
+    utils.writeConsoleMsg('info', 'windowMainDisablePowerSaveBlocker ::: Check if there is a PowerSaveBlocker enabled, if so try to disable it.')
+    var currentPowerSaveBlockerStatus = utils.globalObjectGet('powerSaveBlockerEnabled')
+
+    if(currentPowerSaveBlockerStatus === true) {
+        var currentPowerSaveBlockerId = utils.globalObjectGet('powerSaveBlockerId') // get the id
+        if(currentPowerSaveBlockerId !== -1) {
+            utils.writeConsoleMsg('info', 'windowMainDisablePowerSaveBlocker ::: Trying to disable the PowerSaveBlocker with the ID _' + currentPowerSaveBlockerId + '_ now, as media-dupes is not longer downloading.')
+            const { ipcRenderer } = require('electron')
+            ipcRenderer.send('disablePowerSaveBlocker', currentPowerSaveBlockerId)
+        }
+    }
+    else {
+        utils.writeConsoleMsg('info', 'windowMainDisablePowerSaveBlocker ::: PowerSaveBlocker was not enabled, so nothing to do here.')
+    }
+}
+
+
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -1119,3 +1149,5 @@ module.exports.windowMainDisableAddUrlButton = windowMainDisableAddUrlButton
 
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
 module.exports.youtubeSuggest = youtubeSuggest
+
+module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlocker
