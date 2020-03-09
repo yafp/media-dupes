@@ -26,6 +26,17 @@ The following categories are used:
 
 ***
 
+### media-dupes 0.7.0 (2020xxyy) - DEV
+#### ```Added```
+* Energy-management
+  * Added a power-save-blocker. Now trying to prevent powerSave while downloads are in progress. See [#97](https://github.com/yafp/media-dupes/issues/97)
+
+#### ```Changed```
+* Dependencies
+  * Updated ```sentry```  from ```1.2.1``` to ```1.3.0```
+
+***
+
 ### media-dupes 0.6.0 (20200306)
 #### ```Added```
 * URL input: Url-input-field is now color-coded (red = unreachable, yellow = unchecked, green = reachable). See [#82](https://github.com/yafp/media-dupes/issues/82)
