@@ -32,8 +32,10 @@ The following categories are used:
   * Added a power-save-blocker. Now trying to prevent powerSave while downloads are in progress. See [#97](https://github.com/yafp/media-dupes/issues/97)
 
 #### ```Changed```
+* Windows nsis installer. Show install and uninstall details. See [#96](https://github.com/yafp/media-dupes/issues/96)
 * Dependencies
   * Updated ```sentry```  from ```1.2.1``` to ```1.3.0```
+  * Updated ```electron```  from ```8.1.0``` to ```8.1.1```
 
 ***
 

@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.6.20200309",
+  "version": "0.6.20200310",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -223,7 +223,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "docdash": "^1.2.0",
-    "electron": "^8.1.0",
+    "electron": "^8.1.1",
     "electron-builder": "^22.4.0",
     "electron-packager": "^14.2.1",
     "eslint": "^6.8.0",
