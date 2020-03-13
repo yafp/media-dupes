@@ -253,7 +253,6 @@ function createWindowMain () {
         webPreferences: {
             nodeIntegration: true,
             webSecurity: true // introduced in 0.3.0
-            // preload: path.join(__dirname, 'preload.js')
         }
     })
 
@@ -330,12 +329,12 @@ function createWindowMain () {
 
         if (powerSaveBlocker.isStarted(id)) {
             doLog('info', 'Successfully enabled the PowerSaveBlocker with the ID _' + id + '_ as app is currently downloading')
-            global.sharedObj['powerSaveBlockerEnabled'] = true
-            global.sharedObj['powerSaveBlockerId'] = id
+            global.sharedObj.powerSaveBlockerEnabled = true
+            global.sharedObj.powerSaveBlockerId = id
         } else {
             doLog('error', 'Enabling the Power-Save-Blocker for the current download failed')
-            global.sharedObj['powerSaveBlockerEnabled'] = false
-            global.sharedObj['powerSaveBlockerId'] = -1
+            global.sharedObj.powerSaveBlockerEnabled = false
+            global.sharedObj.powerSaveBlockerId = -1
         }
     })
 
@@ -370,7 +369,7 @@ function createWindowMain () {
 
         // power management
         powerSaveBlockerEnabled: powerSaveBlockerEnabled,
-        powerSaveBlockerId: powerSaveBlockerId, 
+        powerSaveBlockerId: powerSaveBlockerId,
 
         // settings UI
         enableErrorReporting: enableErrorReporting,

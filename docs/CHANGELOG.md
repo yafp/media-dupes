@@ -33,9 +33,19 @@ The following categories are used:
 
 #### ```Changed```
 * Windows nsis installer. Show install and uninstall details. See [#96](https://github.com/yafp/media-dupes/issues/96)
+* Settings
+  * youtube-dl: Update button is now disabled if update is technically not possible.
 * Dependencies
-  * Updated ```sentry```  from ```1.2.1``` to ```1.3.0```
   * Updated ```electron```  from ```8.1.0``` to ```8.1.1```
+  * Updated ```electron-builder```  from ```22.4.0``` to ```22.4.1```
+  * Updated ```electron-log```  from ```4.0.7``` to ```4.1.0```
+  * Updated ```sentry```  from ```1.2.1``` to ```1.3.0```
+
+#### ```Fixed```
+* youtube-dl update routine
+  * Improved handling  of 'Force updating youtube-dl binary ' function via menu.
+  * Added error handling to 'reset youtube-dl binary path' function via menu.
+* Fixed horizontal scrollbar bug. See [#100](https://github.com/yafp/media-dupes/issues/100)
 
 ***
 

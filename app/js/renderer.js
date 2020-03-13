@@ -412,6 +412,8 @@ function settingsLoadAllOnSettingsUiLoad () {
     utils.userSettingRead('enableErrorReporting', true) // get setting for error-reporting
     utils.userSettingRead('downloadDir', true) // download dir
     utils.userSettingRead('audioFormat', true) // load configured audio format and update the settings UI
+
+    settings.settingsEnableOrDisableYoutubeDLUpdateButton()
 }
 
 /**
@@ -927,6 +929,7 @@ require('electron').ipcRenderer.on('youtubeDlBinaryPathReset', function () {
         } else {
             // details file cant be resetted due to permission issues
             utils.writeConsoleMsg('warn', 'youtubeDlBinaryPathReset ::: Found youtube-dl binary update, but unable to execute update due to permissions')
+            utils.showNoty('error', 'Unable to reset the <b>youtube-dl</b> setup due to permissions issues. The file: ' + youtubeDlBinaryDetailsPath + ' is not writeable.')
         }
     })
 
