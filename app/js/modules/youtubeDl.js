@@ -198,6 +198,8 @@ function binaryUpdateCheck (silent = true, force = false) {
 
             if (silent === false) {
                 utils.showNoty('error', 'Unable to update youtube-dl as ' + youtubeDlBinaryDetailsPath + ' is not writeable. This depends most likely on the package/installation type you selected')
+                ui.windowMainLoadingAnimationHide()
+                ui.windowMainApplicationStateSet()
             }
         }
     })

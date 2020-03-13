@@ -229,6 +229,27 @@ function settingsOpenExternal (url) {
     utils.openURL(url)
 }
 
+function settingsEnableOrDisableYoutubeDLUpdateButton () {
+    // check if youtube details file is writeable
+    // if not - disable thje update button
+    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetailsPathGet()
+    utils.canWriteFileOrFolder(youtubeDlBinaryDetailsPath, function (error, isWritable) {
+        if (error) {
+            utils.writeConsoleMsg('error', 'settingsEnableOrDisableYoutubeDLUpdateButton ::: Error while trying to read the youtube-dl details file. Error: ' + error)
+            throw error
+        }
+
+        if (isWritable === true) {
+            // technically we could execute an update if there is one - so lets search for updates
+            utils.writeConsoleMsg('info', 'settingsEnableOrDisableYoutubeDLUpdateButton ::: Updating youtube-dl binary is technically possible. Button can stay enabled')
+        } else {
+            // details file cant be resetted due to permission issues
+            utils.writeConsoleMsg('warn', 'settingsEnableOrDisableYoutubeDLUpdateButton ::: Updating youtube-dl binary is not possible on this setup due to permission issues.')
+            $('#buttonSettingsYoutubeDLStartUpdate').prop('disabled', true) // disable the button
+        }
+    })
+}
+
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -244,3 +265,4 @@ module.exports.settingsToggleUrlInformations = settingsToggleUrlInformations
 module.exports.settingsToggleErrorReporting = settingsToggleErrorReporting
 module.exports.settingsAudioFormatSave = settingsAudioFormatSave
 module.exports.settingsOpenExternal = settingsOpenExternal
+module.exports.settingsEnableOrDisableYoutubeDLUpdateButton = settingsEnableOrDisableYoutubeDLUpdateButton
