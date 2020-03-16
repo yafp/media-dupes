@@ -107,7 +107,6 @@ function windowMainClickButtonAudio () {
 */
 function windowMainClickButtonSettings () {
     ui.windowMainSettingsUiLoad()
-    sentry.countEvent('usageButtonSettings')
 }
 
 /**
@@ -129,7 +128,6 @@ function windowMainClickButtonIntro () {
 */
 function windowMainClickButtonExtrators () {
     ui.windowMainShowSupportedExtractors()
-    sentry.countEvent('usageButtonExtractors')
 }
 
 /**
@@ -140,7 +138,6 @@ function windowMainClickButtonExtrators () {
 */
 function windowMainClickButtonDownloads () {
     ui.windowMainOpenDownloadFolder()
-    sentry.countEvent('usageButtonOpenDownloadFolder')
 }
 
 /**
@@ -151,7 +148,6 @@ function windowMainClickButtonDownloads () {
 */
 function windowMainClickButtonLogReset () {
     ui.windowMainLogReset()
-    sentry.countEvent('usageButtonResetLog')
 }
 
 /**
@@ -162,7 +158,6 @@ function windowMainClickButtonLogReset () {
 */
 function windowMainClickButtonUIReset () {
     ui.windowMainResetAskUser()
-    sentry.countEvent('usageButtonResetUI')
 }
 
 // ----------------------------------------------------------------------------
@@ -176,7 +171,6 @@ function windowMainClickButtonUIReset () {
 */
 function windowSettingsClickIconUserSettingsDir () {
     settings.settingsFolderOpen()
-    sentry.countEvent('usageSettingsOpenSettingsFolder')
 }
 
 /**
@@ -187,7 +181,6 @@ function windowSettingsClickIconUserSettingsDir () {
 */
 function windowSettingsClickButtonChooseDownloadDir () {
     settings.settingsSelectDownloadDir()
-    sentry.countEvent('usageSettingsChooseDownloadDir')
 }
 
 /**
@@ -198,7 +191,6 @@ function windowSettingsClickButtonChooseDownloadDir () {
 */
 function windowSettingsClickCheckboxVerboseMode () {
     settings.settingsToggleVerboseMode()
-    sentry.countEvent('usageSettingsToggleVerboseMode')
 }
 
 /**
@@ -209,7 +201,6 @@ function windowSettingsClickCheckboxVerboseMode () {
 */
 function windowSettingsClickCheckboxAdditionalParameter () {
     settings.settingsToggleAdditionalParameter()
-    sentry.countEvent('usageSettingsToggleAdditionalParameter')
 }
 
 /**
@@ -220,7 +211,6 @@ function windowSettingsClickCheckboxAdditionalParameter () {
 */
 function windowSettingsClickButtonAdditionalParameterSave () {
     settings.settingsSaveAdditionalParameter()
-    sentry.countEvent('usageSettingsSaveAdditionalParameter')
 }
 
 /**
@@ -231,7 +221,6 @@ function windowSettingsClickButtonAdditionalParameterSave () {
 */
 function windowSettingsClickCheckboxUpdatePolicy () {
     settings.settingsTogglePrereleases()
-    sentry.countEvent('usageSettingsTogglePrereleases')
 }
 
 /**
@@ -242,7 +231,6 @@ function windowSettingsClickCheckboxUpdatePolicy () {
 */
 function windowSettingsClickIconBug () {
     settings.settingsOpenDevTools()
-    sentry.countEvent('usageSettingsOpenDevTools')
 }
 
 /**
@@ -253,7 +241,6 @@ function windowSettingsClickIconBug () {
 */
 function windowSettingsClickCheckboxErrorReporting () {
     settings.settingsToggleErrorReporting()
-    sentry.countEvent('usageSettingsToggleErrorReporting')
 }
 
 /**
@@ -276,7 +263,6 @@ function windowSettingsClickCheckboxErrorReportingMoreInfo () {
 */
 function windowSettingsClickDropdownAudioFormats () {
     settings.settingsAudioFormatSave()
-    sentry.countEvent('usageSettingsChooseAudioFormat')
 }
 
 /**
@@ -298,12 +284,10 @@ function windowSettingsClickOpenUrl (url) {
 */
 function windowSettingsClickYoutubeDlUpdate () {
     youtubeDl.binaryUpdateCheck(false, false) // If silent = false -> Forces result feedback, even if no update is available
-    sentry.countEvent('usageSettingsButtonYoutubeDlUpdatePressed')
 }
 
 function windowSettingsClickCheckboxUrlInformations () {
     settings.settingsToggleUrlInformations()
-    sentry.countEvent('usageSettingsToggleUrlInformations')
 }
 
 // ----------------------------------------------------------------------------
@@ -498,7 +482,6 @@ function urlInputFieldOnFocus () {
 */
 function searchUpdate (silent = true) {
     ui.windowMainApplicationStateSet('Searching media-dupes updates')
-    sentry.countEvent('usageUpdateSearchMediaDupesStarted')
 
     // check if pre-releases should be included or not
     var curEnablePrereleasesSetting = utils.globalObjectGet('enablePrereleases')
@@ -566,7 +549,6 @@ function searchUpdate (silent = true) {
         // If a stable (not a prelease) update is available - see #73
         if (localAppVersion < remoteAppVersionLatest) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Found update, notify user')
-            sentry.countEvent('usageUpdateSearchMediaDupesFoundUpdate')
 
             // prepare the message for the user - depending on the fact if it is a pre-release or not
             var updateText
@@ -604,7 +586,6 @@ function searchUpdate (silent = true) {
             n.show()
         } else {
             utils.writeConsoleMsg('info', 'searchUpdate ::: No newer version of media-dupes found.')
-            sentry.countEvent('usageUpdateSearchMediaDupesNoUpdatesAvailable')
 
             // when executed manually via menu -> user should see result of this search
             if (silent === false) {
@@ -640,7 +621,6 @@ function openReleasesOverview () {
     const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
     utils.writeConsoleMsg('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
     utils.openURL(urlGitHubReleases)
-    sentry.countEvent('usageOpenReleaseOverview')
 }
 
 /**
@@ -717,7 +697,6 @@ function settingsGetYoutubeDLBinaryVersion (_callback) {
 */
 function validateUrlBeforeAdd () {
     var currentContentOfUrlInputField = $('#inputNewUrl').val() // get current content of field
-    sentry.countEvent('usageValidateUrlStarted')
 
     // if the field is empty - continue
     if (currentContentOfUrlInputField === '') {
@@ -727,7 +706,6 @@ function validateUrlBeforeAdd () {
         var isUrlValid = utils.validURL(currentContentOfUrlInputField)
         if (isUrlValid) {
             utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
-            sentry.countEvent('usageValidateUrlSuccess')
             utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
         } else {
             utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL (' + currentContentOfUrlInputField + ').')

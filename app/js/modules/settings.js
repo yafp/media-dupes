@@ -66,34 +66,30 @@ function settingsSelectDownloadDir () {
 /**
 * @function settingsToggleVerboseMode
 * @summary Enables or disabled the verbose mode
-* @description Sentry is used for log output. It is disabled by default. Enables or disabled the verbode mode
+* @description Enables or disabled the verbode mode
 */
 function settingsToggleVerboseMode () {
     if ($('#checkboxEnableVerbose').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now enabled')
         utils.userSettingWrite('enableVerboseMode', true)
-        sentry.countEvent('usageSettingsVerboseModeEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleVerboseMode ::: Verbose Mode is now disabled')
         utils.userSettingWrite('enableVerboseMode', false)
-        sentry.countEvent('usageSettingsVerboseModeDisabled')
     }
 }
 
 /**
 * @function settingsToggleAdditionalParameter
 * @summary Enables or disabled the verbose mode
-* @description Sentry is used for log output. It is disabled by default. Enables or disabled the verbode mode
+* @description It is disabled by default. Enables or disabled the verbode mode
 */
 function settingsToggleAdditionalParameter () {
     if ($('#checkboxEnableAdditionalParameter').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleAdditionalParameter ::: Additional parameter is now enabled')
         utils.userSettingWrite('enableAdditionalParameter', true)
-        sentry.countEvent('usageSettingsAdditionalParameterEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleAdditionalParameter ::: Additional parameter is now disabled')
         utils.userSettingWrite('enableAdditionalParameter', false)
-        sentry.countEvent('usageSettingsAdditionalParameterEnabled')
     }
 }
 
@@ -136,11 +132,9 @@ function settingsTogglePrereleases () {
     if ($('#checkboxEnablePreReleases').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will now include pre-releases')
         utils.userSettingWrite('enablePrereleases', true)
-        sentry.countEvent('usageSettingsPrereleasesEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsTogglePrereleases ::: Update-Search will ignore pre-releases')
         utils.userSettingWrite('enablePrereleases', false)
-        sentry.countEvent('usageSettingsPrereleasesDisabled')
     }
 }
 
@@ -153,25 +147,22 @@ function settingsToggleUrlInformations () {
     if ($('#checkboxEnableUrlInformations').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now enabled')
         utils.userSettingWrite('enableUrlInformations', true)
-        sentry.countEvent('usageSettingsUrlInformationsEnabled')
     } else {
         utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now disabled')
         utils.userSettingWrite('enableUrlInformations', false)
-        sentry.countEvent('usageSettingsUrlInformationsDisabled')
     }
 }
 
 /**
 * @function settingsToggleErrorReporting
 * @summary Enables or disabled the error reporting function
-* @description Sentry is used for error reporting. It is enabled by default. Enables or disabled the error reporting function
+* @description Enables or disabled the error reporting function
 */
 function settingsToggleErrorReporting () {
     if ($('#checkboxEnableErrorReporting').is(':checked')) {
         utils.writeConsoleMsg('info', 'settingsToggleErrorReporting ::: Error reporting is now enabled')
         utils.userSettingWrite('enableErrorReporting', true)
         sentry.enableSentry()
-        sentry.countEvent('usageSettingsErrorReportingEnabled')
     } else {
         // ask if user really wants to disable error-reporting (using a confirm dialog)
         const Noty = require('noty')
