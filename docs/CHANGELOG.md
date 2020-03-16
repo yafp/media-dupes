@@ -41,6 +41,9 @@ The following categories are used:
   * Updated ```electron-log```  from ```4.0.7``` to ```4.1.0```
   * Updated ```sentry```  from ```1.2.1``` to ```1.3.0```
 
+#### ```Removed```
+* Removed most of the event count functions. Only core functionality is counted from now.
+
 #### ```Fixed```
 * youtube-dl update routine
   * Improved handling  of 'Force updating youtube-dl binary ' function via menu.
