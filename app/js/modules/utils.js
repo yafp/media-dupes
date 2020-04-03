@@ -536,15 +536,10 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
                     // dir does not exists
                     settingDownloadDir = ''
                     writeConsoleMsg('error', 'userSettingRead ::: Configured download dir _' + settingDownloadDir + '_ does not exists. Gonna reset the user-setting.')
-                    globalObjectSet('downloadDir', settingDownloadDir)
 
-                    // delete the config
-                    storage.remove('downloadDir', function (error) {
-                        if (error) {
-                            writeConsoleMsg('error', 'userSettingRead ::: Unable to delete config. Error: ' + error)
-                            throw error
-                        }
-                    })
+                    settingDownloadDir = defaultDownloadFolderGet() // get the default download target
+                    globalObjectSet('downloadDir', settingDownloadDir) // update the object
+                    userSettingWrite('downloadDir', settingDownloadDir, true) // update the config
                 }
 
                 // Update UI select
