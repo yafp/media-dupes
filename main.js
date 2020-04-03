@@ -416,8 +416,6 @@ function createWindowMain () {
         // mainWindow.webContents.send('initSettings')
         mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
         mainWindow.webContents.send('startDisclaimerCheck') // check if disclaimer must be shown
-        // mainWindow.webContents.send('startSearchUpdatesSilent') // search silently for media-dupes updates
-        // mainWindow.webContents.send('youtubeDlSearchUpdatesSilent') // search silently for youtube-dl binary updates
         mainWindow.webContents.send('todoListCheck') // search if there are urls to restore
         mainWindow.webContents.send('unblurMainUI') // unblur the main UI
 
