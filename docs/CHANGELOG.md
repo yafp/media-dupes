@@ -26,29 +26,33 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.7.0 (2020xxyy) - DEV
+### media-dupes 0.7.0 (20200403)
 #### ```Added```
 * Energy-management
   * Added a power-save-blocker. Now trying to prevent powerSave while downloads are in progress. See [#97](https://github.com/yafp/media-dupes/issues/97)
 
 #### ```Changed```
+* Audio-Mode: Added tracknumer as first parameter for the naming pattern of audio files.
 * Windows nsis installer. Show install and uninstall details. See [#96](https://github.com/yafp/media-dupes/issues/96)
+* Removed most of the event count functions. Only core functionality is counted from now. See [#103](https://github.com/yafp/media-dupes/issues/103)
 * Settings
   * youtube-dl: Update button is now disabled if update is technically not possible.
 * Dependencies
-  * Updated ```electron```  from ```8.1.0``` to ```8.1.1```
+  * Updated ```electron```  from ```8.1.0``` to ```8.2.0```
   * Updated ```electron-builder```  from ```22.4.0``` to ```22.4.1```
-  * Updated ```electron-log```  from ```4.0.7``` to ```4.1.0```
+  * Updated ```electron-log```  from ```4.0.7``` to ```4.1.1```
+  * Updated ```fontaswesome-free```  from ```5.12.1``` to ```5.13.0```
   * Updated ```sentry```  from ```1.2.1``` to ```1.3.0```
-
-#### ```Removed```
-* Removed most of the event count functions. Only core functionality is counted from now.
+  * Updated ```mocha```  from ```7.1.0``` to ```7.1.1```
 
 #### ```Fixed```
 * youtube-dl update routine
   * Improved handling  of 'Force updating youtube-dl binary ' function via menu.
   * Added error handling to 'reset youtube-dl binary path' function via menu.
+  * Fixed update issues due to missing permissions. See [#98](https://github.com/yafp/media-dupes/issues/98)
 * Fixed horizontal scrollbar bug. See [#100](https://github.com/yafp/media-dupes/issues/100)
+* Fixed some vulnerabilities in dependencies.
+* Fixed an issue when the configured download target no longer exists. Now fallbacks to default
 
 ***
 

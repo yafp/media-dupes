@@ -53,6 +53,8 @@ Please see the [changelog](docs/CHANGELOG.md) for more details.
 ## download
 You'll find the latest releases [here](https://github.com/yafp/media-dupes/releases).
 
+Some of our install packages allow updating the bundled youtube-dl package while others doesnt due to permission issues.
+
 ## install
 Please see the [installation instructions](docs/INSTALL.md) for more details.
 
