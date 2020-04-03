@@ -375,7 +375,7 @@ function windowMainDownloadContent (mode) {
                     // OPTIONS
                     '--ignore-errors', // Continue on download errors, for example to skip unavailable videos in a playlist
                     '--format', 'bestaudio',
-                    '--output', path.join(configuredDownloadFolder, 'Audio', '%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
+                    '--output', path.join(configuredDownloadFolder, 'Audio', '%(track_number)s-%(artist)s-%(album)s-%(title)s-%(id)s.%(ext)s'), // output path
                     // FILESYSTEM OPTIONS
                     '--restrict-filenames', // Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
                     '--continue', // Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.
@@ -476,7 +476,7 @@ function windowMainDownloadContent (mode) {
                 const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
                         sentry.countEvent('usageURLsFailed')
-                        utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Country-/ and/or similar restrictions</small>', 0)
+                        utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Using old version of media-dupes<br>* Using old version of youtube-dl<br>* Country-/ and/or similar restrictions</small>', 0)
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         windowMainLogAppend('Failed to download a single url', true)
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url (Attention: this is not the actual url . we got a problem here)
