@@ -140,6 +140,25 @@ textarea {
 }
 
 
+/* ########################################################################## */
+/* DATATABLES */
+/* ########################################################################## */
+th { font-size: 12px; }
+td { font-size: 11px; }
+
+/* hover color for rows */
+table#example.dataTable tbody tr:hover {
+  background-color: #ffa;
+}
+ 
+table#example.dataTable tbody tr:hover > .sorting_1 {
+  background-color: #ffa;
+}
+
+
+#todoList{
+    height: 200px;
+}
 
 /* ########################################################################## */
 /* LINKs */
