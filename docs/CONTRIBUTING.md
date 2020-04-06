@@ -14,13 +14,6 @@ email, or any other method with the owners of this repository before making a ch
 The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/).
 It is auto-generated on each commit.
 
-### CI
-The project repository is using:
-
-* [Travis CI](https://travis-ci.org/) (for Linux and macOS)
-
-for Continuos Integration aspects.
-
 ### Building media-dupes
 Build instructions can be found [here](BUILD.md).
 
