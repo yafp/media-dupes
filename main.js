@@ -51,7 +51,7 @@ const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases
 // app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
 
 // mainWindow: minimal window size
-const mainWindowMinimalWindowHeight = 760
+const mainWindowMinimalWindowHeight = 830
 const mainWindowMinimalWindowWidth = 620
 
 // settingsWundow: minimal window size

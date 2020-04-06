@@ -20,6 +20,7 @@ const sentry = require('./sentry.js')
 //
 var distractEnabler = 0
 var arrayUserUrls = [] // contains the urls which should be downloaded
+var arrayUserUrlsN = []
 
 /**
 * @function windowMainApplicationStateSet
@@ -355,9 +356,9 @@ function windowMainDownloadContent (mode) {
             utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Detected bundled ffmpeg at: _' + ffmpegPath + '_.')
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
-            if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
+            if (typeof arrayUserUrlsN === 'undefined' || !(arrayUserUrlsN instanceof Array)) {
                 windowMainApplicationStateSet()
-                utils.showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadContent(). Please report this', 0)
+                utils.showNoty('error', 'Unexpected state of array _arrayUserUrlsN_ in function downloadContent(). Please report this', 0)
                 return
             } else {
                 utils.globalObjectSet('todoListStateEmpty', false)
@@ -458,9 +459,9 @@ function windowMainDownloadContent (mode) {
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             var url
-            for (var i = 0; i < arrayUserUrls.length; i++) {
+            for (var i = 0; i < arrayUserUrlsN.length; i++) {
                 sentry.countEvent('usageURLsOverall')
-                url = utils.fullyDecodeURI(arrayUserUrls[i]) // decode url - see #25
+                url = utils.fullyDecodeURI(arrayUserUrlsN[i]) // decode url - see #25
                 utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Added URL: _' + url + '_ (' + mode + ') with the following parameters: _' + youtubeDlParameter + '_ to the queue.')
                 // windowMainLogAppend('Added: \t\t' + url + ' to queue', true) // append url to log
 
@@ -480,7 +481,7 @@ function windowMainDownloadContent (mode) {
                         utils.writeConsoleMsg('error', 'windowMainDownloadContent ::: Problems downloading an url with the following parameters: _' + youtubeDlParameter + '_. Error: ' + error)
                         windowMainLogAppend('Failed to download a single url', true)
                         arrayUrlsThrowingErrors.push(url) // remember troublesome url (Attention: this is not the actual url . we got a problem here)
-                        utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
+                        utils.downloadStatusCheck(arrayUserUrlsN.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
                         throw error
                     }
 
@@ -491,11 +492,11 @@ function windowMainDownloadContent (mode) {
                     utils.writeConsoleMsg('info', output.join('\n')) // Show processing output for this download task
                     windowMainLogAppend(output.join('\n')) // Show processing output for this download task
 
-                    if (arrayUserUrls.length > 1) {
+                    if (arrayUserUrlsN.length > 1) {
                         utils.showNoty('success', 'Finished 1 download') // inform user
                     }
 
-                    utils.downloadStatusCheck(arrayUserUrls.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
+                    utils.downloadStatusCheck(arrayUserUrlsN.length, arrayUrlsProcessedSuccessfully.length, arrayUrlsThrowingErrors.length) // check if we are done here
 
                     // FIXME:
                     //
@@ -576,8 +577,8 @@ function windowMainDownloadVideo () {
             ]
 
             // Check if todoArray exists otherwise abort and throw error. See: MEDIA-DUPES-J
-            if (typeof arrayUserUrls === 'undefined' || !(arrayUserUrls instanceof Array)) {
-                utils.showNoty('error', 'Unexpected state of array _arrayUserUrls_ in function downloadVideo(). Please report this', 0)
+            if (typeof arrayUserUrlsN === 'undefined' || !(arrayUserUrlsN instanceof Array)) {
+                utils.showNoty('error', 'Unexpected state of array _arrayUserUrlsN_ in function downloadVideo(). Please report this', 0)
                 return
             }
 
@@ -589,11 +590,11 @@ function windowMainDownloadVideo () {
 
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
-            var arrayLength = arrayUserUrls.length
+            var arrayLength = arrayUserUrlsN.length
             windowMainLogAppend('Queue contains ' + arrayLength + ' urls.')
             windowMainLogAppend('Starting to download items from queue ... ')
             for (var i = 0; i < arrayLength; i++) {
-                var url = arrayUserUrls[i] // get url
+                var url = arrayUserUrlsN[i] // get url
 
                 // decode url - see #25
                 //
@@ -669,7 +670,6 @@ function windowMainDownloadVideo () {
                     if (arrayUrlsProcessedSuccessfully.length === arrayLength) {
                         utils.showNotification('Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.')
                         windowMainLogAppend('Finished downloading ' + arrayUrlsProcessedSuccessfully.length + ' url(s). Queue is now empty.', true)
-                        windowMainToDoListReset()
                         windowMainUiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
                         windowMainLoadingAnimationHide() // stop download animation / spinner
                         windowMainButtonsOthersEnable() // enable some of the buttons again
@@ -693,11 +693,26 @@ function windowMainAddUrl () {
     if (newUrl !== '') {
         var isUrlValid = utils.validURL(newUrl)
         if (isUrlValid) {
-            utils.writeConsoleMsg('info', 'windowMainAddUrl ::: Adding new url: _' + newUrl + '_.')
-            arrayUserUrls.push(newUrl) // append to array
-            windowMainToDoListUpdate() // update todo list
-            $('#inputNewUrl').val('') // reset input
-            inputUrlFieldSetState() // empty = white
+            // check if url is already in arrayUserUrlsN - If not add it to table
+            var isThisUrlAlreadyPartOfList = arrayUserUrlsN.includes(newUrl)
+            if (isThisUrlAlreadyPartOfList === false) {
+                utils.writeConsoleMsg('info', 'windowMainAddUrl ::: Adding new url: _' + newUrl + '_.')
+                $('#inputNewUrl').val('') // reset input
+                inputUrlFieldSetState() // empty = white
+                arrayUserUrlsN.push(newUrl) // append to array
+                dataTablesRowAdd(newUrl) // #102
+            } else {
+                utils.showNoty('warning', 'This url is already part of the current todo list')
+            }
+
+            // if array size > 0 -> enable start button
+            var arrayLength = arrayUserUrlsN.length
+            if (arrayLength === 0) {
+                utils.globalObjectSet('todoListStateEmpty', true)
+            } else {
+                windowMainButtonsStartEnable()
+                utils.globalObjectSet('todoListStateEmpty', false)
+            }
 
             // if urlInformations is enabled - launch them
             var curSettingUrlInformations = utils.globalObjectGet('enableUrlInformations') // #95
@@ -742,7 +757,6 @@ function windowMainDistract () {
 * @description Gets triggered after the download function finished
 */
 function windowMainDownloadQueueFinished () {
-    windowMainToDoListReset()
     windowMainUiMakeUrgent() // mark mainWindow as urgent to inform the user about the state change
     windowMainLoadingAnimationHide() // stop download animation / spinner
     windowMainButtonsOthersEnable() // enable some of the buttons again
@@ -765,58 +779,15 @@ function windowMainUiReset () {
     windowMainDisableAddUrlButton()
     windowMainButtonsStartDisable() // disable start button
     windowMainButtonsOthersEnable() // ensure some buttons are enabled
-    windowMainToDoListReset() // empty todo-list textarea
+
+    // FIXME:
+    // dataTablesReset() // empty todo-list textarea
+
     windowMainLogReset() // empty log textarea
     windowMainApplicationStateSet() // reset application state
     windowMainThumbnailPreviewReset() // reset the thumbnail
     utils.globalObjectSet('todoListStateEmpty', true) // store that the todolist is now empty
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Finished resetting the UI')
-}
-
-/**
-* @function windowMainToDoListReset
-* @summary Resets the todo-list textarea
-* @description Resets the todo-list textarea
-*/
-function windowMainToDoListReset () {
-    arrayUserUrls = [] // reset the array
-    document.getElementById('textareaTodoList').value = '' // reset todo-list in UI
-    utils.writeConsoleMsg('info', 'windowMainToDoListReset ::: Did reset the todolist-textarea')
-}
-
-/**
-* @function windowMainToDoListUpdate
-* @summary Updates the todo-list after a user added an url
-* @description Is called by addUrl(). Makes the url array unique to remove duplicated entries. Updates the UI todo item. Calls windowMainButtonsStartEnable() if array is > 0
-*/
-function windowMainToDoListUpdate () {
-    // check for duplicates
-    var alreadySeen = []
-    arrayUserUrls.forEach(function (str) {
-        if (alreadySeen[str]) {
-            utils.writeConsoleMsg('warn', 'windowMainToDoListUpdate ::: Duplicate url found: _' + str + '_.')
-            windowMainLogAppend('Warning:\tFound and removed url duplicate\n\t\t' + str)
-        } else {
-            alreadySeen[str] = true
-        }
-    })
-
-    arrayUserUrls = $.unique(arrayUserUrls) // remove duplicate entries in array
-
-    // write the now unique url array content to textarea
-    var textarea = document.getElementById('textareaTodoList')
-    textarea.value = arrayUserUrls.join('\n')
-
-    // if array size > 0 -> enable start button
-    var arrayLength = arrayUserUrls.length
-    if (arrayLength === 0) {
-        utils.globalObjectSet('todoListStateEmpty', true)
-    } else {
-        windowMainButtonsStartEnable()
-        utils.globalObjectSet('todoListStateEmpty', false)
-    }
-
-    utils.writeConsoleMsg('info', 'windowMainToDoListUpdate ::: Updated the todo-list')
 }
 
 /**
@@ -850,8 +821,8 @@ function windowMainToDoListRestore () {
                 curUrl = data[key].url
                 utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restoring the url: _' + curUrl + '_ from settings file: _' + key + '_.') // key = name of json file
 
-                arrayUserUrls.push(curUrl) // append to array
-                windowMainToDoListUpdate() // update todo list
+                arrayUserUrlsN.push(curUrl) // append to array
+                dataTablesRowAdd(curUrl)
                 restoreCounter = restoreCounter + 1 // update url-restore counter
 
                 // Delete the related file
@@ -868,9 +839,6 @@ function windowMainToDoListRestore () {
 
         // inform the user if something got restored
         if (restoreCounter > 0) {
-            // windowMainToDoListReset() // empty the todolist
-            windowMainToDoListUpdate() // update todo list
-
             utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Finished restored ' + restoreCounter + ' URLs from previous session.')
             utils.showNoty('success', 'Restored <b>' + restoreCounter + '</b> URLs from your last session.')
 
@@ -879,6 +847,11 @@ function windowMainToDoListRestore () {
             ipcRenderer.send('makeWindowUrgent')
 
             sentry.countEvent('usageRestoredUrlFromPreviousSession')
+
+
+            // remember that todo list is now not longer empty - see #105
+            utils.globalObjectSet('todoListStateEmpty', false)
+
         } else {
             utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Found no urls to restore from previous session.')
         }
@@ -898,9 +871,9 @@ function windowMainToDoListSave () {
     if (isToDoListEmpty === false) {
         var baseName = 'todoListEntry_'
         var tempName
-        var arrayLength = arrayUserUrls.length
+        var arrayLength = arrayUserUrlsN.length
         for (var i = 0; i < arrayLength; i++) {
-            var url = arrayUserUrls[i]
+            var url = arrayUserUrlsN[i]
             tempName = baseName + i
             utils.writeConsoleMsg('info', 'windowMainToDoListSave :::  Trying to save the URL: ' + url + '_ to the file: _' + tempName + '_.')
 
@@ -1089,6 +1062,11 @@ function youtubeSuggest () {
         .catch(console.error)
 }
 
+/**
+* @function windowMainDisablePowerSaveBlocker
+* @summary Disable the power save blocker
+* @description RDisable the power save blocker
+*/
 function windowMainDisablePowerSaveBlocker () {
     utils.writeConsoleMsg('info', 'windowMainDisablePowerSaveBlocker ::: Check if there is a PowerSaveBlocker enabled, if so try to disable it.')
     var currentPowerSaveBlockerStatus = utils.globalObjectGet('powerSaveBlockerEnabled')
@@ -1103,6 +1081,73 @@ function windowMainDisablePowerSaveBlocker () {
     } else {
         utils.writeConsoleMsg('info', 'windowMainDisablePowerSaveBlocker ::: PowerSaveBlocker was not enabled, so nothing to do here.')
     }
+}
+
+/**
+* @function removeUrlFromTodoList
+* @summary Remove a single url from todo list array
+* @description Remove a single url from todo list array
+* @param {String} url - The url which should be removed from the todo array
+*/
+function removeUrlFromTodoList(url){
+    // remove url from array
+    const index = arrayUserUrlsN.indexOf(url);
+    if (index > -1) {
+        arrayUserUrlsN.splice(index, 1);
+    }
+
+    // check array size (to ensure saving & restoring urls works as expected)
+    if(arrayUserUrlsN.length === 0) {
+        utils.globalObjectSet('todoListStateEmpty', true)
+        windowMainButtonsStartDisable() // disable start buttons
+    } else {
+        utils.globalObjectSet('todoListStateEmpty', false)
+        windowMainButtonsStartEnable() // Enable Start buttons
+    }
+}
+
+// #102
+/**
+* @function dataTablesRowAdd
+* @summary Add a single row to the dataTable
+* @description Add a single row to the dataTable
+* @param {String} url - The url which should be added to the datatable todo list
+*/
+function dataTablesRowAdd (url) {
+    var t = $('#example').DataTable()
+
+    t.row.add([
+        '<button type="button" id="play" name="play" class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-play"></i></button>',
+        url,
+        '',
+        '<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>'
+    ]).draw(false)
+}
+
+// #102
+/**
+* @function dataTablesReset
+* @summary clears the dataTable
+* @description clears the dataTable
+*/
+function dataTablesReset () {
+    var table = $('#example').DataTable()
+
+    table
+        .clear()
+        .draw()
+
+    arrayUserUrlsN = [] // need to reset the array
+}
+
+// #102
+/**
+* @function dataTablesInit
+* @summary init the dataTable
+* @description init the dataTable
+*/
+function dataTablesInit () {
+
 }
 
 // ----------------------------------------------------------------------------
@@ -1130,8 +1175,6 @@ module.exports.windowMainAddUrl = windowMainAddUrl
 module.exports.windowMainDistract = windowMainDistract
 module.exports.windowMainDownloadQueueFinished = windowMainDownloadQueueFinished
 module.exports.windowMainUiReset = windowMainUiReset
-module.exports.windowMainToDoListReset = windowMainToDoListReset
-module.exports.windowMainToDoListUpdate = windowMainToDoListUpdate
 module.exports.windowMainToDoListRestore = windowMainToDoListRestore
 module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
@@ -1140,8 +1183,9 @@ module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
 module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
 module.exports.windowMainEnableAddUrlButton = windowMainEnableAddUrlButton
 module.exports.windowMainDisableAddUrlButton = windowMainDisableAddUrlButton
-
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
 module.exports.youtubeSuggest = youtubeSuggest
-
 module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlocker
+module.exports.removeUrlFromTodoList = removeUrlFromTodoList // #102
+module.exports.dataTablesRowAdd = dataTablesRowAdd // #102
+module.exports.dataTablesReset = dataTablesReset // #102

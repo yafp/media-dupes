@@ -24,6 +24,25 @@ The following categories are used:
 * ```Security```: in case of vulnerabilities.
 
 
+
+***
+
+### media-dupes 0.8.0 (2020xxyy) - DEV
+#### ```Added```
+* ToDo list
+  * Single urls can now be removed from list. See [#104](https://github.com/yafp/media-dupes/issues/104)
+
+#### ```Changed```
+* ToDo list is now a table. See [#102](https://github.com/yafp/media-dupes/issues/102)
+
+#### ```Removed```
+* CI
+  * Removing travis and appveyor - as building is now realized using GitHub actions.
+
+#### ```Fixed```
+* Fixed an error of todo-list saving and restoring. See [#105](https://github.com/yafp/media-dupes/issues/105)
+
+
 ***
 
 ### media-dupes 0.7.0 (20200403)

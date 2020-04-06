@@ -32,8 +32,6 @@ unhandled.initUnhandled()
 // ----------------------------------------------------------------------------
 // VARIABLES
 // ----------------------------------------------------------------------------
-// var arrayUserUrls = [] // contains the urls which should be downloaded
-// var arrayUrlsThrowingErrors = [] // coontains urls which throws errors while trying to download
 
 // Settings variables
 //
@@ -64,7 +62,6 @@ function windowMainClickDistract () {
 */
 function windowMainClickButtonAddUrl () {
     ui.windowMainAddUrl()
-    sentry.countEvent('usageButtonAddUrl')
 }
 
 /**
@@ -79,7 +76,7 @@ function windowMainClickButtonVideo () {
 }
 
 /**
-* @function windowMainClickButtonVideo
+* @function windowMainClickButtonVideoV2
 * @summary Handles the click on the video button
 * @description Triggered from the mainWindow. Starts the video download function from the module ui
 * @memberof renderer

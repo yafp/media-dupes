@@ -706,6 +706,9 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
         ui.windowMainLogAppend(statusReport + '', true) // append to log
         ui.windowMainLogAppend('### QUEUE ENDED ###\n\n', true) // Show mode in log
         ui.windowMainDownloadQueueFinished()
+
+        // reset the datatable
+        ui.dataTablesReset()
     } else {
         writeConsoleMsg('info', 'downloadStatusCheck ::: Some download tasks are not yet finished')
     }
