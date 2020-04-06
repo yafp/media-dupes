@@ -14,9 +14,8 @@ available for:
 ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c30508f8add43ee8fbb62c2a669e76b)](https://www.codacy.com/manual/yafp/media-dupes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yafp/media-dupes&amp;utm_campaign=Badge_Grade)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/k4c1nve3xejgolbr?svg=true)](https://ci.appveyor.com/project/yafp/media-dupes)
-[![Build Status](https://travis-ci.org/yafp/media-dupes.svg?branch=master)](https://travis-ci.org/yafp/media-dupes)
-![npm audit](https://github.com/yafp/media-dupes/workflows/npm%20audit/badge.svg)
+![GitHub Actions - electron_builder](https://github.com/yafp/media-dupes/workflows/electron_builder/badge.svg)
+![GitHub Actions - npm audit](https://github.com/yafp/media-dupes/workflows/npm%20audit/badge.svg)
 ![GitHub Current Release](https://img.shields.io/github/release/yafp/media-dupes.svg?style=flat)
 ![GitHub Release Date](https://img.shields.io/github/release-date/yafp/media-dupes.svg?style=flat)
 ![GitHub Download All releases](https://img.shields.io/github/downloads/yafp/media-dupes/total.svg)
@@ -28,6 +27,7 @@ available for:
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
 [![Discord](https://img.shields.io/discord/672401845855191040.svg)](https://discord.gg/gHnqdHy)
 [![jsDoc](https://github.com/yafp/media-dupes/workflows/GitHub%20pages/badge.svg)](https://yafp.github.io/media-dupes/)
+![av_scan](https://github.com/yafp/media-dupes/workflows/av_scan/badge.svg)
 
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_latest.png)
 
