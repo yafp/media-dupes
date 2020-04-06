@@ -38,6 +38,19 @@
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css">
 
+
+
+
+
+    <!-- datatables -->
+    <!-- core -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <!-- scroller -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.0.1/css/scroller.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.0.1/js/scroller.dataTables.min.js"></script>
+
+
     <title>media-dupes</title>
 
 </head>
@@ -63,7 +76,7 @@
                 <!-- header -->
                 <div class="modal-header">
                     <h5 class="modal-title" id="previewTitle"></h5>
-                    
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -121,19 +134,47 @@
             </div>
         </div>
 
-        <!-- show todo-list -->
-        <div class="row-fluid">
-            <textarea
-                class="form-control"
-                id="textareaTodoList"
-                name="textareaTodoList"
-                placeholder="todo-list"
-                readonly
-                rows="6"
-                data-step="4"
-                data-intro="Your URL should now be visible here on the <b>todo-list</b> - well done.<br><br>You could now add more URLs like you already did before OR start the download process.">
-            </textarea>
+        <!-- #102 - new todo-list is a table -->
+        <div class="row-fluid" id="todoList">
+            <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Play</th>
+                <th>Url</th>
+                <th>Status</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+
+        <!--
+        <tbody>
+            <tr>
+                <td></td>
+                <td>https://www.mixcloud.com/SoulCoolRecords/dj-muro-vibe-obsession-roy-ayers-side/</td>
+                <td>Open</td>
+                <td></td>
+            </tr>
+        </tbody>
+        -->
+
+        <!--
+        <tfoot>
+            <tr>
+                <th>Play</th>
+                <th>Url</th>
+                <th>Status</th>
+                <th>Remove</th>
+            </tr>
+        </tfoot>
+        -->
+    </table>
         </div>
+
+
+
+
+
+
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -154,7 +195,7 @@
                 <i class="fas fa-video"></i> Video <i class="fas fa-download"></i>
             </button>
             <!-- video: not using .exec() -->
-            
+
             <!--
             <button
                 id="buttonStartVideo"
@@ -168,7 +209,7 @@
                 <i class="fas fa-video"></i> Youtube video
             </button>
             -->
-            
+
 
             <!-- audio: using exec() -->
             <button
@@ -307,6 +348,70 @@ $( document ).ready(function()
     setTimeout(function(){
         $('#myModal').modal('hide') // splashscreen
     }, 1000);
+
+
+
+    // #102
+    //
+    var table = $('#example').DataTable( {
+        "dom": '<t>',
+        // scroller
+        "scrollY": 150,
+        "scrollCollapse": true,
+        "scroller": true,
+        // Default text for empty table
+        "language": {
+            "emptyTable": "ToDo list is empty"
+        },
+        // Hide some cols
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false, // hiding column 0
+                "searchable": false
+            }
+        ],
+        // column sizing and default content
+        "columns": [
+            {
+                "width": "20px"
+            },
+            null,
+            {
+                "data": "status", // can be null or undefined
+                "defaultContent": "<i>queued</i>",
+                "width": "20px"
+            },
+            {
+                "width": "20px"
+            }
+        ]
+    } );
+
+    // Delete a row
+    $('#example tbody').on( 'click', '#delete', function () {
+        rowData = table.row( $(this).parents('tr') ).data();
+
+        utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[1] + ' from todo list')
+
+        // remove from array: arrayUserUrlsN
+        ui.removeUrlFromTodoList(rowData[1])
+
+        // remove from table
+        table
+            .row( $(this).parents('tr') )
+            .remove()
+            .draw();
+    });
+
+
+    // Play a row
+    $('#example tbody').on( 'click', '#play', function () {
+        rowData = table.row( $(this).parents('tr') ).data();
+        utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[1] + ' from todo list')
+    });
+
+
 
 
 });
