@@ -413,8 +413,8 @@ function urlInputFieldOnKeyUp () {
 
         var isUrlValid = utils.validURL(currentContentOfUrlInputField)
         if (isUrlValid) {
-            utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is a valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
-            utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
+            utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is a valid URL (' + currentContentOfUrlInputField + ').')
+            ui.inputUrlFieldSetState('valid') // valid = green
         } else {
             // utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: User input is not a valid URL (' + currentContentOfUrlInputField + ').')
         }
@@ -455,12 +455,10 @@ function urlInputFieldOnFocus () {
 
         var isUrlValid = utils.validURL(currentClipboardContent)
         if (isUrlValid) {
-            utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a valid URL: _' + currentClipboardContent + '_. Now check if it is reachable.')
+            utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a valid URL: _' + currentClipboardContent + '_.')
             $('#inputNewUrl').val(currentClipboardContent) // paste it
             $('#inputNewUrl').select() // select it entirely
-
-            // check if url is reachable
-            utils.urlIsReachable(currentClipboardContent)
+            ui.inputUrlFieldSetState('valid') // valid = green
         } else {
             utils.writeConsoleMsg('warn', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL: _' + currentClipboardContent + '_.')
         }
@@ -671,7 +669,7 @@ function settingsShowFfmpegInfo () {
 function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
 
-    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetailsPathGet() // get path to youtube-dl binary details
+    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetaclipilsPathGet() // get path to youtube-dl binary details
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
             utils.writeConsoleMsg('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')
@@ -698,15 +696,12 @@ function validateUrlBeforeAdd () {
     // if the field is empty - continue
     if (currentContentOfUrlInputField === '') {
         utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: Empty field')
-        sentry.countEvent('usageValidateUrlEmptyUrl')
     } else {
         var isUrlValid = utils.validURL(currentContentOfUrlInputField)
         if (isUrlValid) {
-            utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + '). Now check if it is reachable.')
-            utils.urlIsReachable(currentContentOfUrlInputField) // check if url is reachable
+            utils.writeConsoleMsg('info', 'validateUrlBeforeAdd ::: URL seems valid URL (' + currentContentOfUrlInputField + ').')
         } else {
             utils.writeConsoleMsg('info', 'urlInputFieldOnFocus ::: Clipboard contains a non valid URL (' + currentContentOfUrlInputField + ').')
-            sentry.countEvent('usageValidateUrlError')
         }
     }
 }

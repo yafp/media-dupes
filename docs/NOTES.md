@@ -14,10 +14,10 @@
   * ffmpeg: make pull request to https://github.com/pietrop/ffmpeg-static-electron to update from ffmpeg 3.x to 4.x
     * 20191210 - Created pull request for ffmpeg 4.2.1
 * Progress for stream (non exec use): https://www.npmjs.com/package/progress-stream
-* youtube-dl flags:
-  * --socket-timeout    What is a good default value? 120 ?
-  * --retries           What is a good default value ? 9999 ?
 * seperate electron-builder.conf from package-json
+* https://www.npmjs.com/package/youtube-loader ???
+* ToDoList
+  * Listen into an url of the todo-list: https://www.npmjs.com/package/metascraper-media-provider
 
 ### Currently working on
 

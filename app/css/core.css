@@ -108,15 +108,11 @@ h6{
 }
 
 /* ########################################################################## */
-/* TEXTAREAs */
+/* TEXTAREA */
 /* ########################################################################## */
 textarea {
     font-size: 12px !important;
     font-weight: bold;
-    /* font-family: Verdana, Arial, Helvetica, sans-serif; */
-    /*
-    font-family: monospace;
-    */
     font-family: 'ArialMono';
 
     background-color: #ecf0f1;
@@ -124,12 +120,6 @@ textarea {
     background-position: center;
     width: 32px;
     height:32px;
-}
-
-#textareaTodoList {
-    min-width: 100%;
-    width: 100%;
-    resize: none;
 }
 
 #textareaLogOutput {
@@ -143,8 +133,17 @@ textarea {
 /* ########################################################################## */
 /* DATATABLES */
 /* ########################################################################## */
-th { font-size: 12px; }
-td { font-size: 11px; }
+/* table head */
+th { 
+    font-size: 12px; 
+    color: gray;
+}
+
+/* table rows */
+td { 
+    font-size: 11px; 
+    color: gray;
+}
 
 /* hover color for rows */
 table#example.dataTable tbody tr:hover {
@@ -154,6 +153,7 @@ table#example.dataTable tbody tr:hover {
 table#example.dataTable tbody tr:hover > .sorting_1 {
   background-color: #ffa;
 }
+
 
 
 #todoList{

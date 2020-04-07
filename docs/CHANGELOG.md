@@ -31,16 +31,26 @@ The following categories are used:
 #### ```Added```
 * ToDo list
   * Single urls can now be removed from list. See [#104](https://github.com/yafp/media-dupes/issues/104)
+* Dependencies
+  * Added ```datatables.net-dt```  version ```1.10.20```. See [#102](https://github.com/yafp/media-dupes/issues/102)
+  * Added ```datatables.net-scroller-dt```  version ```2.0.1```. See [#102](https://github.com/yafp/media-dupes/issues/102)
 
 #### ```Changed```
 * ToDo list is now a table. See [#102](https://github.com/yafp/media-dupes/issues/102)
+* Reset UI is now reloading the UI.
+* Changed notifcation-display-time on end of download queue. Info hides itself after a while. Warning and error stay until confirmed.
+* Dependencies
+  * Updated ```electron```  from ```8.2.0``` to ```8.2.1```
+  * Updated ```jsdoc```  from ```3.6.3``` to ```3.6.4```
+
 
 #### ```Removed```
+* Removed is-reachable test for urls as it was not reliable. See [#106](https://github.com/yafp/media-dupes/issues/106)
 * CI
   * Removing travis and appveyor - as building is now realized using GitHub actions.
 
 #### ```Fixed```
-* Fixed an error of todo-list saving and restoring. See [#105](https://github.com/yafp/media-dupes/issues/105)
+* Fixed an error in todo-list saving and restoring. See [#105](https://github.com/yafp/media-dupes/issues/105)
 
 
 ***

@@ -672,6 +672,7 @@ function disclaimerShow () {
 function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
     var statusReport
     var notificationType
+    var notificationTime
 
     writeConsoleMsg('info', 'downloadStatusCheck ::: Overall: ' + overall)
     writeConsoleMsg('info', 'downloadStatusCheck ::: Succeeded: ' + succeeded)
@@ -685,6 +686,7 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
             writeConsoleMsg('info', 'downloadStatusCheck ::: All downloads successfully')
             statusReport = 'Finished entire download queue (' + overall + ') successfully'
             notificationType = 'success'
+            notificationTime = 3000
         }
 
         // some errors
@@ -692,6 +694,7 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
             writeConsoleMsg('warn', 'downloadStatusCheck ::: Some downloads failed')
             statusReport = 'Finished entire download queue (' + overall + ') - ' + succeeded + ' succeeded and ' + failed + ' failed with errors.'
             notificationType = 'warning'
+            notificationTime = 0
         }
 
         // all failed
@@ -699,10 +702,11 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
             writeConsoleMsg('error', 'downloadStatusCheck ::: All downloads failed')
             statusReport = 'Finished entire download queue (' + overall + ') - but all downloads failed with errors.'
             notificationType = 'error'
+            notificationTime = 0
         }
 
         showNotification(statusReport) // show an OS notification
-        showNoty(notificationType, statusReport, 0) // show an in-app notification
+        showNoty(notificationType, statusReport, notificationTime) // show an in-app notification
         ui.windowMainLogAppend(statusReport + '', true) // append to log
         ui.windowMainLogAppend('### QUEUE ENDED ###\n\n', true) // Show mode in log
         ui.windowMainDownloadQueueFinished()
@@ -712,28 +716,6 @@ function downloadStatusCheck (overall = 0, succeeded = 0, failed = 0) {
     } else {
         writeConsoleMsg('info', 'downloadStatusCheck ::: Some download tasks are not yet finished')
     }
-}
-
-/**
-* @function urlIsReachable
-* @summary Checks if a given url is reachable or not
-* @description Checks if a given url is reachable or not. Changes the color of the url input field
-* @param {string} - userInput - The url which should be checked if reachable or not
-*/
-function urlIsReachable (userInput) {
-    const isReachable = require('is-reachable');
-
-    (async () => {
-        if (await isReachable(userInput) === true) {
-            writeConsoleMsg('info', 'urlIsReachable ::: The input _' + userInput + '_ is reachable')
-            ui.inputUrlFieldSetState('reachable')
-            sentry.countEvent('usageUrlReachable')
-        } else {
-            writeConsoleMsg('error', 'urlIsReachable ::: The input _' + userInput + '_ is NOT reachable')
-            ui.inputUrlFieldSetState('unreachable')
-            sentry.countEvent('usageUrlUnreachable')
-        }
-    })()
 }
 
 /**
@@ -785,6 +767,5 @@ module.exports.defaultDownloadFolderGet = defaultDownloadFolderGet
 module.exports.disclaimerCheck = disclaimerCheck
 module.exports.disclaimerShow = disclaimerShow
 module.exports.downloadStatusCheck = downloadStatusCheck
-module.exports.urlIsReachable = urlIsReachable
 module.exports.generateTimestamp = generateTimestamp
 module.exports.canWriteFileOrFolder = canWriteFileOrFolder

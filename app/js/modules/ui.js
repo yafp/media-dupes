@@ -700,7 +700,7 @@ function windowMainAddUrl () {
                 $('#inputNewUrl').val('') // reset input
                 inputUrlFieldSetState() // empty = white
                 arrayUserUrlsN.push(newUrl) // append to array
-                dataTablesRowAdd(newUrl) // #102
+                toDoListSingleUrlAdd(newUrl) // #102
             } else {
                 utils.showNoty('warning', 'This url is already part of the current todo list')
             }
@@ -774,20 +774,23 @@ function windowMainDownloadQueueFinished () {
 */
 function windowMainUiReset () {
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Starting to reset the UI')
+
+    // call reload of the mainWindow
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('reloadMainWindow')
+
+    /*
     $('#inputNewUrl').val('') // empty the URL input field
     inputUrlFieldSetState() // empty = white
     windowMainDisableAddUrlButton()
     windowMainButtonsStartDisable() // disable start button
     windowMainButtonsOthersEnable() // ensure some buttons are enabled
-
-    // FIXME:
-    // dataTablesReset() // empty todo-list textarea
-
     windowMainLogReset() // empty log textarea
     windowMainApplicationStateSet() // reset application state
     windowMainThumbnailPreviewReset() // reset the thumbnail
     utils.globalObjectSet('todoListStateEmpty', true) // store that the todolist is now empty
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Finished resetting the UI')
+    */
 }
 
 /**
@@ -822,7 +825,7 @@ function windowMainToDoListRestore () {
                 utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Restoring the url: _' + curUrl + '_ from settings file: _' + key + '_.') // key = name of json file
 
                 arrayUserUrlsN.push(curUrl) // append to array
-                dataTablesRowAdd(curUrl)
+                toDoListSingleUrlAdd(curUrl)
                 restoreCounter = restoreCounter + 1 // update url-restore counter
 
                 // Delete the related file
@@ -848,10 +851,8 @@ function windowMainToDoListRestore () {
 
             sentry.countEvent('usageRestoredUrlFromPreviousSession')
 
-
             // remember that todo list is now not longer empty - see #105
             utils.globalObjectSet('todoListStateEmpty', false)
-
         } else {
             utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Found no urls to restore from previous session.')
         }
@@ -949,7 +950,7 @@ function windowMainDisableAddUrlButton () {
 */
 function inputUrlFieldSetState (state) {
     switch (state) {
-    case 'reachable':
+    case 'valid':
         $('#inputNewUrl').css('background-color', '#90EE90') // green
         windowMainEnableAddUrlButton()
         break
@@ -1084,20 +1085,20 @@ function windowMainDisablePowerSaveBlocker () {
 }
 
 /**
-* @function removeUrlFromTodoList
+* @function toDoListSingleUrlRemove
 * @summary Remove a single url from todo list array
 * @description Remove a single url from todo list array
 * @param {String} url - The url which should be removed from the todo array
 */
-function removeUrlFromTodoList(url){
+function toDoListSingleUrlRemove (url) {
     // remove url from array
-    const index = arrayUserUrlsN.indexOf(url);
+    const index = arrayUserUrlsN.indexOf(url)
     if (index > -1) {
-        arrayUserUrlsN.splice(index, 1);
+        arrayUserUrlsN.splice(index, 1)
     }
 
     // check array size (to ensure saving & restoring urls works as expected)
-    if(arrayUserUrlsN.length === 0) {
+    if (arrayUserUrlsN.length === 0) {
         utils.globalObjectSet('todoListStateEmpty', true)
         windowMainButtonsStartDisable() // disable start buttons
     } else {
@@ -1108,12 +1109,14 @@ function removeUrlFromTodoList(url){
 
 // #102
 /**
-* @function dataTablesRowAdd
+* @function toDoListSingleUrlAdd
 * @summary Add a single row to the dataTable
 * @description Add a single row to the dataTable
 * @param {String} url - The url which should be added to the datatable todo list
 */
-function dataTablesRowAdd (url) {
+function toDoListSingleUrlAdd (url) {
+    utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Adding a single row for the url _' + url + '_ to the dataTable')
+
     var t = $('#example').DataTable()
 
     t.row.add([
@@ -1122,31 +1125,51 @@ function dataTablesRowAdd (url) {
         '',
         '<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>'
     ]).draw(false)
-}
 
-// #102
-/**
-* @function dataTablesReset
-* @summary clears the dataTable
-* @description clears the dataTable
-*/
-function dataTablesReset () {
-    var table = $('#example').DataTable()
 
-    table
-        .clear()
-        .draw()
 
-    arrayUserUrlsN = [] // need to reset the array
-}
 
-// #102
-/**
-* @function dataTablesInit
-* @summary init the dataTable
-* @description init the dataTable
-*/
-function dataTablesInit () {
+
+
+    // TODO: after fetchhing stuff using meta-scraper the added row should be patched
+    //
+    // play with metascraper: https://github.com/microlinkhq/metascraper
+    //
+    //
+    const metascraper = require('metascraper')([
+        require('metascraper-video')(),
+        require('metascraper-description')(),
+        require('metascraper-image')(),
+        require('metascraper-audio')(),
+        require('metascraper-logo')(),
+        require('metascraper-logo-favicon')(),
+        require('metascraper-media-provider')(),
+        require('metascraper-soundcloud')(),
+        require('metascraper-title')(),
+        require('metascraper-youtube')(),
+    ])
+
+    var urlLogo
+    var urlDescription
+    var urlTitle
+
+    const got = require('got')
+
+    const targetUrl = url
+
+    ;(async () => {
+        const { body: html, url } = await got(targetUrl)
+        const metadata = await metascraper({ html, url })
+        console.log(metadata)
+
+        urlLogo = metadata.logo
+        urlDescription = metadata.description
+        urlTitle = metadata.title
+
+    })()
+
+
+
 
 }
 
@@ -1186,6 +1209,5 @@ module.exports.windowMainDisableAddUrlButton = windowMainDisableAddUrlButton
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
 module.exports.youtubeSuggest = youtubeSuggest
 module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlocker
-module.exports.removeUrlFromTodoList = removeUrlFromTodoList // #102
-module.exports.dataTablesRowAdd = dataTablesRowAdd // #102
-module.exports.dataTablesReset = dataTablesReset // #102
+module.exports.toDoListSingleUrlRemove = toDoListSingleUrlRemove // #102
+module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102

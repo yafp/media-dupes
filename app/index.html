@@ -38,18 +38,15 @@
     <!-- project css -->
     <link rel="stylesheet" href="css/core.css">
 
-
-
-
-
     <!-- datatables -->
     <!-- core -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <!-- scroller -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.0.1/css/scroller.dataTables.min.css">
-    <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.0.1/js/scroller.dataTables.min.js"></script>
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="../node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../node_modules/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
 
+    <!-- scroller -->
+    <link rel="stylesheet" href="../node_modules/datatables.net-scroller-dt/css/scroller.dataTables.min.css">
+    <script type="text/javascript" src="../node_modules/datatables.net-scroller-dt/js/scroller.dataTables.min.js"></script>
 
     <title>media-dupes</title>
 
@@ -306,7 +303,7 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#" onclick="windowMainClickButtonLogReset();">Reset the log</a>
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reset the User Interface (UI)</a>
+                <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reload the User Interface (UI)</a>
             </div>
 
         </div>
@@ -342,13 +339,11 @@ $( document ).ready(function()
 
     titlebarInit() // init titleBar
     settingsLoadAllOnAppStart() // load user settings
-    windowMainClickButtonUIReset() // FIXME: still needed?
 
     // modal hide
     setTimeout(function(){
         $('#myModal').modal('hide') // splashscreen
     }, 1000);
-
 
 
     // #102
@@ -388,6 +383,7 @@ $( document ).ready(function()
         ]
     } );
 
+
     // Delete a row
     $('#example tbody').on( 'click', '#delete', function () {
         rowData = table.row( $(this).parents('tr') ).data();
@@ -395,7 +391,7 @@ $( document ).ready(function()
         utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[1] + ' from todo list')
 
         // remove from array: arrayUserUrlsN
-        ui.removeUrlFromTodoList(rowData[1])
+        ui.toDoListSingleUrlRemove(rowData[1])
 
         // remove from table
         table
@@ -410,10 +406,7 @@ $( document ).ready(function()
         rowData = table.row( $(this).parents('tr') ).data();
         utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[1] + ' from todo list')
     });
-
-
-
-
+    
 });
 </script>
 
