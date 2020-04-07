@@ -263,6 +263,12 @@ function createWindowMain () {
         mainWindow.setPosition(windowPositionX, windowPositionY)
     }
 
+    // Call from renderer: reload the application
+    ipcMain.on('reloadMainWindow', (event) => {
+        doLog('info', 'createWindowMain ::: Trying to reload the main window.')
+        mainWindow.reload()
+    })
+
     // Call from renderer: Open download folder
     ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
         doLog('info', 'createWindowMain ::: Trying to open the download directory _' + userSettingValue + '_.')
