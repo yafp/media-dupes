@@ -718,8 +718,8 @@ function canWriteFileOrFolder (path, callback) {
 
 /**
 * @function generateUrlId
-* @summary
-* @description
+* @summary generates an id based on a given url
+* @description generates an id based on a given url
 * @param {String} url - url
 * @return {string} urlId - the generated md5
 */
