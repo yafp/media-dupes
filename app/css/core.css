@@ -155,6 +155,14 @@ table#example.dataTable tbody tr:hover > .sorting_1 {
 }
 
 
+.zoomSmall:hover {
+    transform: scale(1.5);
+}
+
+.zoomBig:hover {
+    transform: scale(5.0);
+}
+
 
 #todoList{
     height: 200px;

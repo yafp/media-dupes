@@ -355,33 +355,6 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
         }
         // end: enableVerboseMode
 
-        // Setting: enableUrlInformations
-        //
-        if (key === 'enableUrlInformations') {
-            var settingUrlInformations
-
-            // if it is not yet configured
-            if ((value === null) || (value === undefined)) {
-                settingUrlInformations = false // set the default
-                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Initializing it now with the default value: _' + settingUrlInformations + '_.')
-                userSettingWrite('enableUrlInformations', settingUrlInformations, true) // write the setting
-            } else {
-                settingUrlInformations = value // update global var
-                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingUrlInformations + '_.')
-            }
-            globalObjectSet('enableUrlInformations', settingUrlInformations) // update the global object
-
-            // Optional: update the settings UI
-            if (optionalUpdateSettingUI === true) {
-                if (settingUrlInformations === true) {
-                    $('#checkboxEnableUrlInformations').prop('checked', true)
-                } else {
-                    $('#checkboxEnableUrlInformations').prop('checked', false)
-                }
-            }
-        }
-        // end: enableAdditionalParameter
-
         // Setting: enableAdditionalParameter
         //
         if (key === 'enableAdditionalParameter') {
@@ -743,6 +716,19 @@ function canWriteFileOrFolder (path, callback) {
     })
 }
 
+/**
+* @function generateUrlId
+* @summary
+* @description
+* @param {String} url - url
+* @return {string} urlId - the generated md5
+*/
+function generateUrlId (url) {
+    var md5 = require('md5')
+    var urlId = md5(url)
+    return urlId
+}
+
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -769,3 +755,4 @@ module.exports.disclaimerShow = disclaimerShow
 module.exports.downloadStatusCheck = downloadStatusCheck
 module.exports.generateTimestamp = generateTimestamp
 module.exports.canWriteFileOrFolder = canWriteFileOrFolder
+module.exports.generateUrlId = generateUrlId

@@ -31,9 +31,24 @@ The following categories are used:
 #### ```Added```
 * ToDo list
   * Single urls can now be removed from list. See [#104](https://github.com/yafp/media-dupes/issues/104)
-* Dependencies
+  * Now shows the url favicon. See [#107](https://github.com/yafp/media-dupes/issues/107)
+  * Now shows the preview image. See [#108](https://github.com/yafp/media-dupes/issues/108)
+* New Dependencies
   * Added ```datatables.net-dt```  version ```1.10.20```. See [#102](https://github.com/yafp/media-dupes/issues/102)
   * Added ```datatables.net-scroller-dt```  version ```2.0.1```. See [#102](https://github.com/yafp/media-dupes/issues/102)
+  * Added ```md5```  version ```2.2.1```.
+  * Added ```got```  version ```10.7.0```.
+  * Added ```metascraper```  version ```5.11.8```.
+  * Added ```metascraper-audio```  version ```5.11.8```.
+  * Added ```metascraper-description```  version ```5.11.8```.
+  * Added ```metascraper-image```  version ```5.11.8```.
+  * Added ```metascraper-logo```  version ```5.11.8```.
+  * Added ```metascraper-logo-favicon```  version ```5.11.8```.
+  * Added ```metascraper-media-provider```  version ```5.11.8```.
+  * Added ```metascraper-soundcloud```  version ```5.11.8```.
+  * Added ```metascraper-title```  version ```5.11.8```.
+  * Added ```metascraper-video```  version ```5.11.8```.
+  * Added ```metascraper-youtube```  version ```5.11.8```.
 
 #### ```Changed```
 * ToDo list is now a table. See [#102](https://github.com/yafp/media-dupes/issues/102)
@@ -45,6 +60,7 @@ The following categories are used:
 
 
 #### ```Removed```
+* Removed youtube-dl setting 'fetch url informations'. See [#109](https://github.com/yafp/media-dupes/issues/109)
 * Removed is-reachable test for urls as it was not reliable. See [#106](https://github.com/yafp/media-dupes/issues/106)
 * CI
   * Removing travis and appveyor - as building is now realized using GitHub actions.

@@ -66,34 +66,27 @@
     </div>
     <!-- splash -->
 
-    <!-- thumnail -->
-    <div class="modal animated fadeIn" id="myModalThumbnail" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+    <!--URL Image preview -->
+    <div class="modal animated fadeIn" id="myModalImagePreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <!-- header -->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="previewTitle"></h5>
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title">Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                 </div>
-
-                <!-- body -->
+                <!-- content -->
                 <div class="modal-body">
-                    <center><img id="previewThumbnailImage" src="" class="ifl-image" height="256"></center>
+                    <center><img id="imagePreview" src="" class="ifl-image" width="256"></center>
                 </div>
-
-                <!-- footer -->
-                <div class="modal-footer">
-                    <h6 class="modal-title" id="previewId"></h6>
-                    <h6 class="modal-title" id="previewDesc"></h6>
-                </div>
-
             </div>
         </div>
     </div>
-    <!-- /thumbnail -->
+    <!-- URL Image preview -->
+
 
     <div id="mainContainer" class="animated fadeIn delay-1s container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
 
@@ -136,10 +129,13 @@
             <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
+                <th>ID</th>
+                <th><i class="fas fa-cloud" title="Source service"></i></th>
+                <th><i class="far fa-image" title="Preview"></i></th>
                 <th>Play</th>
                 <th>Url</th>
                 <th>Status</th>
-                <th>Remove</th>
+                <th><i class="fas fa-trash-alt" title="Remove URL"></i></th>
             </tr>
         </thead>
 
@@ -361,7 +357,7 @@ $( document ).ready(function()
         // Hide some cols
         "columnDefs": [
             {
-                "targets": [ 0 ],
+                "targets": [ 0, 3],
                 "visible": false, // hiding column 0
                 "searchable": false
             }
@@ -369,16 +365,33 @@ $( document ).ready(function()
         // column sizing and default content
         "columns": [
             {
-                "width": "20px"
-            },
-            null,
-            {
-                "data": "status", // can be null or undefined
-                "defaultContent": "<i>queued</i>",
-                "width": "20px"
+                'name': 'id',
+                'width': '20px'
             },
             {
-                "width": "20px"
+                'name': 'logo',
+                'width': '20px'
+            },
+            {
+                'name': 'preview',
+                'width': '20px'
+            },
+            {
+                'name': 'buttonPlay',
+                'width': '20px'
+            },
+            {
+                'name': 'url'
+            },
+            {
+                'name': 'status',
+                'data': 'status', // can be null or undefined
+                'defaultContent': '<i>queued</i>',
+                'width': '20px'
+            },
+            {
+                'name': 'buttonDelete',
+                'width': '10px'
             }
         ]
     } );
@@ -388,10 +401,10 @@ $( document ).ready(function()
     $('#example tbody').on( 'click', '#delete', function () {
         rowData = table.row( $(this).parents('tr') ).data();
 
-        utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[1] + ' from todo list')
+        utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[4] + ' from todo list')
 
         // remove from array: arrayUserUrlsN
-        ui.toDoListSingleUrlRemove(rowData[1])
+        ui.toDoListSingleUrlRemove(rowData[4])
 
         // remove from table
         table
@@ -404,7 +417,7 @@ $( document ).ready(function()
     // Play a row
     $('#example tbody').on( 'click', '#play', function () {
         rowData = table.row( $(this).parents('tr') ).data();
-        utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[1] + ' from todo list')
+        utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[4] + ' from todo list')
     });
     
 });

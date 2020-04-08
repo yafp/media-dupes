@@ -28,7 +28,6 @@ var arrayUserUrlsN = []
 * @description Updates the applicationState in globalObject. Updates the application state displayed in the UI. Starts or stops the spinner depending on the state
 * @param {string} [newState] - String which defines the new state of the application
 */
-
 function windowMainApplicationStateSet (newState = 'idle') {
     if (newState === 'Download in progress') { // #97
         // enable powerSaveBlocker
@@ -713,12 +712,6 @@ function windowMainAddUrl () {
                 windowMainButtonsStartEnable()
                 utils.globalObjectSet('todoListStateEmpty', false)
             }
-
-            // if urlInformations is enabled - launch them
-            var curSettingUrlInformations = utils.globalObjectGet('enableUrlInformations') // #95
-            if (curSettingUrlInformations === true) {
-                youtubeDl.getUrlInfo(newUrl) // #87
-            }
         } else {
             // invalid url
             utils.writeConsoleMsg('warn', 'windowMainAddUrl ::: Detected invalid url: _' + newUrl + '_.')
@@ -876,7 +869,7 @@ function windowMainToDoListSave () {
         for (var i = 0; i < arrayLength; i++) {
             var url = arrayUserUrlsN[i]
             tempName = baseName + i
-            utils.writeConsoleMsg('info', 'windowMainToDoListSave :::  Trying to save the URL: ' + url + '_ to the file: _' + tempName + '_.')
+            utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Trying to save the URL: ' + url + '_ to the file: _' + tempName + '_.')
 
             storage.set(tempName, { url: url }, function (error) {
                 if (error) {
@@ -1092,9 +1085,16 @@ function windowMainDisablePowerSaveBlocker () {
 */
 function toDoListSingleUrlRemove (url) {
     // remove url from array
+
+    console.warn(url)
+    console.error(arrayUserUrlsN)
+
     const index = arrayUserUrlsN.indexOf(url)
     if (index > -1) {
         arrayUserUrlsN.splice(index, 1)
+        utils.writeConsoleMsg('info', 'toDoListSingleUrlRemove ::: Removed the url from the todo list array.')
+    } else {
+        utils.writeConsoleMsg('error', 'toDoListSingleUrlRemove ::: Unable to remove the url from the todo list array.')
     }
 
     // check array size (to ensure saving & restoring urls works as expected)
@@ -1117,24 +1117,22 @@ function toDoListSingleUrlRemove (url) {
 function toDoListSingleUrlAdd (url) {
     utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Adding a single row for the url _' + url + '_ to the dataTable')
 
-    var t = $('#example').DataTable()
+    var urlId = utils.generateUrlId(url) // generate an id for this url
 
-    t.row.add([
-        '<button type="button" id="play" name="play" class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-play"></i></button>',
-        url,
-        '',
-        '<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>'
+    // add new row to datatable (with the most important informations)
+    //
+    var table = $('#example').DataTable()
+    table.row.add([
+        urlId, // ID
+        '<div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="sr-only">Loading...</span></div>', // logo
+        '<div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="sr-only">Loading...</span></div>', // preview
+        '<button type="button" id="play" name="play" class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-play"></i></button>', // Play
+        url, // url
+        '', // state
+        '<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger disabled"><i class="fas fa-trash-alt"></i></button>' // remove
     ]).draw(false)
 
-
-
-
-
-
-    // TODO: after fetchhing stuff using meta-scraper the added row should be patched
-    //
-    // play with metascraper: https://github.com/microlinkhq/metascraper
-    //
+    // Now try to fetch meta informations about the url using: metascraper
     //
     const metascraper = require('metascraper')([
         require('metascraper-video')(),
@@ -1146,10 +1144,11 @@ function toDoListSingleUrlAdd (url) {
         require('metascraper-media-provider')(),
         require('metascraper-soundcloud')(),
         require('metascraper-title')(),
-        require('metascraper-youtube')(),
+        require('metascraper-youtube')()
     ])
 
     var urlLogo
+    var urlImage
     var urlDescription
     var urlTitle
 
@@ -1160,17 +1159,49 @@ function toDoListSingleUrlAdd (url) {
     ;(async () => {
         const { body: html, url } = await got(targetUrl)
         const metadata = await metascraper({ html, url })
-        console.log(metadata)
+
+        // show all detected metadata
+        console.error(metadata)
 
         urlLogo = metadata.logo
+        urlImage = metadata.image
         urlDescription = metadata.description
         urlTitle = metadata.title
 
+        // find the new datatable record
+        //
+        var indexes = table.rows().eq(0).filter(function (rowIdx) {
+            return table.cell(rowIdx, 0).data() === urlId
+        })
+        // console.error(indexes)
+        // console.error(indexes[0])
+
+        // update the previously generated new row
+        //
+        // logo
+        table.cell({ row: indexes[0], column: 1 }).data('<img class="zoomSmall" src="' + urlLogo + '" width="30" title="' + urlTitle + '" onclick=utils.openURL("' + url + '");>')
+
+        // preview
+        // table.cell({row:indexes[0], column:2}).data('<img class="zoomBig" src="' + urlImage + '" width="30" title="' + urlDescription + '">');
+        // table.cell({row:indexes[0], column:2}).data('<img src="' + urlImage + '" width="30" title="' + urlDescription + '"  onmouseover="imagePreviewModalShow( "'+ urlImage +'")" onmouseout="imagePreviewModalHide()" >');
+        table.cell({ row: indexes[0], column: 2 }).data('<img class="zoomSmall" src="' + urlImage + '" width="30" title="' + urlDescription + '"  onclick=ui.imagePreviewModalShow("' + urlImage + '"); >')
+
+        // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
+        table.cell({ row: indexes[0], column: 6 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
     })()
 
+}
 
-
-
+/**
+* @function imagePreviewModalShow
+* @summary Shows the preview modal dialog
+* @description Shows the preview modal dialog which shows a big version of the image provided by the selected url
+* @param {String} url - The url which to the image
+*/
+function imagePreviewModalShow (url) {
+    utils.writeConsoleMsg('info', 'imagePreviewModalShow ::: Trying to show the preview image from _' + url + '_.')
+    $('#imagePreview').attr('src', url) // set the image src
+    $('#myModalImagePreview').modal('show') // show the modal
 }
 
 // ----------------------------------------------------------------------------
@@ -1211,3 +1242,4 @@ module.exports.youtubeSuggest = youtubeSuggest
 module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlocker
 module.exports.toDoListSingleUrlRemove = toDoListSingleUrlRemove // #102
 module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102
+module.exports.imagePreviewModalShow = imagePreviewModalShow

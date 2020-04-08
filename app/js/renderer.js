@@ -283,10 +283,6 @@ function windowSettingsClickYoutubeDlUpdate () {
     youtubeDl.binaryUpdateCheck(false, false) // If silent = false -> Forces result feedback, even if no update is available
 }
 
-function windowSettingsClickCheckboxUrlInformations () {
-    settings.settingsToggleUrlInformations()
-}
-
 // ----------------------------------------------------------------------------
 // FUNCTIONS - OTHERS
 // ----------------------------------------------------------------------------
@@ -669,7 +665,7 @@ function settingsShowFfmpegInfo () {
 function settingsGetYoutubeDLBinaryVersion (_callback) {
     const fs = require('fs')
 
-    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetaclipilsPathGet() // get path to youtube-dl binary details
+    var youtubeDlBinaryDetailsPath = youtubeDl.binaryDetailsPathGet() // get path to youtube-dl binary details
     fs.readFile(youtubeDlBinaryDetailsPath, 'utf8', function (error, contents) {
         if (error) {
             utils.writeConsoleMsg('error', 'settingsGetYoutubeDLBinaryVersion ::: Unable to detect youtube-dl binary version. Error: ' + error + '.')

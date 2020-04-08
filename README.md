@@ -25,9 +25,10 @@ available for:
 [![Merged PRs](https://img.shields.io/github/issues-pr-closed-raw/yafp/media-dupes.svg?label=merged+PRs)](https://github.com/yafp/media-dupes/pulls?q=is:pr+is:merged)
 [![GitHub stars](https://img.shields.io/github/stars/yafp/media-dupes)](https://github.com/yafp/media-dupes/stargazers)
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
+[![GitHub Pages](https://github.com/yafp/media-dupes/workflows/GitHub%20pages/badge.svg)](https://yafp.github.io/media-dupes/)
+![GitHub AV Scan](https://github.com/yafp/media-dupes/workflows/av_scan/badge.svg)
 [![Discord](https://img.shields.io/discord/672401845855191040.svg)](https://discord.gg/gHnqdHy)
-[![jsDoc](https://github.com/yafp/media-dupes/workflows/GitHub%20pages/badge.svg)](https://yafp.github.io/media-dupes/)
-![av_scan](https://github.com/yafp/media-dupes/workflows/av_scan/badge.svg)
+
 
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_latest.png)
 

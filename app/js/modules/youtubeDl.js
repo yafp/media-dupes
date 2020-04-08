@@ -328,98 +328,6 @@ function binaryUpdateExecute () {
     })
 }
 
-/**
-* @function getUrlInfo
-* @summary Outputs infos to a single url
-* @description Outputs infos to a single url
-* @param {string} url - the url to fetich infos about
-*/
-function getUrlInfo (url) {
-    ui.windowMainLoadingAnimationShow()
-
-    const youtubedl = require('youtube-dl')
-
-    // Optional arguments passed to youtube-dl.
-    // const options = ['--username=user', '--password=hunter2']
-    const options = []
-
-    youtubedl.getInfo(url, options, function (err, info) {
-        if (err) {
-            ui.windowMainLoadingAnimationHide()
-            throw err
-        }
-
-        /*
-        console.log('id:', info.id)
-        console.log('title:', info.title)
-        console.log('url:', info.url)
-        console.log('thumbnail:', info.thumbnail)
-        console.log('description:', info.description)
-        console.log('filename:', info._filename)
-        console.log('format id:', info.format_id)
-        */
-
-        ui.windowMainLogAppend('Checking URL for meta informations:', true)
-
-        var gotUrlInfos = false
-
-        // info.id
-        if (typeof info.id !== 'undefined') {
-            ui.windowMainLogAppend(' id:\t' + info.id)
-            gotUrlInfos = true
-        }
-
-        // info.title
-        if (typeof info.title !== 'undefined') {
-            ui.windowMainLogAppend(' title:\t' + info.title)
-            gotUrlInfos = true
-        }
-
-        // info.url
-        if (typeof info.url !== 'undefined') {
-            ui.windowMainLogAppend(' url:\t' + info.url)
-            gotUrlInfos = true
-        }
-
-        // info.thumbnail
-        var thumbnailUrl
-        if (typeof info.thumbnail !== 'undefined') {
-            thumbnailUrl = info.thumbnail
-            ui.windowMainLogAppend(' thumb:\t' + thumbnailUrl)
-            gotUrlInfos = true
-        } else {
-            thumbnailUrl = ''
-        }
-
-        // in mainWindow
-        $('#mainWindowThumbnailPreview').attr('src', thumbnailUrl)
-
-        // in modal:
-        $('#previewTitle').html(info.title) // header
-        $('#previewThumbnailImage').attr('src', thumbnailUrl) // body
-        $('#previewId').html(info.id) // footer:
-        $('#previewDesc').html(info.description) // footer:
-
-        // info.description
-        if (typeof info.description !== 'undefined') {
-            ui.windowMainLogAppend(' desc:\t' + info.description)
-            gotUrlInfos = true
-        }
-
-        // info._filename
-        if (typeof info._filename !== 'undefined') {
-            ui.windowMainLogAppend(' name:\t' + info._filename)
-            gotUrlInfos = true
-        }
-
-        if (gotUrlInfos === false) {
-            ui.windowMainLogAppend('No meta informations found for: ' + url, true)
-        }
-
-        ui.windowMainLoadingAnimationHide()
-    })
-}
-
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -432,4 +340,3 @@ module.exports.binaryPathReset = binaryPathReset
 module.exports.binaryUpdateCheck = binaryUpdateCheck
 module.exports.binaryUpdateSearch = binaryUpdateSearch
 module.exports.binaryUpdateExecute = binaryUpdateExecute
-module.exports.getUrlInfo = getUrlInfo
