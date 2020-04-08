@@ -363,7 +363,6 @@ function createWindowMain () {
     var enableAdditionalParameter = false
     var additionalYoutubeDlParameter = ''
     var enableErrorReporting = true
-    var enableUrlInformations = false
     var downloadDir = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
     var audioFormat = 'mp3' // mp3 is the default
     var confirmedDisclaimer = false
@@ -379,7 +378,6 @@ function createWindowMain () {
 
         // settings UI
         enableErrorReporting: enableErrorReporting,
-        enableUrlInformations: enableUrlInformations,
         enableVerboseMode: enableVerboseMode,
         enableAdditionalParameter: enableAdditionalParameter,
         additionalYoutubeDlParameter: additionalYoutubeDlParameter,
@@ -456,23 +454,28 @@ function createWindowMain () {
         // todoList handling - see #66
         //
         var curTodoListStateEmpty = global.sharedObj.todoListStateEmpty
-        doLog('info', 'createWindowMain ::: Current todo list empty state is: _' + curTodoListStateEmpty + '_.')
+        doLog('info', 'createWindowMain ::: Is the todo list currently empty?: _' + curTodoListStateEmpty + '_.')
         if (curTodoListStateEmpty === false) {
             // todo List contains data which should be handled
             var choiceB = require('electron').dialog.showMessageBoxSync(this,
-                {
-                    icon: path.join(__dirname, 'app/img/icon/icon.png'),
-                    type: 'question',
-                    buttons: ['Yes', 'No'],
-                    title: 'Save current todo list?',
-                    message: 'Your todo list contains unprocessed URLs.\n\nDo you want to restore them on next launch?'
-                })
+            {
+                icon: path.join(__dirname, 'app/img/icon/icon.png'),
+                type: 'question',
+                buttons: ['Yes', 'No'],
+                title: 'Save current todo list?',
+                message: 'Your todo list contains unprocessed URLs.\n\nDo you want to restore them on next launch?'
+            })
+
             if (choiceB === 0) {
                 doLog('info', 'createWindowMain ::: User wants to save his todo list')
                 mainWindow.webContents.send('todoListTryToSave')
             } else {
-                doLog('info', 'createWindowMain ::: User DOES NOT want to save his todo list')
+                doLog('info', 'createWindowMain ::: User does NOT want to save his todo list')
             }
+        }
+        else
+        {
+            doLog('info', 'createWindowMain ::: There is nothing in the todo list to save')
         }
 
         // get window position and size

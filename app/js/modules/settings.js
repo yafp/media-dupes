@@ -139,21 +139,6 @@ function settingsTogglePrereleases () {
 }
 
 /**
-* @function settingsToggleUrlInformations
-* @summary Enables or disables the fetch-url-informations function
-* @description Enables or disables the setting to fetch-url-informations using .getInfo on each added url
-*/
-function settingsToggleUrlInformations () {
-    if ($('#checkboxEnableUrlInformations').is(':checked')) {
-        utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now enabled')
-        utils.userSettingWrite('enableUrlInformations', true)
-    } else {
-        utils.writeConsoleMsg('info', 'settingsToggleUrlInformations ::: Url Informations are now disabled')
-        utils.userSettingWrite('enableUrlInformations', false)
-    }
-}
-
-/**
 * @function settingsToggleErrorReporting
 * @summary Enables or disabled the error reporting function
 * @description Enables or disabled the error reporting function
@@ -252,7 +237,6 @@ module.exports.settingsToggleVerboseMode = settingsToggleVerboseMode
 module.exports.settingsToggleAdditionalParameter = settingsToggleAdditionalParameter
 module.exports.settingsSaveAdditionalParameter = settingsSaveAdditionalParameter
 module.exports.settingsTogglePrereleases = settingsTogglePrereleases
-module.exports.settingsToggleUrlInformations = settingsToggleUrlInformations
 module.exports.settingsToggleErrorReporting = settingsToggleErrorReporting
 module.exports.settingsAudioFormatSave = settingsAudioFormatSave
 module.exports.settingsOpenExternal = settingsOpenExternal
