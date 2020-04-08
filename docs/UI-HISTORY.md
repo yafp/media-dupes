@@ -22,3 +22,9 @@ This page shows how the UI of **media-dupes** changed over the time
 
 ### 0.6.0
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_0.6.0.png)
+
+### 0.7.0
+![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_0.7.0.png)
+
+### 0.8.0
+![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_0.8.0.png)
