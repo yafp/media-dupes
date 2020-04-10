@@ -57,6 +57,7 @@ The following categories are used:
 * Dependencies
   * Updated ```electron```  from ```8.2.0``` to ```8.2.1```
   * Updated ```jsdoc```  from ```3.6.3``` to ```3.6.4```
+  * Updated ```jquery```  from ```3.4.1``` to ```3.5.0```
 
 
 #### ```Removed```
@@ -67,6 +68,7 @@ The following categories are used:
 
 #### ```Fixed```
 * Fixed an error in todo-list saving and restoring. See [#105](https://github.com/yafp/media-dupes/issues/105)
+* Fixed an error in todo-list cleanup. See [#110](https://github.com/yafp/media-dupes/issues/110)
 
 
 ***

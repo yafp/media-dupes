@@ -1085,10 +1085,6 @@ function windowMainDisablePowerSaveBlocker () {
 */
 function toDoListSingleUrlRemove (url) {
     // remove url from array
-
-    console.warn(url)
-    console.error(arrayUserUrlsN)
-
     const index = arrayUserUrlsN.indexOf(url)
     if (index > -1) {
         arrayUserUrlsN.splice(index, 1)
@@ -1204,6 +1200,19 @@ function imagePreviewModalShow (url) {
     $('#myModalImagePreview').modal('show') // show the modal
 }
 
+
+function dataTablesReset() {
+    var table = $('#example').DataTable()
+
+    table
+    .clear()
+    .draw();
+
+    // reset the array
+    arrayUserUrlsN = []
+}
+
+
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -1243,3 +1252,4 @@ module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlo
 module.exports.toDoListSingleUrlRemove = toDoListSingleUrlRemove // #102
 module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102
 module.exports.imagePreviewModalShow = imagePreviewModalShow
+module.exports.dataTablesReset = dataTablesReset
