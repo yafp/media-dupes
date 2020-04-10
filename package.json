@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.7.20200408",
+  "version": "0.7.20200410",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "scripts": {
@@ -253,7 +253,7 @@
     "ffmpeg-static-electron": "^2.0.1",
     "got": "^10.7.0",
     "intro.js": "^2.9.3",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "md5": "^2.2.1",
     "metascraper": "^5.11.8",
     "metascraper-audio": "^5.11.8",
