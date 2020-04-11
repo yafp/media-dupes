@@ -27,7 +27,7 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.8.0 (2020xxyy) - DEV
+### media-dupes 0.8.0 (20200411)
 #### ```Added```
 * ToDo list
   * Single urls can now be removed from list. See [#104](https://github.com/yafp/media-dupes/issues/104)
@@ -58,7 +58,6 @@ The following categories are used:
   * Updated ```electron```  from ```8.2.0``` to ```8.2.1```
   * Updated ```jsdoc```  from ```3.6.3``` to ```3.6.4```
   * Updated ```jquery```  from ```3.4.1``` to ```3.5.0```
-
 
 #### ```Removed```
 * Removed youtube-dl setting 'fetch url informations'. See [#109](https://github.com/yafp/media-dupes/issues/109)
