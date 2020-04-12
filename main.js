@@ -51,7 +51,7 @@ const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases
 // app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
 
 // mainWindow: minimal window size
-const mainWindowMinimalWindowHeight = 830
+const mainWindowMinimalWindowHeight = 730
 const mainWindowMinimalWindowWidth = 620
 
 // settingsWundow: minimal window size
@@ -458,13 +458,13 @@ function createWindowMain () {
         if (curTodoListStateEmpty === false) {
             // todo List contains data which should be handled
             var choiceB = require('electron').dialog.showMessageBoxSync(this,
-            {
-                icon: path.join(__dirname, 'app/img/icon/icon.png'),
-                type: 'question',
-                buttons: ['Yes', 'No'],
-                title: 'Save current todo list?',
-                message: 'Your todo list contains unprocessed URLs.\n\nDo you want to restore them on next launch?'
-            })
+                {
+                    icon: path.join(__dirname, 'app/img/icon/icon.png'),
+                    type: 'question',
+                    buttons: ['Yes', 'No'],
+                    title: 'Save current todo list?',
+                    message: 'Your todo list contains unprocessed URLs.\n\nDo you want to restore them on next launch?'
+                })
 
             if (choiceB === 0) {
                 doLog('info', 'createWindowMain ::: User wants to save his todo list')
@@ -472,9 +472,7 @@ function createWindowMain () {
             } else {
                 doLog('info', 'createWindowMain ::: User does NOT want to save his todo list')
             }
-        }
-        else
-        {
+        } else {
             doLog('info', 'createWindowMain ::: There is nothing in the todo list to save')
         }
 

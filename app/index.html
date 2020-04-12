@@ -232,7 +232,6 @@
                 name="textareaLogOutput"
                 placeholder="application log"
                 readonly
-                rows="12"
                 data-step="8" data-intro="The <b>application log</b> shows some details about the download process">
             </textarea>
         </div>
@@ -307,9 +306,6 @@
 
         <!-- state -->
         <div id="applicationState" class="row-empty animated pulse infinite">&nbsp;</div>
-
-        <!-- empty line -->
-        <div class="row-fluid row-empty">&nbsp;</div>
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -419,7 +415,7 @@ $( document ).ready(function()
         rowData = table.row( $(this).parents('tr') ).data();
         utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[4] + ' from todo list')
     });
-    
+
 });
 </script>
 
