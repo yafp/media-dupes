@@ -24,6 +24,14 @@ The following categories are used:
 * ```Security```: in case of vulnerabilities.
 
 
+***
+
+### media-dupes 0.9.0 (2020xxyy) - DEV
+#### ```Added```
+#### ```Changed```
+* Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
+#### ```Removed```
+#### ```Fixed```
 
 ***
 

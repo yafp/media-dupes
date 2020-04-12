@@ -1185,7 +1185,6 @@ function toDoListSingleUrlAdd (url) {
         // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
         table.cell({ row: indexes[0], column: 6 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
     })()
-
 }
 
 /**
@@ -1200,18 +1199,16 @@ function imagePreviewModalShow (url) {
     $('#myModalImagePreview').modal('show') // show the modal
 }
 
-
-function dataTablesReset() {
+function dataTablesReset () {
     var table = $('#example').DataTable()
 
     table
-    .clear()
-    .draw();
+        .clear()
+        .draw()
 
     // reset the array
     arrayUserUrlsN = []
 }
-
 
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
