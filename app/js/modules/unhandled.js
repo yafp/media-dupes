@@ -43,8 +43,6 @@ function initUnhandled () {
             })
         }
     })
-
-    // utils.writeConsoleMsg('info', 'initUnhandled ::: electron-unhandled is now initialized')
 }
 
 // ----------------------------------------------------------------------------
