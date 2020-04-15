@@ -21,7 +21,6 @@
 
 ### Currently working on
 
-* fix snap for building process
 * custom flags for NSIS
 
 

@@ -28,10 +28,33 @@ The following categories are used:
 
 ### media-dupes 0.9.0 (2020xxyy) - DEV
 #### ```Added```
+* Added 'show supported sites' menu entry to the help -> youtube-dl menu. See [#113](https://github.com/yafp/media-dupes/issues/113)
+* Added support for cli parameters. See [#115](https://github.com/yafp/media-dupes/issues/115)
+
 #### ```Changed```
-* Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
+* UI: Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
+* Disclaimer: Added blur and unblur. Changed timing for disclaimer-check call (moved from ready-to-show to show).
+* Sentry: Removed several event count events to reduce overall amount of generated reports.
+* Updated dependencies:
+  * Updated ```electron``` from ```8.2.1``` to ```8.2.2```
+  * Updated ```electron-util``` from ```0.14.0``` to ```0.14.1```
+  * Updated ```metascraper``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-audio``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-description``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-image``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-logo``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-logo-favicon``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-media-provider``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-soundcloud``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-title``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-video``` from ```5.11.8``` to ```5.11.9```
+  * Updated ```metascraper-youtube``` from ```5.11.8``` to ```5.11.9```
+
+
 #### ```Removed```
+
 #### ```Fixed```
+* Fixed a minor issue in todo-list if metascraper got null values. See [#114](https://github.com/yafp/media-dupes/issues/114)
 
 ***
 
