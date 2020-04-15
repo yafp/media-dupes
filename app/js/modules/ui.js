@@ -452,7 +452,6 @@ function windowMainDownloadContent (mode) {
                         utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Appending custom parameter: _' + splittedParameters[j] + '_ to the youtube-dl parameter set.')
                     }
                 }
-                sentry.countEvent('usageQueueWithAdditionalParameters')
             }
 
             // assuming we got an array with urls to process
@@ -486,7 +485,6 @@ function windowMainDownloadContent (mode) {
 
                     // no error occured for this url - assuming the download finished
                     //
-                    sentry.countEvent('usageURLsSucceeded')
                     arrayUrlsProcessedSuccessfully.push(url)
                     utils.writeConsoleMsg('info', output.join('\n')) // Show processing output for this download task
                     windowMainLogAppend(output.join('\n')) // Show processing output for this download task
@@ -842,8 +840,6 @@ function windowMainToDoListRestore () {
             const { ipcRenderer } = require('electron')
             ipcRenderer.send('makeWindowUrgent')
 
-            sentry.countEvent('usageRestoredUrlFromPreviousSession')
-
             // remember that todo list is now not longer empty - see #105
             utils.globalObjectSet('todoListStateEmpty', false)
         } else {
@@ -880,7 +876,6 @@ function windowMainToDoListSave () {
             })
         }
         utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: Finished saving todoList content to files.')
-        sentry.countEvent('usageSavedUrlsForNextSession')
     } else {
         utils.writeConsoleMsg('info', 'windowMainToDoListSave ::: todoList was empty - nothing to store.') // #79
     }
@@ -968,7 +963,6 @@ function inputUrlFieldSetState (state) {
 * @description Opens a dialog to ask for a user string. Is then using the string to get youtube suggestions for the string. Results are appended to the log
 */
 function youtubeSuggest () {
-    sentry.countEvent('usageYoutubeSuggest')
     const prompt = require('electron-prompt')
 
     const youtubeSearchUrlBase = 'https://www.youtube.com/results?search_query='
@@ -1175,11 +1169,22 @@ function toDoListSingleUrlAdd (url) {
         // update the previously generated new row
         //
         // logo
+        if (urlLogo == null) {
+            urlLogo = 'img/dummy/dummy.png'
+        }
+        if (urlTitle == null) {
+            urlTitle = 'No url title'
+        }
         table.cell({ row: indexes[0], column: 1 }).data('<img class="zoomSmall" src="' + urlLogo + '" width="30" title="' + urlTitle + '" onclick=utils.openURL("' + url + '");>')
 
         // preview
-        // table.cell({row:indexes[0], column:2}).data('<img class="zoomBig" src="' + urlImage + '" width="30" title="' + urlDescription + '">');
-        // table.cell({row:indexes[0], column:2}).data('<img src="' + urlImage + '" width="30" title="' + urlDescription + '"  onmouseover="imagePreviewModalShow( "'+ urlImage +'")" onmouseout="imagePreviewModalHide()" >');
+        //
+        if (urlImage == null) {
+            urlImage = 'img/dummy/dummy.png'
+        }
+        if (urlDescription == null) {
+            urlDescription = 'No url description available'
+        }
         table.cell({ row: indexes[0], column: 2 }).data('<img class="zoomSmall" src="' + urlImage + '" width="30" title="' + urlDescription + '"  onclick=ui.imagePreviewModalShow("' + urlImage + '"); >')
 
         // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
