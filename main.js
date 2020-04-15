@@ -4,13 +4,7 @@
 * @namespace main
 */
 
-// ----------------------------------------------------------------------------
-// REQUIRE: MEDIA-DUPES MODULES
-// ----------------------------------------------------------------------------
-const crash = require('./app/js/modules/crashReporter.js') // crashReporter
-const sentry = require('./app/js/modules/sentry.js') // sentry
-const unhandled = require('./app/js/modules/unhandled.js') // electron-unhandled
-const utils = require('./app/js/modules/utils.js')
+// console.time('init') // start measuring startup time
 
 // -----------------------------------------------------------------------------
 // REQUIRE: 3rd PARTY
@@ -21,10 +15,143 @@ const path = require('path')
 const fs = require('fs')
 const openAboutWindow = require('about-window').default // for: about-window
 
-// npm-check:
-// use:
-//   npm-check -s
-// to ignore all non-referenced node_modules
+// -----------------------------------------------------------------------------
+// Shared object
+// -----------------------------------------------------------------------------
+//
+var consoleOutput = false // can be changed using --verbose
+
+// power save blocker
+var powerSaveBlockerEnabled = false
+var powerSaveBlockerId = -1
+
+// Settings UI
+var enableVerboseMode = false
+var enableAdditionalParameter = false
+var additionalYoutubeDlParameter = ''
+var enableErrorReporting = true
+var downloadDir = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
+var audioFormat = 'mp3' // mp3 is the default
+var confirmedDisclaimer = false
+
+// Main UI
+var applicationState = 'idle' // default is idle
+var todoListStateEmpty = true // is empty by default
+
+global.sharedObj = {
+    // console Output
+    consoleOutput: consoleOutput,
+
+    // power management
+    powerSaveBlockerEnabled: powerSaveBlockerEnabled,
+    powerSaveBlockerId: powerSaveBlockerId,
+
+    // settings UI
+    enableErrorReporting: enableErrorReporting,
+    enableVerboseMode: enableVerboseMode,
+    enableAdditionalParameter: enableAdditionalParameter,
+    additionalYoutubeDlParameter: additionalYoutubeDlParameter,
+    downloadDir: downloadDir,
+    audioFormat: audioFormat,
+    confirmedDisclaimer: confirmedDisclaimer,
+
+    // main UI
+    applicationState: applicationState,
+    todoListStateEmpty: todoListStateEmpty
+}
+
+// ----------------------------------------------------------------------------
+// REQUIRE: MEDIA-DUPES MODULES
+// ----------------------------------------------------------------------------
+const crash = require('./app/js/modules/crashReporter.js') // crashReporter
+const sentry = require('./app/js/modules/sentry.js') // sentry
+const unhandled = require('./app/js/modules/unhandled.js') // electron-unhandled
+const utils = require('./app/js/modules/utils.js')
+
+// ----------------------------------------------------------------------------
+// COMMAND-LINE-ARGS
+// ----------------------------------------------------------------------------
+const commandLineArgs = require('command-line-args')
+const commandLineUsage = require('command-line-usage') // https://github.com/75lb/command-line-usage/wiki
+
+// image to unicode: https://drewish.com/projects/unicoder/
+const appLogo = '       ▖▄▖▌▌▌▌▄▖▖       \n    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n▝▞▄        ▘▘        ▌▌▘\n ▌▌▙▖              ▗▐▐▐ \n ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n       ▘▘▘▘▚▌▘▘▘▘       '
+
+const optionDefinitions = [
+    {
+        description: 'Display this usage guide.',
+        name: 'help',
+        alias: 'h',
+        type: Boolean,
+        /* typeLabel: '{underline boolean}', */
+        defaultValue: false
+    },
+    {
+        description: 'Show verbose output.',
+        name: 'verbose',
+        alias: 'v',
+        type: Boolean,
+        defaultValue: false
+    },
+    {
+        description: 'Skip the disclaimer',
+        name: 'skipDisclaimer',
+        alias: 's',
+        type: Boolean,
+        defaultValue: false
+    }
+]
+
+const options = commandLineArgs(optionDefinitions)
+
+// Option: Help
+if (options.help) {
+    const usage = commandLineUsage([
+        {
+            content: [
+                appLogo
+            ],
+            raw: true
+        },
+        {
+            header: 'media-dupes',
+            content: 'a minimal content duplicator for common media services like youtube.'
+        },
+        {
+            header: 'Options',
+            hide: ['skipDisclaimer'],
+            optionList: optionDefinitions
+        },
+        {
+            header: 'Issues',
+            content: '{underline https://github.com/yafp/media-dupes/issues}'
+        },
+        {
+            header: 'Code',
+            content: '{underline https://github.com/yafp/media-dupes}'
+        }
+    /*
+    {
+      content: 'Project home: {underline https://github.com/yafp/media-dupes}'
+    }
+    */
+    ])
+    console.log(usage)
+    app.quit() // stop the application
+}
+
+// Option: Verbose
+//
+if (options.verbose) {
+    // verbose = true
+    global.sharedObj.consoleOutput = true
+}
+
+// Option: Verbose
+//
+if (options.skipDisclaimer) {
+    global.sharedObj.confirmedDisclaimer = true
+}
 
 // ----------------------------------------------------------------------------
 // ERROR-HANDLING:
@@ -45,7 +172,7 @@ let distractionWindow
 const gotTheLock = app.requestSingleInstanceLock() // for: single-instance handling
 const defaultUserDataPath = app.getPath('userData') // for: storing window position and size
 
-const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases } = require('./app/js/modules/githubUrls.js') // project-urls
+const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases, urlYoutubeDlSupportedSites } = require('./app/js/modules/urls.js') // project-urls
 
 // Caution: Warning since electron 8
 // app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
@@ -71,8 +198,14 @@ const settingsWindowMinimalWindowWidth = 800
 * @param {string} message - The log message
 */
 function doLog (type, message) {
-    const prefix = '[   Main   ] '
     const log = require('electron-log')
+
+    if (global.sharedObj.consoleOutput === false) {
+        return
+    }
+
+    const prefix = '[   Main   ] '
+
     // electron-log can: error, warn, info, verbose, debug, silly
     switch (type) {
     case 'info':
@@ -102,9 +235,8 @@ function doLog (type, message) {
 function createWindowSettings () {
     doLog('info', 'createWindowSettings ::: Creating the settings window')
 
-    // Create the browser window.
+    // Create the browser window.for Settings
     settingsWindow = new BrowserWindow({
-        // parent: mainWindow,
         modal: true,
         frame: true, // false results in a borderless window. Needed for custom titlebar
         titleBarStyle: 'default', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
@@ -113,7 +245,6 @@ function createWindowSettings () {
         center: true, // Show window in the center of the screen. (since 0.3.0)
         width: settingsWindowMinimalWindowWidth,
         minWidth: settingsWindowMinimalWindowWidth,
-        // resizable: false, // this conflickts with opening dev tools
         minimizable: false, // not implemented on linux
         maximizable: false, // not implemented on linux
         height: settingsWindowMinimalWindowHeight,
@@ -125,11 +256,8 @@ function createWindowSettings () {
         }
     })
 
-    // and load the setting.html of the app.
-    settingsWindow.loadFile('app/settings.html')
-
-    // window needs no menu
-    settingsWindow.removeMenu()
+    settingsWindow.loadFile('app/settings.html') // load the setting.html to the settings-window
+    settingsWindow.removeMenu() // the settings window needs no menu
 
     // Call from renderer: Settings UI - toggle dev tools
     ipcMain.on('settingsToggleDevTools', function () {
@@ -144,13 +272,8 @@ function createWindowSettings () {
     // Emitted when the window is closed.
     settingsWindow.on('closed', function (event) {
         doLog('info', 'createWindowSettings ::: settingsWindow is closed (event: closed)')
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        settingsWindow = null
-
-        // unblur main UI
-        mainWindow.webContents.send('unblurMainUI')
+        settingsWindow = null // Dereference the window object
+        mainWindow.webContents.send('unblurMainUI') // unblur the main UI
     })
 }
 
@@ -163,10 +286,10 @@ function createWindowSettings () {
 function createWindowDistraction () {
     doLog('info', 'createWindowDistraction ::: Creating the distraction window')
 
-    // Create the browser window.
+    // Create the distraction browser window.
     distractionWindow = new BrowserWindow({
         frame: true, // false results in a borderless window. Needed for custom titlebar
-        backgroundColor: '#ffffff', // since 0.3.0
+        backgroundColor: '#ffffff',
         center: true,
         width: 550,
         minWidth: 550,
@@ -179,11 +302,8 @@ function createWindowDistraction () {
         }
     })
 
-    // and load the setting.html of the app.
-    distractionWindow.loadFile('app/distraction.html')
-
-    // window needs no menu
-    distractionWindow.removeMenu()
+    distractionWindow.loadFile('app/distraction.html') // load the distraction.html to the
+    distractionWindow.removeMenu() // the distraction-window needs no menu
 
     // Emitted before the window is closed.
     distractionWindow.on('close', function () {
@@ -193,10 +313,7 @@ function createWindowDistraction () {
     // Emitted when the window is closed.
     distractionWindow.on('closed', function (event) {
         doLog('info', 'createWindowDistraction ::: distractionWindow is closed (event: closed)')
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        distractionWindow = null
+        distractionWindow = null // Dereference the window object
     })
 }
 
@@ -220,14 +337,10 @@ function createWindowMain () {
     var data
     try {
         data = JSON.parse(fs.readFileSync(customUserDataPath, 'utf8'))
-
-        // size
-        windowWidth = data.bounds.width
-        windowHeight = data.bounds.height
-
-        // position
-        windowPositionX = data.bounds.x
-        windowPositionY = data.bounds.y
+        windowWidth = data.bounds.width // window size: width
+        windowHeight = data.bounds.height // window size: height
+        windowPositionX = data.bounds.x // window position: x
+        windowPositionY = data.bounds.y // window position: y
 
         doLog('info', 'createWindowMain ::: Got last window position and size information from _' + customUserDataPath + '_.')
     } catch (e) {
@@ -243,7 +356,7 @@ function createWindowMain () {
         frame: false, // false results in a borderless window. Needed for custom titlebar
         titleBarStyle: 'hidden', // needed for custom-electron-titlebar. See: https://electronjs.org/docs/api/frameless-window
         backgroundColor: '#ffffff', // since 0.3.0
-        show: false, // hide until: ready-to-show
+        show: false, // hide until: ready-to-show event is fired
         center: true, // Show window in the center of the screen. (since 0.3.0)
         width: windowWidth,
         minWidth: mainWindowMinimalWindowWidth,
@@ -271,25 +384,25 @@ function createWindowMain () {
 
     // Call from renderer: Open download folder
     ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
-        doLog('info', 'createWindowMain ::: Trying to open the download directory _' + userSettingValue + '_.')
+        doLog('info', 'ipc.openUserDownloadFolder ::: Trying to open the download directory _' + userSettingValue + '_.')
 
         // try to open it
         if (shell.openItem(userSettingValue) === true) {
-            doLog('info', 'createWindowMain :::  Opened the media-dupes download folder (ipcMain)')
+            doLog('info', 'ipc.openUserDownloadFolder :::  Opened the media-dupes download folder (ipcMain)')
         } else {
-            doLog('error', 'createWindowMain ::: Failed to open the user download folder (ipcMain)')
+            doLog('error', 'ipc.openUserDownloadFolder ::: Failed to open the user download folder (ipcMain)')
         }
     })
 
     // Call from renderer: Open settings folder
     ipcMain.on('settingsFolderOpen', (event) => {
-        doLog('info', 'createWindowMain ::: Opened the users settings folder (ipcMain)')
+        doLog('info', 'ipc.settingsFolderOpen ::: Opened the users settings folder (ipcMain)')
         const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings') // change path for userSettings
 
         if (shell.openItem(userSettingsPath) === true) {
-            doLog('info', 'createWindowMain ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
+            doLog('info', 'ipc.settingsFolderOpen ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
         } else {
-            doLog('error', 'createWindowMain ::: Failed to open the user download folder (ipcMain)')
+            doLog('error', 'ipc.settingsFolderOpen ::: Failed to open the user download folder (ipcMain)')
         }
     })
 
@@ -297,13 +410,6 @@ function createWindowMain () {
     ipcMain.on('makeWindowUrgent', function () {
         mainWindow.flashFrame(true)
     })
-
-    // Call from renderer: Option: load main UI
-    /*
-    ipcMain.on('mainUiLoad', function () {
-        mainWindow.loadFile('app/index.html')
-    })
-    */
 
     // Call from renderer: Option: load settings UI
     ipcMain.on('settingsUiLoad', function () {
@@ -323,9 +429,11 @@ function createWindowMain () {
 
     // Call from renderer: Update property from globalObj
     ipcMain.on('globalObjectSet', function (event, property, value) {
-        doLog('info', 'globalObjectSet ::: Set _' + property + '_ to: _' + value + '_')
-        global.sharedObj[property] = value
-        console.warn(global.sharedObj)
+        doLog('info', 'ipc.globalObjectSet ::: Set _' + property + '_ to: _' + value + '_')
+        global.sharedObj[property] = value // update the property in the global shared object
+        if (global.sharedObj.consoleOutput === true) { // If console output is enabled- show the entire sharedObject
+            console.warn(global.sharedObj)
+        }
     })
 
     // Call from renderer - Enable the power save blocker. See #97
@@ -334,11 +442,11 @@ function createWindowMain () {
         const id = powerSaveBlocker.start('prevent-display-sleep')
 
         if (powerSaveBlocker.isStarted(id)) {
-            doLog('info', 'Successfully enabled the PowerSaveBlocker with the ID _' + id + '_ as app is currently downloading')
+            doLog('info', 'ipc.enablePowerSaveBlocker ::: Successfully enabled the PowerSaveBlocker with the ID _' + id + '_ as app is currently downloading')
             global.sharedObj.powerSaveBlockerEnabled = true
             global.sharedObj.powerSaveBlockerId = id
         } else {
-            doLog('error', 'Enabling the Power-Save-Blocker for the current download failed')
+            doLog('error', 'ipc.enablePowerSaveBlocker ::: Enabling the Power-Save-Blocker for the current download failed')
             global.sharedObj.powerSaveBlockerEnabled = false
             global.sharedObj.powerSaveBlockerId = -1
         }
@@ -350,94 +458,59 @@ function createWindowMain () {
         powerSaveBlocker.stop(id)
         global.sharedObj.powerSaveBlockerEnabled = false
         global.sharedObj.powerSaveBlockerId = -1
-        doLog('info', 'Disabled the PowerSaveBlocker with the ID: _' + id + '_.')
+        doLog('info', 'ipc.disablePowerSaveBlocker ::: Disabled the PowerSaveBlocker with the ID: _' + id + '_.')
     })
 
-    // Global object
-    //
-    // power save blocker
-    var powerSaveBlockerEnabled = false
-    var powerSaveBlockerId = -1
-    // Settings UI
-    var enableVerboseMode = false
-    var enableAdditionalParameter = false
-    var additionalYoutubeDlParameter = ''
-    var enableErrorReporting = true
-    var downloadDir = app.getPath('downloads') // Detect the default-download-folder of the user from the OS
-    var audioFormat = 'mp3' // mp3 is the default
-    var confirmedDisclaimer = false
-    // Main UI
-    var applicationState = 'idle' // default is idle
-    var todoListStateEmpty = true // is empty by default
-
-    global.sharedObj = {
-
-        // power management
-        powerSaveBlockerEnabled: powerSaveBlockerEnabled,
-        powerSaveBlockerId: powerSaveBlockerId,
-
-        // settings UI
-        enableErrorReporting: enableErrorReporting,
-        enableVerboseMode: enableVerboseMode,
-        enableAdditionalParameter: enableAdditionalParameter,
-        additionalYoutubeDlParameter: additionalYoutubeDlParameter,
-        downloadDir: downloadDir,
-        audioFormat: audioFormat,
-        confirmedDisclaimer: confirmedDisclaimer,
-
-        // main UI
-        applicationState: applicationState,
-        todoListStateEmpty: todoListStateEmpty
-    }
-
-    // and load the index.html of the app.
-    mainWindow.loadFile('app/index.html')
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.loadFile('app/index.html') // load the index.html to the main window
 
     // Emitted when the web page becomes unresponsive.
     mainWindow.on('unresponsive', function () {
-        doLog('warn', 'createWindowMain ::: mainWindow is now unresponsive (event: unresponsive)')
+        doLog('warn', 'createWindowMain (on unresponsive) ::: mainWindow is now unresponsive (event: unresponsive)')
     })
 
     // Emitted when the unresponsive web page becomes responsive again.
     mainWindow.on('responsive', function () {
-        doLog('info', 'createWindowMain ::: mainWindow is now responsive again (event: responsive)')
+        doLog('info', 'createWindowMain (on responsive) ::: mainWindow is now responsive again (event: responsive)')
     })
 
     // Emitted when the web page has been rendered (while not being shown) and window can be displayed without a visual flash.
     mainWindow.on('ready-to-show', function () {
-        doLog('info', 'createWindowMain ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
+        doLog('info', 'createWindowMain (ready to show) ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
         mainWindow.show()
         mainWindow.focus()
 
-        mainWindow.webContents.send('blurMainUI') // blur the main UI
-        mainWindow.webContents.send('countAppStarts') // count app starts
-
         // do some checks & routines once at start of the application
-        //
-        // mainWindow.webContents.send('initSettings')
         mainWindow.webContents.send('startCheckingDependencies') // check application dependencies
-        mainWindow.webContents.send('startDisclaimerCheck') // check if disclaimer must be shown
         mainWindow.webContents.send('todoListCheck') // search if there are urls to restore
-        mainWindow.webContents.send('unblurMainUI') // unblur the main UI
+        // mainWindow.webContents.send('unblurMainUI') // unblur the main UI
 
         // Start checks for updates scheduled to improve startup time
         mainWindow.webContents.send('scheduleUpdateCheckMediaDupes')
         mainWindow.webContents.send('scheduleUpdateCheckYoutubeDl')
+
+        mainWindow.webContents.send('countAppStarts') // count app starts
     })
+    // end: ready-toshow
+
+    // Emitted when the web page has been rendered (while not being shown) and window can be displayed without a visual flash.
+    mainWindow.on('show', function () {
+        doLog('info', 'createWindowMain (show) ::: mainWindow is now ready, so show it and then focus it (event: ready-to-show)')
+        mainWindow.webContents.send('blurMainUI') // blur the main UI
+        mainWindow.webContents.send('startDisclaimerCheck') // check if disclaimer must be shown
+
+        // console.timeEnd('init') // Stop measuring startup time
+    })
+    // end: ready-toshow
 
     // Emitted before the window is closed.
     mainWindow.on('close', function (event) {
-        doLog('info', 'createWindowMain ::: mainWindow will close (event: close)')
+        doLog('info', 'createWindowMain (on close) ::: mainWindow will close (event: close)')
 
         var curState = global.sharedObj.applicationState // get applicationState
-        doLog('info', 'createWindowMain ::: Current application state is: _' + curState + '_.')
+        doLog('info', 'createWindowMain (on close) ::: Current application state is: _' + curState + '_.')
 
         if (curState === 'Download in progress') {
-            // since electron7 showMessageBox no longer blocks the close. Therefor we are using showMessageBoxSync
-            var choiceA = require('electron').dialog.showMessageBoxSync(this,
+            var choiceA = require('electron').dialog.showMessageBoxSync(this, // since electron7 showMessageBox no longer blocks the close. Therefor we are using showMessageBoxSync
                 {
                     icon: path.join(__dirname, 'app/img/icon/icon.png'),
                     type: 'question',
@@ -454,7 +527,7 @@ function createWindowMain () {
         // todoList handling - see #66
         //
         var curTodoListStateEmpty = global.sharedObj.todoListStateEmpty
-        doLog('info', 'createWindowMain ::: Is the todo list currently empty?: _' + curTodoListStateEmpty + '_.')
+        doLog('info', 'createWindowMain (on close) ::: Is the todo list currently empty?: _' + curTodoListStateEmpty + '_.')
         if (curTodoListStateEmpty === false) {
             // todo List contains data which should be handled
             var choiceB = require('electron').dialog.showMessageBoxSync(this,
@@ -467,10 +540,10 @@ function createWindowMain () {
                 })
 
             if (choiceB === 0) {
-                doLog('info', 'createWindowMain ::: User wants to save his todo list')
+                doLog('info', 'createWindowMain (on close) ::: User wants to save his todo list')
                 mainWindow.webContents.send('todoListTryToSave')
             } else {
-                doLog('info', 'createWindowMain ::: User does NOT want to save his todo list')
+                doLog('info', 'createWindowMain (on close) ::: User does NOT want to save his todo list')
             }
         } else {
             doLog('info', 'createWindowMain ::: There is nothing in the todo list to save')
@@ -494,27 +567,23 @@ function createWindowMain () {
             doLog('info', 'createWindowMain ::: mainWindow stored window-position and -size in _' + customUserDataPath + '_ (event: close)')
         })
     })
+    // end: close
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function (event) {
-        doLog('info', 'createWindowMain ::: mainWindow is closed (event: closed)')
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null
+        doLog('info', 'createWindowMain (closed) ::: mainWindow is closed (event: closed)')
+        mainWindow = null // Dereference the window object,
     })
+    // end: closed
 }
 
 /**
 * @function createMenuMain
-* @summary Creates the application menu
-* @description Creates the application menu
+* @summary Creates the menu for the main UI
+* @description Creates the menu for the main UI
 * @memberof main
 */
 function createMenuMain () {
-    // doLog('createMenu', __dirname)
-
-    // Create a custom menu
     var menu = Menu.buildFromTemplate([
 
         // Menu: File
@@ -524,7 +593,6 @@ function createMenuMain () {
                 // Settings
                 {
                     label: 'Settings',
-                    // icon: __dirname + '/app/img/icon/icon.png',
                     click () {
                         mainWindow.webContents.send('openSettings')
                     },
@@ -750,6 +818,15 @@ function createMenuMain () {
                 {
                     label: 'Youtube-DL',
                     submenu: [
+                        // Show supported sites
+                        {
+                            id: 'youtubeDlShowSupportedSites',
+                            label: 'Show list of supported sites',
+                            click () {
+                                shell.openExternal(urlYoutubeDlSupportedSites)
+                            },
+                            enabled: true
+                        },
                         // Clear cache in userData
                         {
                             id: 'youtubeDlBinaryPathReset',
@@ -792,7 +869,6 @@ function forceSingleAppInstance () {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // Someone tried to run a second instance, we should focus our first instance window.
             if (mainWindow) {
-                // #134
                 if (mainWindow === null) {
                     // do nothing - there is no mainwindow - most likely we are on macOS
                 } else {
@@ -870,11 +946,15 @@ app.on('ready', function () {
 app.on('window-all-closed', function () {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') app.quit()
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })
 
 app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) createWindowMain()
+    if (mainWindow === null) {
+        createWindowMain()
+    }
 })
