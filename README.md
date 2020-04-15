@@ -58,12 +58,14 @@ You'll find the latest releases [here](https://github.com/yafp/media-dupes/relea
 Please see the [installation instructions](docs/INSTALL.md) for more details.
 
 ## updates
-**media-dupes** checks on application launch if there is an update available.
+**media-dupes** checks on application launch if there is a newer `media-dupes` version available.
 Updates must be installed manually as automatic updating of electron applications requires that the builds are code-signed, which i can't provide so far.
+
+**media-dupes** checks as well on application launch if there are updates available for the bundled `youtube-dl` tool.
 
 **Be aware:**
 
-Updating the bundled `youtube-dl` package is only possible if the user has write access to the `media-dupes` installation path (which does not work with all available packages/installation types).
+Updating the bundled `youtube-dl` package is only possible if the user has write access to the `media-dupes` installation path (which does not work for all available packages/installation types).
 
 ## license
 Please see the [LICENSE](LICENSE) for more details.
@@ -109,4 +111,4 @@ Building **media-dupes** yourself is pretty easy. Please see the [building instr
 
 
 ## footnotes
-<a name="footnote1">1</a>: Assuming the provided url is supported by `youtube-dl`.
+<a name="footnote1">1</a>: Assuming the provided url is supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/supportedsites.html).
