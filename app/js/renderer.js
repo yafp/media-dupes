@@ -114,7 +114,6 @@ function windowMainClickButtonSettings () {
 */
 function windowMainClickButtonIntro () {
     ui.windowMainIntroShow()
-    sentry.countEvent('usageButtonIntro')
 }
 
 /**
@@ -247,9 +246,8 @@ function windowSettingsClickCheckboxErrorReporting () {
 * @memberof renderer
 */
 function windowSettingsClickCheckboxErrorReportingMoreInfo () {
-    const { urlGithubSentryUsage } = require('./js/modules/githubUrls.js') // get url
+    const { urlGithubSentryUsage } = require('./js/modules/urls.js') // get url
     utils.openURL(urlGithubSentryUsage)
-    sentry.countEvent('usageSettingsErrorReportingShowMoreInfo')
 }
 
 /**
@@ -478,7 +476,7 @@ function searchUpdate (silent = true) {
     var curEnablePrereleasesSetting = utils.globalObjectGet('enablePrereleases')
 
     // get url for github releases / api
-    const { urlGithubApiReleases } = require('./js/modules/githubUrls.js') // get API url
+    const { urlGithubApiReleases } = require('./js/modules/urls.js') // get API url
 
     var remoteAppVersionLatest = '0.0.0'
     var remoteAppVersionLatestPrerelease = false
@@ -609,7 +607,7 @@ function searchUpdate (silent = true) {
 * @memberof renderer
 */
 function openReleasesOverview () {
-    const { urlGitHubReleases } = require('./js/modules/githubUrls.js')
+    const { urlGitHubReleases } = require('./js/modules/urls.js')
     utils.writeConsoleMsg('info', 'openReleasesOverview ::: Opening _' + urlGitHubReleases + '_ to show available releases.')
     utils.openURL(urlGitHubReleases)
 }
