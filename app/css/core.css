@@ -234,17 +234,14 @@ cssbody {
 /* ########################################################################## */
 /* FADEIN THE WINDOW */
 /* ########################################################################## */
-/*
 @keyframes fadein {
-  from
-  {
+  from {
     opacity: 0;
   }
   to {
     opacity: 1;
   }
 }
-*/
 
 .app {
     /* Disable text selection, or your app will feel like a web page */
