@@ -1,18 +1,17 @@
 /**
- * @file Contains all github urls
+ * @file Contains all urls
  * @author yafp
- * @module githubUrls
+ * @module urls
  */
 'use strict'
 
 // ----------------------------------------------------------------------------
-// DEFINE GITHUB URL CONSTANTS
+// DEFINE URL CONSTANTS
 // ----------------------------------------------------------------------------
 //
 
 /**
 * @constant
-* @name urlGitHubGeneral
 * @type {string}
 * @default
 */
@@ -60,6 +59,13 @@ const urlGithubApiReleases = 'https://api.github.com/repos/yafp/media-dupes/rele
 */
 const urlGithubSentryUsage = 'https://github.com/yafp/media-dupes/blob/master/docs/SENTRY.md' // sentry usage
 
+/**
+* @constant
+* @type {string}
+* @default
+*/
+const urlYoutubeDlSupportedSites = 'https://ytdl-org.github.io/youtube-dl/supportedsites.html' // supported sites by youtube-dl
+
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -71,3 +77,4 @@ module.exports.urlGitHubReleases = urlGitHubReleases
 module.exports.urlGitHubRepoTags = urlGitHubRepoTags
 module.exports.urlGithubApiReleases = urlGithubApiReleases
 module.exports.urlGithubSentryUsage = urlGithubSentryUsage
+module.exports.urlYoutubeDlSupportedSites = urlYoutubeDlSupportedSites
