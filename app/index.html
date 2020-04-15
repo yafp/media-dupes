@@ -54,7 +54,7 @@
 
 <body class="">
 
-    <!--Splash -->
+    <!--Modal: Splash -->
     <div class="modal animated fadeOut" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content no-border">
@@ -64,10 +64,10 @@
             </div>
         </div>
     </div>
-    <!-- splash -->
+    <!-- Modal: Splash -->
 
 
-    <!--URL Image preview -->
+    <!--Modal: URL Image preview -->
     <div class="modal animated fadeIn" id="myModalImagePreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -80,14 +80,16 @@
                 </div>
                 <!-- content -->
                 <div class="modal-body">
-                    <center><img id="imagePreview" src="" class="ifl-image" width="256"></center>
+                    <center>
+                        <img id="imagePreview" src="" class="ifl-image" width="256">
+                    </center>
                 </div>
             </div>
         </div>
     </div>
-    <!-- URL Image preview -->
+    <!-- Modal: URL Image preview -->
 
-
+    <!-- main ui container -->
     <div id="mainContainer" class="animated fadeIn delay-1s container-fluid mediaDupes_nonSelectableText h-100 d-flex flex-column">
 
         <!-- empty line -->
@@ -127,47 +129,19 @@
         <!-- #102 - new todo-list is a table -->
         <div class="row-fluid" id="todoList">
             <table id="example" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th><i class="fas fa-cloud" title="Source service"></i></th>
-                <th><i class="far fa-image" title="Preview"></i></th>
-                <th>Play</th>
-                <th>Url</th>
-                <th>Status</th>
-                <th><i class="fas fa-trash-alt" title="Remove URL"></i></th>
-            </tr>
-        </thead>
-
-        <!--
-        <tbody>
-            <tr>
-                <td></td>
-                <td>https://www.mixcloud.com/SoulCoolRecords/dj-muro-vibe-obsession-roy-ayers-side/</td>
-                <td>Open</td>
-                <td></td>
-            </tr>
-        </tbody>
-        -->
-
-        <!--
-        <tfoot>
-            <tr>
-                <th>Play</th>
-                <th>Url</th>
-                <th>Status</th>
-                <th>Remove</th>
-            </tr>
-        </tfoot>
-        -->
-    </table>
+                <thead>
+                    <tr>
+                        <th>ID</th> <!-- generated id -->
+                        <th><i class="fas fa-cloud" title="Source service"></i></th> <!-- favicon -->
+                        <th><i class="far fa-image" title="Preview"></i></th> <!-- preview image -->
+                        <th>Play</th> <!-- play / prelisten button -->
+                        <th>Url</th> <!-- url -->
+                        <th>Status</th> <!-- status -->
+                        <th><i class="fas fa-trash-alt" title="Remove URL"></i></th> <!-- delete / remove button -->
+                    </tr>
+                </thead>
+            </table>
         </div>
-
-
-
-
-
-
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
@@ -236,11 +210,8 @@
             </textarea>
         </div>
 
-
-
         <!-- The rest is aligned at bottom of the page -->
         <div class="fixed-bottom applicationWindowBottom">
-
 
         <!-- extra buttons-->
         <div class="row-fluid">
@@ -298,7 +269,7 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#" onclick="windowMainClickButtonLogReset();">Reset the log</a>
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reload the User Interface (UI)</a>
+                <a class="dropdown-item" href="#" onclick="windowMainClickButtonUIReset();">Reload media-dupes</a>
             </div>
 
         </div>
@@ -314,7 +285,7 @@
         <!-- /bottom -->
 
     </div>
-    <!-- container -->
+    <!-- main ui container -->
 
     <!-- You can also require other files to run in this process -->
     <script src="js/renderer.js"></script>
