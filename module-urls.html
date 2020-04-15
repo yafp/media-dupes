@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>app/js/modules/sentry.js - media-dupes jsdoc documentation</title>
+    <title>urls - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple JSDoc based documentation for media-dupes" />
     
@@ -40,86 +40,739 @@
 
 <div id="main">
     
-    <h1 class="page-title">app/js/modules/sentry.js</h1>
+    <h1 class="page-title">urls</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Contains all sentry functions
- * @author yafp
- * @module sentry
- */
-'use strict'
+        
+            
+        
+    
+</header>
 
-const utils = require('./utils.js')
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description usertext"><p>Contains all urls</p></div>
+            
 
-// ----------------------------------------------------------------------------
-// Error Handling using: sentry
-// ----------------------------------------------------------------------------
-//
-// https://sentry.io/organizations/yafp/
-// https://docs.sentry.io/platforms/javascript/electron/
-// https://docs.sentry.io/error-reporting/configuration/?platform=electron
-//
-const Sentry = require('@sentry/electron')
-// const process = require('process')
-Sentry.init({
-    // release: 'media-dupes@' + process.env.npm_package_version,
-    dsn: 'https://4bd3f512a1e34e24ab9838b00f57d131@sentry.io/1847606',
-    debug: true
-})
-//
-// simple way to force a crash:
-// myUndefinedFunctionInSentryModul();
+            
+                
 
-/**
-* @function enableSentry
-* @summary Enables sentry
-* @description Enabled sentry to log errors
-*/
-function enableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    utils.writeConsoleMsg('info', 'enableSentry ::: Enabled sentry')
-}
 
-/**
-* @function disableSentry
-* @summary Disables sentry
-* @description Disables sentry to log errors
-*/
-function disableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    utils.writeConsoleMsg('warn', 'disableSentry ::: Disabled sentry')
-}
 
-/**
-* @function countEvent
-* @summary Captures a message or event
-* @description Captures a message or event
-*/
-function countEvent (eventName) {
-    var isReportingEnabled = utils.globalObjectGet('enableErrorReporting')
-    if (isReportingEnabled === true) {
-        Sentry.captureMessage(eventName)
-    }
-}
 
-// ----------------------------------------------------------------------------
-// EXPORT THE MODULE FUNCTIONS
-// ----------------------------------------------------------------------------
-//
-module.exports.enableSentry = enableSentry
-module.exports.disableSentry = disableSentry
-module.exports.countEvent = countEvent
-</code></pre>
-        </article>
-    </section>
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>yafp</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~urlGithubApiReleases"><span class="type-signature">(inner, constant) </span>urlGithubApiReleases<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://api.github.com/repos/yafp/media-dupes/releases</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlGitHubChangelog"><span class="type-signature">(inner, constant) </span>urlGitHubChangelog<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://github.com/yafp/media-dupes/blob/master/docs/CHANGELOG.md</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlGitHubGeneral"><span class="type-signature">(inner, constant) </span>urlGitHubGeneral<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://github.com/yafp/media-dupes</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlGitHubIssues"><span class="type-signature">(inner, constant) </span>urlGitHubIssues<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://github.com/yafp/media-dupes/issues</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlGitHubReleases"><span class="type-signature">(inner, constant) </span>urlGitHubReleases<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://github.com/yafp/media-dupes/releases</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlGitHubRepoTags"><span class="type-signature">(inner, constant) </span>urlGitHubRepoTags<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://api.github.com/repos/yafp/media-dupes/tags</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlGithubSentryUsage"><span class="type-signature">(inner, constant) </span>urlGithubSentryUsage<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://github.com/yafp/media-dupes/blob/master/docs/SENTRY.md</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~urlYoutubeDlSupportedSites"><span class="type-signature">(inner, constant) </span>urlYoutubeDlSupportedSites<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="app_js_modules_urls.js.html">app/js/modules/urls.js</a>, <a href="app_js_modules_urls.js.html#line67">line 67</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>https://ytdl-org.github.io/youtube-dl/supportedsites.html</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

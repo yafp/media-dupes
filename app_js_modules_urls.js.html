@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>app/js/modules/sentry.js - media-dupes jsdoc documentation</title>
+    <title>app/js/modules/urls.js - media-dupes jsdoc documentation</title>
     
     <meta name="description" content="a simple JSDoc based documentation for media-dupes" />
     
@@ -40,7 +40,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">app/js/modules/sentry.js</h1>
+    <h1 class="page-title">app/js/modules/urls.js</h1>
     
 
     
@@ -51,72 +51,85 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Contains all sentry functions
+ * @file Contains all urls
  * @author yafp
- * @module sentry
+ * @module urls
  */
 'use strict'
 
-const utils = require('./utils.js')
-
 // ----------------------------------------------------------------------------
-// Error Handling using: sentry
+// DEFINE URL CONSTANTS
 // ----------------------------------------------------------------------------
 //
-// https://sentry.io/organizations/yafp/
-// https://docs.sentry.io/platforms/javascript/electron/
-// https://docs.sentry.io/error-reporting/configuration/?platform=electron
-//
-const Sentry = require('@sentry/electron')
-// const process = require('process')
-Sentry.init({
-    // release: 'media-dupes@' + process.env.npm_package_version,
-    dsn: 'https://4bd3f512a1e34e24ab9838b00f57d131@sentry.io/1847606',
-    debug: true
-})
-//
-// simple way to force a crash:
-// myUndefinedFunctionInSentryModul();
 
 /**
-* @function enableSentry
-* @summary Enables sentry
-* @description Enabled sentry to log errors
+* @constant
+* @type {string}
+* @default
 */
-function enableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = true
-    utils.writeConsoleMsg('info', 'enableSentry ::: Enabled sentry')
-}
+const urlGitHubGeneral = 'https://github.com/yafp/media-dupes' // repo url
 
 /**
-* @function disableSentry
-* @summary Disables sentry
-* @description Disables sentry to log errors
+* @constant
+* @type {string}
+* @default
 */
-function disableSentry () {
-    Sentry.getCurrentHub().getClient().getOptions().enabled = false
-    utils.writeConsoleMsg('warn', 'disableSentry ::: Disabled sentry')
-}
+const urlGitHubIssues = 'https://github.com/yafp/media-dupes/issues' // issue url
 
 /**
-* @function countEvent
-* @summary Captures a message or event
-* @description Captures a message or event
+* @constant
+* @type {string}
+* @default
 */
-function countEvent (eventName) {
-    var isReportingEnabled = utils.globalObjectGet('enableErrorReporting')
-    if (isReportingEnabled === true) {
-        Sentry.captureMessage(eventName)
-    }
-}
+const urlGitHubChangelog = 'https://github.com/yafp/media-dupes/blob/master/docs/CHANGELOG.md' // changelog url
+
+/**
+* @constant
+* @type {string}
+* @default
+*/
+const urlGitHubReleases = 'https://github.com/yafp/media-dupes/releases' // releases url
+
+/**
+* @constant
+* @type {string}
+* @default
+*/
+const urlGitHubRepoTags = 'https://api.github.com/repos/yafp/media-dupes/tags' // tags api url
+
+/**
+* @constant
+* @type {string}
+* @default
+*/
+const urlGithubApiReleases = 'https://api.github.com/repos/yafp/media-dupes/releases' // release api
+
+/**
+* @constant
+* @type {string}
+* @default
+*/
+const urlGithubSentryUsage = 'https://github.com/yafp/media-dupes/blob/master/docs/SENTRY.md' // sentry usage
+
+/**
+* @constant
+* @type {string}
+* @default
+*/
+const urlYoutubeDlSupportedSites = 'https://ytdl-org.github.io/youtube-dl/supportedsites.html' // supported sites by youtube-dl
 
 // ----------------------------------------------------------------------------
 // EXPORT THE MODULE FUNCTIONS
 // ----------------------------------------------------------------------------
 //
-module.exports.enableSentry = enableSentry
-module.exports.disableSentry = disableSentry
-module.exports.countEvent = countEvent
+module.exports.urlGitHubGeneral = urlGitHubGeneral
+module.exports.urlGitHubIssues = urlGitHubIssues
+module.exports.urlGitHubChangelog = urlGitHubChangelog
+module.exports.urlGitHubReleases = urlGitHubReleases
+module.exports.urlGitHubRepoTags = urlGitHubRepoTags
+module.exports.urlGithubApiReleases = urlGithubApiReleases
+module.exports.urlGithubSentryUsage = urlGithubSentryUsage
+module.exports.urlYoutubeDlSupportedSites = urlYoutubeDlSupportedSites
 </code></pre>
         </article>
     </section>
