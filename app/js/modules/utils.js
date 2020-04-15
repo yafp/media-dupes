@@ -20,24 +20,27 @@ const ui = require('./ui.js')
 * @param {string} message - String which defines the log message
 */
 function writeConsoleMsg (type, message) {
-    const prefix = '[ Renderer ] '
-    const log = require('electron-log')
-    // electron-log can: error, warn, info, verbose, debug, silly
-    switch (type) {
-    case 'info':
-        log.info(prefix + message)
-        break
+    var consoleOutput = globalObjectGet('consoleOutput')
+    if (consoleOutput === true) {
+        const prefix = '[ Renderer ] '
+        const log = require('electron-log')
+        // electron-log can: error, warn, info, verbose, debug, silly
+        switch (type) {
+        case 'info':
+            log.info(prefix + message)
+            break
 
-    case 'warn':
-        log.warn(prefix + message)
-        break
+        case 'warn':
+            log.warn(prefix + message)
+            break
 
-    case 'error':
-        log.error(prefix + message)
-        break
+        case 'error':
+            log.error(prefix + message)
+            break
 
-    default:
-        log.silly(prefix + message)
+        default:
+            log.silly(prefix + message)
+        }
     }
 }
 
@@ -549,15 +552,22 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
         // Setting: confirmedDisclaimer
         //
         if (key === 'confirmedDisclaimer') {
-            var settingConfirmedDisclaimer
-            // not configured
-            if ((value === null) || (value === undefined)) {
-                writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Gonna show the disclaimer now')
-                disclaimerShow()
+            // special case - first check the global object - to make the -s startup parameter possible
+            var skipDisclaimer = globalObjectGet('confirmedDisclaimer')
+            if (skipDisclaimer === true) {
+                // nothing to do here - we are skipping the disclaimer handling
             } else {
-                settingConfirmedDisclaimer = true
-                globalObjectSet('confirmedDisclaimer', settingConfirmedDisclaimer)
-                writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingConfirmedDisclaimer + '_.')
+                var settingConfirmedDisclaimer
+                // not configured
+                if ((value === null) || (value === undefined)) {
+                    writeConsoleMsg('warn', 'userSettingRead ::: No user setting found for: _' + key + '_. Gonna show the disclaimer now')
+                    disclaimerShow()
+                } else {
+                    settingConfirmedDisclaimer = true
+                    globalObjectSet('confirmedDisclaimer', settingConfirmedDisclaimer)
+                    writeConsoleMsg('info', 'userSettingRead ::: Found configured _' + key + '_ with value: _' + settingConfirmedDisclaimer + '_.')
+                    ui.windowMainBlurSet(false) // unblur the main UI
+                }
             }
         }
         // end: confirmedDisclaimer
@@ -614,9 +624,7 @@ function disclaimerCheck () {
 */
 function disclaimerShow () {
     const dialog = require('electron').remote.dialog
-
     writeConsoleMsg('warn', 'disclaimerShow ::: Showing the disclaimer now.')
-
     var disclaimerTitle = 'media-dupes disclaimer'
     var disclaimerText = 'THIS SOFTWARE IS PROVIDED BY THE DEVELOPERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
 
@@ -629,8 +637,8 @@ function disclaimerShow () {
         })
     if (choice === 0) {
         writeConsoleMsg('info', 'disclaimerShow ::: User confirmed the disclaimer.')
-        sentry.countEvent('usageDisclaimerConfirmed')
         userSettingWrite('confirmedDisclaimer', true)
+        ui.windowMainBlurSet(false) // unblur the main UI
     }
 }
 
