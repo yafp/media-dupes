@@ -298,11 +298,12 @@ function titlebarInit () {
         titleHorizontalAlignment: 'center', // position of window title
         icon: 'img/icon/icon.png',
         drag: true, // whether or not you can drag the window by holding the click on the title bar.
-        backgroundColor: customTitlebar.Color.fromHex('#171717'),
+        backgroundColor: customTitlebar.Color.fromHex('#343a40'),
         minimizable: true,
         maximizable: true,
         closeable: true,
-        itemBackgroundColor: customTitlebar.Color.fromHex('#525252') // hover color
+        unfocusEffect: false, // added in 0.9.0
+        itemBackgroundColor: customTitlebar.Color.fromHex('#ffe5e5') // menu item -> hover color
     })
 
     // Be aware: the font-size of .window-title (aka application name) is set by app/css/core.css
