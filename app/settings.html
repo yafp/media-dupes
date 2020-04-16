@@ -64,7 +64,7 @@
                 <a class="nav-item nav-link" id="nav-audio-tab" data-toggle="tab" href="#audio-tab" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="fas fa-music"></i> Audio</a>
                 <a class="nav-item nav-link" id="nav-youtubedl-tab" data-toggle="tab" href="#youtubedl-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fab fa-youtube"></i> youtube-dl</a>
                 <a class="nav-item nav-link" id="nav-ffmpeg-tab" data-toggle="tab" href="#ffmpeg-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fas fa-tools"></i> ffmpeg</a>
-                <a class="nav-item nav-link" id="nav-reporting-tab" data-toggle="tab" href="#reporting-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fas fa-bug"></i> Reporting</a> 
+                <a class="nav-item nav-link" id="nav-reporting-tab" data-toggle="tab" href="#reporting-tab" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fas fa-bug"></i> Reporting</a>
             </div>
         </div>
         <!-- /Tabs -->
@@ -88,7 +88,7 @@
                     <div class="input-group mb-3">
                         <input id="inputCustomTargetDir" name="inputCustomTargetDir" type="text" class="form-control form-control-sm" placeholder="Not set, using default download directory" readonly>
                         <div class="input-group-append">
-                            <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" onclick="windowSettingsClickButtonChooseDownloadDir()"><i class="far fa-folder-open"></i> Choose</button>
+                            <button id="buttonSettingsSelectCustomTargetDir" name="buttonSettingsSelectCustomTargetDir" class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" onclick="windowSettingsClickButtonChooseDownloadDir()"><i class="far fa-folder-open"></i> Choose</button>
                         </div>
                     </div>
                 </div>
@@ -165,7 +165,7 @@
                         <input type="text" class="form-control form-control-sm" placeholder="youtube-dl path" id="userSettingsYouTubeDLPathInfo" name="userSettingsYouTubeDLPathInfo" readonly>
                         <div class="input-group-append">
                             <button id="buttonSettingsYoutubeDLStartUpdate" class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickYoutubeDlUpdate()"><i class="fab fa-youtube"></i> Update</button>
-                            <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
+                            <button class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://ytdl-org.github.io/youtube-dl/index.html')"><i class="fas fa-globe-europe"></i> Visit</button>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                             </div>
                         </div>
                         <input type="text" class="form-control form-control-sm" id="textInputAdditionalParameter" name="textInputAdditionalParameter" placeholder="--socket-timeout 5 --retries 15" value="">
-                        <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickButtonAdditionalParameterSave();"><i class="fas fa-save"></i> Save</button>
+                        <button class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickButtonAdditionalParameterSave();"><i class="fas fa-save"></i> Save</button>
                     </div>
                 </div>
 
@@ -200,7 +200,7 @@
                     <div class="input-group mb-3">
                         <input type="text" class="form-control form-control-sm" placeholder="ffmpeg path" id="userSettingsFfmpegPathInfo" name="userSettingsFfmpegPathInfo" readonly>
                         <div class="input-group-append">
-                            <button class="btn btn-success btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
+                            <button class="btn btn-danger btn-sm mediaDupes_btnDefaultWidth" type="button" onclick="windowSettingsClickOpenUrl('https://www.ffmpeg.org/')"><i class="fas fa-globe-europe"></i> Visit</button>
                         </div>
                     </div>
                 </div>

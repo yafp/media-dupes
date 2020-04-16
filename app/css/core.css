@@ -15,6 +15,19 @@ body{
 }
 
 
+/*
+bootstrap color codes: https://www.bitdegree.org/learn/bootstrap-colors
+    primary:    #007bff
+    info:       #17a2b8
+    success:    #28a745
+    warning:    #ffc107
+    danger:     #dc3545
+    dark:       #343a40
+    secondary   #6c757d
+    light       #f8f9fa
+    white       #ffffff
+*/
+
 
 /* ########################################################################## */
 /* NAV COLOR ON SETTINGS */
@@ -66,9 +79,12 @@ body{
 /* WINDOW BORDER */
 /* ########################################################################## */
 .container-after-titlebar{
-    border-left: 1px solid #171717;
-    border-right: 1px solid #171717;
-    border-bottom: 1px solid #171717;
+    /* #171717 */
+    /* #6c757d */
+    /* 343a40 */
+    border-left: 1px solid #343a40;
+    border-right: 1px solid #343a40;
+    border-bottom: 1px solid #343a40;
 }
 
 /* ########################################################################## */
@@ -90,7 +106,7 @@ h2{
 h3{
     text-align: right;
     color: gray;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 h4{
@@ -147,11 +163,13 @@ td {
 
 /* hover color for rows */
 table#example.dataTable tbody tr:hover {
-  background-color: #ffa;
+  /* background-color: #ffa; */
+  background-color: #ffe5e5;
 }
 
 table#example.dataTable tbody tr:hover > .sorting_1 {
-  background-color: #ffa;
+  /* background-color: #ffa; */
+  background-color: #ffe5e5;
 }
 
 
