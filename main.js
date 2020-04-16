@@ -75,7 +75,7 @@ const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage') // https://github.com/75lb/command-line-usage/wiki
 
 // image to unicode: https://drewish.com/projects/unicoder/
-const appLogo = '       ▖▄▖▌▌▌▌▄▖▖       \n    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n▝▞▄        ▘▘        ▌▌▘\n ▌▌▙▖              ▗▐▐▐ \n ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n       ▘▘▘▘▚▌▘▘▘▘       '
+const appLogo = '\t       ▖▄▖▌▌▌▌▄▖▖       \n\t    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n\t  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n\t ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n\t ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n\t▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n\t▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n\t▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n\t▝▞▄        ▘▘        ▌▌▘\n\t ▌▌▙▖              ▗▐▐▐ \n\t ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n\t  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n\t    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n\t       ▘▘▘▘▚▌▘▘▘▘       '
 
 const optionDefinitions = [
     {
@@ -198,30 +198,30 @@ const settingsWindowMinimalWindowWidth = 800
 * @param {string} message - The log message
 */
 function doLog (type, message) {
-    const log = require('electron-log')
+    const logM = require('electron-log')
+    const prefix = '[   Main   ] '
 
     if (global.sharedObj.consoleOutput === false) {
-        return
+        logM.transports.console.level = false // disable Terminal output. Still logs to DevTools and LogFile
     }
-
-    const prefix = '[   Main   ] '
+    // important: https://github.com/megahertz/electron-log/issues/189
 
     // electron-log can: error, warn, info, verbose, debug, silly
     switch (type) {
     case 'info':
-        log.info(prefix + message)
+        logM.info(prefix + message)
         break
 
     case 'warn':
-        log.warn(prefix + message)
+        logM.warn(prefix + message)
         break
 
     case 'error':
-        log.error(prefix + message)
+        logM.error(prefix + message)
         break
 
     default:
-        log.silly(prefix + message)
+        logM.silly(prefix + message)
             // code block
     }
 }
@@ -593,6 +593,7 @@ function createMenuMain () {
                 // Settings
                 {
                     label: 'Settings',
+                    icon: path.join(__dirname, 'app/img/menu/file/cog_red.png'),
                     click () {
                         mainWindow.webContents.send('openSettings')
                     },
@@ -605,6 +606,7 @@ function createMenuMain () {
                 {
                     role: 'quit',
                     label: 'Exit',
+                    icon: path.join(__dirname, 'app/img/menu/file/power-off_red.png'),
                     click () {
                         app.quit()
                     },
@@ -619,11 +621,13 @@ function createMenuMain () {
             submenu: [
                 {
                     label: 'Undo',
+                    icon: path.join(__dirname, 'app/img/menu/edit/undo_red.png'),
                     accelerator: 'CmdOrCtrl+Z',
                     selector: 'undo:'
                 },
                 {
                     label: 'Redo',
+                    icon: path.join(__dirname, 'app/img/menu/edit/redo_red.png'),
                     accelerator: 'Shift+CmdOrCtrl+Z',
                     selector: 'redo:'
                 },
@@ -632,16 +636,19 @@ function createMenuMain () {
                 },
                 {
                     label: 'Cut',
+                    icon: path.join(__dirname, 'app/img/menu/edit/cut_red.png'),
                     accelerator: 'CmdOrCtrl+X',
                     selector: 'cut:'
                 },
                 {
                     label: 'Copy',
+                    icon: path.join(__dirname, 'app/img/menu/edit/copy_red.png'),
                     accelerator: 'CmdOrCtrl+C',
                     selector: 'copy:'
                 },
                 {
                     label: 'Paste',
+                    icon: path.join(__dirname, 'app/img/menu/edit/paste_red.png'),
                     accelerator: 'CmdOrCtrl+V',
                     selector: 'paste:'
                 },
@@ -654,6 +661,7 @@ function createMenuMain () {
         },
 
         // Menu: View
+        /*
         {
             label: 'View',
             submenu: [
@@ -667,8 +675,10 @@ function createMenuMain () {
                 }
             ]
         },
+        */
 
         // Menu: Youtube
+        /*
         {
             label: 'Search',
             submenu: [
@@ -681,11 +691,20 @@ function createMenuMain () {
                 }
             ]
         },
+        */
 
         // Menu: Window
         {
             label: 'Window',
             submenu: [
+                {
+                    role: 'reload',
+                    label: 'Reload',
+                    click (item, mainWindow) {
+                        mainWindow.reload()
+                    },
+                    accelerator: 'CmdOrCtrl+R'
+                },
                 {
                     role: 'togglefullscreen',
                     label: 'Toggle Fullscreen',
@@ -701,6 +720,7 @@ function createMenuMain () {
                 {
                     role: 'minimize',
                     label: 'Minimize',
+                    icon: path.join(__dirname, 'app/img/menu/window/window-minimize_red.png'),
                     click (item, mainWindow) {
                         if (mainWindow.isMinimized()) {
                             // mainWindow.restore();
@@ -712,6 +732,7 @@ function createMenuMain () {
                 },
                 {
                     label: 'Maximize',
+                    icon: path.join(__dirname, 'app/img/menu/window/window-maximize_red.png'),
                     click (item, mainWindow) {
                         if (mainWindow.isMaximized()) {
                             mainWindow.unmaximize()
@@ -756,6 +777,7 @@ function createMenuMain () {
                 // open homepage
                 {
                     label: 'Homepage',
+                    icon: path.join(__dirname, 'app/img/menu/help/github_red.png'),
                     click () {
                         shell.openExternal(urlGitHubGeneral)
                     },
@@ -764,6 +786,7 @@ function createMenuMain () {
                 // report issue
                 {
                     label: 'Report issue',
+                    icon: path.join(__dirname, 'app/img/menu/help/github_red.png'),
                     click () {
                         shell.openExternal(urlGitHubIssues)
                     },
@@ -772,6 +795,7 @@ function createMenuMain () {
                 // open changelog
                 {
                     label: 'Changelog',
+                    icon: path.join(__dirname, 'app/img/menu/help/github_red.png'),
                     click () {
                         shell.openExternal(urlGitHubChangelog)
                     },
@@ -780,10 +804,22 @@ function createMenuMain () {
                 // open Releases
                 {
                     label: 'Releases',
+                    icon: path.join(__dirname, 'app/img/menu/help/github_red.png'),
                     click () {
                         shell.openExternal(urlGitHubReleases)
                     },
                     accelerator: 'F4'
+                },
+                {
+                    type: 'separator'
+                },
+                // Youtube-suggest
+                {
+                    label: 'Youtube Suggest',
+                    click (item, mainWindow) {
+                        mainWindow.webContents.send('openYoutubeSuggestDialog')
+                    },
+                    accelerator: 'CmdOrCtrl+S'
                 },
                 {
                     type: 'separator'
@@ -805,6 +841,7 @@ function createMenuMain () {
                 {
                     id: 'HelpConsole',
                     label: 'Console',
+                    icon: path.join(__dirname, 'app/img/menu/help/terminal_red.png'),
                     click (item, mainWindow) {
                         mainWindow.webContents.toggleDevTools()
                     },
@@ -817,6 +854,7 @@ function createMenuMain () {
                 // SubMenu youtube-dl maintenance of help
                 {
                     label: 'Youtube-DL',
+                    icon: path.join(__dirname, 'app/img/menu/help/youtube_red.png'),
                     submenu: [
                         // Show supported sites
                         {
