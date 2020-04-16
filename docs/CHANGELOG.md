@@ -30,6 +30,7 @@ The following categories are used:
 #### ```Added```
 * Added 'show supported sites' menu entry to the help -> youtube-dl menu. See [#113](https://github.com/yafp/media-dupes/issues/113)
 * Added support for cli parameters. See [#115](https://github.com/yafp/media-dupes/issues/115)
+* Added icons to menu. See [#118](https://github.com/yafp/media-dupes/issues/118)
 
 #### ```Changed```
 * UI: Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
@@ -37,6 +38,7 @@ The following categories are used:
 * Sentry: Removed several event count events to reduce overall amount of generated reports.
 * Updated dependencies:
   * Updated ```electron``` from ```8.2.1``` to ```8.2.2```
+  * Updated ```electron-builder``` from ```22.4.1``` to ```22.5.1```
   * Updated ```electron-util``` from ```0.14.0``` to ```0.14.1```
   * Updated ```metascraper``` from ```5.11.8``` to ```5.11.9```
   * Updated ```metascraper-audio``` from ```5.11.8``` to ```5.11.9```
@@ -49,9 +51,6 @@ The following categories are used:
   * Updated ```metascraper-title``` from ```5.11.8``` to ```5.11.9```
   * Updated ```metascraper-video``` from ```5.11.8``` to ```5.11.9```
   * Updated ```metascraper-youtube``` from ```5.11.8``` to ```5.11.9```
-
-
-#### ```Removed```
 
 #### ```Fixed```
 * Fixed a minor issue in todo-list if metascraper got null values. See [#114](https://github.com/yafp/media-dupes/issues/114)

@@ -70,6 +70,13 @@ Updating the bundled `youtube-dl` package is only possible if the user has write
 ## license
 Please see the [LICENSE](LICENSE) for more details.
 
+## log files
+**media-dupes** is writing log files. You will find them here:
+
+* Linux: `~/.config/media-dupes/logs/{process type}.log`
+* macOS: `~/Library/Logs/media-dupes/{process type}.log`
+* Windows: `%USERPROFILE%\AppData\Roaming\media-dupes\logs\{process type}.log`
+
 ## privacy
 * **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases.
 * reporting is enabled by default, but can be disabled in the application settings UI.
