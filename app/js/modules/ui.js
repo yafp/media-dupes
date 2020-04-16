@@ -107,9 +107,19 @@ function windowMainButtonsOthersDisable () {
 function windowMainButtonsStartEnable () {
     // enable start buttons if needed - if needed
     if ($('#buttonStartVideoExec').is(':disabled')) {
+        // Button: VideoExec
         $('#buttonStartVideoExec').prop('disabled', false)
+        $('#buttonStartVideoExec').removeClass('btn-secondary') // remove class: secondary
+        $('#buttonStartVideoExec').addClass('btn-danger') // add class: danger
+        // Button: Video
         $('#buttonStartVideo').prop('disabled', false)
+        $('#buttonStartVideo').removeClass('btn-secondary') // remove danger class
+        $('#buttonStartVideo').addClass('btn-danger') // add class: danger
+        // Button: AudioExec
         $('#buttonStartAudioExec').prop('disabled', false)
+        $('#buttonStartAudioExec').removeClass('btn-secondary') // remove class: secondary
+        $('#buttonStartAudioExec').addClass('btn-danger') // add class: danger
+
         utils.writeConsoleMsg('info', 'windowMainButtonsStartEnable ::: Did enable both start buttons')
     }
 }
@@ -122,9 +132,19 @@ function windowMainButtonsStartEnable () {
 function windowMainButtonsStartDisable () {
     // disable start buttons - if needed
     if ($('#buttonStartVideoExec').is(':enabled')) {
+        // Button: VideoExec
         $('#buttonStartVideoExec').prop('disabled', true)
+        $('#buttonStartVideoExec').removeClass('btn-danger') // remove class: danger
+        $('#buttonStartVideoExec').addClass('btn-secondary') // add class: secondary
+        // Button: Video
         $('#buttonStartVideo').prop('disabled', true)
+        $('#buttonStartVideo').removeClass('btn-danger') // remove danger class
+        $('#buttonStartVideo').addClass('btn-secondary') // add class: secondary
+        // Button: AudioExec
         $('#buttonStartAudioExec').prop('disabled', true)
+        $('#buttonStartAudioExec').removeClass('btn-danger') // remove danger class
+        $('#buttonStartAudioExec').addClass('btn-secondary') // add class: secondary
+
         utils.writeConsoleMsg('info', 'windowMainButtonsStartDisable ::: Did disable both start buttons')
     }
 }
@@ -752,7 +772,6 @@ function windowMainDownloadQueueFinished () {
     windowMainLoadingAnimationHide() // stop download animation / spinner
     windowMainButtonsOthersEnable() // enable some of the buttons again
     windowMainApplicationStateSet() // reset application state
-    windowMainThumbnailPreviewReset() // reset the thumbnail
     windowMainDisablePowerSaveBlocker() // disabled the power save blocker
 
     utils.globalObjectSet('todoListStateEmpty', true)
@@ -778,7 +797,6 @@ function windowMainUiReset () {
     windowMainButtonsOthersEnable() // ensure some buttons are enabled
     windowMainLogReset() // empty log textarea
     windowMainApplicationStateSet() // reset application state
-    windowMainThumbnailPreviewReset() // reset the thumbnail
     utils.globalObjectSet('todoListStateEmpty', true) // store that the todolist is now empty
     utils.writeConsoleMsg('info', 'windowMainUiReset ::: Finished resetting the UI')
     */
@@ -840,8 +858,8 @@ function windowMainToDoListRestore () {
             const { ipcRenderer } = require('electron')
             ipcRenderer.send('makeWindowUrgent')
 
-            // remember that todo list is now not longer empty - see #105
-            utils.globalObjectSet('todoListStateEmpty', false)
+            utils.globalObjectSet('todoListStateEmpty', false) // remember that todo list is now not longer empty - see #105
+            windowMainButtonsStartEnable() // enable the start buttons
         } else {
             utils.writeConsoleMsg('info', 'windowMaintoDoListRestore ::: Found no urls to restore from previous session.')
         }
@@ -889,21 +907,6 @@ function windowMainToDoListSave () {
 function windowMainUiMakeUrgent () {
     const { ipcRenderer } = require('electron')
     ipcRenderer.send('makeWindowUrgent') // make window urgent after having finished downloading. See #7
-}
-
-/**
-* @function windowMainThumbnailPreviewReset
-* @summary Resets the thumbnail preview back to default / empty
-* @description Resets the thumbnail preview back to default / empty
-*/
-function windowMainThumbnailPreviewReset () {
-    // mainWindow
-    $('#mainWindowThumbnailPreview').attr('src', '') // empty the thumbnail preview
-    // modal:
-    $('#previewTitle').html('') // reset the title
-    $('#previewThumbnailImage').attr('src', '') // remove the image from thumbnail modal dialog
-    $('#previewId').html('') // id
-    $('#previewDesc').html('') // description
 }
 
 /**
@@ -1078,7 +1081,6 @@ function windowMainDisablePowerSaveBlocker () {
 * @param {String} url - The url which should be removed from the todo array
 */
 function toDoListSingleUrlRemove (url) {
-    // remove url from array
     const index = arrayUserUrlsN.indexOf(url)
     if (index > -1) {
         arrayUserUrlsN.splice(index, 1)
@@ -1244,8 +1246,6 @@ module.exports.windowMainToDoListRestore = windowMainToDoListRestore
 module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
 module.exports.windowMainDownloadVideo = windowMainDownloadVideo
-module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
-module.exports.windowMainThumbnailPreviewReset = windowMainThumbnailPreviewReset
 module.exports.windowMainEnableAddUrlButton = windowMainEnableAddUrlButton
 module.exports.windowMainDisableAddUrlButton = windowMainDisableAddUrlButton
 module.exports.inputUrlFieldSetState = inputUrlFieldSetState
