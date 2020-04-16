@@ -20,27 +20,25 @@ const ui = require('./ui.js')
 * @param {string} message - String which defines the log message
 */
 function writeConsoleMsg (type, message) {
-    var consoleOutput = globalObjectGet('consoleOutput')
-    if (consoleOutput === true) {
-        const prefix = '[ Renderer ] '
-        const log = require('electron-log')
-        // electron-log can: error, warn, info, verbose, debug, silly
-        switch (type) {
-        case 'info':
-            log.info(prefix + message)
-            break
+    const logR = require('electron-log')
+    const prefix = '[ Renderer ] '
 
-        case 'warn':
-            log.warn(prefix + message)
-            break
+    // electron-log can: error, warn, info, verbose, debug, silly
+    switch (type) {
+    case 'info':
+        logR.info(prefix + message)
+        break
 
-        case 'error':
-            log.error(prefix + message)
-            break
+    case 'warn':
+        logR.warn(prefix + message)
+        break
 
-        default:
-            log.silly(prefix + message)
-        }
+    case 'error':
+        logR.error(prefix + message)
+        break
+
+    default:
+        logR.silly(prefix + message)
     }
 }
 
