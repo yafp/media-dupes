@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
+
     <script>
         if (typeof module === 'object') {
             window.module = module;
@@ -49,6 +50,8 @@
     <script type="text/javascript" src="../node_modules/datatables.net-scroller-dt/js/scroller.dataTables.min.js"></script>
 
     <title>media-dupes</title>
+
+
 
 </head>
 
@@ -134,9 +137,10 @@
                         <th>ID</th> <!-- generated id -->
                         <th><i class="fas fa-cloud" title="Source service"></i></th> <!-- favicon -->
                         <th><i class="far fa-image" title="Preview"></i></th> <!-- preview image -->
-                        <th>Play</th> <!-- play / prelisten button -->
-                        <th>Url</th> <!-- url -->
-                        <th>Status</th> <!-- status -->
+                        <th><i class="fas fa-play" title="Pre-listen 5 seconds"></i></th> <!-- play / prelisten button -->
+                        <th><i class="fas fa-link" title="Link Url"></i></th> <!-- shortened url -->
+                        <th>Url (long)</th> <!-- url -->
+                        <th><i class="fas fa-info" title="Status"></i></th> <!-- status -->
                         <th><i class="fas fa-trash-alt" title="Remove URL"></i></th> <!-- delete / remove button -->
                     </tr>
                 </thead>
@@ -324,7 +328,7 @@ $( document ).ready(function()
         // Hide some cols
         "columnDefs": [
             {
-                "targets": [ 0, 3],
+                "targets": [ 0, 5 ],
                 "visible": false, // hiding column 0
                 "searchable": false
             }
@@ -333,22 +337,24 @@ $( document ).ready(function()
         "columns": [
             {
                 'name': 'id',
-                'width': '20px'
             },
             {
                 'name': 'logo',
-                'width': '20px'
+                'width': '10px'
             },
             {
                 'name': 'preview',
-                'width': '20px'
+                'width': '10px'
             },
             {
                 'name': 'buttonPlay',
-                'width': '20px'
+                'width': '10px'
             },
             {
                 'name': 'url'
+            },
+            {
+                'name': 'url_long'
             },
             {
                 'name': 'status',
@@ -368,10 +374,10 @@ $( document ).ready(function()
     $('#example tbody').on( 'click', '#delete', function () {
         rowData = table.row( $(this).parents('tr') ).data();
 
-        utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[4] + ' from todo list')
+        utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[5] + ' from todo list')
 
         // remove from array: arrayUserUrlsN
-        ui.toDoListSingleUrlRemove(rowData[4])
+        ui.toDoListSingleUrlRemove(rowData[5])
 
         // remove from table
         table
@@ -383,8 +389,19 @@ $( document ).ready(function()
 
     // Play a row
     $('#example tbody').on( 'click', '#play', function () {
+
+        //var cell = table.cell( this );
+        //cell.data( cell.data() + 1 ).draw();
+        //cell.data( "42").draw();
+
         rowData = table.row( $(this).parents('tr') ).data();
-        utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[4] + ' from todo list')
+        //console.error(rowData)
+        utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[5] + ' from todo list')
+
+        //var playButtonCode = rowData[3]
+        // change icon from play to pause: <i class="fas fa-pause"></i>
+        //table.cell({ row: rowData, column: 3 }).data('<button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary"><i class="fas fa-pause"></i></button>')
+
     });
 
 });

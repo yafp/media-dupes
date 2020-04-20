@@ -404,7 +404,7 @@ function urlInputFieldOnKeyUp () {
         utils.writeConsoleMsg('info', 'urlInputFieldOnKeyUp ::: Is now empty, gonna reset the background color')
         ui.inputUrlFieldSetState() // empty = white
     } else {
-        ui.inputUrlFieldSetState('unchecked') // unchecked = yellow
+        ui.inputUrlFieldSetState('unchecked') // unchecked = light red
 
         var isUrlValid = utils.validURL(currentContentOfUrlInputField)
         if (isUrlValid) {
@@ -766,7 +766,7 @@ require('electron').ipcRenderer.on('scheduleUpdateCheckMediaDupes', function () 
         function () {
             utils.writeConsoleMsg('info', 'scheduleUpdateCheckMediaDupes ::: Starting scheduled search for new media-dupes updates.')
             searchUpdate(true) // silent
-        }, 5000) // after 5 seconds
+        }, 3000) // after 3 seconds
 })
 
 /**
@@ -780,7 +780,7 @@ require('electron').ipcRenderer.on('scheduleUpdateCheckYoutubeDl', function () {
         function () {
             utils.writeConsoleMsg('info', 'scheduleUpdateCheckYoutubeDl ::: Starting scheduled search for new youtube-dl updates.')
             youtubeDl.binaryUpdateCheck(true, false) // If silent = false -> Forces result feedback, even if no update is available
-        }, 5000) // after 5 seconds
+        }, 3000) // after 3 seconds
 })
 
 /**

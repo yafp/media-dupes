@@ -946,11 +946,7 @@ function inputUrlFieldSetState (state) {
         windowMainEnableAddUrlButton()
         break
     case 'unchecked':
-        $('#inputNewUrl').css('background-color', '#F0E68C') //  yellow
-        windowMainDisableAddUrlButton()
-        break
-    case 'unreachable':
-        $('#inputNewUrl').css('background-color', '#FA8072') // red
+        $('#inputNewUrl').css('background-color', '#ffe5e5') //  light red
         windowMainDisableAddUrlButton()
         break
     default:
@@ -1082,6 +1078,8 @@ function windowMainDisablePowerSaveBlocker () {
 */
 function toDoListSingleUrlRemove (url) {
     const index = arrayUserUrlsN.indexOf(url)
+    //console.error(arrayUserUrlsN)
+    //console.error(url)
     if (index > -1) {
         arrayUserUrlsN.splice(index, 1)
         utils.writeConsoleMsg('info', 'toDoListSingleUrlRemove ::: Removed the url from the todo list array.')
@@ -1099,6 +1097,22 @@ function toDoListSingleUrlRemove (url) {
     }
 }
 
+function truncateString (str, num) {
+    utils.writeConsoleMsg('info', 'truncateString ::: Truncating _' + str + '_ after ' + num + ' chars.')
+
+    // remove http/https
+    str = str.replace('https://', '')
+    str = str.replace('http://', '')
+
+    // If the length of str is less than or equal to num
+    // just return str--don't truncate it.
+    if (str.length <= num) {
+        return str
+    }
+    // Return str truncated with '...' concatenated to the end of str.
+    return str.slice(0, num) + '...'
+}
+
 // #102
 /**
 * @function toDoListSingleUrlAdd
@@ -1111,6 +1125,8 @@ function toDoListSingleUrlAdd (url) {
 
     var urlId = utils.generateUrlId(url) // generate an id for this url
 
+    var shortUrl = truncateString(url, 50)
+
     // add new row to datatable (with the most important informations)
     //
     var table = $('#example').DataTable()
@@ -1119,7 +1135,8 @@ function toDoListSingleUrlAdd (url) {
         '<div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="sr-only">Loading...</span></div>', // logo
         '<div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="sr-only">Loading...</span></div>', // preview
         '<button type="button" id="play" name="play" class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-play"></i></button>', // Play
-        url, // url
+        shortUrl, // url
+        url,
         '', // state
         '<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger disabled"><i class="fas fa-trash-alt"></i></button>' // remove
     ]).draw(false)
@@ -1143,6 +1160,7 @@ function toDoListSingleUrlAdd (url) {
     var urlImage
     var urlDescription
     var urlTitle
+    var urlAudio
 
     const got = require('got')
 
@@ -1159,6 +1177,7 @@ function toDoListSingleUrlAdd (url) {
         urlImage = metadata.image
         urlDescription = metadata.description
         urlTitle = metadata.title
+        urlAudio = metadata.audio
 
         // find the new datatable record
         //
@@ -1189,8 +1208,11 @@ function toDoListSingleUrlAdd (url) {
         }
         table.cell({ row: indexes[0], column: 2 }).data('<img class="zoomSmall" src="' + urlImage + '" width="30" title="' + urlDescription + '"  onclick=ui.imagePreviewModalShow("' + urlImage + '"); >')
 
+        // play button
+        table.cell({ row: indexes[0], column: 3 }).data('<button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary"><i class="fas fa-play"></i></button>')
+
         // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
-        table.cell({ row: indexes[0], column: 6 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
+        table.cell({ row: indexes[0], column: 7 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
     })()
 }
 
@@ -1206,6 +1228,22 @@ function imagePreviewModalShow (url) {
     $('#myModalImagePreview').modal('show') // show the modal
 }
 
+function playAudio (url) {
+    utils.writeConsoleMsg('info', 'playAudio ::: Trying to play audio _' + url + '_.')
+    // new Audio(url).play()
+
+    var a = new Audio(url)
+    a.play() // start to play
+    setTimeout(function () { // stop it again after 5 seconds
+        a.pause()
+    }, 5000)
+}
+
+/**
+* @function dataTablesReset
+* @summary Reset the datatable
+* @description  Reset the datatable
+*/
 function dataTablesReset () {
     var table = $('#example').DataTable()
 
@@ -1254,4 +1292,7 @@ module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlo
 module.exports.toDoListSingleUrlRemove = toDoListSingleUrlRemove // #102
 module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102
 module.exports.imagePreviewModalShow = imagePreviewModalShow
+module.exports.playAudio = playAudio
 module.exports.dataTablesReset = dataTablesReset
+
+module.exports.truncateString = truncateString
