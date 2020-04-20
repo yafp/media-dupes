@@ -168,7 +168,6 @@ table#example.dataTable tbody tr:hover {
 }
 
 table#example.dataTable tbody tr:hover > .sorting_1 {
-  /* background-color: #ffa; */
   background-color: #ffe5e5;
 }
 
@@ -204,7 +203,7 @@ table#example.dataTable tbody tr:hover > .sorting_1 {
 /* ROW EMPTY */
 /* ########################################################################## */
 .row-empty{
-    height: 20px;
+    height: 15px;
 }
 
 /* ########################################################################## */
