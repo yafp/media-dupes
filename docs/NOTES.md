@@ -23,6 +23,10 @@
 
 * custom flags for NSIS
 
+### urls for screenshots:
+* https://www.youtube.com/watch?v=WY0Sap4Q0sg&list=PLcxmmGC6Lv9youEshjI5K7UQOZydxKzOn
+* https://soundcloud.com/jdilla/thank-you-jay-dee-act-3
+
 
 ### urls
 * youtube-dl: https://github.com/ytdl-org/youtube-dl

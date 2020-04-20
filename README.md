@@ -27,7 +27,6 @@ available for:
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
 [![GitHub Pages](https://github.com/yafp/media-dupes/workflows/GitHub%20pages/badge.svg)](https://yafp.github.io/media-dupes/)
 ![GitHub AV Scan](https://github.com/yafp/media-dupes/workflows/av_scan/badge.svg)
-[![Discord](https://img.shields.io/discord/672401845855191040.svg)](https://discord.gg/gHnqdHy)
 
 
 ![ui](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/screenshots/ui_latest.png)
@@ -35,7 +34,7 @@ available for:
 </div>
 
 
-## about media-dupes
+# about 
 **media-dupes** can<sup>[1](#footnote1)</sup>:
 
 * download video
@@ -48,8 +47,19 @@ available for:
 * available for linux, macOS and windows.
 * free and open source
 
+***
+
+# general informations
+
 ## changelog
 Please see the [changelog](docs/CHANGELOG.md) for more details.
+
+## license
+Please see the [LICENSE](LICENSE) for more details.
+
+***
+
+# getting started
 
 ## download
 You'll find the latest releases [here](https://github.com/yafp/media-dupes/releases).
@@ -67,16 +77,46 @@ Updates must be installed manually as automatic updating of electron application
 
 Updating the bundled `youtube-dl` package is only possible if the user has write access to the `media-dupes` installation path (which does not work for all available packages/installation types).
 
-## license
-Please see the [LICENSE](LICENSE) for more details.
+***
 
-## log files
+# debugging / verbose
+There are several ways to get verbose informations about what **media-dupes** is doing.
+
+* Log files
+* Developer console
+* Commandline output
+
+## Log files
 **media-dupes** is writing log files. You will find them here:
 
 * Linux: `~/.config/media-dupes/logs/{process type}.log`
 * macOS: `~/Library/Logs/media-dupes/{process type}.log`
 * Windows: `%USERPROFILE%\AppData\Roaming\media-dupes\logs\{process type}.log`
 
+## Developer console
+Press `F12` within the app or navigate via the `Help` menu and select `Console (F12)` to access the Developer Console.
+
+## Commandline output
+* Start **media-dupes** with `--verbose`
+
+***
+
+# developers
+You are always welcome to check and even improve the code.
+
+## contributing
+Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
+A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
+
+## jsdoc
+The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/). It is auto-generated (using [JsDoc Action](https://github.com/marketplace/actions/jsdoc-action)) on each commit of this project.
+
+## build
+Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
+
+***
+
+# misc 
 ## privacy
 * **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases.
 * reporting is enabled by default, but can be disabled in the application settings UI.
@@ -89,10 +129,6 @@ Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 If you have question regarding **media-dupes** use one of the following options
 
 * Github: click [here](https://github.com/yafp/media-dupes/issues) to create an issue
-* Discord: click [here](https://discord.gg/gHnqdHy) to join the yafp discord server
-* Riot: click [here](https://riot.im/app/#/room/#media-dupes:matrix.org) to join the public **#media-dupes** riot.im room available on **matrix.org**.
-* Slack: click [here](https://join.slack.com/t/yafp/shared_invite/enQtOTU2NzAzNzIzMTM4LTdhNjdjOTI1MTBhNmNjYmY0NzM0YmFlZDgyOWFjYmY5ZGM2NzE4NWFhNzdkYzMzNjhlNjViOGI3MzE0OWNjNGY) to join the yafp workspace
-
 
 ## support / fund
 If you want to support the development of **media-dupes** you can fund me on:
@@ -103,19 +139,7 @@ If you want to support the development of **media-dupes** you can fund me on:
 ## disclosure
 **media-dupes** is not affiliated with any of the supported apps/services.
 
-## developers
-You are always welcome to check and even improve the code.
+***
 
-### contributing
-Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
-A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
-
-### jsdoc
-The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/). It is auto-generated (using [JsDoc Action](https://github.com/marketplace/actions/jsdoc-action)) on each commit of this project.
-
-### build
-Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
-
-
-## footnotes
+# footnotes
 <a name="footnote1">1</a>: Assuming the provided url is supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/supportedsites.html).

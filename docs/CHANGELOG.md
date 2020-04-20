@@ -28,17 +28,19 @@ The following categories are used:
 
 ### media-dupes 0.9.0 (2020xxyy) - DEV
 #### ```Added```
+* Added prelisten function to todo-list. See [#119](https://github.com/yafp/media-dupes/issues/119)
 * Added 'show supported sites' menu entry to the help -> youtube-dl menu. See [#113](https://github.com/yafp/media-dupes/issues/113)
 * Added support for cli parameters. See [#115](https://github.com/yafp/media-dupes/issues/115)
 * Added icons to menu. See [#118](https://github.com/yafp/media-dupes/issues/118)
 
 #### ```Changed```
 * UI: Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
+* ToDoList: Content of column url is now truncated to ensure the table does not break. See [#120](https://github.com/yafp/media-dupes/issues/120)
 * Disclaimer: Added blur and unblur. Changed timing for disclaimer-check call (moved from ready-to-show to show).
 * Sentry: Removed several event count events to reduce overall amount of generated reports.
+* New default value for `app.allowRendererProcessReuse` is now `true`.
 * Updated dependencies:
-  * Updated ```electron``` from ```8.2.1``` to ```8.2.2```
-  * Updated ```electron-builder``` from ```22.4.1``` to ```22.5.1```
+  * Updated ```electron``` from ```8.2.1``` to ```8.2.3```
   * Updated ```electron-util``` from ```0.14.0``` to ```0.14.1```
   * Updated ```metascraper``` from ```5.11.8``` to ```5.11.9```
   * Updated ```metascraper-audio``` from ```5.11.8``` to ```5.11.9```
