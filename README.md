@@ -34,7 +34,7 @@ available for:
 </div>
 
 
-# about 
+# about
 **media-dupes** can<sup>[1](#footnote1)</sup>:
 
 * download video
@@ -49,25 +49,15 @@ available for:
 
 ***
 
-# general informations
-
-## changelog
-Please see the [changelog](docs/CHANGELOG.md) for more details.
-
-## license
-Please see the [LICENSE](LICENSE) for more details.
-
-***
-
 # getting started
 
-## download
+### download
 You'll find the latest releases [here](https://github.com/yafp/media-dupes/releases).
 
-## install
+### install
 Please see the [installation instructions](docs/INSTALL.md) for more details.
 
-## updates
+### updates
 **media-dupes** checks on application launch if there is a newer `media-dupes` version available.
 Updates must be installed manually as automatic updating of electron applications requires that the builds are code-signed, which i can't provide so far.
 
@@ -76,6 +66,12 @@ Updates must be installed manually as automatic updating of electron application
 **Be aware:**
 
 Updating the bundled `youtube-dl` package is only possible if the user has write access to the `media-dupes` installation path (which does not work for all available packages/installation types).
+
+### changelog
+Please see the [changelog](docs/CHANGELOG.md) for more details.
+
+### license
+Please see the [LICENSE](LICENSE) for more details.
 
 ***
 
@@ -86,17 +82,17 @@ There are several ways to get verbose informations about what **media-dupes** is
 * Developer console
 * Commandline output
 
-## Log files
+### Log files
 **media-dupes** is writing log files. You will find them here:
 
 * Linux: `~/.config/media-dupes/logs/{process type}.log`
 * macOS: `~/Library/Logs/media-dupes/{process type}.log`
 * Windows: `%USERPROFILE%\AppData\Roaming\media-dupes\logs\{process type}.log`
 
-## Developer console
+### Developer console
 Press `F12` within the app or navigate via the `Help` menu and select `Console (F12)` to access the Developer Console.
 
-## Commandline output
+### Commandline output
 * Start **media-dupes** with `--verbose`
 
 ***
@@ -104,20 +100,20 @@ Press `F12` within the app or navigate via the `Help` menu and select `Console (
 # developers
 You are always welcome to check and even improve the code.
 
-## contributing
+### contributing
 Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
 A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
 
-## jsdoc
+### jsdoc
 The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/). It is auto-generated (using [JsDoc Action](https://github.com/marketplace/actions/jsdoc-action)) on each commit of this project.
 
-## build
+### build
 Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
 
 ***
 
-# misc 
-## privacy
+# misc
+### privacy
 * **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases.
 * reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
@@ -125,18 +121,18 @@ Building **media-dupes** yourself is pretty easy. Please see the [building instr
 
 Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 
-## discussion
+### discussion
 If you have question regarding **media-dupes** use one of the following options
 
 * Github: click [here](https://github.com/yafp/media-dupes/issues) to create an issue
 
-## support / fund
+### support / fund
 If you want to support the development of **media-dupes** you can fund me on:
 
 * [github](https://github.com/sponsors/yafp)
 * [patreon](https://www.patreon.com/yafp)
 
-## disclosure
+### disclosure
 **media-dupes** is not affiliated with any of the supported apps/services.
 
 ***
