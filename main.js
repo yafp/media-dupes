@@ -71,87 +71,31 @@ const utils = require('./app/js/modules/utils.js')
 // ----------------------------------------------------------------------------
 // COMMAND-LINE-ARGS
 // ----------------------------------------------------------------------------
-const commandLineArgs = require('command-line-args')
-const commandLineUsage = require('command-line-usage') // https://github.com/75lb/command-line-usage/wiki
-
+/*
 // image to unicode: https://drewish.com/projects/unicoder/
 const appLogo = '\t       ▖▄▖▌▌▌▌▄▖▖       \n\t    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n\t  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n\t ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n\t ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n\t▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n\t▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n\t▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n\t▝▞▄        ▘▘        ▌▌▘\n\t ▌▌▙▖              ▗▐▐▐ \n\t ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n\t  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n\t    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n\t       ▘▘▘▘▚▌▘▘▘▘       '
+*/
+var yargs = require("yargs")
+/*
+  .option('skipDisclaimer', {
+    alias: 's',
+    type: 'boolean',
+    description: 'Skip disclaimer on startup'
+  })
+  */
+  .epilog('Project URL: https://github.com/yafp/media-dupes')
+  .strict(true) // arguments must be valid
+  .option('verbose', {
+    alias: 'v',
+    type: 'boolean',
+    description: 'Run with verbose logging'
+  })
+  .argv
 
-const optionDefinitions = [
-    {
-        description: 'Display this usage guide.',
-        name: 'help',
-        alias: 'h',
-        type: Boolean,
-        /* typeLabel: '{underline boolean}', */
-        defaultValue: false
-    },
-    {
-        description: 'Show verbose output.',
-        name: 'verbose',
-        alias: 'v',
-        type: Boolean,
-        defaultValue: false
-    },
-    {
-        description: 'Skip the disclaimer',
-        name: 'skipDisclaimer',
-        alias: 's',
-        type: Boolean,
-        defaultValue: false
-    }
-]
-
-const options = commandLineArgs(optionDefinitions)
-
-// Option: Help
-if (options.help) {
-    const usage = commandLineUsage([
-        {
-            content: [
-                appLogo
-            ],
-            raw: true
-        },
-        {
-            header: 'media-dupes',
-            content: 'a minimal content duplicator for common media services like youtube.'
-        },
-        {
-            header: 'Options',
-            hide: ['skipDisclaimer'],
-            optionList: optionDefinitions
-        },
-        {
-            header: 'Issues',
-            content: '{underline https://github.com/yafp/media-dupes/issues}'
-        },
-        {
-            header: 'Code',
-            content: '{underline https://github.com/yafp/media-dupes}'
-        }
-    /*
-    {
-      content: 'Project home: {underline https://github.com/yafp/media-dupes}'
-    }
-    */
-    ])
-    console.log(usage)
-    app.quit() // stop the application
-}
-
-// Option: Verbose
-//
-if (options.verbose) {
-    // verbose = true
+if(yargs.verbose == true) {
     global.sharedObj.consoleOutput = true
 }
 
-// Option: Verbose
-//
-if (options.skipDisclaimer) {
-    global.sharedObj.confirmedDisclaimer = true
-}
 
 // ----------------------------------------------------------------------------
 // ERROR-HANDLING:
@@ -175,11 +119,11 @@ const defaultUserDataPath = app.getPath('userData') // for: storing window posit
 const { urlGitHubGeneral, urlGitHubIssues, urlGitHubChangelog, urlGitHubReleases, urlYoutubeDlSupportedSites } = require('./app/js/modules/urls.js') // project-urls
 
 // Caution: Warning since electron 8
-// app.allowRendererProcessReuse = false // see: https://github.com/electron/electron/issues/18397
+app.allowRendererProcessReuse = true // see: https://github.com/electron/electron/issues/18397. Set to true with media-dupes 0.9.0
 
 // mainWindow: minimal window size
 const mainWindowMinimalWindowHeight = 730
-const mainWindowMinimalWindowWidth = 620
+const mainWindowMinimalWindowWidth = 600
 
 // settingsWundow: minimal window size
 const settingsWindowMinimalWindowHeight = 400
