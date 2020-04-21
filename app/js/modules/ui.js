@@ -272,46 +272,6 @@ function windowMainOpenDownloadFolder () {
 }
 
 /**
-* @function windowMainShowSupportedExtractors
-* @summary Shows a list of all currently supported extractors of youtube-dl
-* @description Shows a list of all currently supported extractors of youtube-dl
-*/
-function windowMainShowSupportedExtractors () {
-    windowMainApplicationStateSet('Loading extractors list')
-
-    utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Loading list of all supported extractors...')
-    windowMainLogAppend('Fetching list of supported youtube-dl extractors', true)
-    windowMainButtonsOthersDisable()
-
-    const youtubedl = require('youtube-dl')
-    youtubedl.getExtractors(true, function (error, list) {
-        if (error) {
-            utils.showNoty('error', 'Unable to get youtube-dl extractor list.', 0)
-            utils.writeConsoleMsg('error', 'windowMainShowSupportedExtractors ::: Unable to get youtube-dl extractors. Error: _' + error + '_.')
-            throw error
-        }
-
-        utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Found ' + list.length + ' extractors')
-
-        // show all extractors in console
-        /*
-        for (let i = 0; i < list.length; i++) {
-            utils.writeConsoleMsg('info', 'showSupportedExtractors ::: ' + list[i])
-        }
-        */
-
-        // show all extractors in Ui log
-        // document.getElementById('textareaLogOutput').value = list.join('\n')
-        windowMainLogAppend(list.join('\n'))
-
-        utils.writeConsoleMsg('info', 'windowMainShowSupportedExtractors ::: Found ' + list.length + ' extractors') // summary in console.
-        windowMainLogAppend('Found ' + list.length + ' supported youtube-dl extractors', true)
-        windowMainButtonsOthersEnable()
-        windowMainApplicationStateSet()
-    })
-}
-
-/**
 * @function windowMainSettingsUiLoad
 * @summary Navigate to setting.html
 * @description Is triggered via button on index.html. Calls method on main.js which loads setting.html to the application window
@@ -1078,8 +1038,8 @@ function windowMainDisablePowerSaveBlocker () {
 */
 function toDoListSingleUrlRemove (url) {
     const index = arrayUserUrlsN.indexOf(url)
-    //console.error(arrayUserUrlsN)
-    //console.error(url)
+    // console.error(arrayUserUrlsN)
+    // console.error(url)
     if (index > -1) {
         arrayUserUrlsN.splice(index, 1)
         utils.writeConsoleMsg('info', 'toDoListSingleUrlRemove ::: Removed the url from the todo list array.')
@@ -1273,7 +1233,6 @@ module.exports.windowMainLogReset = windowMainLogReset
 module.exports.windowMainLogScrollToEnd = windowMainLogScrollToEnd
 module.exports.windowMainResetAskUser = windowMainResetAskUser
 module.exports.windowMainOpenDownloadFolder = windowMainOpenDownloadFolder
-module.exports.windowMainShowSupportedExtractors = windowMainShowSupportedExtractors
 module.exports.windowMainSettingsUiLoad = windowMainSettingsUiLoad
 module.exports.windowMainDownloadContent = windowMainDownloadContent
 module.exports.windowMainAddUrl = windowMainAddUrl
@@ -1294,5 +1253,4 @@ module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102
 module.exports.imagePreviewModalShow = imagePreviewModalShow
 module.exports.playAudio = playAudio
 module.exports.dataTablesReset = dataTablesReset
-
 module.exports.truncateString = truncateString

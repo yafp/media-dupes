@@ -58,7 +58,7 @@
 <body class="">
 
     <!--Modal: Splash -->
-    <div class="modal animated fadeOut" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal animated fadeOut" id="myModalSplash" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content no-border">
                 <div class="modal-body">
@@ -125,7 +125,7 @@
         <div class="input-group mb-3">
             <input type="text" class="form-control form-control-sm" placeholder="url" id="inputNewUrl" name="inputNewUrl" onkeyup="urlInputFieldOnKeyUp()" onfocus="urlInputFieldOnFocus();" onKeyPress="urlInputFieldOnKeyPress(event)" data-step="2" data-intro="Paste your media-service URL into this field.<br><br><u>Example:</u><br><i>http://www.youtube.com/watch?v=90AiXO1pAiA</i>">
             <div class="input-group-append">
-                <button class="btn btn-secondary btn-sm mediaDupes_btnDefaultWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="windowMainClickButtonAddUrl();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i> Add URL</button>
+                <button class="btn btn-secondary btn-sm mediaDupes_btnSmallWidth" type="button" id="buttonAddUrl" name="buttonAddUrl" title="add url to todo-list" onclick="windowMainClickButtonAddUrl();" data-step="3" data-intro="Now add this URL to the todo-list by pressing the <b>Add URL</b> button."><i class="fas fa-plus"></i></button>
             </div>
         </div>
 
@@ -162,7 +162,7 @@
                 onclick="windowMainClickButtonVideo();"
                 disabled
                 data-step="6"
-                data-intro="The <b>Video</b> button tries to download each video featured on your <b>todo-list</b>.">
+                data-intro="The <b>Video</b> button tries to download each url from on your <b>todo-list</b>.">
                 <i class="fas fa-video"></i> Video <i class="fas fa-download"></i>
             </button>
             <!-- video: not using .exec() -->
@@ -192,14 +192,13 @@
                 onclick="windowMainClickButtonAudio();"
                 disabled
                 data-step="7"
-                data-intro="The <b>Audio</b> button tries to download each audio featured on your <b>todo-list</b>.">
+                data-intro="The <b>Audio</b> button tries to download each url from on your <b>todo-list</b>.">
                 <i class="fas fa-music"></i> Audio <i class="fas fa-download"></i>
             </button>
         </div>
 
         <!-- empty line -->
         <div class="row-fluid row-empty">&nbsp;</div>
-
 
         <!-- show log -->
         <!-- h-100 d-flex flex-column -->
@@ -239,16 +238,6 @@
                 onclick="windowMainClickButtonIntro();">
                 <i class="fas fa-info"></i> Intro
             </button>
-            <!-- Extractors -->
-            <button
-                id="buttonShowExtractors"
-                name="buttonShowExtractors"
-                type="button"
-                class="btn btn-outline-secondary btn-sm mediaDupes_btnDefaultWidth"
-                title="Show list of supported media platforms"
-                onclick="windowMainClickButtonExtrators();">
-                <i class="fas fa-list"></i> Extractors
-            </button>
             <!-- Download folder -->
             <button
                 id="buttonShowDownloadFolder"
@@ -264,7 +253,7 @@
                 id="buttonResetUI"
                 name="buttonResetUI"
                 type="button"
-                class="btn btn-outline-secondary btn-sm float-right dropdown-toggle"
+                class="btn btn-outline-secondary btn-sm float-right dropdown-toggle mediaDupes_btnSmallWidth"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false">
@@ -302,14 +291,14 @@ $( document ).ready(function()
 {
     console.log( 'index.html ready' )
 
-    $('#myModal').modal('show') // load splash
+    $('#myModalSplash').modal('show') // show splash
 
     titlebarInit() // init titleBar
     settingsLoadAllOnAppStart() // load user settings
 
-    // modal hide
+    // hide the modal splash
     setTimeout(function(){
-        $('#myModal').modal('hide') // splashscreen
+        $('#myModalSplash').modal('hide')
     }, 1000);
 
 
@@ -328,15 +317,15 @@ $( document ).ready(function()
         // Hide some cols
         "columnDefs": [
             {
-                "targets": [ 0, 5 ],
-                "visible": false, // hiding column 0
+                "targets": [ 0, 5 ], // hiding column 0 and 5
+                "visible": false, 
                 "searchable": false
             }
         ],
         // column sizing and default content
         "columns": [
             {
-                'name': 'id',
+                'name': 'id', // hidden
             },
             {
                 'name': 'logo',
@@ -354,7 +343,7 @@ $( document ).ready(function()
                 'name': 'url'
             },
             {
-                'name': 'url_long'
+                'name': 'url_long' //hidden
             },
             {
                 'name': 'status',

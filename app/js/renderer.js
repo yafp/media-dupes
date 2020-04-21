@@ -117,16 +117,6 @@ function windowMainClickButtonIntro () {
 }
 
 /**
-* @function windowMainClickButtonExtrators
-* @summary Handles the click on the extractors button
-* @description Triggered from the mainWindow. Starts the show supported extractors function from the module ui
-* @memberof renderer
-*/
-function windowMainClickButtonExtrators () {
-    ui.windowMainShowSupportedExtractors()
-}
-
-/**
 * @function windowMainClickButtonDownloads
 * @summary Handles the click on the Downloads button
 * @description Triggered from the mainWindow. Starts the open-download-folder function from the module ui
