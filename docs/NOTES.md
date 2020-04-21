@@ -1,7 +1,7 @@
 ![logo](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/logo/128x128.png)
 
 # media-dupes
-## notes
+## developer notes / reminder
 
 ### todo
 * re-enable ASAR
@@ -15,19 +15,7 @@
     * 20191210 - Created pull request for ffmpeg 4.2.1
 * Progress for stream (non exec use): https://www.npmjs.com/package/progress-stream
 * seperate electron-builder.conf from package-json
-* https://www.npmjs.com/package/youtube-loader ???
-* ToDoList
-  * Listen into an url of the todo-list: https://www.npmjs.com/package/metascraper-media-provider
-
-### Currently working on
-
-* custom flags for NSIS
 
 ### urls for screenshots:
-* https://www.youtube.com/watch?v=WY0Sap4Q0sg&list=PLcxmmGC6Lv9youEshjI5K7UQOZydxKzOn
+* https://www.youtube.com/watch?v=WY0Sap4Q0sg
 * https://soundcloud.com/jdilla/thank-you-jay-dee-act-3
-
-
-### urls
-* youtube-dl: https://github.com/ytdl-org/youtube-dl
-* node-youtube-dl: https://github.com/przemyslawpluta/node-youtube-dl

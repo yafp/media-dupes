@@ -25,7 +25,7 @@ available for:
 [![Merged PRs](https://img.shields.io/github/issues-pr-closed-raw/yafp/media-dupes.svg?label=merged+PRs)](https://github.com/yafp/media-dupes/pulls?q=is:pr+is:merged)
 [![GitHub stars](https://img.shields.io/github/stars/yafp/media-dupes)](https://github.com/yafp/media-dupes/stargazers)
 ![GitHub License](https://img.shields.io/github/license/yafp/media-dupes.svg)
-[![GitHub Pages](https://github.com/yafp/media-dupes/workflows/GitHub%20pages/badge.svg)](https://yafp.github.io/media-dupes/)
+[![jsdoc](https://github.com/yafp/media-dupes/workflows/jsdoc/badge.svg)](https://yafp.github.io/media-dupes/)
 ![GitHub AV Scan](https://github.com/yafp/media-dupes/workflows/av_scan/badge.svg)
 
 
@@ -90,7 +90,7 @@ There are several ways to get verbose informations about what **media-dupes** is
 * Windows: `%USERPROFILE%\AppData\Roaming\media-dupes\logs\{process type}.log`
 
 ### Developer console
-Press `F12` within the app or navigate via the `Help` menu and select `Console (F12)` to access the Developer Console.
+Press <kbd>F12</kbd> within the app or navigate via the `Help` menu and select `Console (F12)` to access the Developer Console.
 
 ### Commandline output
 * Start **media-dupes** with `--verbose`
