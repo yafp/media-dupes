@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.8.20200420",
+  "version": "0.8.20200421",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "repository": {
@@ -15,7 +15,7 @@
   "contributors": [
     {
       "name": "Florian Pöck",
-      "email": "fidel@yafp.de",
+      "email": "info@yafp.de",
       "url": "https://yafp.de"
     }
   ],
@@ -176,31 +176,45 @@
       "target": [
         {
           "target": "deb",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "pacman",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "zip",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "AppImage",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "snap",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "freebsd",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "rpm",
-          "arch": [ "x64" ]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },
@@ -222,7 +236,7 @@
     "chai-as-promised": "^7.1.1",
     "docdash": "^1.2.0",
     "electron": "^8.2.3",
-    "electron-builder": "^22.4.1",
+    "electron-builder": "^22.5.1",
     "electron-packager": "^14.2.1",
     "eslint": "^6.8.0",
     "jsdoc": "^3.6.4",
@@ -249,7 +263,7 @@
     "electron-unhandled": "^3.0.2",
     "electron-util": "^0.14.1",
     "ffmpeg-static-electron": "^2.0.1",
-    "got": "^10.7.0",
+    "got": "^11.0.1",
     "intro.js": "^2.9.3",
     "jquery": "^3.5.0",
     "md5": "^2.2.1",
