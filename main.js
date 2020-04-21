@@ -71,31 +71,46 @@ const utils = require('./app/js/modules/utils.js')
 // ----------------------------------------------------------------------------
 // COMMAND-LINE-ARGS
 // ----------------------------------------------------------------------------
-/*
+
 // image to unicode: https://drewish.com/projects/unicoder/
-const appLogo = '\t       ▖▄▖▌▌▌▌▄▖▖       \n\t    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n\t  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n\t ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n\t ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n\t▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n\t▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n\t▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n\t▝▞▄        ▘▘        ▌▌▘\n\t ▌▌▙▖              ▗▐▐▐ \n\t ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n\t  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n\t    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n\t       ▘▘▘▘▚▌▘▘▘▘       '
-*/
-var yargs = require("yargs")
-/*
-  .option('skipDisclaimer', {
-    alias: 's',
-    type: 'boolean',
-    description: 'Skip disclaimer on startup'
-  })
-  */
-  .epilog('Project URL: https://github.com/yafp/media-dupes')
-  .strict(true) // arguments must be valid
-  .option('verbose', {
-    alias: 'v',
-    type: 'boolean',
-    description: 'Run with verbose logging'
-  })
-  .argv
+//const appLogo = '\t       ▖▄▖▌▌▌▌▄▖▖       \n\t    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n\t  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n\t ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n\t ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n\t▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n\t▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n\t▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n\t▝▞▄        ▘▘        ▌▌▘\n\t ▌▌▙▖              ▗▐▐▐ \n\t ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n\t  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n\t    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n\t       ▘▘▘▘▚▌▘▘▘▘       '
+const appLogo = '       ▖▄▖▌▌▌▌▄▖▖       \n    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n▝▞▄        ▘▘        ▌▌▘\n ▌▌▙▖              ▗▐▐▐ \n ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n       ▘▘▘▘▚▌▘▘▘▘       '
 
-if(yargs.verbose == true) {
-    global.sharedObj.consoleOutput = true
+var yargs = require('yargs')
+    .strict(true) // arguments must be valid
+    .usage('Usage: $0 <command> [options]')
+    // define arguments
+    .option('verbose', {
+        alias: 'v',
+        type: 'boolean',
+        description: 'Starts media-dupes with verbose output'
+    })
+    .option('help', {
+        alias: 'h',
+        type: 'boolean',
+        description: 'Shows the media-dupes help'
+    })
+    .option('version', {
+        type: 'boolean',
+        description: 'Shows the media-dupes version'
+    })
+
+    // displayed in case of invalid parameters
+    .showHelpOnFail(false, "Specify --help to display the available options")
+
+    // show the project url
+    .epilog(appLogo)
+    .epilog('Project URL: https://github.com/yafp/media-dupes')
+    
+
+    // Show an example
+    //
+    //.example('$0 --help', 'Shows the media-dupes help')
+    .argv
+
+if (yargs.verbose === true) {
+    global.sharedObj.consoleOutput = true // update the global object
 }
-
 
 // ----------------------------------------------------------------------------
 // ERROR-HANDLING:
@@ -698,6 +713,7 @@ function createMenuMain () {
                 {
                     role: 'about',
                     label: 'About',
+                    icon: path.join(__dirname, 'app/img/menu/help/info-circle_red.png'),
                     click () {
                         openAboutWindow({
                             icon_path: path.join(__dirname, 'app/img/about/icon_about.png'),
@@ -771,6 +787,7 @@ function createMenuMain () {
                 // Update
                 {
                     label: 'Search media-dupes updates',
+                    icon: path.join(__dirname, 'app/img/menu/help/cloud-download-alt_red.png'),
                     click (item, mainWindow) {
                         mainWindow.webContents.send('startSearchUpdatesVerbose')
                     },
