@@ -1,20 +1,3 @@
-@font-face {
-    font-family: 'Arial';
-    src:  url('../fonts/Arial/Arial.ttf') format('opentype');
-
-    font-family: 'ArialMono';
-    src:  url('../fonts/ArialMono/Arial_Monospaced_MT.ttf') format('opentype');
-
-}
-
-/* ########################################################################## */
-/* BODY */
-/* ########################################################################## */
-body{
-    font-family: 'Arial';
-}
-
-
 /*
 bootstrap color codes: https://www.bitdegree.org/learn/bootstrap-colors
     primary:    #007bff
@@ -28,43 +11,52 @@ bootstrap color codes: https://www.bitdegree.org/learn/bootstrap-colors
     white       #ffffff
 */
 
+/* ########################################################################## */
+/* FONT */
+/* ########################################################################## */
+@font-face {
+    font-family: 'Arial';
+    src:  url('../fonts/Arial/Arial.ttf') format('opentype');
+
+    font-family: 'ArialMono';
+    src:  url('../fonts/ArialMono/Arial_Monospaced_MT.ttf') format('opentype');
+
+}
 
 /* ########################################################################## */
-/* NAV COLOR ON SETTINGS */
+/* BODY */
 /* ########################################################################## */
-.nav-link{
-    color: gray;
+body {
+    font-family: 'Arial';
 }
-
-.nav-link:hover{
-    color: #c0392b;
-}
-
-.nav-item.nav-link.active{
-    color: #c0392b;
-}
-
 
 /* ########################################################################## */
 /* BOOTSTRAP MODAL - used as SPLASH */
 /* ########################################################################## */
 /* opacity of background */
-.modal-backdrop
-{
+.modal-backdrop {
     opacity:0.0 !important;
 }
 
 /* removing border from splash */
-.no-border{
+.no-border {
   border:none !important;
 }
-
 
 /* ########################################################################## */
 /* THE MAIN UI WINDOW CONTAINER */
 /* ########################################################################## */
-#mainContainer{
+#mainContainer {
     animation-delay: 0.5s; /* custom animation delay */
+}
+
+/* ########################################################################## */
+/* WINDOW BORDER */
+/* ########################################################################## */
+.container-after-titlebar {
+    border-left: 1px solid #343a40;
+    border-right: 1px solid #343a40;
+    border-bottom: 1px solid #343a40;
 }
 
 /* ########################################################################## */
@@ -76,55 +68,43 @@ bootstrap color codes: https://www.bitdegree.org/learn/bootstrap-colors
 }
 
 /* ########################################################################## */
-/* WINDOW BORDER */
-/* ########################################################################## */
-.container-after-titlebar{
-    /* #171717 */
-    /* #6c757d */
-    /* 343a40 */
-    border-left: 1px solid #343a40;
-    border-right: 1px solid #343a40;
-    border-bottom: 1px solid #343a40;
-}
-
-/* ########################################################################## */
 /* CUSTOM-TITLEBAR */
 /* ########################################################################## */
-.window-title{
+.window-title {
     font-size: 13px !important;
 }
 
 /* ########################################################################## */
 /* HEADINGS */
 /* ########################################################################## */
-h2{
+h2 {
     text-align: right;
     color: gray;
     font-size: 24px;
 }
 
-h3{
+h3 {
     text-align: right;
     color: gray;
     font-size: 14px;
 }
 
-h4{
+h4 {
     color: #c0392b;
 }
 
-h5{
+h5 {
     color: gray;
     font-size: 18px;
 }
 
-h6{
+h6 {
     font-size: 14px;
     color: gray;
 }
 
 /* ########################################################################## */
-/* TEXTAREA */
+/* LOG TEXTAREA */
 /* ########################################################################## */
 textarea {
     font-size: 12px !important;
@@ -142,9 +122,8 @@ textarea {
     background-image: url("../img/background/icon_textarea_log_64x64.png");
     min-width: 100%;
     width: 100%;
-    min-height: 170px;
+    min-height: 200px;
 }
-
 
 /* ########################################################################## */
 /* DATATABLES */
@@ -163,14 +142,12 @@ td {
 
 /* hover color for rows */
 table#example.dataTable tbody tr:hover {
-  /* background-color: #ffa; */
   background-color: #ffe5e5;
 }
 
 table#example.dataTable tbody tr:hover > .sorting_1 {
   background-color: #ffe5e5;
 }
-
 
 .zoomSmall:hover {
     transform: scale(1.5);
@@ -180,8 +157,7 @@ table#example.dataTable tbody tr:hover > .sorting_1 {
     transform: scale(5.0);
 }
 
-
-#todoList{
+#todoList {
     height: 200px;
 }
 
@@ -197,25 +173,25 @@ table#example.dataTable tbody tr:hover > .sorting_1 {
   color: #c0392b;
 }
 
-
-
 /* ########################################################################## */
 /* ROW EMPTY */
 /* ########################################################################## */
-.row-empty{
+.row-empty {
     height: 15px;
 }
 
 /* ########################################################################## */
 /* BUTTONS */
 /* ########################################################################## */
-.mediaDupes_btnDefaultWidth
-{
+.mediaDupes_btnDefaultWidth {
     min-width: 100px;
 }
 
-.mediaDupes_btnDownloadActionWidth
-{
+.mediaDupes_btnSmallWidth {
+    min-width: 50px;
+}
+
+.mediaDupes_btnDownloadActionWidth {
     min-width: 160px;
 }
 
@@ -237,15 +213,6 @@ table#example.dataTable tbody tr:hover > .sorting_1 {
 .applicationWindowBottom {
     margin-left: 15px;
     margin-right: 15px;
-}
-
-/* ########################################################################## */
-/* Use the “system font/San Francisco” */
-/* ########################################################################## */
-cssbody {
-    /*
-    font: caption;
-    */
 }
 
 /* ########################################################################## */
@@ -276,7 +243,6 @@ cssbody {
     animation: fadein 0.5s;
 }
 
-
 /* ########################################################################## */
 /* INTRO.JS - Fixing issues where the UI element was just white - not visible */
 /* see: https://github.com/usablica/intro.js/issues/840 */
@@ -291,7 +257,6 @@ cssbody {
     background: transparent !important;
 }
 
-
 /* ########################################################################## */
 /* FIXING THE HORIZONTAL SCROLLBAR WHICH APPEARS ON i.e. ARCH LINUX on first load */
 /* ########################################################################## */
@@ -299,22 +264,36 @@ cssbody {
     display: none;
 }
 
+/* ########################################################################## */
+/* SETTINGS: NAV COLOR */
+/* ########################################################################## */
+.nav-link{
+    color: gray;
+}
+
+.nav-link:hover {
+    color: #c0392b;
+}
+
+.nav-item.nav-link.active {
+    color: #c0392b;
+}
 
 /* ########################################################################## */
 /* PLAYGROUND: Background colors for development */
 /* ########################################################################## */
-.bg_yellow{
+.bg_yellow {
     background-color: #F0E68C;
 }
 
-.bg_red{
+.bg_red {
     background-color: #FA8072;
 }
 
-.bg_blue{
+.bg_blue {
     background-color: #87CEEB;
 }
 
-.bg_green{
+.bg_green {
     background-color: #90EE90;
 }
