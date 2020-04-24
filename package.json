@@ -259,7 +259,7 @@
     "electron-unhandled": "^3.0.2",
     "electron-util": "^0.14.1",
     "ffmpeg-static-electron": "^2.0.1",
-    "got": "^11.0.1",
+    "got": "^11.0.2",
     "intro.js": "^2.9.3",
     "jquery": "^3.5.0",
     "md5": "^2.2.1",
