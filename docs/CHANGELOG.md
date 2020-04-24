@@ -43,7 +43,7 @@ The following categories are used:
   * Updated `electron` from `8.2.1` to `8.2.3`
   * Updated `electron-builder` from `22.4.1` to `22.5.1`
   * Updated `electron-util` from `0.14.0` to `0.14.1`
-  * Updated `got` from `10.7.1` to `11.0.1`
+  * Updated `got` from `10.7.1` to `11.0.2`
   * Updated `metascraper` from `5.11.8` to `5.11.9`
   * Updated `metascraper-audio` from `5.11.8` to `5.11.9`
   * Updated `metascraper-description` from `5.11.8` to `5.11.9`
