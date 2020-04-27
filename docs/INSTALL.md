@@ -36,10 +36,6 @@
 * Mount the .dmg
 * Drag the .app to `/Applications`
 
-#### brew
-* Execute: `brew cask install media-dupes`
-
-
 ### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows
 
 #### installer
