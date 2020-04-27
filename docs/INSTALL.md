@@ -9,35 +9,39 @@
 #### .AppImage
 * Download the latest .AppImage
 * Copy the AppImage to the desired location
-* Make it executable: ```chmod +x /path/to/local/media-dupes-file.AppImage```
+* Make it executable: `chmod +x /path/to/local/media-dupes-file.AppImage`
 * Execute it
 
 #### .deb
 * Download the latest .deb
-* execute: ```sudo dpkg -i /path/to/local/media-dupes-file.deb```
+* execute: `sudo dpkg -i /path/to/local/media-dupes-file.deb`
 
 #### .pacman
 * Download the latest .pacman
-* execute: ```sudo pacman -U /path/to/local/media-dupes-file.pacman```
+* execute: `sudo pacman -U /path/to/local/media-dupes-file.pacman`
 
 #### .rpm
 * Download the latest .rpm
 * execute:
-  * ```sudo dnf localinstall /path/to/local/media-dupes-file.rpm``` or
-  * ```sudo yum localinstall /path/to/local/media-dupes-file.rpm```
+  * `sudo dnf localinstall /path/to/local/media-dupes-file.rpm` or
+  * `sudo yum localinstall /path/to/local/media-dupes-file.rpm`
 
 #### .snap
 * Download the latest .snap
-* execute: ```sudo snap install /path/to/local/media-dupes-file.snap```
+* execute: `sudo snap install /path/to/local/media-dupes-file.snap`
 
 ### ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/apple_32x32.png) macOS
 #### .dmg
-* Download the latest ```.dmg```
+* Download the latest `.dmg`
 * Mount the .dmg
-* Drag the .app to ```/Applications```
+* Drag the .app to `/Applications`
+
+#### brew
+* Execute: `brew cask install media-dupes`
+
 
 ### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows
 
 #### installer
-* Download the latest ```win-installer.exe```
-* Execute the ```win-installer.exe```
+* Download the latest `win-installer.exe`
+* Execute the `win-installer.exe`
