@@ -219,7 +219,8 @@ function binaryUpdateSearch (silent = true, force = false) {
     const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags' // set youtube-dl API url
     utils.writeConsoleMsg('info', 'binaryUpdateSearch ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available youtube-dl releases. Parameters are silent: _' + silent + '_ and force: _' + force + '_.')
 
-    var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data, status) {
+    //var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data, status) {
+    $.get(urlYTDLGitHubRepoTags, function (data, status) {
         // 3000 // in milliseconds
 
         utils.writeConsoleMsg('info', 'binaryUpdateSearch ::: Accessing _' + urlYTDLGitHubRepoTags + '_ ended with: _' + status + '_')

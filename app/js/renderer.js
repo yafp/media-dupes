@@ -478,7 +478,8 @@ function searchUpdate (silent = true) {
     //
     localAppVersion = require('electron').remote.app.getVersion()
 
-    var updateStatus = $.get(urlGithubApiReleases, function (data, status) {
+    //var updateStatus = $.get(urlGithubApiReleases, function (data, status) {
+    $.get(urlGithubApiReleases, function (data, status) {
         // 3000 // in milliseconds
 
         utils.writeConsoleMsg('info', 'searchUpdate ::: Accessing _' + urlGithubApiReleases + '_ ended with: _' + status + '_')
