@@ -310,7 +310,7 @@ function windowMainDownloadContent (mode) {
     utils.writeConsoleMsg('info', 'windowMainDownloadContent ::: Download target directory is set to: _' + configuredDownloadFolder + '_.')
 
     if (utils.isDirectoryAvailable(configuredDownloadFolder)) {
-        // the default download folder exists
+        // the download folder exists
 
         // check if it is writeable
         if (utils.isDirectoryWriteable(configuredDownloadFolder)) {
@@ -321,7 +321,6 @@ function windowMainDownloadContent (mode) {
 
             // require some stuff
             const youtubedl = require('youtube-dl')
-            const { remote } = require('electron')
             const path = require('path')
 
             var arrayUrlsProcessedSuccessfully = [] // prepare array for urls which got successfully downloaded
@@ -748,18 +747,6 @@ function windowMainUiReset () {
     // call reload of the mainWindow
     const { ipcRenderer } = require('electron')
     ipcRenderer.send('reloadMainWindow')
-
-    /*
-    $('#inputNewUrl').val('') // empty the URL input field
-    inputUrlFieldSetState() // empty = white
-    windowMainDisableAddUrlButton()
-    windowMainButtonsStartDisable() // disable start button
-    windowMainButtonsOthersEnable() // ensure some buttons are enabled
-    windowMainLogReset() // empty log textarea
-    windowMainApplicationStateSet() // reset application state
-    utils.globalObjectSet('todoListStateEmpty', true) // store that the todolist is now empty
-    utils.writeConsoleMsg('info', 'windowMainUiReset ::: Finished resetting the UI')
-    */
 }
 
 /**
@@ -805,8 +792,6 @@ function windowMainToDoListRestore () {
                     }
                 })
             }
-
-            // console.error(restoreCounter)
         }
 
         // inform the user if something got restored
@@ -1057,6 +1042,13 @@ function toDoListSingleUrlRemove (url) {
     }
 }
 
+/**
+* @function truncateString
+* @summary Truncate a string
+* @description Truncate a string
+* @param {String} str - The string which should be truncated
+* @param {number} num - The length after which the string should get truncated
+*/
 function truncateString (str, num) {
     utils.writeConsoleMsg('info', 'truncateString ::: Truncating _' + str + '_ after ' + num + ' chars.')
 
@@ -1064,13 +1056,11 @@ function truncateString (str, num) {
     str = str.replace('https://', '')
     str = str.replace('http://', '')
 
-    // If the length of str is less than or equal to num
-    // just return str--don't truncate it.
+    // If the length of str is less than or equal to num just return str--don't truncate it.
     if (str.length <= num) {
         return str
     }
-    // Return str truncated with '...' concatenated to the end of str.
-    return str.slice(0, num) + '...'
+    return str.slice(0, num) + '...' // Return str truncated with '...' concatenated to the end of str.
 }
 
 // #102
@@ -1130,8 +1120,7 @@ function toDoListSingleUrlAdd (url) {
         const { body: html, url } = await got(targetUrl)
         const metadata = await metascraper({ html, url })
 
-        // show all detected metadata
-        console.error(metadata)
+        //console.log(metadata) // show all detected metadata
 
         urlLogo = metadata.logo
         urlImage = metadata.image
@@ -1188,9 +1177,13 @@ function imagePreviewModalShow (url) {
     $('#myModalImagePreview').modal('show') // show the modal
 }
 
+/**
+* @function playAudio
+* @summary Pre-listening to the audio stream
+* @description  Plays 5 sec of audio as pre-listening 
+*/
 function playAudio (url) {
-    utils.writeConsoleMsg('info', 'playAudio ::: Trying to play audio _' + url + '_.')
-    // new Audio(url).play()
+    utils.writeConsoleMsg('info', 'playAudio ::: Trying to play 5 sec audio from source: _' + url + '_.')
 
     var a = new Audio(url)
     a.play() // start to play
@@ -1211,8 +1204,7 @@ function dataTablesReset () {
         .clear()
         .draw()
 
-    // reset the array
-    arrayUserUrlsN = []
+    arrayUserUrlsN = [] // reset the array
 }
 
 // ----------------------------------------------------------------------------

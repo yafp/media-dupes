@@ -9,7 +9,6 @@
 // REQUIRE MODULES
 // ----------------------------------------------------------------------------
 //
-const utils = require('./utils.js')
 
 /**
 * @function ffmpegGetBinaryPath
@@ -19,7 +18,6 @@ const utils = require('./utils.js')
 */
 function ffmpegGetBinaryPath () {
     var ffmpeg = require('ffmpeg-static-electron')
-    // utils.writeConsoleMsg('info', 'ffmpegGetBinaryPath ::: ffmpeg binary path is: _' + ffmpeg.path + '_.')
     return (ffmpeg.path)
 }
 

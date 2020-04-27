@@ -306,7 +306,7 @@ function binaryUpdateSearch (silent = true, force = false) {
 * @description Updates the youtube-dl binary
 */
 function binaryUpdateExecute () {
-    const youtubedl = require('youtube-dl')
+    //const youtubedl = require('youtube-dl')
     const downloader = require('youtube-dl/lib/downloader')
 
     const remote = require('electron').remote

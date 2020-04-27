@@ -470,7 +470,7 @@ function userSettingRead (key, optionalUpdateSettingUI = false) {
         // Setting: downloadDir
         //
         if (key === 'downloadDir') {
-            const { remote } = require('electron')
+            //const { remote } = require('electron')
             var settingDownloadDir
 
             // not yet set - seems like initial run
