@@ -13,6 +13,7 @@ available for:
 ![apple](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/apple_32x32.png)
 ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png)
 
+[![DeepScan grade](https://deepscan.io/api/teams/8831/projects/11041/branches/160247/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8831&pid=11041&bid=160247)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c30508f8add43ee8fbb62c2a669e76b)](https://www.codacy.com/manual/yafp/media-dupes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yafp/media-dupes&amp;utm_campaign=Badge_Grade)
 ![GitHub Actions - electron_builder](https://github.com/yafp/media-dupes/workflows/electron_builder/badge.svg)
 ![GitHub Actions - npm audit](https://github.com/yafp/media-dupes/workflows/npm%20audit/badge.svg)
@@ -47,8 +48,6 @@ available for:
 * available for linux, macOS and windows.
 * free and open source
 
-***
-
 # getting started
 
 ### download
@@ -73,35 +72,8 @@ Please see the [changelog](docs/CHANGELOG.md) for more details.
 ### license
 Please see the [LICENSE](LICENSE) for more details.
 
-***
-
-# debugging / verbose
-There are several ways to get verbose informations about what **media-dupes** is doing.
-
-* Log files
-* Developer console
-* Commandline output
-
-### Log files
-**media-dupes** is writing log files. You will find them here:
-
-* Linux: 
-  * `~/.config/media-dupes/logs/main.log`
-  * `~/.config/media-dupes/logs/renderer.log`
-* macOS: 
-  * `~/Library/Logs/media-dupes/main.log`
-  * `~/Library/Logs/media-dupes/renderer.log`
-* Windows: 
-  * `%USERPROFILE%\AppData\Roaming\media-dupes\logs\main.log`
-  * `%USERPROFILE%\AppData\Roaming\media-dupes\logs\renderer.log`
-
-### Developer console
-Press <kbd>F12</kbd> within the app or navigate via the `Help` menu and select `Console (F12)` to access the Developer Console.
-
-### Commandline output
-* Start **media-dupes** with `--verbose`
-
-***
+# debugging / verbose / logging
+Please see the [verbose](docs/VERBOSE.md) informations for more details.
 
 # developers
 You are always welcome to check and even improve the code.
@@ -115,8 +87,6 @@ The current jsdoc documentation can be found on [https://yafp.github.io/media-du
 
 ### build
 Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
-
-***
 
 # misc
 ### privacy
