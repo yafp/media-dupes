@@ -218,10 +218,12 @@ function settingsEnableOrDisableYoutubeDLUpdateButton () {
         if (isWritable === true) {
             // technically we could execute an update if there is one - so lets search for updates
             utils.writeConsoleMsg('info', 'settingsEnableOrDisableYoutubeDLUpdateButton ::: Updating youtube-dl binary is technically possible. Button can stay enabled')
+            $('#buttonSettingsYoutubeDLStartUpdate').prop('title', 'Updating youtube-dl is supported based on your installation permissions.') // set a title to the button
         } else {
             // details file cant be resetted due to permission issues
             utils.writeConsoleMsg('warn', 'settingsEnableOrDisableYoutubeDLUpdateButton ::: Updating youtube-dl binary is not possible on this setup due to permission issues.')
             $('#buttonSettingsYoutubeDLStartUpdate').prop('disabled', true) // disable the button
+            $('#buttonSettingsYoutubeDLStartUpdate').prop('title', 'Updating youtube-dl is disabled based on your installation permissions. The needed file is not writeable') // set a title to the button
         }
     })
 }
