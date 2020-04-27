@@ -501,10 +501,10 @@ function searchUpdate (silent = true) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Ignoring pre-releases in update search')
             // find the latest non pre-release build
             // loop over the versions array to find the latest non-pre-release
-            var latestOfficialRelease
+            //var latestOfficialRelease
             for (var i = 0; i < versions.length; i++) {
                 if (versions[i].prerelease === false) {
-                    latestOfficialRelease = i
+                    //latestOfficialRelease = i
                     break
                 }
             }

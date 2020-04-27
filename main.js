@@ -101,7 +101,7 @@ var yargs = require('yargs')
     // show the project url
     .epilog(appLogo)
     .epilog('Project URL: https://github.com/yafp/media-dupes')
-    
+
 
     // Show an example
     //
@@ -867,7 +867,7 @@ function forceSingleAppInstance () {
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // Someone tried to run a second instance, we should focus our first instance window.
-            if (mainWindow) {
+            //if (mainWindow) {
                 if (mainWindow === null) {
                     // do nothing - there is no mainwindow - most likely we are on macOS
                 } else {
@@ -877,7 +877,7 @@ function forceSingleAppInstance () {
                     }
                     mainWindow.focus()
                 }
-            }
+            //}
         })
     }
 }

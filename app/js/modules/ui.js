@@ -451,7 +451,8 @@ function windowMainDownloadContent (mode) {
 
                 // Download
                 //
-                const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
+                //const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
+                youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
                         sentry.countEvent('usageURLsFailed')
                         utils.showNoty('error', '<b>Download failed</b><br><br>' + error + '<br><br><small><b><u>Common causes</u></b><br>* youtube-dl does not support this url. Please check the list of extractors<br>* Using old version of media-dupes<br>* Using old version of youtube-dl<br>* Country-/ and/or similar restrictions</small>', 0)
@@ -1180,7 +1181,7 @@ function imagePreviewModalShow (url) {
 /**
 * @function playAudio
 * @summary Pre-listening to the audio stream
-* @description  Plays 5 sec of audio as pre-listening 
+* @description  Plays 5 sec of audio as pre-listening
 */
 function playAudio (url) {
     utils.writeConsoleMsg('info', 'playAudio ::: Trying to play 5 sec audio from source: _' + url + '_.')
