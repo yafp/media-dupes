@@ -451,7 +451,7 @@ function windowMainDownloadContent (mode) {
 
                 // Download
                 //
-                //const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
+                // const newDownload = youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                 youtubedl.exec(url, youtubeDlParameter, {}, function (error, output) {
                     if (error) {
                         sentry.countEvent('usageURLsFailed')
@@ -1121,7 +1121,7 @@ function toDoListSingleUrlAdd (url) {
         const { body: html, url } = await got(targetUrl)
         const metadata = await metascraper({ html, url })
 
-        //console.log(metadata) // show all detected metadata
+        // console.log(metadata) // show all detected metadata
 
         urlLogo = metadata.logo
         urlImage = metadata.image

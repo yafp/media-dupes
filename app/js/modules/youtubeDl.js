@@ -191,7 +191,8 @@ function binaryUpdateCheck (silent = true, force = false) {
         if (isWritable === true) {
             // technically we could execute an update if there is one - so lets search for updates
             utils.writeConsoleMsg('info', 'binaryUpdateCheck ::: Updating youtube-dl binary is technically possible - so start searching for available youtube-dl updates. Silent: _' + silent + '_ and Force: _' + force + '_.')
-            var isYoutubeBinaryUpdateAvailable = binaryUpdateSearch(silent, force)
+            // var isYoutubeBinaryUpdateAvailable = binaryUpdateSearch(silent, force)
+            binaryUpdateSearch(silent, force)
         } else {
             // details file cant be resetted due to permission issues
             utils.writeConsoleMsg('warn', 'binaryUpdateCheck ::: Updating youtube-dl binary is not possible on this setup due to permission issues.')
@@ -210,6 +211,7 @@ function binaryUpdateCheck (silent = true, force = false) {
 * @summary Searches for youtube-dl binary updates
 * @description Searches for youtube-dl binary updates
 * @param {boolean} silent - Defaults to true. If true, the progress is silent, if false there is info-feedback even if there is no update available
+* @param {boolean} force - Defaults to false. If enabled the update is forced even if there isa no update available (replacing the existing)
 */
 function binaryUpdateSearch (silent = true, force = false) {
     var remoteAppVersionLatest = '0.0.0'
@@ -219,7 +221,7 @@ function binaryUpdateSearch (silent = true, force = false) {
     const urlYTDLGitHubRepoTags = 'https://api.github.com/repos/ytdl-org/youtube-dl/tags' // set youtube-dl API url
     utils.writeConsoleMsg('info', 'binaryUpdateSearch ::: Start checking _' + urlYTDLGitHubRepoTags + '_ for available youtube-dl releases. Parameters are silent: _' + silent + '_ and force: _' + force + '_.')
 
-    //var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data, status) {
+    // var updateStatus = $.get(urlYTDLGitHubRepoTags, function (data, status) {
     $.get(urlYTDLGitHubRepoTags, function (data, status) {
         // 3000 // in milliseconds
 
@@ -307,7 +309,7 @@ function binaryUpdateSearch (silent = true, force = false) {
 * @description Updates the youtube-dl binary
 */
 function binaryUpdateExecute () {
-    //const youtubedl = require('youtube-dl')
+    // const youtubedl = require('youtube-dl')
     const downloader = require('youtube-dl/lib/downloader')
 
     const remote = require('electron').remote

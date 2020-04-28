@@ -285,6 +285,7 @@ function titlebarInit () {
     const customTitlebar = require('custom-electron-titlebar')
 
     const myTitlebar = new customTitlebar.Titlebar({
+    // new customTitlebar.Titlebar({
         titleHorizontalAlignment: 'center', // position of window title
         icon: 'img/icon/icon.png',
         drag: true, // whether or not you can drag the window by holding the click on the title bar.
@@ -478,7 +479,7 @@ function searchUpdate (silent = true) {
     //
     localAppVersion = require('electron').remote.app.getVersion()
 
-    //var updateStatus = $.get(urlGithubApiReleases, function (data, status) {
+    // var updateStatus = $.get(urlGithubApiReleases, function (data, status) {
     $.get(urlGithubApiReleases, function (data, status) {
         // 3000 // in milliseconds
 
@@ -501,10 +502,10 @@ function searchUpdate (silent = true) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Ignoring pre-releases in update search')
             // find the latest non pre-release build
             // loop over the versions array to find the latest non-pre-release
-            //var latestOfficialRelease
+            // var latestOfficialRelease
             for (var i = 0; i < versions.length; i++) {
                 if (versions[i].prerelease === false) {
-                    //latestOfficialRelease = i
+                    // latestOfficialRelease = i
                     break
                 }
             }

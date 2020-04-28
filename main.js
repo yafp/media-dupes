@@ -73,7 +73,7 @@ const utils = require('./app/js/modules/utils.js')
 // ----------------------------------------------------------------------------
 
 // image to unicode: https://drewish.com/projects/unicoder/
-//const appLogo = '\t       ▖▄▖▌▌▌▌▄▖▖       \n\t    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n\t  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n\t ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n\t ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n\t▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n\t▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n\t▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n\t▝▞▄        ▘▘        ▌▌▘\n\t ▌▌▙▖              ▗▐▐▐ \n\t ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n\t  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n\t    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n\t       ▘▘▘▘▚▌▘▘▘▘       '
+// const appLogo = '\t       ▖▄▖▌▌▌▌▄▖▖       \n\t    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n\t  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n\t ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n\t ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n\t▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n\t▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n\t▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n\t▝▞▄        ▘▘        ▌▌▘\n\t ▌▌▙▖              ▗▐▐▐ \n\t ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n\t  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n\t    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n\t       ▘▘▘▘▚▌▘▘▘▘       '
 const appLogo = '       ▖▄▖▌▌▌▌▄▖▖       \n    ▗▐▐▐▗▚▚▚▚▚▚▚▀▌▌▖    \n  ▗▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▚   \n ▗▐▐▐▚▚▚▀▝▐▐▐▞▝▝▞▞▞▞▞▌▖ \n ▌▌▌▌▌▌▘  ▗▚▜▖  ▝▐▐▞▞▞▞ \n▗▚▚▚▌▚    ▐▐▐▖▖   ▌▌▌▌▛▖\n▚▚▚▘    ▝▜▐▐▚▚▚▘  ▘▚▚▚▚▘\n▚▚▙▘      ▚▚▚▚      ▝▞▞▞\n▝▞▄        ▘▘        ▌▌▘\n ▌▌▙▖              ▗▐▐▐ \n ▝▐▗▚▜▐▚▜▐▚▚▜▐▐▐▐▞▌▌▌▌▘ \n  ▝▐▐▐▐▐▐▐▐▐▐▐▐▚▚▚▚▚▘▘  \n    ▝▐▐▐▐▐▐▐▐▐▐▐▐▐▝ ▘   \n       ▘▘▘▘▚▌▘▘▘▘       '
 
 var yargs = require('yargs')
@@ -96,16 +96,15 @@ var yargs = require('yargs')
     })
 
     // displayed in case of invalid parameters
-    .showHelpOnFail(false, "Specify --help to display the available options")
+    .showHelpOnFail(false, 'Specify --help to display the available options')
 
     // show the project url
     .epilog(appLogo)
     .epilog('Project URL: https://github.com/yafp/media-dupes')
 
-
     // Show an example
     //
-    //.example('$0 --help', 'Shows the media-dupes help')
+    // .example('$0 --help', 'Shows the media-dupes help')
     .argv
 
 if (yargs.verbose === true) {
@@ -867,17 +866,17 @@ function forceSingleAppInstance () {
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // Someone tried to run a second instance, we should focus our first instance window.
-            //if (mainWindow) {
-                if (mainWindow === null) {
-                    // do nothing - there is no mainwindow - most likely we are on macOS
-                } else {
-                    // mainWindow exists
-                    if (mainWindow.isMinimized()) {
-                        mainWindow.restore()
-                    }
-                    mainWindow.focus()
+            // if (mainWindow) {
+            if (mainWindow === null) {
+                // do nothing - there is no mainwindow - most likely we are on macOS
+            } else {
+                // mainWindow exists
+                if (mainWindow.isMinimized()) {
+                    mainWindow.restore()
                 }
-            //}
+                mainWindow.focus()
+            }
+            // }
         })
     }
 }
