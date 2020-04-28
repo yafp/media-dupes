@@ -34,9 +34,11 @@ The following categories are used:
 * Added icons to menu. See [#118](https://github.com/yafp/media-dupes/issues/118)
 
 #### `Changed`
-* UI: Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
-* ToDoList: Content of column url is now truncated to ensure the table does not break. See [#120](https://github.com/yafp/media-dupes/issues/120)
-* Disclaimer: Added blur and unblur. Changed timing for disclaimer-check call (moved from ready-to-show to show).
+* UI: 
+  * Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
+  * Settings icon on settings window now shows its function using a title.
+  * ToDoList: Content of column url is now truncated to ensure the table does not break. See [#120](https://github.com/yafp/media-dupes/issues/120)
+  * Disclaimer: Added blur and unblur. Changed timing for disclaimer-check call (moved from ready-to-show to show).
 * Sentry: Removed several event count events to reduce overall amount of generated reports.
 * New default value for `app.allowRendererProcessReuse` is now `true`.
 * Updated dependencies:
@@ -44,17 +46,17 @@ The following categories are used:
   * Updated `electron-builder` from `22.4.1` to `22.5.1`
   * Updated `electron-util` from `0.14.0` to `0.14.1`
   * Updated `got` from `10.7.1` to `11.0.2`
-  * Updated `metascraper` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-audio` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-description` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-image` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-logo` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-logo-favicon` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-media-provider` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-soundcloud` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-title` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-video` from `5.11.8` to `5.11.9`
-  * Updated `metascraper-youtube` from `5.11.8` to `5.11.9`
+  * Updated `metascraper` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-audio` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-description` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-image` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-logo` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-logo-favicon` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-media-provider` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-soundcloud` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-title` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-video` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-youtube` from `5.11.8` to `5.11.10`
 
 #### `Removed`
 * Removed the show extractors function from the main UI. Users can still see a list of supported youtube-dl sites via the help menu. See [#121](https://github.com/yafp/media-dupes/issues/121)

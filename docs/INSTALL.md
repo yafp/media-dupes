@@ -36,6 +36,8 @@
 * Mount the .dmg
 * Drag the .app to `/Applications`
 
+Informations about how to install non-app-store applications on macOS can be found [here](https://apple.stackexchange.com/questions/294013/how-to-allow-install-of-non-app-store-or-identified-developers-on-macos-sierra).
+
 ### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows
 
 #### installer

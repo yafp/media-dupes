@@ -45,7 +45,7 @@ available for:
 
 * based on `electron`
 * using bundled versions of `youtube-dl` and `ffmpeg` to do it's magic
-* available for linux, macOS and windows.
+* available for *freebsd*, *linux*, *macOS* and *windows*.
 * free and open source
 
 # getting started
@@ -72,24 +72,10 @@ Please see the [changelog](docs/CHANGELOG.md) for more details.
 ### license
 Please see the [LICENSE](LICENSE) for more details.
 
-# debugging / verbose / logging
+## debugging / verbose / logging
 Please see the [verbose](docs/VERBOSE.md) informations for more details.
 
-# developers
-You are always welcome to check and even improve the code.
-
-### contributing
-Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
-A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
-
-### jsdoc
-The current jsdoc documentation can be found on [https://yafp.github.io/media-dupes/](https://yafp.github.io/media-dupes/). It is auto-generated (using [JsDoc Action](https://github.com/marketplace/actions/jsdoc-action)) on each commit of this project.
-
-### build
-Building **media-dupes** yourself is pretty easy. Please see the [building instructions](docs/BUILD.md) for more details.
-
-# misc
-### privacy
+## privacy
 * **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases.
 * reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
@@ -97,21 +83,27 @@ Building **media-dupes** yourself is pretty easy. Please see the [building instr
 
 Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 
-### discussion
-If you have question regarding **media-dupes** use one of the following options
+## discussion
+If you have question regarding **media-dupes** click [here](https://github.com/yafp/media-dupes/issues) to create an issue
 
-* Github: click [here](https://github.com/yafp/media-dupes/issues) to create an issue
-
-### support / fund
+## support / fund
 If you want to support the development of **media-dupes** you can fund me on:
 
 * [github](https://github.com/sponsors/yafp)
 * [patreon](https://www.patreon.com/yafp)
 
-### disclosure
+## disclosure
 **media-dupes** is not affiliated with any of the supported apps/services.
+
+
+# developers
+You are always welcome to check and even improve the code.
+
+* Please see the [contributing informations](docs/CONTRIBUTING.md) for more details.
+* A list of all contributors can be found [here](docs/CONTRIBUTORS.md).
+
 
 ***
 
-# footnotes
+### footnotes
 <a name="footnote1">1</a>: Assuming the provided url is supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/supportedsites.html).
