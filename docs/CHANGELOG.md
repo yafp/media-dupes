@@ -34,7 +34,7 @@ The following categories are used:
 * Added icons to menu. See [#118](https://github.com/yafp/media-dupes/issues/118)
 
 #### `Changed`
-* UI: 
+* UI:
   * Reduced minimal window height from 830px to 730 px. See [#111](https://github.com/yafp/media-dupes/issues/111)
   * Settings icon on settings window now shows its function using a title.
   * ToDoList: Content of column url is now truncated to ensure the table does not break. See [#120](https://github.com/yafp/media-dupes/issues/120)
@@ -42,17 +42,17 @@ The following categories are used:
 * Sentry: Removed several event count events to reduce overall amount of generated reports.
 * New default value for `app.allowRendererProcessReuse` is now `true`.
 * Updated dependencies:
-  * Updated `electron` from `8.2.1` to `8.2.3`
-  * Updated `electron-builder` from `22.4.1` to `22.5.1`
+  * Updated `electron` from `8.2.1` to `8.2.5`
+  * Updated `electron-builder` from `22.4.1` to `22.6.0`
+  * Updated `electron-log` from `4.1.1` to `4.1.2`
   * Updated `electron-util` from `0.14.0` to `0.14.1`
-  * Updated `got` from `10.7.1` to `11.0.2`
   * Updated `metascraper` from `5.11.8` to `5.11.10`
   * Updated `metascraper-audio` from `5.11.8` to `5.11.10`
   * Updated `metascraper-description` from `5.11.8` to `5.11.10`
   * Updated `metascraper-image` from `5.11.8` to `5.11.10`
   * Updated `metascraper-logo` from `5.11.8` to `5.11.10`
-  * Updated `metascraper-logo-favicon` from `5.11.8` to `5.11.10`
-  * Updated `metascraper-media-provider` from `5.11.8` to `5.11.10`
+  * Updated `metascraper-logo-favicon` from `5.11.8` to `5.11.11`
+  * Updated `metascraper-media-provider` from `5.11.8` to `5.11.11`
   * Updated `metascraper-soundcloud` from `5.11.8` to `5.11.10`
   * Updated `metascraper-title` from `5.11.8` to `5.11.10`
   * Updated `metascraper-video` from `5.11.8` to `5.11.10`

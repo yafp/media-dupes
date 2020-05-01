@@ -72,10 +72,10 @@ Please see the [changelog](docs/CHANGELOG.md) for more details.
 ### license
 Please see the [LICENSE](LICENSE) for more details.
 
-## debugging / verbose / logging
+### debugging / verbose / logging
 Please see the [verbose](docs/VERBOSE.md) informations for more details.
 
-## privacy
+### privacy
 * **media-dupes** is using sentry to collect error reports and do some anonymous usage stats. This helps heavily finding bugs which might occur only in some specific use-cases.
 * reporting is enabled by default, but can be disabled in the application settings UI.
 * media-dupes is not tracking it's users (i.e. using Google Analytics or similar)
@@ -83,16 +83,16 @@ Please see the [verbose](docs/VERBOSE.md) informations for more details.
 
 Please check [here](docs/SENTRY.md) how **media-dupes** is using sentry and why.
 
-## discussion
+### discussion
 If you have question regarding **media-dupes** click [here](https://github.com/yafp/media-dupes/issues) to create an issue
 
-## support / fund
+### support / fund
 If you want to support the development of **media-dupes** you can fund me on:
 
 * [github](https://github.com/sponsors/yafp)
 * [patreon](https://www.patreon.com/yafp)
 
-## disclosure
+### disclosure
 **media-dupes** is not affiliated with any of the supported apps/services.
 
 
@@ -105,5 +105,5 @@ You are always welcome to check and even improve the code.
 
 ***
 
-### footnotes
+###### footnotes
 <a name="footnote1">1</a>: Assuming the provided url is supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/supportedsites.html).

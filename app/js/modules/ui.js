@@ -1072,10 +1072,7 @@ function truncateString (str, num) {
 * @param {String} url - The url which should be added to the datatable todo list
 */
 function toDoListSingleUrlAdd (url) {
-    utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Adding a single row for the url _' + url + '_ to the dataTable')
-
     var urlId = utils.generateUrlId(url) // generate an id for this url
-
     var shortUrl = truncateString(url, 50)
 
     // add new row to datatable (with the most important informations)
@@ -1092,6 +1089,13 @@ function toDoListSingleUrlAdd (url) {
         '<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger disabled"><i class="fas fa-trash-alt"></i></button>' // remove
     ]).draw(false)
 
+    utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Added the url _' + url + '_ to the todo-list (dataTable).')
+
+    // FIXME
+    //startMetaScraper(url)
+
+
+    //  The following code is now moved to seperate function: startMetaScraper()
     // Now try to fetch meta informations about the url using: metascraper
     //
     const metascraper = require('metascraper')([
@@ -1164,7 +1168,97 @@ function toDoListSingleUrlAdd (url) {
         // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
         table.cell({ row: indexes[0], column: 7 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
     })()
+
+
 }
+
+
+
+/**
+* @function startMetaScraper
+* @summary Starts metascraper for a single url
+* @description Starts metascraper for a single url
+* @param {String} url - The url which to the image
+*/
+function startMetaScraper (url) {
+    utils.writeConsoleMsg('info', 'startMetaScraper ::: Start mediascraper for the url _' + url + '_.')
+
+    var table = $('#example').DataTable()
+
+    const metascraper = require('metascraper')([
+        require('metascraper-video')(),
+        require('metascraper-description')(),
+        require('metascraper-image')(),
+        require('metascraper-audio')(),
+        require('metascraper-logo')(),
+        require('metascraper-logo-favicon')(),
+        require('metascraper-media-provider')(),
+        require('metascraper-soundcloud')(),
+        require('metascraper-title')(),
+        require('metascraper-youtube')()
+    ])
+
+    var urlLogo
+    var urlImage
+    var urlDescription
+    var urlTitle
+    var urlAudio
+
+    const got = require('got')
+
+    const targetUrl = url
+
+    ;(async () => {
+        const { body: html, url } = await got(targetUrl)
+        const metadata = await metascraper({ html, url })
+
+        console.log(metadata) // show all detected metadata
+
+        urlLogo = metadata.logo
+        urlImage = metadata.image
+        urlDescription = metadata.description
+        urlTitle = metadata.title
+        urlAudio = metadata.audio
+
+        // find the new datatable record
+        //
+        var indexes = table.rows().eq(0).filter(function (rowIdx) {
+            return table.cell(rowIdx, 0).data() === urlId
+        })
+        // console.error(indexes)
+        // console.error(indexes[0])
+
+        // update the previously generated new row
+        //
+        // logo
+        if (urlLogo == null) {
+            urlLogo = 'img/dummy/dummy.png'
+        }
+        if (urlTitle == null) {
+            urlTitle = 'No url title'
+        }
+        table.cell({ row: indexes[0], column: 1 }).data('<img class="zoomSmall" src="' + urlLogo + '" width="30" title="' + urlTitle + '" onclick=utils.openURL("' + url + '");>')
+
+        // preview
+        //
+        if (urlImage == null) {
+            urlImage = 'img/dummy/dummy.png'
+        }
+        if (urlDescription == null) {
+            urlDescription = 'No url description available'
+        }
+        table.cell({ row: indexes[0], column: 2 }).data('<img class="zoomSmall" src="' + urlImage + '" width="30" title="' + urlDescription + '"  onclick=ui.imagePreviewModalShow("' + urlImage + '"); >')
+
+        // play button
+        table.cell({ row: indexes[0], column: 3 }).data('<button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary"><i class="fas fa-play"></i></button>')
+
+        // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
+        table.cell({ row: indexes[0], column: 7 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
+    })()
+}
+
+
+
 
 /**
 * @function imagePreviewModalShow
@@ -1243,6 +1337,7 @@ module.exports.youtubeSuggest = youtubeSuggest
 module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlocker
 module.exports.toDoListSingleUrlRemove = toDoListSingleUrlRemove // #102
 module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102
+module.exports.startMetaScraper = startMetaScraper
 module.exports.imagePreviewModalShow = imagePreviewModalShow
 module.exports.playAudio = playAudio
 module.exports.dataTablesReset = dataTablesReset
