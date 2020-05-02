@@ -1125,7 +1125,7 @@ function truncateString (str, num) {
 */
 function toDoListSingleUrlAdd (url) {
     var urlId = utils.generateUrlId(url) // generate an id for this url
-    var shortUrl = truncateString(url, 40)
+    var shortUrl = truncateString(url, 50)
 
     // add new row to datatable (with the most important informations)
     //
@@ -1144,7 +1144,8 @@ function toDoListSingleUrlAdd (url) {
     utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Added the url _' + url + '_ to the todo-list (dataTable).')
 
     // FIXME
-    // startMetaScraper(url)
+    //startMetaScraper(url)
+
 
     //  The following code is now moved to seperate function: startMetaScraper()
     // Now try to fetch meta informations about the url using: metascraper
@@ -1176,8 +1177,7 @@ function toDoListSingleUrlAdd (url) {
         const { body: html, url } = await got(targetUrl)
         const metadata = await metascraper({ html, url })
 
-        console.log(metadata) // show all detected metadata
-        utils.writeConsoleMsg('warn', 'toDoListSingleUrlAdd ::: Scraped the following metadata: ', metadata)
+        // console.log(metadata) // show all detected metadata
 
         urlLogo = metadata.logo
         urlImage = metadata.image
@@ -1215,18 +1215,16 @@ function toDoListSingleUrlAdd (url) {
         table.cell({ row: indexes[0], column: 2 }).data('&lt;img class="zoomSmall" src="' + urlImage + '" width="30" title="' + urlDescription + '"  onclick=ui.imagePreviewModalShow("' + urlImage + '"); >')
 
         // play button
-        //
-        if (urlAudio == null) {
-            // dont enable the button at all
-        } else {
-            table.cell({ row: indexes[0], column: 3 }).data('&lt;button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary">&lt;i class="fas fa-play">&lt;/i>&lt;/button>')
-        }
+        table.cell({ row: indexes[0], column: 3 }).data('&lt;button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary">&lt;i class="fas fa-play">&lt;/i>&lt;/button>')
 
         // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
-        //
         table.cell({ row: indexes[0], column: 7 }).data('&lt;button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger">&lt;i class="fas fa-trash-alt">&lt;/i>&lt;/button>')
     })()
+
+
 }
+
+
 
 /**
 * @function startMetaScraper
@@ -1235,8 +1233,84 @@ function toDoListSingleUrlAdd (url) {
 * @param {String} url - The url which to the image
 */
 function startMetaScraper (url) {
+    utils.writeConsoleMsg('info', 'startMetaScraper ::: Start mediascraper for the url _' + url + '_.')
 
+    var table = $('#example').DataTable()
+
+    const metascraper = require('metascraper')([
+        require('metascraper-video')(),
+        require('metascraper-description')(),
+        require('metascraper-image')(),
+        require('metascraper-audio')(),
+        require('metascraper-logo')(),
+        require('metascraper-logo-favicon')(),
+        require('metascraper-media-provider')(),
+        require('metascraper-soundcloud')(),
+        require('metascraper-title')(),
+        require('metascraper-youtube')()
+    ])
+
+    var urlLogo
+    var urlImage
+    var urlDescription
+    var urlTitle
+    var urlAudio
+
+    const got = require('got')
+
+    const targetUrl = url
+
+    ;(async () => {
+        const { body: html, url } = await got(targetUrl)
+        const metadata = await metascraper({ html, url })
+
+        console.log(metadata) // show all detected metadata
+
+        urlLogo = metadata.logo
+        urlImage = metadata.image
+        urlDescription = metadata.description
+        urlTitle = metadata.title
+        urlAudio = metadata.audio
+
+        // find the new datatable record
+        //
+        var indexes = table.rows().eq(0).filter(function (rowIdx) {
+            return table.cell(rowIdx, 0).data() === urlId
+        })
+        // console.error(indexes)
+        // console.error(indexes[0])
+
+        // update the previously generated new row
+        //
+        // logo
+        if (urlLogo == null) {
+            urlLogo = 'img/dummy/dummy.png'
+        }
+        if (urlTitle == null) {
+            urlTitle = 'No url title'
+        }
+        table.cell({ row: indexes[0], column: 1 }).data('&lt;img class="zoomSmall" src="' + urlLogo + '" width="30" title="' + urlTitle + '" onclick=utils.openURL("' + url + '");>')
+
+        // preview
+        //
+        if (urlImage == null) {
+            urlImage = 'img/dummy/dummy.png'
+        }
+        if (urlDescription == null) {
+            urlDescription = 'No url description available'
+        }
+        table.cell({ row: indexes[0], column: 2 }).data('&lt;img class="zoomSmall" src="' + urlImage + '" width="30" title="' + urlDescription + '"  onclick=ui.imagePreviewModalShow("' + urlImage + '"); >')
+
+        // play button
+        table.cell({ row: indexes[0], column: 3 }).data('&lt;button type="button" id="play" onclick=ui.playAudio("' + urlAudio + '"); name="play" class="btn btn-sm btn-outline-secondary">&lt;i class="fas fa-play">&lt;/i>&lt;/button>')
+
+        // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
+        table.cell({ row: indexes[0], column: 7 }).data('&lt;button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger">&lt;i class="fas fa-trash-alt">&lt;/i>&lt;/button>')
+    })()
 }
+
+
+
 
 /**
 * @function imagePreviewModalShow
@@ -1258,38 +1332,11 @@ function imagePreviewModalShow (url) {
 function playAudio (url) {
     utils.writeConsoleMsg('info', 'playAudio ::: Trying to play 5 sec audio from source: _' + url + '_.')
 
-    /*
     var a = new Audio(url)
-    try {
-        a.play() // start to play
-        setTimeout(function () { // stop it again after 5 seconds
-            a.pause()
-        }, 5000)
-    }
-    catch(error) {
-        utils.writeConsoleMsg('error', 'playAudio ::: Trying to play the audio failed. Error: ' + error)
-    }
-    */
-
-    var a = new Audio(url)
-    var playPromise = a.play();
-
-    // In browsers that don’t yet support this functionality,
-    // playPromise won’t be defined.
-    if (playPromise !== undefined) {
-        playPromise.then(function() {
-            // Automatic playback started!
-            setTimeout(function () { // stop it again after 5 seconds
-                a.pause()
-            }, 5000)
-        }).catch(function(error) {
-            // Automatic playback failed.
-            // Show a UI element to let the user manually start playback.
-            utils.showNoty('warning', 'Prelisting failed (no supported source was found)')
-        });
-    }
-
-
+    a.play() // start to play
+    setTimeout(function () { // stop it again after 5 seconds
+        a.pause()
+    }, 5000)
 }
 
 /**
@@ -1361,7 +1408,7 @@ module.exports.truncateString = truncateString
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat May 02 2020 21:25:35 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat May 02 2020 21:26:01 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
