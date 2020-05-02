@@ -10,3 +10,4 @@ exclude_paths:
   - 'LICENSE'
   - 'CODE_OF_CONDUCT.md'
   - 'README.md'
+  - 'jsdoc.json'
