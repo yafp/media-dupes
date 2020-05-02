@@ -318,7 +318,7 @@ $( document ).ready(function()
         "columnDefs": [
             {
                 "targets": [ 0, 5 ], // hiding column 0 and 5
-                "visible": false, 
+                "visible": false,
                 "searchable": false
             }
         ],
@@ -363,7 +363,7 @@ $( document ).ready(function()
     $('#example tbody').on( 'click', '#delete', function () {
         rowData = table.row( $(this).parents('tr') ).data();
 
-        utils.writeConsoleMsg('info', 'Trying to remove the url ' + rowData[5] + ' from todo list')
+        utils.writeConsoleMsg('info', 'index.html ::: Trying to remove the url ' + rowData[5] + ' from todo list')
 
         // remove from array: arrayUserUrlsN
         ui.toDoListSingleUrlRemove(rowData[5])
@@ -385,7 +385,7 @@ $( document ).ready(function()
 
         rowData = table.row( $(this).parents('tr') ).data();
         //console.error(rowData)
-        utils.writeConsoleMsg('info', 'Trying to play the url ' + rowData[5] + ' from todo list')
+        utils.writeConsoleMsg('info', 'index.html ::: Trying to play the url ' + rowData[5] + ' from todo list')
 
         //var playButtonCode = rowData[3]
         // change icon from play to pause: <i class="fas fa-pause"></i>

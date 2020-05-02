@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.8.20200501",
+  "version": "0.9.0",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "repository": {

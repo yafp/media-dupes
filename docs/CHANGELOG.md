@@ -26,7 +26,7 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.9.0 (2020xxyy) - DEV
+### media-dupes 0.9.0 (20200502)
 #### `Added`
 * Added prelisten function to todo-list. See [#119](https://github.com/yafp/media-dupes/issues/119)
 * Added 'show supported sites' menu entry to the help -> youtube-dl menu. See [#113](https://github.com/yafp/media-dupes/issues/113)
