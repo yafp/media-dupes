@@ -24,6 +24,20 @@ The following categories are used:
 * `Security`: in case of vulnerabilities.
 
 
+### media-dupes 0.x.y (2020xxyy) - DEV
+#### `Added`
+
+#### `Changed`
+* Updated dependencies:
+  * Updated `jquery` from `3.5.0` to `3.5.1`
+  * Updated `metascraper-logo-favicon` from `5.11.11` to `5.11.12`
+  * Updated `metascraper-media-provider` from `5.11.11` to `5.11.12`
+
+#### `Removed`
+
+#### `Fixed`
+
+
 ***
 
 ### media-dupes 0.9.0 (20200502)

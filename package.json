@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.9.0",
+  "version": "0.9.20200506",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "repository": {
@@ -47,7 +47,7 @@
     "youtube",
     "youtube-dl"
   ],
-  "author": "yafp <fidel@yafp.de>",
+  "author": "yafp <info@yafp.de>",
   "license": "GPL-3.0",
   "standardx": {
     "ignore": [
@@ -261,15 +261,15 @@
     "ffmpeg-static-electron": "^2.0.1",
     "got": "^10.7.0",
     "intro.js": "^2.9.3",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "md5": "^2.2.1",
     "metascraper": "^5.11.10",
     "metascraper-audio": "^5.11.10",
     "metascraper-description": "^5.11.10",
     "metascraper-image": "^5.11.10",
     "metascraper-logo": "^5.11.10",
-    "metascraper-logo-favicon": "^5.11.11",
-    "metascraper-media-provider": "^5.11.11",
+    "metascraper-logo-favicon": "^5.11.12",
+    "metascraper-media-provider": "^5.11.12",
     "metascraper-soundcloud": "^5.11.10",
     "metascraper-title": "^5.11.10",
     "metascraper-video": "^5.11.10",
