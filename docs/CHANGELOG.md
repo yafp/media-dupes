@@ -23,20 +23,20 @@ The following categories are used:
 * `Fixed`: for any bug fixes.
 * `Security`: in case of vulnerabilities.
 
+***
 
-### media-dupes 0.x.y (2020xxyy) - DEV
-#### `Added`
-
+### media-dupes 0.9.1 (2020xxyy) - DEV
 #### `Changed`
 * Updated dependencies:
+  * Updated `animate.css` from `3.7.2` to `4.1.0`
+  * Updated `datatables.net-dt` from `1.10.20` to `1.10.21`
+  * Updated `datatables.net-scroller-dt` from `2.0.1` to `2.0.2`
+  * Updated `eslint` from `6.8.0` to `7.0.0`
+  * Updated `got` from `10.7.0` to `11.1.3`
   * Updated `jquery` from `3.5.0` to `3.5.1`
-  * Updated `metascraper-logo-favicon` from `5.11.11` to `5.11.12`
-  * Updated `metascraper-media-provider` from `5.11.11` to `5.11.12`
-
-#### `Removed`
-
-#### `Fixed`
-
+  * Updated `metascraper-logo-favicon` from `5.11.11` to `5.11.13`
+  * Updated `metascraper-media-provider` from `5.11.11` to `5.11.13`
+  * Updated `metascraper-soundcloud` from `5.11.11` to `5.11.13`
 
 ***
 
