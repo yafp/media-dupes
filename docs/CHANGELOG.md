@@ -29,6 +29,7 @@ The following categories are used:
 #### `Changed`
 * Updated dependencies:
   * Updated `animate.css` from `3.7.2` to `4.1.0`
+  * Updated `bootstrap` from `4.4.1` to `4.5.0`
   * Updated `datatables.net-dt` from `1.10.20` to `1.10.21`
   * Updated `datatables.net-scroller-dt` from `2.0.1` to `2.0.2`
   * Updated `eslint` from `6.8.0` to `7.0.0`
