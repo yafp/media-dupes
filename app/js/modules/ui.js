@@ -82,7 +82,6 @@ function windowMainButtonsOthersEnable () {
     // enable some buttons
     $('#inputNewUrl').prop('disabled', false) // url input field
     $('#buttonShowHelp').prop('disabled', false) // help / intro
-    $('#buttonShowExtractors').prop('disabled', false) // showExtractors
     utils.writeConsoleMsg('info', 'windowMainButtonsOthersEnable ::: Did enable some other UI elements')
 }
 
@@ -95,7 +94,6 @@ function windowMainButtonsOthersDisable () {
     // disable some buttons
     $('#inputNewUrl').prop('disabled', true) // url input field
     $('#buttonShowHelp').prop('disabled', true) // help / intro
-    $('#buttonShowExtractors').prop('disabled', true) // showExtractors
     utils.writeConsoleMsg('info', 'windowMainButtonsOthersDisable ::: Did disable some other UI elements')
 }
 
@@ -433,6 +431,10 @@ function windowMainDownloadContent (mode) {
                 }
             }
 
+
+            // update UI
+            windowMainSetReadOnly()
+
             // assuming we got an array with urls to process
             // for each item of the array ... try to start a download-process
             var url
@@ -484,6 +486,21 @@ function windowMainDownloadContent (mode) {
         }
     }
 }
+
+/**
+* @function windowMainSetReadOnly
+* @summary ensures that the user can not add or remove items to the todo-list while the app is processing an existing todo list
+* @description ensures that the user can not add or remove items to the todo-list while the app is processing an existing todo list
+*/
+function windowMainSetReadOnly() {
+    $('#buttonAddUrl').prop('disabled', true) // disable the add url button
+    $('#inputNewUrl').prop('disabled', true) // url input field
+
+    // make sure the user can no longer remove items from the todolist
+    $('#delete').prop('disabled', true) // disable all delete buttons for each url
+}
+
+
 
 /**
 * @function windowMainDownloadVideo
@@ -1124,8 +1141,8 @@ function toDoListSingleUrlAdd (url) {
         const { body: html, url } = await got(targetUrl)
         const metadata = await metascraper({ html, url })
 
-        console.log(metadata) // show all detected metadata
-        utils.writeConsoleMsg('warn', 'toDoListSingleUrlAdd ::: Scraped the following metadata: ', metadata)
+        //console.log(metadata) // show all detected metadata
+        utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Scraped the following metadata: ', metadata)
 
         urlLogo = metadata.logo
         urlImage = metadata.image
@@ -1282,6 +1299,7 @@ module.exports.windowMainUiReset = windowMainUiReset
 module.exports.windowMainToDoListRestore = windowMainToDoListRestore
 module.exports.windowMainToDoListSave = windowMainToDoListSave
 module.exports.windowMainUiMakeUrgent = windowMainUiMakeUrgent
+module.exports.windowMainSetReadOnly = windowMainSetReadOnly
 module.exports.windowMainDownloadVideo = windowMainDownloadVideo
 module.exports.windowMainEnableAddUrlButton = windowMainEnableAddUrlButton
 module.exports.windowMainDisableAddUrlButton = windowMainDisableAddUrlButton

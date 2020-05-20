@@ -322,6 +322,7 @@ function createWindowMain () {
         minHeight: mainWindowMinimalWindowHeight,
         icon: path.join(__dirname, 'app/img/icon/icon.png'),
         webPreferences: {
+            enableRemoteModule: true, // since electron 9.0.0
             nodeIntegration: true,
             webSecurity: true // introduced in 0.3.0
         }
@@ -342,26 +343,34 @@ function createWindowMain () {
 
     // Call from renderer: Open download folder
     ipcMain.on('openUserDownloadFolder', (event, userSettingValue) => {
-        doLog('info', 'ipc.openUserDownloadFolder ::: Trying to open the download directory _' + userSettingValue + '_.')
+        doLog('info', 'ipc.openUserDownloadFolder ::: Trying to open the user download folder _' + userSettingValue + '_.')
 
         // try to open it
-        if (shell.openItem(userSettingValue) === true) {
+        shell.openPath(userSettingValue)  // FIXME: check result
+        /*
+        var openUserDownloadFolder = shell.openPath(userSettingValue)
+        if (Object.keys(openUserDownloadFolder).length === 0) {
             doLog('info', 'ipc.openUserDownloadFolder :::  Opened the media-dupes download folder (ipcMain)')
         } else {
-            doLog('error', 'ipc.openUserDownloadFolder ::: Failed to open the user download folder (ipcMain)')
+            doLog('error', 'ipc.openUserDownloadFolder ::: Failed to open the user download folder (ipcMain). Error: ' + openUserDownloadFolder)
         }
+        */
     })
 
     // Call from renderer: Open settings folder
     ipcMain.on('settingsFolderOpen', (event) => {
-        doLog('info', 'ipc.settingsFolderOpen ::: Opened the users settings folder (ipcMain)')
+        doLog('info', 'ipc.settingsFolderOpen ::: Trying to open the users settings folder (ipcMain)')
         const userSettingsPath = path.join(app.getPath('userData'), 'UserSettings') // change path for userSettings
 
-        if (shell.openItem(userSettingsPath) === true) {
-            doLog('info', 'ipc.settingsFolderOpen ::: Opened the media-dupes subfolder in users download folder (ipcMain)')
+        // try to open it
+        shell.openPath(userSettingsPath) // FIXME: check result
+        /*
+        if (shell.openPath(userSettingsPath) === true) {
+            doLog('info', 'ipc.settingsFolderOpen ::: Opened the media-dupes settings folder (ipcMain)')
         } else {
-            doLog('error', 'ipc.settingsFolderOpen ::: Failed to open the user download folder (ipcMain)')
+            doLog('error', 'ipc.settingsFolderOpen ::: Failed to open the user settings folder (ipcMain)')
         }
+        */
     })
 
     // Call from renderer:  Urgent window

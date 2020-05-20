@@ -26,7 +26,7 @@ const unhandled = require('./js/modules/unhandled.js') // electron-unhandled
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
-crash.initCrashReporter()
+//crash.initCrashReporter() // since electron9: crashReporter.start is deprecated in the renderer process. Call it from the main process instead.
 unhandled.initUnhandled()
 
 // ----------------------------------------------------------------------------

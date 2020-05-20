@@ -16,11 +16,9 @@ bootstrap color codes: https://www.bitdegree.org/learn/bootstrap-colors
 /* ########################################################################## */
 @font-face {
     font-family: 'Arial';
-    src:  url('../fonts/Arial/Arial.ttf') format('opentype');
-
+    src: url('../fonts/Arial/Arial.ttf') format('opentype');
     font-family: 'ArialMono';
-    src:  url('../fonts/ArialMono/Arial_Monospaced_MT.ttf') format('opentype');
-
+    src: url('../fonts/ArialMono/Arial_Monospaced_MT.ttf') format('opentype');
 }
 
 /* ########################################################################## */
@@ -33,14 +31,14 @@ body {
 /* ########################################################################## */
 /* BOOTSTRAP MODAL - used as SPLASH */
 /* ########################################################################## */
-/* opacity of background */
+/* background color of the modal */
 .modal-backdrop {
-    opacity:0.0 !important;
+    opacity: 0.0 !important;
 }
 
 /* removing border from splash */
 .no-border {
-  border:none !important;
+  border: none !important;
 }
 
 /* ########################################################################## */

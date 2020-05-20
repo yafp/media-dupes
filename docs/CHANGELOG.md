@@ -32,8 +32,11 @@ The following categories are used:
   * Updated `bootstrap` from `4.4.1` to `4.5.0`
   * Updated `datatables.net-dt` from `1.10.20` to `1.10.21`
   * Updated `datatables.net-scroller-dt` from `2.0.1` to `2.0.2`
+  * Updated `electron` from `8.2.5` to `9.0.0`
+  * Updated `electron-builder` from `22.6.0` to `22.6.1`
+  * Updated `electron-log` from `4.1.2` to `4.1.3`
   * Updated `eslint` from `6.8.0` to `7.0.0`
-  * Updated `got` from `10.7.0` to `11.1.3`
+  * Updated `got` from `10.7.0` to `11.1.4`
   * Updated `jquery` from `3.5.0` to `3.5.1`
   * Updated `metascraper-logo-favicon` from `5.11.11` to `5.11.13`
   * Updated `metascraper-media-provider` from `5.11.11` to `5.11.13`
