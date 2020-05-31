@@ -26,29 +26,32 @@ The following categories are used:
 ***
 
 ### media-dupes 0.9.1 (2020xxyy) - DEV
+#### `Added`
+* Added todo-list-protection to ensure items of the list arent removed while media-dupes is processing the list. See [#127](https://github.com/yafp/media-dupes/issues/127)
+* Added a warning dialog about consequenses of not updating media-dupes. See [#129](https://github.com/yafp/media-dupes/issues/129)
+
 #### `Changed`
 * Updated dependencies:
-  * Updated `animate.css` from `3.7.2` to `4.1.0`
-  * Updated `bootstrap` from `4.4.1` to `4.5.0`
   * Updated `datatables.net-dt` from `1.10.20` to `1.10.21`
   * Updated `datatables.net-scroller-dt` from `2.0.1` to `2.0.2`
-  * Updated `electron` from `8.2.5` to `9.0.0`
-  * Updated `electron-builder` from `22.6.0` to `22.6.1`
+  * Updated `electron` from `8.2.5` to `9.0.0`. See [#128](https://github.com/yafp/media-dupes/issues/128)
+  * Updated `electron-builder` from `22.6.0` to `22.7.0`
   * Updated `electron-log` from `4.1.2` to `4.2.0`
   * Updated `eslint` from `6.8.0` to `7.1.0`
   * Updated `got` from `10.7.0` to `11.1.4`
   * Updated `jquery` from `3.5.0` to `3.5.1`
-  * Updated `metascraper` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-audio` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-description` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-image` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-logo` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-logo-favicon` from `5.11.11` to `5.11.14`
-  * Updated `metascraper-media-provider` from `5.11.11` to `5.11.14`
-  * Updated `metascraper-soundcloud` from `5.11.11` to `5.11.14`
-  * Updated `metascraper-title` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-video` from `5.11.10` to `5.11.14`
-  * Updated `metascraper-youtube` from `5.11.10` to `5.11.14`
+  * Updated `metascraper` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-audio` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-description` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-image` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-logo` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-logo-favicon` from `5.11.11` to `5.11.16`
+  * Updated `metascraper-media-provider` from `5.11.11` to `5.11.16`
+  * Updated `metascraper-soundcloud` from `5.11.11` to `5.11.16`
+  * Updated `metascraper-title` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-video` from `5.11.10` to `5.11.16`
+  * Updated `metascraper-youtube` from `5.11.10` to `5.11.17`
+  * Updated `v8-compile-cache` from `2.1.0` to `2.1.1`
 
 ***
 

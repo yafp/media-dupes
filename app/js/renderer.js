@@ -560,6 +560,11 @@ function searchUpdate (silent = true) {
 
                         Noty.button('No', 'btn btn-secondary mediaDupes_btnDefaultWidth float-right', function () {
                             n.close()
+
+                            if (remoteAppVersionLatestPrerelease === false) {
+                                utils.showNoty('warning', 'Please be aware that not updating <b>media-dupes</b> will result in an <b>outdated youtube-dl version</b> which again will result in download errors.', 0)
+                            }
+
                         })
                     ]
                 })

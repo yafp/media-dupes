@@ -358,7 +358,6 @@ $( document ).ready(function()
     // Delete a row
     $('#example tbody').on( 'click', '#delete', function () {
         rowData = table.row( $(this).parents('tr') ).data();
-
         utils.writeConsoleMsg('info', 'index.html ::: Trying to remove the url ' + rowData[5] + ' from todo list')
 
         // remove from array: arrayUserUrlsN

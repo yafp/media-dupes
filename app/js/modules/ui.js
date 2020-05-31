@@ -1089,6 +1089,10 @@ function truncateString (str, num) {
 * @param {String} url - The url which should be added to the datatable todo list
 */
 function toDoListSingleUrlAdd (url) {
+
+    windowMainLoadingAnimationShow() // show that something is currently happening
+
+
     var urlId = utils.generateUrlId(url) // generate an id for this url
     var shortUrl = truncateString(url, 40)
 
@@ -1107,9 +1111,6 @@ function toDoListSingleUrlAdd (url) {
     ]).draw(false)
 
     utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Added the url _' + url + '_ to the todo-list (dataTable).')
-
-    // FIXME
-    // startMetaScraper(url)
 
     //  The following code is now moved to seperate function: startMetaScraper()
     // Now try to fetch meta informations about the url using: metascraper
@@ -1190,17 +1191,10 @@ function toDoListSingleUrlAdd (url) {
         // button delete: enable the delete button (to prevent that the row gets removed while mediascrapper is fetching data
         //
         table.cell({ row: indexes[0], column: 7 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
+
+
+        windowMainLoadingAnimationHide()
     })()
-}
-
-/**
-* @function startMetaScraper
-* @summary Starts metascraper for a single url
-* @description Starts metascraper for a single url
-* @param {String} url - The url which to the image
-*/
-function startMetaScraper (url) {
-
 }
 
 /**
@@ -1308,7 +1302,6 @@ module.exports.youtubeSuggest = youtubeSuggest
 module.exports.windowMainDisablePowerSaveBlocker = windowMainDisablePowerSaveBlocker
 module.exports.toDoListSingleUrlRemove = toDoListSingleUrlRemove // #102
 module.exports.toDoListSingleUrlAdd = toDoListSingleUrlAdd // #102
-module.exports.startMetaScraper = startMetaScraper
 module.exports.imagePreviewModalShow = imagePreviewModalShow
 module.exports.playAudio = playAudio
 module.exports.dataTablesReset = dataTablesReset
