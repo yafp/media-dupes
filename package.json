@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.9.20200607",
+  "version": "0.10.0",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "repository": {
@@ -276,6 +276,7 @@
     "metascraper-youtube": "^5.11.21",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.1",
+    "semver": "^7.3.2",
     "time-stamp": "^2.2.0",
     "v8-compile-cache": "^2.1.1",
     "yargs": "^15.3.1",

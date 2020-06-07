@@ -462,6 +462,9 @@ function urlInputFieldOnFocus () {
 * @param {booean} [silent] - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
+
+    var semver = require('semver')
+
     ui.windowMainApplicationStateSet('Searching media-dupes updates')
 
     // check if pre-releases should be included or not
@@ -529,7 +532,9 @@ function searchUpdate (silent = true) {
         utils.writeConsoleMsg('info', 'searchUpdate ::: Latest media-dupes version: ' + remoteAppVersionLatest)
 
         // If a stable (not a prelease) update is available - see #73
-        if (localAppVersion < remoteAppVersionLatest) {
+
+        //if (localAppVersion < remoteAppVersionLatest) {
+        if(semver.lt(localAppVersion, remoteAppVersionLatest)) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Found update, notify user')
 
             // prepare the message for the user - depending on the fact if it is a pre-release or not

@@ -25,12 +25,13 @@ The following categories are used:
 
 ***
 
-### media-dupes 0.10.0 (2020xxyy) - DEV
+### media-dupes 0.10.0 (20200607)
 #### `Added`
 * Added todo-list-protection to ensure items of the list arent removed while media-dupes is processing the list. See [#127](https://github.com/yafp/media-dupes/issues/127)
 * Added a warning dialog about consequences of not updating media-dupes. See [#129](https://github.com/yafp/media-dupes/issues/129)
 
 #### `Changed`
+* Improved update check - using semver for version comparison.
 * Updated dependencies:
   * Updated `about-window` from `1.13.2` to `1.13.4`
   * Updated `datatables.net-dt` from `1.10.20` to `1.10.21`
