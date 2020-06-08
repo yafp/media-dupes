@@ -23,6 +23,18 @@ The following categories are used:
 * `Fixed`: for any bug fixes.
 * `Security`: in case of vulnerabilities.
 
+
+***
+
+### media-dupes 0.10.1 (20200609)
+#### `Changed`
+* Updated dependencies:
+  * Updated `electron` from `9.0.2` to `9.0.3`.
+
+#### `Fixed`
+* Fixed a dependencie error. See [#130](https://github.com/yafp/media-dupes/issues/130)
+
+
 ***
 
 ### media-dupes 0.10.0 (20200607)
