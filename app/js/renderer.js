@@ -26,7 +26,7 @@ const unhandled = require('./js/modules/unhandled.js') // electron-unhandled
 // ----------------------------------------------------------------------------
 // ERROR HANDLING
 // ----------------------------------------------------------------------------
-//crash.initCrashReporter() // since electron9: crashReporter.start is deprecated in the renderer process. Call it from the main process instead.
+// crash.initCrashReporter() // since electron9: crashReporter.start is deprecated in the renderer process. Call it from the main process instead.
 unhandled.initUnhandled()
 
 // ----------------------------------------------------------------------------
@@ -462,7 +462,6 @@ function urlInputFieldOnFocus () {
 * @param {booean} [silent] - Boolean with default value. Shows a feedback in case of no available updates If 'silent' = false. Special handling for manually triggered update search
 */
 function searchUpdate (silent = true) {
-
     var semver = require('semver')
 
     ui.windowMainApplicationStateSet('Searching media-dupes updates')
@@ -533,8 +532,8 @@ function searchUpdate (silent = true) {
 
         // If a stable (not a prelease) update is available - see #73
 
-        //if (localAppVersion < remoteAppVersionLatest) {
-        if(semver.lt(localAppVersion, remoteAppVersionLatest)) {
+        // if (localAppVersion < remoteAppVersionLatest) {
+        if (semver.lt(localAppVersion, remoteAppVersionLatest)) {
             utils.writeConsoleMsg('info', 'searchUpdate ::: Found update, notify user')
 
             // prepare the message for the user - depending on the fact if it is a pre-release or not
@@ -569,7 +568,6 @@ function searchUpdate (silent = true) {
                             if (remoteAppVersionLatestPrerelease === false) {
                                 utils.showNoty('warning', 'Please be aware that not updating <b>media-dupes</b> will result in an <b>outdated youtube-dl version</b> which again will result in download errors.', 0)
                             }
-
                         })
                     ]
                 })

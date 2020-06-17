@@ -40,6 +40,8 @@ Informations about how to install non-app-store applications on macOS can be fou
 
 ### ![windows](https://raw.githubusercontent.com/yafp/media-dupes/master/.github/images/platform/windows_32x32.png) windows
 
+It's recommended to use the installer and use it just for the current user. This ensures that updating the bundles youtube-dl works out of the box.
+
 #### installer
 * Download the latest `win-installer.exe`
 * Execute the `win-installer.exe`

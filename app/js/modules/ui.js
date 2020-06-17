@@ -431,7 +431,6 @@ function windowMainDownloadContent (mode) {
                 }
             }
 
-
             // update UI
             windowMainSetReadOnly()
 
@@ -492,15 +491,13 @@ function windowMainDownloadContent (mode) {
 * @summary ensures that the user can not add or remove items to the todo-list while the app is processing an existing todo list
 * @description ensures that the user can not add or remove items to the todo-list while the app is processing an existing todo list
 */
-function windowMainSetReadOnly() {
+function windowMainSetReadOnly () {
     $('#buttonAddUrl').prop('disabled', true) // disable the add url button
     $('#inputNewUrl').prop('disabled', true) // url input field
 
     // make sure the user can no longer remove items from the todolist
     $('#delete').prop('disabled', true) // disable all delete buttons for each url
 }
-
-
 
 /**
 * @function windowMainDownloadVideo
@@ -1089,9 +1086,7 @@ function truncateString (str, num) {
 * @param {String} url - The url which should be added to the datatable todo list
 */
 function toDoListSingleUrlAdd (url) {
-
     windowMainLoadingAnimationShow() // show that something is currently happening
-
 
     var urlId = utils.generateUrlId(url) // generate an id for this url
     var shortUrl = truncateString(url, 40)
@@ -1142,7 +1137,7 @@ function toDoListSingleUrlAdd (url) {
         const { body: html, url } = await got(targetUrl)
         const metadata = await metascraper({ html, url })
 
-        //console.log(metadata) // show all detected metadata
+        // console.log(metadata) // show all detected metadata
         utils.writeConsoleMsg('info', 'toDoListSingleUrlAdd ::: Scraped the following metadata: ', metadata)
 
         urlLogo = metadata.logo
@@ -1192,7 +1187,6 @@ function toDoListSingleUrlAdd (url) {
         //
         table.cell({ row: indexes[0], column: 7 }).data('<button type="button" id="delete" name="delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i></button>')
 
-
         windowMainLoadingAnimationHide()
     })()
 }
@@ -1231,24 +1225,22 @@ function playAudio (url) {
     */
 
     var a = new Audio(url)
-    var playPromise = a.play();
+    var playPromise = a.play()
 
     // In browsers that don’t yet support this functionality,
     // playPromise won’t be defined.
     if (playPromise !== undefined) {
-        playPromise.then(function() {
+        playPromise.then(function () {
             // Automatic playback started!
             setTimeout(function () { // stop it again after 5 seconds
                 a.pause()
             }, 5000)
-        }).catch(function(error) {
+        }).catch(function (error) {
             // Automatic playback failed.
             // Show a UI element to let the user manually start playback.
             utils.showNoty('warning', 'Prelisting failed (no supported source was found)')
-        });
+        })
     }
-
-
 }
 
 /**

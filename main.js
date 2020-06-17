@@ -346,7 +346,7 @@ function createWindowMain () {
         doLog('info', 'ipc.openUserDownloadFolder ::: Trying to open the user download folder _' + userSettingValue + '_.')
 
         // try to open it
-        shell.openPath(userSettingValue)  // FIXME: check result
+        shell.openPath(userSettingValue) // FIXME: check result
         /*
         var openUserDownloadFolder = shell.openPath(userSettingValue)
         if (Object.keys(openUserDownloadFolder).length === 0) {
