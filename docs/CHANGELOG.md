@@ -29,12 +29,18 @@ The following categories are used:
 ### media-dupes 0.10.x (2020xxyy)
 #### `Changed`
 * Updated dependencies:
-  * Updated `electron` from `9.0.3` to `9.0.4`.
+  * Updated `fontawesome-free` from `5.13.0` to `5.13.1`.
+  * Updated `electron` from `9.0.3` to `9.0.5`.
   * Updated `electron-log` from `4.2.1` to `4.2.2`.
+  * Updated `eslint` from `7.2.0` to `7.3.1`.
   * Updated `metascraper` from `5.11.21` to `5.12.6`.
   * Updated `metascraper-logo-favicon` from `5.11.21` to `5.12.6`.
-  * Updated `metascraper-media-provider` from `5.11.22` to `5.12.5`.
-  * Updated `metascraper-soundcloud` from `5.11.21` to `5.12.5`.
+  * Updated `metascraper-media-provider` from `5.11.22` to `5.12.8`.
+  * Updated `metascraper-soundcloud` from `5.11.21` to `5.12.7`.
+
+#### `Fixed`
+* Fixed a TypeError. See [#133](https://github.com/yafp/media-dupes/issues/133)
+
 
 ***
 

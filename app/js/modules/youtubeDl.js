@@ -322,7 +322,7 @@ function binaryUpdateExecute () {
         'use strict'
         if (error) {
             utils.writeConsoleMsg('error', 'binaryUpdateExecute ::: Error while trying to update the youtube-dl binary at: _' + targetPath + '_. Error: ' + error)
-            utils.showNoty('error', 'Unable to update youtube-dl binary. Error: ' + error, 0)
+            utils.showNoty('error', 'Unable to update youtube-dl binary. ' + error, 0)
             throw error
         }
         utils.writeConsoleMsg('info', 'binaryUpdateExecute ::: Updated youtube-dl binary at: _' + targetPath + '_.')
