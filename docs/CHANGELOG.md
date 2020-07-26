@@ -29,17 +29,29 @@ The following categories are used:
 ### media-dupes 0.10.x (2020xxyy)
 #### `Changed`
 * Updated dependencies:
-  * Updated `fontawesome-free` from `5.13.0` to `5.13.1`.
-  * Updated `electron` from `9.0.3` to `9.0.5`.
+  * Updated `custom-electron-titlebar` from `3.2.2` to `3.2.3`.
+  * Updated `fontawesome-free` from `5.13.0` to `5.14.0`.
+  * Updated `electron` from `9.0.3` to `9.1.1`.
   * Updated `electron-log` from `4.2.1` to `4.2.2`.
   * Updated `electron-packager` from `14.2.1` to `15.0.0`.
   * Updated `electron-util` from `0.14.1` to `0.14.2`.
-  * Updated `eslint` from `7.2.0` to `7.3.1`.
-  * Updated `metascraper` from `5.11.21` to `5.12.6`.
-  * Updated `metascraper-logo-favicon` from `5.11.21` to `5.12.6`.
+  * Updated `electron-json-storage` from `4.1.8` to `4.2.0`.
+  * Updated `eslint` from `7.2.0` to `7.5.0`.
+  * Updated `jsdoc` from `3.6.4` to `3.6.5`.
+  * Updated `metascraper` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-audio` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-description` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-image` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-logo` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-logo-favicon` from `5.11.21` to `5.12.19`.
   * Updated `metascraper-media-provider` from `5.11.22` to `5.12.9`.
-  * Updated `metascraper-soundcloud` from `5.11.21` to `5.12.9`.
+  * Updated `metascraper-soundcloud` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-title` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-video` from `5.11.21` to `5.12.19`.
+  * Updated `metascraper-youtube` from `5.11.21` to `5.12.19`.
   * Updated `ntl` from `5.0.0` to `5.1.0`.
+  * Updated `sentry/electron` from `1.3.0` to `1.5.1`.
+  * Updated `yargs` from `15.3.1` to `15.4.1`.
 
 #### `Fixed`
 * Fixed a TypeError. See [#133](https://github.com/yafp/media-dupes/issues/133)
