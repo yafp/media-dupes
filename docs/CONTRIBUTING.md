@@ -4,8 +4,6 @@
 # media-dupes
 ## Contributing
 
----
-
 ### general
 When contributing to this repository, please first discuss the change you wish to make via issue,
 email, or any other method with the owners of this repository before making a change.
@@ -21,7 +19,7 @@ Building **media-dupes** yourself is pretty easy. Please see the [building instr
 ### Sentry (Crashreports)
 Crashreport informations are located [here](https://sentry.io/organizations/yafp/issues/?project=1847606).
 
----
+
 
 ### Getting started
 
@@ -43,7 +41,7 @@ Crashreport informations are located [here](https://sentry.io/organizations/yafp
 ##### Run some basic test
 * Execute: `npm test`
 
----
+
 
 #### 2. Misc howto's
 
@@ -69,7 +67,7 @@ Crashreport informations are located [here](https://sentry.io/organizations/yafp
 or using `npm-check`:
 
 * Install requirements: `npm install -g npm-check`
-* Run: 
+* Run:
   * `npm-check` or
   * `npm-check -s` (-s = Skip check for unused packages)
 
