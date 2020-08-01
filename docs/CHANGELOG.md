@@ -26,6 +26,17 @@ The following categories are used:
 
 ***
 
+### media-dupes 0.10.3 (20200801)
+#### `Changed`
+* Updated dependencies:
+  * Updated `eslint` from `7.5.0` to `7.6.0`.
+
+#### `Fixed`
+* Fixed a dependency error. See [#140](https://github.com/yafp/media-dupes/issues/140)
+
+
+***
+
 ### media-dupes 0.10.2 (20200730)
 #### `Changed`
 * Updated dependencies:

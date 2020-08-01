@@ -2,7 +2,7 @@
   "name": "media-dupes",
   "productName": "media-dupes",
   "desktopName": "media-dupes.desktop",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "a minimal content duplicator for common media services like youtube",
   "main": "main.js",
   "repository": {
@@ -232,12 +232,11 @@
     ]
   },
   "devDependencies": {
-    "bootstrap": "^4.4.1",
     "docdash": "^1.2.0",
     "electron": "^9.1.2",
     "electron-builder": "^22.8.0",
     "electron-packager": "^15.0.0",
-    "eslint": "^7.5.0",
+    "eslint": "^7.6.0",
     "jsdoc": "^3.6.5",
     "ntl": "^5.1.0",
     "rimraf": "^3.0.2",
@@ -245,6 +244,7 @@
     "standardx": "^5.0.0"
   },
   "dependencies": {
+    "bootstrap": "^4.4.1",
     "@fortawesome/fontawesome-free": "^5.14.0",
     "@sentry/electron": "^1.5.2",
     "about-window": "^1.13.4",
