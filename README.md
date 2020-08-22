@@ -34,6 +34,7 @@ available for:
 
 </div>
 
+# project is discontinued
 
 # about
 **media-dupes** can<sup>[1](#footnote1)</sup>:
